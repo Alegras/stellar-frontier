@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## [0.7.3.2] — 2026-11-08 · Портативная сборка с GIF-меню
+
+- Single-file portable встраивает /menu/*.gif и *.png как data URI; консоль без ERR_FILE_NOT_FOUND, verify-portable 10/10.
+
 ## [0.7.3.1] — 2026-11-08 · Интеграция GIF-меню и фикс CSS
 
 - Главное меню: постер-заглушка, плавное появление GIF после загрузки, reduced-motion.

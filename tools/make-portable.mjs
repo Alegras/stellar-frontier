@@ -20,8 +20,16 @@ const embedDlc = (text) => text.replace(/\/dlc\/[A-Za-z0-9_\/.\-]+\.png/g, (url)
   embedded.set(url, dataUri);
   return dataUri;
 });
+const embedMenu = (text) => text.replace(/\/menu\/[A-Za-z0-9_\/.-]+\.(png|gif)/g, (url) => {
+  const file = PUBLIC + url;
+  if (!existsSync(file)) return url;
+  const mime = url.endsWith(".gif") ? "image/gif" : "image/png";
+  return "data:" + mime + ";base64," + readFileSync(file).toString("base64");
+});
 js = embedDlc(js);
 css = embedDlc(css);
+js = embedMenu(js);
+css = embedMenu(css);
 if (embedded.size > 0) console.log("embedded DLC assets:", embedded.size);
 if (js.includes("</script")) throw new Error("bundle contains </script, needs escaping");
 const scriptStart = html.indexOf('<script type="module"');
