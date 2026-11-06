@@ -3,10 +3,10 @@ import type { Game } from "../game/Game";
 import type { GameState } from "../game/types";
 import { Badge, Btn, Modal, Panel, Sep } from "./controls";
 import { CoopPanel, MPStatusHud, type CoopCallbacks, type CoopLobbyState } from "./CoopPanel";
-import { L, dlcOf, fgOf, send, tr } from "./fg";
+import { L, dlcModalStateOf, dlcOf, fgOf, send, tr } from "./fg";
 import { PANEL_IDS, PANEL_REGISTRY, PANEL_TITLES } from "./fullgame-registry";
 import type { PanelId } from "./fullgame-registry";
-import { DialogueOverlay, useDlcAutoStart } from "./DialogueOverlay";
+import { DialogueOverlay } from "./DialogueOverlay";
 import { worldOf } from "./util";
 
 // PanelId/PANEL_TITLES/PANEL_REGISTRY живут в fullgame-registry.ts (без JSX), чтобы
@@ -68,7 +68,6 @@ export function PanelHost({ panel, game, state, onClose, coopCallbacks, coopLobb
 export function FullGameOverlays({ game, state }: { game: Game; state: GameState }) {
   const world = worldOf(game);
   const fg = fgOf(world);
-  useDlcAutoStart(game, state);
   // feature-flag DLC для стартов через API (меню шлёт dlc_toggle само): один раз на мир
   const dlcFlagSynced = useRef<string>("");
   useEffect(() => {
@@ -88,7 +87,11 @@ export function FullGameOverlays({ game, state }: { game: Game; state: GameState
   const [lastPendingId, setLastPendingId] = useState<string | null>(null);
 
   const pending = fg?.narrative.pending ?? [];
-  const event = pending.find((e) => !dismissed.includes(e.id)) ?? null;
+  const eventRaw = pending.find((e) => !dismissed.includes(e.id)) ?? null;
+  // Приоритет диалога: пока DLC/кампанийный диалог активен, событийные модалки не показываем
+  // и их пауза не включается — очередь событий ждёт закрытия диалога.
+  const dialogueActive = !!dlcOf(world)?.dialogue?.active || (dlcModalStateOf(world)?.dialogueActive ?? false);
+  const event = dialogueActive ? null : eventRaw;
   const dismiss = () => {
     if (!event) return;
     send(game, { type: "event_dismiss", eventId: event.id });

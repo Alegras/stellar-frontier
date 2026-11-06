@@ -47,7 +47,7 @@ def main() -> int:
 
     # --- 1. персонажи: portrait + portraits => все 6 эмоций
     chars = data_chars["characters"] if isinstance(data_chars, dict) and "characters" in data_chars else data_chars
-    check(isinstance(chars, list) and len(chars) >= 2, "characters.json: ожидается ≥2 персонажа")
+    check(isinstance(chars, list) and len(chars) >= 4, "characters.json: ожидается ≥4 персонажа (task-39)")
     for ch in chars:
         cid = ch.get("id", "?")
         portrait = ch.get("portrait") or ""
@@ -69,11 +69,30 @@ def main() -> int:
             if info:
                 check(info["size"] == (128, 128), f"{rel}: размер {info['size']} != 128x128")
                 check(info["mode"] == "P", f"{rel}: mode {info['mode']} != P (нужен PNG-8)")
-                check(info["colors"] <= 16, f"{rel}: {info['colors']} цветов > 16 (палитра портрета)")
-                check(info["bytes"] <= 3 * 1024, f"{rel}: {info['bytes']} B > 3 КБ (бюджет кадра)")
+                check(info["colors"] <= 32, f"{rel}: {info['colors']} цветов > 32 (палитра портрета, task-39)")
+                check(info["bytes"] <= 12 * 1024, f"{rel}: {info['bytes']} B > 12 КБ (бюджет кадра, Qwen-рендер)")
             # карта portraits покрывает эмоции
             if portraits:
                 check(emo in portraits, f"{cid}: в portraits нет эмоции {emo}")
+
+    manifest_chars = {c.get("id"): c for c in manifest.get("characters", [])}
+    json_ids = {c.get("id") for c in chars}
+    if manifest_chars:
+        check(set(manifest_chars) == json_ids,
+              f"manifest.characters ({sorted(manifest_chars)}) != characters.json ({sorted(json_ids)})")
+        for ch in chars:
+            cid = ch.get("id")
+            mc = manifest_chars.get(cid)
+            if not mc:
+                continue
+            check(mc.get("portraitSize") == 128, f"manifest {cid}: portraitSize != 128")
+            for emo in EMOTIONS:
+                want = f"portraits/{cid}/{emo}.png"
+                check(mc.get("portraits", {}).get(emo) == want,
+                      f"manifest {cid}/{emo}: {mc.get('portraits', {}).get(emo)!r} != {want!r}")
+                check(os.path.isfile(os.path.join(DLC, want)), f"нет файла {want}")
+    else:
+        warnings.append("manifest.characters отсутствует — сверка с characters.json пропущена")
 
     # --- 2. карточки: art => файл 320x180
     cards = data_cards["cards"] if isinstance(data_cards, dict) and "cards" in data_cards else data_cards

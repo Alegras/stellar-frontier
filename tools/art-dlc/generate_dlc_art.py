@@ -21,6 +21,7 @@ import json
 import os
 import random
 import sys
+import zlib
 from dataclasses import dataclass
 
 import numpy as np
@@ -163,292 +164,1077 @@ class Painter:
 
 
 # ------------------------------------------------------------------ ПОРТРЕТЫ
+# --------------------------------------------------------------- ПОРТРЕТЫ (v2)
+# Редизайн task-39: 4 персонажа × 6 эмоций, 128×128, единый пайплайн.
+# Анатомия: 3/4-поворот, три плана лица (лоб/скула/челюсть), 4 тона кожи,
+# светотень плоскостями + Bayer 4×4 только в переходах, hair masses (затылок/чёлка/пряди),
+# rim light по дальнему контуру, аккуратные глаза (веко/белок/радужка/зрачок/блик),
+# брови, нос, губы; эмоции — мимикой (брови/веки/рот/румянец/пот/слёзы), без запечённого текста.
+# Референсы/техники: docs/ART-NOTES.md (CC0 Cyberpunk Portraits by Hyptosis — только обучение).
+
 @dataclass(frozen=True)
 class Person:
     id: str
     name: str
-    skin: tuple[int, int, int]
-    skin_shade: tuple[int, int, int]
-    skin_light: tuple[int, int, int]
-    hair: tuple[int, int, int]
-    hair_light: tuple[int, int, int]
-    cloth: tuple[int, int, int]
-    cloth_shade: tuple[int, int, int]
-    accent: tuple[int, int, int]
-    accent_dark: tuple[int, int, int]
-    iris: tuple[int, int, int]
-    bg_a: tuple[int, int, int]
-    bg_b: tuple[int, int, int]
-    kind: str  # "mentor" | "dispatcher"
+    role: str
+    kind: str                      # soldier | synth | admiral | counselor
+    skin: tuple                    # (light, base, shade, deep)
+    hair: tuple                    # (light, base, shade)
+    brow: tuple
+    iris: tuple
+    lips: tuple                    # (line, lower-lip light)
+    cloth: tuple                   # (light, base, shade)
+    accent: tuple
+    accent2: tuple
+    bg: tuple                      # (plate, glow)
+    rim: tuple                     # цвет контрового света
+    hair_style: str                # short_swept | bob | crop | long_veil
+    extras: tuple = ()
+    age: int = 40
+
+
+def _mk(hexes):
+    return tuple(hx(h) for h in hexes)
+
+
+def _portrait_seed(person_id: str, emotion: str) -> int:
+    return (zlib.crc32(person_id.encode("utf-8")) ^ zlib.crc32(emotion.encode("utf-8"))) & 0xFFFF
 
 
 TEIRA = Person(
-    id="teira_os",
-    name="Тейра Ос",
-    skin=hx("#FFCF6B"),
-    skin_shade=hx("#F08A24"),
-    skin_light=hx("#FFCF6B"),
-    hair=hx("#B7C2D0"),
-    hair_light=hx("#E8EEF7"),
-    cloth=hx("#1B2A4A"),
-    cloth_shade=hx("#101A2E"),
-    accent=hx("#F5C542"),
-    accent_dark=hx("#B8862A"),
+    id="teira_os", name="Тейра Ос", role="наставник, командор", kind="soldier",
+    skin=_mk(["#DCA05C", "#B87434", "#8A4E1C", "#5C3410"]),
+    hair=_mk(["#5C6878", "#233A5C", "#0A1020"]),
+    brow=hx("#233A5C"),
     iris=hx("#B8862A"),
-    bg_a=hx("#0A1020"),
-    bg_b=hx("#142038"),
-    kind="mentor",
-)
-KIRA = Person(
-    id="kira7",
-    name="Кира-7",
-    skin=hx("#B7C2D0"),
-    skin_shade=hx("#8C99A8"),
-    skin_light=hx("#E8EEF7"),
-    hair=hx("#38414F"),
-    hair_light=hx("#5C6878"),
-    cloth=hx("#233A5C"),
-    cloth_shade=hx("#142038"),
-    accent=hx("#4FC3F7"),
-    accent_dark=hx("#2A7CA8"),
-    iris=hx("#4FC3F7"),
-    bg_a=hx("#101A2E"),
-    bg_b=hx("#2E4A70"),
-    kind="dispatcher",
+    lips=_mk(["#4A2410", "#C98B55"]),
+    cloth=_mk(["#2E4A70", "#1B2A4A", "#0A1020"]),
+    accent=hx("#F5C542"), accent2=hx("#B8862A"),
+    bg=_mk(["#0A1020", "#233A5C"]),
+    rim=hx("#B7C2D0"),
+    hair_style="short_swept",
+    extras=("scar", "neuro_port", "rank"),
+    age=44,
 )
 
+KIRA = Person(
+    id="kira7", name="Кира-7", role="диспетчер Свет-1", kind="synth",
+    skin=_mk(["#E6F4FA", "#B9D4DF", "#86A8B8", "#3A5668"]),
+    hair=_mk(["#5C6878", "#2E3A44", "#141C24"]),
+    brow=hx("#233A5C"),
+    iris=hx("#4FC3F7"),
+    lips=_mk(["#1E5A7A", "#8CD4EE"]),
+    cloth=_mk(["#2A7CA8", "#233A5C", "#0A1020"]),
+    accent=hx("#4FC3F7"), accent2=hx("#2A7CA8"),
+    bg=_mk(["#0A1020", "#142038"]),
+    rim=hx("#4FC3F7"),
+    hair_style="bob",
+    extras=("earcom", "synth_seams", "synth_glow"),
+    age=6,
+)
+
+KAIN = Person(
+    id="admiral_kain", name="Адмирал Кейн Ордо", role="адмирал флота", kind="admiral",
+    skin=_mk(["#EFE6D6", "#CDBBA0", "#A28D70", "#5E5040"]),
+    hair=_mk(["#FFFFFF", "#E8EEF7", "#A9B4C2"]),
+    brow=hx("#5C6878"),
+    iris=hx("#8C99A8"),
+    lips=_mk(["#5C6878", "#C8B48E"]),
+    cloth=_mk(["#233A5C", "#142038", "#05070E"]),
+    accent=hx("#F5C542"), accent2=hx("#B8862A"),
+    bg=_mk(["#0A1020", "#1B2A4A"]),
+    rim=hx("#F5C542"),
+    hair_style="crop",
+    extras=("cyber_eye", "rank", "ribbons", "scars_old"),
+    age=57,
+)
+
+SELEN = Person(
+    id="counselor_selen", name="Советник Селена Вэр", role="советник по стратегии", kind="counselor",
+    skin=_mk(["#E4CCA4", "#C3A070", "#94704A", "#503A22"]),
+    hair=_mk(["#7A5CFF", "#3A2B5C", "#141026"]),
+    brow=hx("#2E2340"),
+    iris=hx("#7A5CFF"),
+    lips=_mk(["#4E2A33", "#D8A8A0"]),
+    cloth=_mk(["#4B3A72", "#3A2B5C", "#141026"]),
+    accent=hx("#4FC3F7"), accent2=hx("#B7C2D0"),
+    bg=_mk(["#0A1020", "#3A2B5C"]),
+    rim=hx("#7A5CFF"),
+    hair_style="long_veil",
+    extras=("circlet", "earcom"),
+    age=46,
+)
+
+PEOPLE = [TEIRA, KIRA, KAIN, SELEN]
 EMOTIONS = ["neutral", "warm", "cold", "angry", "afraid", "sad"]
 
+# 3/4-силуэт лица (поворот к зрителю влево: дальняя сторона — справа)
+FACE_PTS = [
+    (45, 32), (47, 22), (54, 15), (62, 12), (71, 15), (79, 21), (84, 29), (86, 38),
+    (86, 46), (83, 54), (79, 61), (74, 68), (68, 74), (61, 77), (54, 73), (48, 66),
+    (44, 57), (42, 47), (43, 38),
+]
 
-def draw_portrait(person: Person, emotion: str, seed: int) -> Painter:
-    rnd = random.Random(seed)
-    p = Painter(128, 128, SPACE)
-    # --- фон: плашка 16x16 паттерн (тонкая штриховка, не спорит с лицом) + виньетка
-    p.rect(0, 0, 128, 128, person.bg_a)
+EYE_L = (52, 46)   # ближний глаз (к зрителю), середина лица
+EYE_R = (72, 45)   # дальний глаз (перспективно чуть меньше/выше)
+NOSE_Y = 56
+MOUTH_Y = 65
+
+
+def _poly_mask(pts):
+    m = Image.new("L", (128, 128), 0)
+    ImageDraw.Draw(m).polygon([(int(x), int(y)) for (x, y) in pts], fill=255)
+    return m
+
+
+def _ellipse_mask(box):
+    m = Image.new("L", (128, 128), 0)
+    ImageDraw.Draw(m).ellipse([int(v) for v in box], fill=255)
+    return m
+
+
+def _union_masks(masks):
+    acc = np.zeros((128, 128), dtype=np.uint8)
+    for m in masks:
+        acc = np.maximum(acc, np.asarray(m))
+    return Image.fromarray(acc)
+
+
+def _fill(p: "Painter", mask, color):
+    arr = np.asarray(p.img).copy()
+    arr[np.asarray(mask) > 0] = color
+    p.img = Image.fromarray(arr)
+    p.d = ImageDraw.Draw(p.img)
+
+
+def _shade(p: "Painter", mask, base, shade, level):
+    p.dither_mask(mask, base, shade, level)
+
+
+def _bg(p: "Painter", person: Person) -> None:
+    p.rect(0, 0, 128, 128, SPACE)
     for gy in range(0, 128, 16):
         for gx in range(0, 128, 16):
-            p.dither_rect(gx, gy, gx + 16, gy + 16, person.bg_a, person.bg_b, 0.16)
-    p.dither_rect(0, 0, 128, 8, person.bg_a, person.bg_b, 0.45)
-    p.dither_rect(0, 120, 128, 128, person.bg_a, person.bg_b, 0.45)
-    p.rect(0, 0, 2, 128, SPACE)
-    p.rect(126, 0, 128, 128, SPACE)
+            p.dither_rect(gx, gy, gx + 16, gy + 16, SPACE, SPACE_DEEP, 0.22)
+    p.dither_mask(_ellipse_mask((24, 0, 108, 112)), SPACE_DEEP, person.bg[1], 0.07)
+    p.dither_mask(_ellipse_mask((32, 2, 100, 104)), SPACE_DEEP, person.bg[1], 0.12)
+    p.dither_mask(_ellipse_mask((40, 8, 92, 96)), SPACE_DEEP, person.bg[1], 0.16)
+    p.dither_rect(0, 114, 128, 128, SPACE, SPACE_DEEP, 0.45)
+    p.dither_rect(0, 0, 128, 8, SPACE, SPACE_DEEP, 0.45)
     p.rect(0, 0, 128, 2, SPACE)
     p.rect(0, 126, 128, 128, SPACE)
+    p.rect(0, 0, 2, 128, SPACE)
+    p.rect(126, 0, 128, 128, SPACE)
     for (x, y) in ((2, 2), (124, 2), (2, 124), (124, 124)):
         p.pixel(x, y, METAL_SHADOW)
 
-    # --- силуэт: плечи/торс (погрудный портрет, лицо в верхней трети)
-    sil = Image.new("L", (128, 128), 0)
-    sd = ImageDraw.Draw(sil)
-    shoulders = [(10, 128), (18, 110), (34, 98), (52, 92), (76, 92), (94, 98), (110, 110), (118, 128)]
-    sd.polygon(shoulders, fill=255)
-    p.poly(shoulders, person.cloth)
-    # дальняя сторона торса в тени
-    p.dither_poly([(10, 128), (18, 110), (34, 98), (44, 94), (44, 128)], person.cloth_shade, person.cloth, 0.45)
-    # воротник (V) и подкладка
-    p.poly([(52, 92), (62, 106), (66, 106), (76, 92), (70, 89), (58, 89)], person.cloth_shade)
-    p.line([(53, 93), (62, 104), (74, 93)], person.accent_dark, 1)
-    # акценты фракции на плечах
-    if person.kind == "mentor":
-        p.rect(20, 112, 34, 115, person.accent_dark)
-        p.rect(22, 113, 32, 114, person.accent)
-        p.rect(94, 112, 108, 115, person.accent_dark)
-        p.rect(96, 113, 106, 114, person.accent)
-        # планка ранга на груди (без букв)
-        p.rect(78, 104, 92, 111, person.cloth_shade)
-        p.rect(79, 105, 91, 110, person.accent_dark)
-        for i in range(3):
-            p.rect(80 + i * 4, 106, 82 + i * 4, 109, person.accent)
+
+def _shoulders(p: "Painter", person: Person, emo: str):
+    dy = 1 if emo == "afraid" else (-1 if emo == "sad" else 0)
+    pts = [(6, 128), (14, 104 + dy), (28, 94 + dy), (46, 88 + dy), (82, 88 + dy),
+           (100, 94 + dy), (114, 104 + dy), (116, 128)]
+    m = _poly_mask(pts)
+    _fill(p, m, person.cloth[1])
+    _shade(p, _poly_mask([(6, 128), (14, 104 + dy), (28, 94 + dy), (44, 97 + dy), (44, 128)]),
+           person.cloth[1], person.cloth[0], 0.5)
+    _shade(p, _poly_mask([(94, 100 + dy), (106, 98 + dy), (118, 108 + dy), (116, 128), (100, 128), (96, 104 + dy)]),
+           person.cloth[1], person.cloth[2], 0.55)
+    if person.kind in ("soldier", "admiral"):
+        collar = [(46, 88 + dy), (54, 78 + dy), (74, 78 + dy), (82, 88 + dy), (76, 98 + dy), (52, 98 + dy)]
+        _fill(p, _poly_mask(collar), person.cloth[2])
+        _shade(p, _poly_mask([(54, 86 + dy), (64, 100 + dy), (74, 86 + dy)]), person.cloth[2], person.accent2, 0.55)
+        p.line([(47, 88 + dy), (55, 85 + dy), (73, 85 + dy), (81, 88 + dy)], person.accent, 1)
+        _fill(p, _poly_mask([(14, 108 + dy), (26, 100 + dy), (30, 106 + dy), (18, 122 + dy)]), person.accent2)
+        p.line([(16, 117 + dy), (27, 110 + dy)], person.accent, 1)
+        _fill(p, _poly_mask([(98, 100 + dy), (112, 106 + dy), (108, 112 + dy), (94, 106 + dy)]), person.accent2)
+        p.line([(97, 109 + dy), (110, 115 + dy)], person.accent, 1)
+        if "rank" in person.extras:
+            for i in range(3):
+                p.rect(60 + i * 5, 90 + dy, 63 + i * 5, 93 + dy, person.accent if i < 2 else person.accent2)
+        if "ribbons" in person.extras:
+            for i, c in enumerate((ENEMY, OK, SHIELD)):
+                p.rect(84 + i * 5, 92 + dy, 87 + i * 5, 95 + dy, c)
+                p.pixel(85 + i * 5, 93 + dy, WHITE)
+    elif person.kind == "synth":
+        collar = [(44, 98 + dy), (50, 88 + dy), (78, 88 + dy), (84, 98 + dy), (78, 100 + dy), (50, 100 + dy)]
+        _fill(p, _poly_mask(collar), person.cloth[2])
+        p.line([(46, 98 + dy), (52, 90 + dy), (76, 90 + dy), (82, 98 + dy)], person.accent2, 1)
+        _fill(p, _poly_mask([(90, 98 + dy), (104, 110 + dy), (102, 108 + dy), (88, 104 + dy)]), person.accent2)
+        _fill(p, _poly_mask([(92, 100 + dy), (101, 111 + dy), (100, 106 + dy), (91, 111 + dy)]), person.accent)
+        p.line([(34, 100 + dy), (44, 98 + dy)], person.accent2, 1)
+        p.line([(84, 100 + dy), (94, 104 + dy)], person.accent2, 1)
+    else:  # counselor: высокий воротник-стойка, плащ
+        collar = [(42, 100 + dy), (48, 82 + dy), (80, 82 + dy), (86, 100 + dy), (80, 106 + dy), (48, 106 + dy)]
+        _fill(p, _poly_mask(collar), person.cloth[0])
+        _shade(p, _poly_mask([(48, 78 + dy), (64, 100 + dy), (80, 78 + dy)]), person.cloth[0], person.cloth[1], 0.5)
+        p.line([(44, 99 + dy), (49, 78 + dy), (79, 78 + dy), (84, 99 + dy)], person.accent2, 1)
+        p.line([(52, 104 + dy), (64, 106 + dy), (76, 104 + dy)], person.accent2, 1)
+        p.pixel(64, 98 + dy, person.accent)
+        p.pixel(64, 100 + dy, person.accent)
+        p.rect(62, 100 + dy, 66, 103 + dy, person.accent2)
+        p.rect(63, 101 + dy, 65, 94 + dy, WHITE)
+    p.line([(34, 112 + dy), (32, 128)], person.cloth[2], 1)
+    p.line([(94, 110 + dy), (97, 128)], person.cloth[2], 1)
+    return m
+
+
+def _neck(p: "Painter", person: Person):
+    # короткая широкая шея с трапециями: подбородок ~77, плечи ~88
+    m = _poly_mask([(52, 70), (76, 70), (82, 92), (46, 92)])
+    _fill(p, m, person.skin[1])
+    # тень справа (дальняя сторона) и АО под челюстью — солидными плоскостями
+    _fill(p, _poly_mask([(64, 70), (76, 70), (82, 92), (64, 92)]), person.skin[2])
+    _fill(p, _poly_mask([(52, 70), (64, 70), (64, 79), (52, 79)]), person.skin[2])
+    _fill(p, _poly_mask([(52, 84), (76, 84), (82, 92), (46, 92)]), person.skin[2])
+    p.line([(64, 70), (64, 84)], person.skin[2], 1)
+    # трапеции к плечам (сглаживают «шею-цилиндр»)
+    _fill(p, _poly_mask([(46, 82), (52, 76), (52, 92), (42, 96)]), person.skin[1])
+    _fill(p, _poly_mask([(76, 76), (82, 82), (86, 96), (76, 92)]), person.skin[2])
+    return m
+
+
+def _back_hair(p: "Painter", person: Person):
+    style = person.hair_style
+    if style == "short_swept":
+        pts = [(38, 48), (35, 30), (41, 16), (52, 8), (70, 8), (82, 14), (89, 26), (89, 44),
+               (85, 36), (81, 22), (68, 15), (54, 17), (45, 25), (41, 37)]
+    elif style == "bob":
+        pts = [(36, 64), (33, 34), (38, 16), (52, 6), (70, 6), (84, 12), (92, 28), (92, 48),
+               (88, 68), (83, 52), (82, 26), (68, 16), (52, 18), (44, 30), (41, 52)]
+    elif style == "crop":
+        pts = [(42, 36), (43, 22), (50, 13), (62, 9), (74, 12), (83, 20), (86, 32),
+               (83, 29), (79, 19), (67, 14), (55, 17), (47, 24), (44, 33)]
+    else:  # long_veil
+        pts = [(34, 74), (31, 38), (37, 16), (52, 6), (70, 5), (84, 11), (92, 28), (92, 58),
+               (97, 86), (90, 88), (86, 64), (84, 40), (79, 18), (64, 11), (50, 14), (42, 26),
+               (38, 48), (40, 74)]
+    m = _poly_mask(pts)
+    _fill(p, m, person.hair[1])
+    _fill(p, _poly_mask([(38, 34), (42, 18), (54, 10), (66, 11), (60, 18), (48, 24), (42, 38)]), person.hair[0])
+    _fill(p, _poly_mask([(74, 16), (86, 26), (89, 44), (85, 36), (81, 24), (77, 20)]), person.hair[2])
+    if person.hair_style == "long_veil":
+        _shade(p, _poly_mask([(34, 50), (38, 74), (44, 86), (38, 86), (33, 60)]), person.hair[1], person.hair[2], 0.5)
+        _shade(p, _poly_mask([(88, 44), (92, 58), (97, 84), (90, 86), (86, 60)]), person.hair[1], person.hair[2], 0.5)
+        _fill(p, _poly_mask([(84, 26), (87, 30), (88, 58), (92, 84), (88, 84), (85, 58), (83, 32)]), person.hair[0])
+        p.line([(86, 32), (88, 56), (91, 80)], person.accent, 1)
+    return m
+
+
+def _face(p: "Painter", person: Person, emo: str):
+    tilt = -1 if emo == "afraid" else (1 if emo == "sad" else 0)
+    pts = [(x, y + tilt) for (x, y) in FACE_PTS]
+    m = _poly_mask(pts)
+    _fill(p, m, person.skin[1])
+
+    # --- объёмная светотень: нормаль «полусферы» лица, свет сверху-слева,
+    #     квантование в 4 тона кожи с Bayer 4×4 (структурный дизеринг, не «шум»)
+    arr = np.asarray(p.img).copy()
+    mask = np.asarray(m) > 0
+    ys, xs = np.mgrid[0:128, 0:128]
+    cy = 44 + tilt
+    nx = (xs - 63.0) / 23.0
+    ny = (ys - cy) / 26.0
+    nz = np.sqrt(np.clip(1.0 - nx * nx - ny * ny, 0.0, 1.0))
+    d = -nx * 0.45 - ny * 0.52 + nz * 0.72          # ламберт: свет сверху-слева
+    d -= np.where(ys < 30 + tilt, 0.12, 0.0)        # АО от волос
+    d -= np.where(ys > 68 + tilt, 0.14, 0.0)        # тень челюсти/шеи
+    d -= np.where((xs > 76) & (ys > 42 + tilt), 0.06, 0.0)  # дальняя щека
+    # скула-блик и лоб
+    d += np.where(((xs - 50.0) ** 2 / 40.0 + (ys - (52 + tilt)) ** 2 / 18.0) < 1.0, 0.10, 0.0)
+    v = np.clip((d - 0.02) / 0.9, 0.0, 1.0)
+    tones = np.array([person.skin[3], person.skin[2], person.skin[1], person.skin[0]], dtype=np.uint8)
+    idx = np.digitize(v, [0.18, 0.46, 0.72]).astype(np.int32)
+    for k in range(4):
+        sel = mask & (idx == k)
+        arr[sel] = tones[k]
+    edge = (mask & (idx == 1) & (np.roll(idx, 1, axis=1) == 2)) | (mask & (idx == 2) & (np.roll(idx, 1, axis=1) == 1))
+    arr[edge] = person.skin[2]
+    p.img = Image.fromarray(arr)
+    p.d = ImageDraw.Draw(p.img)
+
+    # --- линия челюсти 1 px и блик подбородка
+    p.line([(69, 69 + tilt), (73, 66 + tilt), (71, 71 + tilt), (65, 74 + tilt)], person.skin[2], 1)
+    p.pixel(61, 72 + tilt, person.skin[0])
+    # 1 px тёмный контур по правому краю лица (объём)
+    p.line([(84, 32 + tilt), (85, 41 + tilt), (82, 51 + tilt), (77, 59 + tilt), (72, 66 + tilt)], person.skin[3], 1)
+    return m
+
+
+def _ear(p: "Painter", person: Person):
+    m = _poly_mask([(38, 40), (44, 38), (45, 48), (42, 55), (38, 53), (37, 46)])
+    _fill(p, m, person.skin[1])
+    _fill(p, _poly_mask([(38, 42), (42, 41), (43, 49), (39, 52)]), person.skin[2])
+    p.line([(40, 43), (41, 50)], person.skin[2], 1)
+    p.pixel(39, 45, person.skin[0])
+    return m
+
+
+def _front_hair(p: "Painter", person: Person):
+    style = person.hair_style
+    if style == "short_swept":
+        pts = [(43, 23), (50, 14), (62, 11), (74, 13), (80, 19), (75, 21), (64, 19), (54, 22), (47, 26)]
+        m = _poly_mask(pts)
+        _fill(p, m, person.hair[1])
+        # блик — узкая полоса, не «шлем»
+        _fill(p, _poly_mask([(47, 20), (52, 15), (58, 14), (60, 18), (52, 20), (48, 23)]), person.hair[0])
+        _fill(p, _poly_mask([(76, 16), (80, 20), (79, 26), (76, 22)]), person.hair[0])
+        p.line([(50, 19), (58, 16)], person.hair[0], 1)
+        # линия роста волос: пара тёмных штрихов у лба
+        p.pixel(52, 22, person.hair[2])
+        p.pixel(59, 21, person.hair[2])
+        p.pixel(56, 20, person.hair[2])
+        if person.age >= 40:
+            for i in range(3):
+                p.line([(76 + i, 18), (78 + i, 26)], person.hair[0], 1)
+        return m
+    if style == "bob":
+        pts = [(44, 22), (50, 12), (64, 10), (78, 13), (84, 20), (80, 28), (70, 24), (56, 25), (48, 28)]
+        m = _poly_mask(pts)
+        _fill(p, m, person.hair[1])
+        _fill(p, _poly_mask([(56, 12), (66, 11), (70, 22), (58, 25), (54, 20)]), person.hair[2])
+        p.line([(64, 11), (63, 22)], person.hair[2], 1)
+        p.line([(50, 16), (58, 13)], person.hair[0], 1)
+        _fill(p, _poly_mask([(40, 28), (45, 26), (47, 52), (43, 60), (39, 54)]), person.hair[1])
+        _fill(p, _poly_mask([(84, 26), (89, 30), (88, 56), (84, 62), (83, 50)]), person.hair[1])
+        p.line([(43, 30), (42, 50)], person.hair[2], 1)
+        p.line([(86, 32), (86, 52)], person.hair[2], 1)
+        return m
+    if style == "crop":
+        pts = [(44, 32), (45, 20), (52, 13), (63, 10), (74, 13), (81, 21), (82, 30), (78, 26),
+               (70, 18), (58, 18), (48, 24)]
+        m = _poly_mask(pts)
+        _fill(p, m, person.hair[1])
+        _fill(p, _poly_mask([(46, 28), (47, 20), (56, 14), (68, 12), (78, 18), (72, 20), (58, 18), (49, 24)]), person.hair[0])
+        p.line([(50, 20), (60, 16)], person.hair[0], 1)
+        _fill(p, _poly_mask([(40, 30), (44, 28), (45, 46), (41, 48)]), person.hair[1])
+        _fill(p, _poly_mask([(84, 28), (88, 32), (88, 48), (84, 50)]), person.hair[1])
+        return m
+    pts = [(44, 20), (52, 10), (64, 7), (76, 11), (84, 19), (80, 26), (70, 20), (58, 20), (48, 26)]
+    m = _poly_mask(pts)
+    _fill(p, m, person.hair[1])
+    _fill(p, _poly_mask([(56, 12), (62, 9), (64, 24), (56, 26), (54, 20)]), person.hair[2])
+    _fill(p, _poly_mask([(66, 9), (76, 12), (80, 22), (72, 24), (66, 20)]), person.hair[0])
+    p.line([(64, 9), (63, 24)], person.hair[2], 1)
+    _fill(p, _poly_mask([(38, 28), (43, 25), (45, 54), (42, 70), (37, 66), (36, 44)]), person.hair[1])
+    _fill(p, _poly_mask([(37, 30), (41, 27), (43, 52), (39, 60)]), person.hair[2])
+    _fill(p, _poly_mask([(83, 26), (87, 32), (88, 54), (91, 78), (86, 76), (84, 48)]), person.hair[1])
+    p.line([(85, 34), (88, 60), (91, 78)], person.hair[0], 1)
+    _fringe_over_forehead(p, person, style)
+    return m
+
+
+def _lower_hairline(p: "Painter", person: Person, style: str):
+    """Опускает линию роста волос на 2–3 px: лоб не «маска», а нормальная треть лица."""
+    if style == "short_swept":
+        band = [(44, 25), (52, 20), (64, 19), (76, 21), (80, 24), (72, 27), (60, 25), (50, 28), (45, 28)]
+    elif style == "bob":
+        band = [(45, 26), (64, 25), (80, 25), (82, 29), (64, 30), (47, 30)]
+    elif style == "crop":
+        band = [(46, 30), (54, 23), (64, 21), (75, 24), (80, 31), (70, 28), (57, 29)]
     else:
-        # диспетчер: бирюзовая нашивка + тёмный жилет
-        p.rect(30, 106, 46, 116, person.cloth_shade)
-        p.rect(32, 108, 44, 114, person.accent_dark)
-        p.rect(34, 110, 42, 111, person.accent)
-        p.rect(98, 104, 110, 116, person.cloth_shade)
-        p.line([(99, 105), (109, 105)], person.accent_dark, 1)
-        p.rect(100, 110, 108, 111, person.accent)
-    p.line([(26, 120), (26, 127)], person.cloth_shade, 1)
-    p.line([(102, 118), (102, 127)], person.cloth_shade, 1)
-    p.dither_rect(36, 116, 50, 127, person.cloth, person.cloth_shade, 0.35)
+        band = [(47, 26), (55, 21), (64, 20), (75, 22), (79, 26), (70, 25), (58, 26), (49, 29)]
+    _fill(p, _poly_mask(band), person.hair[1])
+    # тёмная кромка волос и пара штрихов — «волосы, а не шапка»
+    p.line([(band[0][0] + 2, band[0][1] + 1), (band[1][0], band[1][1] + 1)], person.hair[2], 1)
+    p.line([(band[3][0] - 2, band[3][1] + 1), (band[2][0], band[2][1] + 1)], person.hair[2], 1)
 
-    # --- шея
-    p.rect(56, 74, 72, 94, person.skin_shade)
-    p.rect(58, 74, 66, 90, person.skin)
-    p.rect(66, 80, 72, 92, person.skin_shade)
-    p.rect(58, 90, 66, 94, person.skin_shade)
 
-    # --- волосы сзади (до лица)
-    if person.kind == "mentor":
-        p.poly([(36, 46), (34, 22), (46, 9), (64, 5), (82, 10), (92, 24), (90, 46), (84, 34), (78, 17), (56, 11), (44, 19), (38, 34)], person.hair)
-        p.poly([(74, 12), (88, 22), (90, 36), (84, 30), (78, 18)], person.hair_light)
-        p.rect(36, 40, 41, 56, person.hair)   # бакенбарда
+def _fringe_over_forehead(p: "Painter", person: Person, style: str):
+    """Чёлка/пряди ниже линии роста волос: солидная форма + чёткая кромка (без точек на коже)."""
+    if style == "short_swept":
+        fringe = [(44, 26), (49, 21), (58, 19), (69, 21), (78, 26), (80, 31),
+                  (72, 29), (66, 33), (58, 30), (51, 33), (46, 31)]
+    elif style == "bob":
+        fringe = [(44, 24), (54, 23), (65, 23), (78, 24), (82, 30), (74, 34),
+                  (64, 32), (52, 34), (45, 31)]
+    elif style == "crop":
+        fringe = [(45, 30), (51, 25), (60, 23), (70, 25), (78, 29), (81, 33),
+                  (71, 31), (60, 34), (50, 34)]
     else:
-        p.poly([(34, 54), (31, 24), (44, 7), (64, 3), (84, 9), (94, 26), (92, 54), (86, 40), (82, 19), (64, 13), (46, 20), (40, 40)], person.hair)
-        p.poly([(60, 14), (78, 20), (88, 34), (82, 28), (70, 20)], person.hair_light)
+        fringe = [(46, 27), (53, 23), (62, 22), (73, 24), (79, 28), (74, 32),
+                  (66, 30), (56, 33), (48, 33)]
+    _fill(p, _poly_mask(fringe), person.hair[1])
+    # блик на чёлке — 2 коротких штриха
+    p.line([(50, 23), (57, 21)], person.hair[0], 1)
+    p.line([(66, 22), (72, 24)], person.hair[0], 1)
+    # чёткая кромка: 1 px тёмного контура по зигзагу
+    p.line([(45, 31), (52, 33), (59, 30), (66, 33), (73, 29), (79, 31)], person.hair[2], 1)
+    p.pixel(48, 30, person.hair[2])
+    p.pixel(68, 30, person.hair[2])
 
-    # --- лицо: яйцевидная форма с подбородком (3/4, поворот вправо-вверх)
-    face = Image.new("L", (128, 128), 0)
-    fd = ImageDraw.Draw(face)
-    fd.ellipse([40, 14, 88, 66], fill=255)
-    fd.polygon([(42, 40), (86, 40), (84, 62), (78, 76), (64, 80), (52, 72), (43, 56)], fill=255)
-    p.dither_mask(face, person.skin, person.skin, 0.0)  # ровный тон
-    # тень дальней половины лица и под скулой (дизеринг)
-    p.dither_poly([(78, 16), (88, 24), (86, 60), (80, 74), (74, 70), (74, 34)], person.skin_shade, person.skin, 0.3)
-    p.rect(56, 74, 70, 82, person.skin_shade)  # тень под подбородком
-    p.rect(70, 76, 78, 80, person.skin_shade)
-    # нос: переносица + кончик + ноздря
-    p.vline(60, 42, 52, person.skin_shade)
-    p.rect(58, 52, 63, 54, person.skin_shade)
-    p.pixel(59, 57, SPACE_DEEP)
-    p.pixel(58, 45, person.skin_shade)
-    # ухо (одно, дальнее)
-    p.ellipse(84, 38, 92, 56, person.skin_shade)
-    p.ellipse(86, 41, 90, 53, person.skin)
-    p.pixel(87, 46, person.skin_shade)
-    # брови/глаза/рот по эмоции
-    draw_face_emotion(p, person, emotion, eye_y=40, mouth_y=67)
 
-    # --- детали: чёлка, гарнитура/шрам
-    if person.kind == "mentor":
-        p.poly([(44, 22), (56, 14), (70, 15), (64, 26), (50, 28)], person.hair)
-        p.line([(46, 22), (58, 17)], person.hair_light, 1)
-        p.rect(50, 30, 55, 33, person.skin_shade)   # шрам на виске
-        p.pixel(51, 31, person.skin_light)
-        p.pixel(53, 32, person.skin_light)
+def _eye(p: "Painter", person: Person, center, w: int, h: int, gaze: int, lid: int, far: bool):
+    cx, cy = center
+    h = max(4, h)
+    # глазница: лёгкая тень над глазом
+    p.line([(cx - w // 2 - 1, cy - 2), (cx, cy - 3), (cx + w // 2 + 1, cy - 2)], person.skin[2], 1)
+    # контур: миндаль с приподнятыми уголками
+    outer = [(cx - w // 2, cy + 2), (cx - w // 2 + 2, cy + 1), (cx, cy),
+             (cx + w // 2 - 2, cy + 1), (cx + w // 2, cy + 2),
+             (cx + w // 2 - 2, cy + h), (cx, cy + h + 1), (cx - w // 2 + 2, cy + h)]
+    _fill(p, _poly_mask(outer), SPACE_DEEP)
+    # белок (светлый, 2 px по высоте): полный при испуге, иначе 2 px по центру
+    sclera = person.skin[0] if person.kind != "synth" else hx("#DDF2FA")
+    _fill(p, _poly_mask([(cx - w // 2 + 1, cy + 2), (cx + w // 2 - 1, cy + 2),
+                         (cx + w // 2 - 2, cy + h - 1), (cx - w // 2 + 2, cy + h - 1)]), sclera)
+    # радужка 3×4 + зрачок 2×2 + блик
+    ix = cx + gaze
+    iy = cy + 1
+    _fill(p, _poly_mask([(ix - 1, iy), (ix + 1, iy), (ix + 1, iy + 3), (ix - 1, iy + 3)]), person.iris)
+    p.rect(ix, iy + 1, ix + 1, iy + 3, SPACE_DEEP)
+    p.pixel(ix + 1, iy, WHITE if person.kind != "synth" else person.accent)
+    p.pixel(ix - 1, iy + 2, person.accent if person.kind == "synth" else person.skin[2])
+    # верхнее веко: 2 px + ресничная линия
+    _fill(p, _poly_mask([(cx - w // 2 + 1, cy + 1), (cx + w // 2 - 1, cy + 1),
+                         (cx + w // 2 - 2, cy + 2), (cx - w // 2 + 2, cy + 2)]),
+          person.skin[2])
+    p.line([(cx - w // 2, cy + 2), (cx, cy), (cx + w // 2, cy + 2)], person.skin[3], 1)
+    # нижнее веко 1 px
+    p.line([(cx - w // 2 + 2, cy + h), (cx, cy + h + 1), (cx + w // 2 - 2, cy + h)], person.skin[2], 1)
+
+
+def _brow(p: "Painter", person: Person, x0: int, x1: int, y0: int, y1: int, thick: int):
+    pts = [(x0, y0), (x1, y1), (x1, y1 + thick), (x0 + 1, y0 + thick - 1)]
+    _fill(p, _poly_mask(pts), person.brow)
+    p.pixel(x0, y0 + thick, person.brow)
+    p.pixel(x0 + 1, y0 + thick + 1, person.brow)
+
+
+def _nose(p: "Painter", person: Person, tilt: int):
+    # мягкий нос: тень переносицы справа, 2 px блика на кончике, ноздри и тень основания
+    p.line([(66, 42 + tilt), (66, 50 + tilt)], person.skin[2], 1)
+    p.line([(61, 46 + tilt), (61, 51 + tilt)], person.skin[0], 1)
+    p.line([(60, 54 + tilt), (64, 55 + tilt)], person.skin[0], 1)
+    p.line([(57, 55 + tilt), (69, 55 + tilt)], person.skin[1], 1)
+    p.pixel(58, 54 + tilt, person.skin[3])
+    p.pixel(68, 54 + tilt, person.skin[3])
+    p.line([(59, 56 + tilt), (68, 56 + tilt)], person.skin[2], 1)
+
+
+def _mouth(p: "Painter", person: Person, cy: int, corners: int, width: int, open_h: int, full: bool):
+    x0 = 63 - width // 2
+    x1 = 63 + width // 2
+    if open_h > 0:
+        pts = [(x0, cy + corners), (63, cy + 1), (x1, cy + corners),
+               (x1 - 1, cy + corners + open_h), (63, cy + open_h + 1), (x0 + 1, cy + corners + open_h)]
+        _fill(p, _poly_mask(pts), hx("#2A0F14") if person.kind != "synth" else person.skin[3])
+        p.line([(x0 + 2, cy + corners), (63, cy + 1), (x1 - 2, cy + corners)], WHITE, 1)
+        p.line([(x0 + 3, cy + corners + open_h), (63, cy + open_h), (x1 - 3, cy + corners + open_h)], person.lips[0], 1)
+        return
+    if full:
+        p.line([(x0, cy + corners), (63, cy + 1), (x1, cy + corners)], person.lips[0], 1)
+        p.line([(x0 + 2, cy + 2 + corners), (63, cy + 3), (x1 - 2, cy + 2 + corners)], person.lips[1], 1)
+        p.line([(x0 + 3, cy + 3 + corners), (63, cy + 4), (x1 - 3, cy + 3 + corners)], person.skin[2], 1)
+        p.pixel(x0, cy + corners, person.skin[2])
+        p.pixel(x1, cy + corners, person.skin[2])
     else:
-        # гарнитура диспетчера: наушник на дальнем ухе + микрофон-дужка
-        p.rect(84, 40, 92, 52, person.cloth_shade)
-        p.rect(86, 42, 90, 50, person.accent_dark)
-        p.rect(87, 44, 89, 48, person.accent)
-        p.line([(88, 54), (86, 60), (80, 62)], person.cloth_shade, 1)
-        p.rect(78, 61, 82, 63, person.accent_dark)
-        p.pixel(79, 62, person.accent)
-        # шов синтетика на скуле
-        p.line([(48, 50), (52, 55), (50, 62)], person.skin_shade, 1)
+        p.line([(x0, cy + corners), (63, cy + 1), (x1, cy + corners)], person.lips[0], 1)
+        p.line([(x0 + 2, cy + 2 + corners), (63, cy + 3), (x1 - 2, cy + 2 + corners)], person.lips[1], 1)
 
-    # --- контур силуэта: голова+шея+торс, 1 px тёмный
-    sd.polygon([(40, 16), (88, 16), (88, 64), (80, 82), (64, 86), (48, 78), (40, 60)], fill=255)
-    sd.rectangle([54, 72, 74, 96], fill=255)
-    p.outline_mask(sil, SPACE)
+
+def _features(p: "Painter", person: Person, emo: str):
+    tilt = -1 if emo == "afraid" else (1 if emo == "sad" else 0)
+    ey = EYE_L[1] + tilt
+    if emo == "warm":
+        brow_in, brow_out, thick = -2, -1, 2
+        eye_l, eye_r, lid, gaze = 5, 4, 0, 0
+        corners, width, open_h = 2, 10, 0
+        full = True
+    elif emo == "cold":
+        brow_in, brow_out, thick = 0, -1, 2
+        eye_l, eye_r, lid, gaze = 6, 5, 1, 2
+        corners, width, open_h = 0, 10, 0
+        full = False
+    elif emo == "angry":
+        brow_in, brow_out, thick = 3, -2, 2
+        eye_l, eye_r, lid, gaze = 5, 4, 2, 0
+        corners, width, open_h = -2, 9, 0
+        full = True
+    elif emo == "afraid":
+        brow_in, brow_out, thick = -4, -6, 2
+        eye_l, eye_r, lid, gaze = 8, 7, 0, 0
+        corners, width, open_h = 0, 8, 2
+        full = True
+    elif emo == "sad":
+        brow_in, brow_out, thick = -3, 2, 2
+        eye_l, eye_r, lid, gaze = 6, 5, 1, 0
+        corners, width, open_h = -2, 9, 0
+        full = True
+    else:
+        brow_in, brow_out, thick = -1, -1, 2
+        eye_l, eye_r, lid, gaze = 7, 6, 0, 0
+        corners, width, open_h = 0, 10, 0
+        full = True
+
+    _brow(p, person, 45, 59, ey - 6 + brow_out, ey - 6 + brow_in, thick)
+    _brow(p, person, 81, 68, ey - 6 + brow_out, ey - 6 + brow_in, thick)
+    if emo == "angry":
+        p.line([(60, ey - 5), (67, ey - 5)], person.skin[2], 1)
+        p.line([(61, ey - 4), (66, ey - 4)], person.skin[3], 1)
+    if emo == "sad":
+        p.line([(46, ey - 4), (58, ey - 6)], person.skin[2], 1)
+        _fill(p, _poly_mask([(46, ey + 5), (58, ey + 6), (58, ey + 8), (46, ey + 8)]), person.skin[2])
+        _fill(p, _poly_mask([(68, ey + 5), (80, ey + 6), (80, ey + 8), (68, ey + 8)]), person.skin[2])
+
+    _eye(p, person, (EYE_L[0], ey), 13, eye_l, gaze, lid, far=False)
+    _eye(p, person, (EYE_R[0], ey - 1), 11, eye_r, gaze, lid, far=True)
+
+    _nose(p, person, tilt)
+    _mouth(p, person, MOUTH_Y + tilt, corners, width, open_h, full)
+
+    if emo == "warm":
+        _fill(p, _poly_mask([(43, 52 + tilt), (51, 54 + tilt), (50, 59 + tilt), (43, 58 + tilt)]), person.skin[0])
+        _fill(p, _poly_mask([(73, 50 + tilt), (81, 52 + tilt), (80, 57 + tilt), (73, 56 + tilt)]),
+              person.accent if person.kind != "synth" else person.skin[0])
+        p.pixel(48, 60 + tilt, person.skin[0])
+    if emo == "afraid":
+        p.rect(84, 32, 86, 37, SHIELD)
+        p.pixel(85, 33, WHITE)
+        p.rect(44, 50, 45, 55, SHIELD)
+        p.pixel(44, 51, WHITE)
+    if emo == "sad":
+        p.rect(80, 46, 81, 50, SHIELD)
+        p.pixel(80, 50, WHITE)
+    if emo == "cold":
+        p.line([(58, 61 + tilt), (68, 61 + tilt)], person.skin[2], 1)
+    if emo == "angry":
+        _fill(p, _poly_mask([(43, 50 + tilt), (51, 53 + tilt), (50, 57 + tilt), (43, 56 + tilt)]), person.skin[2])
+
+
+def _extras(p: "Painter", person: Person, emo: str):
+    if "scar" in person.extras:
+        scar_color = person.skin[0] if emo != "angry" else person.skin[1]
+        p.line([(45, 40), (53, 33)], scar_color, 1)
+        p.line([(46, 41), (54, 34)], person.skin[2], 1)
+        p.pixel(48, 36, person.skin[3])
+    if "neuro_port" in person.extras:
+        p.rect(82, 30, 86, 34, METAL_SHADOW)
+        p.rect(83, 31, 85, 33, METAL2)
+        p.pixel(84, 32, person.accent)
+        p.dither_rect(88, 28, 94, 30, SPACE_DEEP, person.accent, 0.3)
+    if "cyber_eye" in person.extras:
+        p.line([(67, 39), (81, 39), (84, 42)], person.accent2, 1)
+        p.line([(67, 48), (81, 48), (84, 45)], person.accent2, 1)
+        p.pixel(83, 42, person.accent)
+        p.pixel(83, 45, person.accent)
+        p.line([(84, 42), (84, 45)], person.accent2, 1)
+    if "earcom" in person.extras:
+        p.rect(83, 40, 89, 52, person.cloth[2])
+        p.rect(85, 42, 88, 50, person.accent2)
+        p.pixel(86, 44, person.accent)
+        p.line([(87, 53), (84, 59), (76, 62)], person.cloth[2], 1)
+        p.rect(74, 61, 78, 63, person.accent2)
+        p.pixel(75, 62, person.accent)
+    if "circlet" in person.extras:
+        p.line([(48, 25), (56, 21), (64, 20), (72, 21), (80, 25)], person.accent2, 1)
+        p.rect(62, 19, 66, 23, person.accent2)
+        p.rect(63, 20, 65, 22, person.accent)
+        p.pixel(64, 20, WHITE)
+    if "synth_seams" in person.extras:
+        p.line([(50, 56), (53, 61), (52, 69)], person.accent2, 1)
+        p.line([(70, 67), (72, 73)], person.accent2, 1)
+        p.pixel(51, 64, person.accent)
+    if "synth_glow" in person.extras:
+        p.line([(44, 44), (44, 53), (47, 63), (52, 72)], person.accent, 1)
+    if person.age >= 55:
+        # возрастные линии: лоб, «гусиные лапки», носогубные складки (тонко, без грязи)
+        p.line([(48, 32), (60, 31)], person.skin[2], 1)
+        p.line([(50, 35), (62, 34)], person.skin[2], 1)
+        p.pixel(68, 32, person.skin[2])
+        p.line([(43, 44), (45, 46)], person.skin[2], 1)
+        p.line([(82, 47), (84, 49)], person.skin[2], 1)
+        p.line([(58, 58), (55, 63)], person.skin[2], 1)
+        p.line([(70, 58), (72, 62)], person.skin[2], 1)
+    if "scars_old" in person.extras:
+        p.line([(76, 26), (79, 31)], person.skin[2], 1)
+        p.line([(74, 58), (78, 62)], person.skin[2], 1)
+        p.pixel(75, 59, person.skin[3])
+
+
+def _rim(p: "Painter", person: Person):
+    rim_pts = [(86, 36), (86, 45), (82, 54), (78, 61), (73, 68), (66, 75)]
+    p.line(rim_pts, person.rim, 1)
+    p.pixel(87, 40, WHITE)
+    p.pixel(86, 48, person.rim)
+    # внешний край дальнего плеча — 3 px, не линия через грудь
+    p.line([(114, 110), (120, 122)], person.rim, 1)
+    if person.kind == "admiral":
+        p.pixel(87, 34, person.accent)
+
+
+def draw_portrait(person: Person, emotion: str, seed: int) -> Painter:
+    p = Painter(128, 128, SPACE)
+    _bg(p, person)
+    masks = [_shoulders(p, person, emotion)]
+    masks.append(_neck(p, person))
+    masks.append(_back_hair(p, person))
+    masks.append(_face(p, person, emotion))
+    masks.append(_ear(p, person))
+    masks.append(_front_hair(p, person))
+    _features(p, person, emotion)
+    _extras(p, person, emotion)
+    _rim(p, person)
+    silhouette = _union_masks(masks)
+    p.outline_mask(silhouette, SPACE)
     return p
 
 
-def draw_face_emotion(p: Painter, person: Person, emotion: str, eye_y: int, mouth_y: int):
-    skin, shade, light = person.skin, person.skin_shade, person.skin_light
-    dark = SPACE_DEEP
-    sclera = WHITE
-    brow = METAL_SHADOW if person.kind == "mentor" else person.hair
+# --------------------------------------------------------- HD-рендер портретов
+# Рисуем сцену в 4× разрешении (512×512) с плавной светотенью и кривыми,
+# затем уменьшаем до 128 и квантуем в палитру проекта (≤32 цвета, без дизеринга).
+S = 4  # масштаб суперсэмплинга
 
-    def eye(cx: int, cy: int, w: int, h: int, iris_shift: int = 0, closed: int = 0):
-        # тёмная обводка века, белок, радужка, зрачок, блик
-        p.rect(cx - 1, cy - 1, cx + w + 1, cy + h + 1, dark)
-        p.rect(cx, cy, cx + w, cy + h, sclera)
-        if closed:
-            p.rect(cx, cy, cx + w, cy + closed, shade)
-            return
-        ix = cx + (w - 3) // 2 + iris_shift
-        iy = cy + max(0, (h - 3) // 2)
-        p.rect(ix, iy, ix + 3, iy + 3, person.iris)
-        p.rect(ix + 1, iy + 1, ix + 2, iy + 3, dark)
-        if h >= 5:
-            p.pixel(ix + 2, iy, light)
-        p.rect(cx, cy, cx + w, cy + 1, shade)  # верхнее веко
+SKIN_TONES = {
+    "teira_os": (hx("#E8B06A"), hx("#C98B45"), hx("#9A5F26"), hx("#5C3410")),
+    "kira7": (hx("#EAF7FC"), hx("#C6DEE8"), hx("#8FB0C0"), hx("#3A5668")),
+    "admiral_kain": (hx("#F0E8D8"), hx("#D6C7AE"), hx("#AA9878"), hx("#5E5040")),
+    "counselor_selen": (hx("#E8D2B0"), hx("#C9A87E"), hx("#96734E"), hx("#4E3620")),
+}
 
-    def brows(inner_dy, outer_dy, thick=2):
-        # ближняя бровь (outer→inner к носу), дальняя (inner→outer)
-        p.line([(44, eye_y + outer_dy), (58, eye_y + inner_dy)], brow, thick)
-        p.line([(70, eye_y + inner_dy), (84, eye_y + outer_dy)], brow, thick)
+PALETTE_HD = [hx(h) for h in PAL]  # 26 базовых цветов проекта
 
-    if emotion == "neutral":
-        brows(-8, -8)
-        eye(44, eye_y, 12, 5)
-        eye(70, eye_y, 12, 5)
-        p.line([(56, mouth_y), (70, mouth_y)], shade, 2)
-        p.pixel(62, mouth_y + 1, dark)
-        p.line([(57, mouth_y + 4), (69, mouth_y + 4)], shade, 1)
-    elif emotion == "warm":
-        brows(-11, -10)
-        eye(44, eye_y, 12, 5)
-        eye(70, eye_y, 12, 5)
-        # улыбка: уголки вверх (+2..3 px), видна линия губ
-        p.line([(53, mouth_y + 3), (57, mouth_y - 1), (67, mouth_y - 1), (73, mouth_y + 3)], shade, 2)
-        p.line([(57, mouth_y + 3), (67, mouth_y + 3)], shade, 1)
-        # румянец + приподнятые щёки
-        p.dither_rect(43, 56, 51, 61, shade, person.accent, 0.22)
-        p.dither_rect(73, 54, 81, 59, shade, person.accent, 0.22)
-        p.pixel(50, 52, light)
-        p.pixel(76, 50, light)
-    elif emotion == "cold":
-        brows(-6, -7)
-        eye(44, eye_y, 12, 4, iris_shift=2)   # взгляд в сторону
-        eye(70, eye_y, 12, 4, iris_shift=2)
-        p.rect(44, eye_y + 3, 56, eye_y + 4, shade)
-        p.rect(70, eye_y + 3, 82, eye_y + 4, shade)
-        p.line([(55, mouth_y + 1), (71, mouth_y + 1)], shade, 2)
-        p.line([(58, mouth_y + 3), (68, mouth_y + 3)], shade, 1)
-    elif emotion == "angry":
-        # брови сведены к переносице (внутренние концы ниже), складка между бровями
-        p.line([(44, eye_y - 10), (58, eye_y - 5)], brow, 2)
-        p.line([(70, eye_y - 5), (84, eye_y - 10)], brow, 2)
-        p.line([(60, eye_y - 4), (68, eye_y - 4)], brow, 1)
-        p.rect(60, eye_y - 3, 62, eye_y + 1, shade)
-        p.rect(66, eye_y - 3, 68, eye_y + 1, shade)
-        eye(44, eye_y, 12, 4)
-        eye(70, eye_y, 12, 4)
-        p.rect(44, eye_y, 56, eye_y + 1, shade)
-        p.rect(70, eye_y, 82, eye_y + 1, shade)
-        p.line([(55, mouth_y + 2), (62, mouth_y), (70, mouth_y + 2)], shade, 2)
-        p.rect(60, mouth_y + 1, 65, mouth_y + 2, dark)
-        p.dither_rect(42, 52, 52, 58, shade, ENEMY, 0.18)
-        p.dither_rect(72, 50, 82, 56, shade, ENEMY, 0.18)
-    elif emotion == "afraid":
-        # брови высоко и «домиком» (внутренние вверх), глаза широко, открытый рот, пот
-        p.line([(44, eye_y - 9), (58, eye_y - 13)], brow, 2)
-        p.line([(70, eye_y - 13), (84, eye_y - 9)], brow, 2)
-        eye(44, eye_y, 12, 7)
-        eye(70, eye_y, 12, 7)
-        p.rect(52, eye_y + 3, 54, eye_y + 5, dark)   # маленькие зрачки
-        p.rect(78, eye_y + 3, 80, eye_y + 5, dark)
-        p.rect(56, mouth_y - 1, 70, mouth_y + 4, dark)
-        p.rect(58, mouth_y, 68, mouth_y + 1, WHITE)
-        p.rect(60, mouth_y + 3, 66, mouth_y + 3, ENEMY_DARK)
-        # капли пота (2 px + белый блик)
-        p.rect(86, 34, 88, 39, SHIELD)
-        p.rect(87, 35, 88, 37, WHITE)
-        p.rect(46, 56, 47, 60, SHIELD)
-        p.pixel(46, 55, WHITE)
-    elif emotion == "sad":
-        # внутренние концы бровей вверх (грусть), веки опущены, уголки рта вниз
-        p.line([(44, eye_y - 6), (58, eye_y - 10)], brow, 2)
-        p.line([(70, eye_y - 10), (84, eye_y - 6)], brow, 2)
-        eye(44, eye_y, 12, 5, closed=2)
-        eye(70, eye_y, 12, 5, closed=2)
-        p.rect(44, eye_y + 1, 56, eye_y + 2, shade)
-        p.rect(70, eye_y + 1, 82, eye_y + 2, shade)
-        p.dither_rect(45, 50, 55, 54, shade, SPACE_FAR, 0.35)
-        p.dither_rect(71, 49, 81, 53, shade, SPACE_FAR, 0.35)
-        p.line([(54, mouth_y + 2), (58, mouth_y), (66, mouth_y), (72, mouth_y + 2)], shade, 2)
-        p.line([(58, mouth_y + 5), (68, mouth_y + 5)], shade, 1)
-        # слеза
-        p.rect(84, 46, 85, 49, SHIELD)
-        p.pixel(84, 49, WHITE)
+
+def _p(x, y):
+    return int(round(x * S)), int(round(y * S))
+
+
+def _poly(*pts):
+    return [ _p(x, y) for (x, y) in pts ]
+
+
+def _ellipse(box):
+    return [int(round(v * S)) for v in box]
+
+
+def _bezier(p0, p1, p2, p3, n=24):
+    out = []
+    for i in range(n + 1):
+        t = i / n
+        x = (1 - t) ** 3 * p0[0] + 3 * (1 - t) ** 2 * t * p1[0] + 3 * (1 - t) * t * t * p2[0] + t ** 3 * p3[0]
+        y = (1 - t) ** 3 * p0[1] + 3 * (1 - t) ** 2 * t * p1[1] + 3 * (1 - t) * t * t * p2[1] + t ** 3 * p3[1]
+        out.append((x, y))
+    return out
+
+
+def _smooth_poly(pts, closed=True):
+    """Скругление ломаной: вставляет квадратичные сглаживания по соседним точкам (для силуэтов)."""
+    out = []
+    n = len(pts)
+    for i in range(n):
+        p0 = pts[i - 1]
+        p1 = pts[i]
+        p2 = pts[(i + 1) % n] if closed else pts[min(i + 1, n - 1)]
+        out.append(p1)
+        if closed or i < n - 1:
+            for t in (0.33, 0.67):
+                x = (1 - t) ** 2 * p0[0] + 2 * (1 - t) * t * p1[0] + t * t * p1[0]
+                y = (1 - t) ** 2 * p0[1] + 2 * (1 - t) * t * p1[1] + t * t * p1[1]
+                x2 = (1 - t) ** 2 * p1[0] + 2 * (1 - t) * t * p2[0] + t * t * p2[0]
+                y2 = (1 - t) ** 2 * p1[1] + 2 * (1 - t) * t * p2[1] + t * t * p2[1]
+                out.append(((x + x2) / 2, (y + y2) / 2))
+    return out
+
+
+def _hd_render(person: Person, emo: str, seed: int) -> Image.Image:
+    from PIL import ImageFilter
+    import math
+
+    W = 128 * S
+    img = Image.new("RGB", (W, W), SPACE)
+    dr = ImageDraw.Draw(img)
+    skin = SKIN_TONES[person.id]
+    cx, ey = 63.0, 45.0
+    tilt = -1 if emo == "afraid" else (1 if emo == "sad" else 0)
+    ey += tilt
+
+    # ------------------------------------------------ фон: плашка + мягкое свечение
+    bg = np.zeros((W, W, 3), dtype=np.float32)
+    bg[:, :] = SPACE
+    yy, xx = np.mgrid[0:W, 0:W]
+    gx, gy = 63.0 * S, 44.0 * S
+    r = np.sqrt(((xx - gx) / (34 * S)) ** 2 + ((yy - gy) / (38 * S)) ** 2)
+    glow = np.clip(1 - r, 0, 1) ** 1.6
+    for k in range(3):
+        bg += np.stack([glow * person.bg[1][k] / 255.0 * 0.30] * 3, axis=-1)
+    # тонкий паттерн 16×16 (диагональ)
+    pat = ((xx // (16 * S) + yy // (16 * S)) % 2 == 0)
+    bg[pat] *= 1.06
+    bg = np.clip(bg, 0, 255)
+    img = Image.fromarray(bg.astype(np.uint8))
+    dr = ImageDraw.Draw(img, "RGBA")
+    # рамка
+    dr.rectangle([0, 0, W - 1, W - 1], outline=SPACE, width=int(round(2 * S)))
+    dr.rectangle([2 * S, 2 * S, W - 2 * S, W - 2 * S], outline=(*METAL_SHADOW, 255), width=int(round(1 * S)))
+    for (qx, qy) in ((2, 2), (124, 2), (2, 124), (124, 124)):
+        dr.rectangle([qx * S - 2, qy * S - 2, qx * S + 2, qy * S + 2], fill=(*METAL_SHADOW, 255))
+
+    # ------------------------------------------------ маски (в 512)
+    mask = Image.new("L", (W, W), 0)
+    md = ImageDraw.Draw(mask)
+
+    shoulders = _smooth_poly([(4, 128), (10, 112), (24, 100), (44, 92), (62, 88), (78, 88), (100, 94),
+                              (116, 106), (124, 128)])
+    md.polygon(_poly(*shoulders) if False else [_p(x, y) for (x, y) in shoulders], fill=255)
+    head_pts = [(43, 40), (43, 30), (47, 21), (54, 15), (62, 12.5), (71, 15), (79, 21), (85, 29),
+                (86, 38), (85, 47), (81, 56), (77, 64), (72, 71), (66, 76), (60, 77.5), (54, 73), (48, 65),
+                (44, 56), (42, 48)]
+    md.polygon([_p(x, y + tilt) for (x, y) in head_pts], fill=255)
+    mask_neck = Image.new("L", (W, W), 0)
+    ImageDraw.Draw(mask_neck).polygon([_p(56, 66), _p(72, 66), _p(75, 82), _p(53, 82)], fill=255)
+    mask_sh = Image.new("L", (W, W), 0)
+    ImageDraw.Draw(mask_sh).polygon([_p(x, y) for (x, y) in shoulders], fill=255)
+    mask_head = Image.new("L", (W, W), 0)
+    ImageDraw.Draw(mask_head).polygon([_p(x, y + tilt) for (x, y) in head_pts], fill=255)
+
+    # ------------------------------------------------ волосы (задняя масса) — маски
+    style = person.hair_style
+    if style == "short_swept":
+        back = [(40, 46), (37, 30), (42, 17), (52, 9), (64, 7), (77, 11), (86, 20), (89, 33), (88, 44),
+                (84, 36), (78, 22), (64, 16), (52, 19), (44, 28), (41, 40)]
+        fringe = [(45, 25), (50, 18), (58, 14), (68, 15), (77, 20), (81, 28), (77, 33), (68, 30), (58, 32),
+                  (50, 30), (46, 32)]
+        sburns = [((40, 34), (43, 32), (44, 50), (41, 52)), ((86, 32), (89, 34), (88, 50), (85, 52))]
+    elif style == "bob":
+        back = [(38, 62), (34, 34), (39, 17), (52, 8), (65, 7), (80, 12), (89, 24), (92, 44), (89, 64),
+                (84, 50), (81, 24), (66, 16), (51, 19), (43, 32), (40, 50)]
+        fringe = [(44, 24), (52, 18), (64, 15), (76, 18), (83, 25), (80, 31), (70, 33), (58, 32), (47, 32), (44, 29)]
+        sburns = [((39, 30), (44, 28), (45, 56), (41, 58)), ((84, 28), (89, 32), (88, 58), (84, 56))]
+    elif style == "crop":
+        back = [(43, 34), (44, 22), (51, 14), (62, 10), (74, 13), (82, 21), (85, 31), (80, 26), (68, 18), (56, 19), (47, 25)]
+        fringe = [(46, 28), (52, 22), (62, 19), (72, 22), (79, 27), (81, 32), (71, 29), (61, 31), (51, 30)]
+        sburns = [((41, 28), (44, 27), (45, 44), (42, 45)), ((84, 27), (88, 30), (88, 44), (84, 45))]
+    else:  # long_veil
+        back = [(36, 70), (32, 38), (38, 16), (52, 7), (65, 6), (80, 11), (90, 25), (92, 52), (98, 82),
+                (90, 84), (85, 58), (82, 30), (64, 18), (50, 22), (41, 38), (40, 66)]
+        fringe = [(46, 27), (53, 20), (62, 17), (73, 20), (80, 27), (75, 32), (66, 29), (56, 31), (48, 32)]
+        sburns = [((39, 30), (44, 26), (46, 62), (40, 64)), ((84, 26), (89, 30), (91, 66), (85, 64))]
+    mask_hair = Image.new("L", (W, W), 0)
+    ImageDraw.Draw(mask_hair).polygon(_smooth_poly(back) and [_p(x, y) for (x, y) in _smooth_poly(back)], fill=255)
+
+    # ------------------------------------------------ тело: одежда с мягким градиентом
+    cloth = np.array(img).astype(np.float32)
+    sh_np = np.asarray(mask_sh) > 0
+    # базовый цвет одежды + вертикальный градиент
+    t = np.clip((yy / (128 * S)), 0, 1)
+    base = np.array(person.cloth[1], dtype=np.float32)
+    light = np.array(person.cloth[0], dtype=np.float32)
+    dark = np.array(person.cloth[2], dtype=np.float32)
+    grad = np.where((xx < W * 0.45), 0.30, 0.12)
+    cloth_col = base + (light - base) * (1 - t)[..., None] * grad[..., None] - (base - dark) * t[..., None] * 0.35
+    cloth[sh_np] = np.clip(cloth_col[sh_np], 0, 255)
+    img = Image.fromarray(cloth.astype(np.uint8))
+    dr = ImageDraw.Draw(img, "RGBA")
+
+    # воротник/погоны/акценты — по типу персонажа
+    if person.kind in ("soldier", "admiral"):
+        collar = [(46, 92), (53, 80), (75, 80), (82, 92), (77, 104), (52, 104)]
+        dr.polygon([_p(x, y) for (x, y) in collar], fill=(*person.cloth[2], 255))
+        dr.polygon([_p(x, y) for (x, y) in [(55, 84), (64, 100), (74, 84)]], fill=(*person.accent2, 120))
+        dr.line([_p(47, 91), _p(54, 81), _p(74, 81), _p(81, 91)], fill=(*person.accent, 255), width=int(round(1 * S)))
+        for (a, b) in (((14, 116), (27, 108)), ((98, 108), (112, 116))):
+            dr.polygon([_p(a[0], a[1]), _p(a[0] + 12, a[1] - 7), _p(a[0] + 15, a[1] + 1), _p(a[0] + 3, a[1] + 8)],
+                       fill=(*person.accent2, 255))
+        if "rank" in person.extras:
+            for i in range(3):
+                dr.rectangle(_ellipse((60 + i * 5, 88, 63 + i * 5, 91)), fill=(*person.accent, 255))
+        if "ribbons" in person.extras:
+            for i, c in enumerate((ENEMY, OK, SHIELD)):
+                dr.rectangle(_ellipse((84 + i * 5, 90, 87 + i * 5, 93)), fill=(*c, 255))
+    elif person.kind == "synth":
+        collar = [(44, 96), (50, 86), (78, 86), (84, 96), (78, 106), (50, 106)]
+        dr.polygon([_p(x, y) for (x, y) in collar], fill=(*person.cloth[2], 255))
+        dr.line([_p(46, 96), _p(52, 88), _p(76, 88), _p(82, 96)], fill=(*person.accent2, 255), width=int(round(1 * S)))
+        dr.polygon([_p(90, 104), _p(104, 108), _p(102, 114), _p(88, 110)], fill=(*person.accent2, 255))
+        dr.polygon([_p(92, 106), _p(101, 109), _p(100, 112), _p(91, 109)], fill=(*person.accent, 255))
+    else:
+        collar = [(42, 98), (48, 80), (80, 80), (86, 98), (80, 114), (48, 114)]
+        dr.polygon([_p(x, y) for (x, y) in collar], fill=(*person.cloth[0], 255))
+        dr.line([_p(44, 97), _p(49, 82), _p(79, 82), _p(84, 97)], fill=(*person.accent2, 255), width=int(round(1 * S)))
+        dr.line([_p(52, 102), _p(64, 113), _p(76, 102)], fill=(*person.accent2, 255), width=int(round(1 * S)))
+        dr.rectangle(_ellipse((62, 98, 66, 101)), fill=(*person.accent2, 255))
+    # складки ткани (мягкие)
+    for (a, b) in (((34, 118), (32, 128)), ((94, 116), (97, 128)), ((48, 116), (52, 128))):
+        dr.line([_p(*a), _p(*b)], fill=(*person.cloth[2], 200), width=int(round(1 * S)))
+
+    # ------------------------------------------------ шея + тень под подбородком
+    neck_col = np.array(person.skin[2], dtype=np.float32)
+    neck_np = np.asarray(mask_neck) > 0
+    body = np.asarray(img).astype(np.float32)
+    # градиент шеи: светлее слева, тень справа и под челюстью
+    nxg = np.clip((xx - 50 * S) / (30 * S), 0, 1)
+    nyg = np.clip((yy - 68 * S) / (24 * S), 0, 1)
+    tone = np.clip(0.55 - nxg * 0.35 - nyg * 0.25, 0, 1)
+    neck_rgb = np.array(person.skin[1], dtype=np.float32) + (neck_col - np.array(person.skin[1])) * (1 - tone)[..., None]
+    body[neck_np] = neck_rgb[neck_np]
+    img = Image.fromarray(body.astype(np.uint8))
+    dr = ImageDraw.Draw(img, "RGBA")
+    # (тень под челюстью добавляется 1 px линией после квантования в 128)
+
+    # ------------------------------------------------ волосы: заливка + градиент/блик
+    hair_np = np.asarray(mask_hair) > 0
+    arr = np.asarray(img).astype(np.float32)
+    hbase = np.array(person.hair[1], dtype=np.float32)
+    hlight = np.array(person.hair[0], dtype=np.float32)
+    hdark = np.array(person.hair[2], dtype=np.float32)
+    # свет сверху-слева
+    hx_ = np.clip((xx - 40 * S) / (60 * S), 0, 1)
+    hy_ = np.clip((yy - 6 * S) / (70 * S), 0, 1)
+    hl = np.clip(0.9 - hx_ * 0.55 - hy_ * 0.65, 0, 1)
+    hcol = hbase + (hlight - hbase) * hl[..., None] * 0.38 - (hbase - hdark) * np.clip(hy_ - 0.45, 0, 1)[..., None] * 0.9
+    arr[hair_np] = np.clip(hcol[hair_np], 0, 255)
+    img = Image.fromarray(arr.astype(np.uint8))
+    dr = ImageDraw.Draw(img, "RGBA")
+
+    # ------------------------------------------------ лицо: скин-градиент по нормали
+    fnp = np.asarray(mask_head) > 0
+    arr = np.asarray(img).astype(np.float32)
+    rx, ry = 24.5 * S, 25.0 * S
+    ncx, ncy = 63 * S, (43 + tilt) * S
+    NX = (xx - ncx) / rx
+    NY = (yy - ncy) / ry
+    NZ = np.sqrt(np.clip(1 - NX * NX - NY * NY, 0, 1))
+    lam = -NX * 0.42 - NY * 0.50 + NZ * 0.76
+    lam = lam - np.clip((yy - (62 + tilt) * S) / (14 * S), 0, 1) * 0.25   # челюсть
+    lam = lam - np.clip(((yy < (30 + tilt) * S) & (xx > 45 * S)).astype(float), 0, 1) * 0.10
+    # cheekbone highlight
+    lam = lam + np.exp(-(((xx - 50 * S) / (9 * S)) ** 2 + ((yy - (52 + tilt) * S) / (6 * S)) ** 2)) * 0.18
+    v = np.clip((lam - 0.12) / 0.78, 0, 1)
+    s0, s1, s2, s3 = [np.array(c, dtype=np.float32) for c in skin]
+    # гладкая смесь тонов
+    vv = v[..., None]
+    lo = np.where(vv < 0.33, s2 + (s1 - s2) * (vv / 0.33), s1 + (s0 - s1) * np.clip((vv - 0.33) / 0.67, 0, 1))
+    lo2 = np.where(vv < 0.18, s3 + (s2 - s3) * (vv / 0.18), lo)
+    arr[fnp] = np.clip(lo2[fnp], 0, 255)
+    img = Image.fromarray(arr.astype(np.uint8))
+    dr = ImageDraw.Draw(img, "RGBA")
+
+    # ------------------------------------------------ уши (мягкие)
+    dr.ellipse(_ellipse((39, 39, 46, 56)), fill=(*person.skin[1], 255))
+    dr.ellipse(_ellipse((41, 43, 44, 53)), fill=(*person.skin[2], 255))
+    dr.line([_p(42, 44), _p(42, 51)], fill=(*person.skin[3], 255), width=int(round(1 * S)))
+
+    # ------------------------------------------------ чёлка (поверх лица), блик
+    fr = Image.new("L", (W, W), 0)
+    ImageDraw.Draw(fr).polygon([_p(x, y) for (x, y) in _smooth_poly(fringe)], fill=255)
+    arr = np.asarray(img).astype(np.float32)
+    hf = np.asarray(fr) > 0
+    fcol = hbase + (hlight - hbase) * np.clip(0.95 - ((xx - 44 * S) / (48 * S)) * 0.8, 0, 1)[..., None]
+    arr[hf] = np.clip(fcol[hf], 0, 255)
+    img = Image.fromarray(arr.astype(np.uint8))
+    dr = ImageDraw.Draw(img, "RGBA")
+    # бакенбарды
+    for quad in sburns:
+        dr.polygon([_p(x, y) for (x, y) in _smooth_poly(quad)], fill=(*person.hair[1], 255))
+    # седина/пси-прядь
+    if person.id == "teira_os":
+        for i in range(3):
+            dr.line([_p(76 + i, 20), _p(78 + i, 29)], fill=(*person.hair[0], 255), width=int(round(1 * S)))
+    if person.id == "counselor_selen":
+        for i in range(4):
+            dr.line([_p(84 + i * 0.4, 26 + i), _p(86 + i * 0.4, 48 + i * 3)], fill=(*person.accent, 255), width=int(round(1 * S)))
+
+    # ------------------------------------------------ черты лица
+    P = {"neutral": dict(bi=-1, bo=-1, bt=2, h=6, lid=1, gz=0, mw=10, mc=0, mo=0),
+         "warm": dict(bi=-2, bo=-1, bt=2, h=6, lid=1, gz=0, mw=10, mc=2, mo=0),
+         "cold": dict(bi=0, bo=-1, bt=2, h=5, lid=2, gz=2, mw=10, mc=0, mo=0),
+         "angry": dict(bi=3, bo=-2, bt=3, h=4, lid=2, gz=0, mw=9, mc=-2, mo=0),
+         "afraid": dict(bi=-4, bo=-6, bt=2, h=8, lid=0, gz=0, mw=8, mc=0, mo=3),
+         "sad": dict(bi=-3, bo=2, bt=2, h=6, lid=2, gz=0, mw=9, mc=-2, mo=0)}[emo]
+    eyl, eyr = 53, 72
+    # брови: толстая кисть с наклоном (в 512 — плавно)
+    def brow(x0, x1, y0, y1, thick):
+        pts = [(x0, y0 + thick), (x0 + (x1 - x0) * 0.35, y0 - 0.4 + thick * 0.6),
+               (x1, y1 + thick * 0.4), (x1, y1), (x0 + (x1 - x0) * 0.3, y0 - 0.6), (x0, y0)]
+        sp = _smooth_poly(pts)
+        dr.polygon([_p(x, y) for (x, y) in sp], fill=(*person.brow, 255))
+    by = ey + tilt - 6
+    brow(45, 59, by + P["bo"], by + P["bi"], P["bt"])
+    brow(81, 68, by + P["bo"], by + P["bi"], P["bt"])
+
+    def eye(cxx, cyy, w, h, gz, lid, far):
+        # глазная щель: белок (эллипс), радужка, зрачок, блик
+        dr.ellipse(_ellipse((cxx - w / 2, cyy - h / 2, cxx + w / 2, cyy + h / 2)), fill=(*TEXT, 255))
+        # верхнее веко — толстая дуга
+        dr.arc(_ellipse((cxx - w / 2 - 0.5, cyy - h / 2 - 1.2, cxx + w / 2 + 0.5, cyy + h / 2 + 0.8)),
+               start=190, end=350, fill=(*person.skin[3], 255), width=max(2, int(1.4 * S)))
+        # радужка и зрачок
+        ix, iy = cxx + gz, cyy + 0.2
+        ir = h * 0.42
+        dr.ellipse(_ellipse((ix - ir, iy - ir, ix + ir, iy + ir)), fill=(*person.iris, 255))
+        dr.ellipse(_ellipse((ix - ir * 0.45, iy - ir * 0.45, ix + ir * 0.45, iy + ir * 0.45)), fill=(*SPACE_DEEP, 255))
+        dr.ellipse(_ellipse((ix + ir * 0.2, iy - ir * 0.55, ix + ir * 0.55, iy - ir * 0.2)), fill=(*WHITE, 255))
+        if person.kind == "synth":
+            dr.arc(_ellipse((cxx - w / 2, cyy - h / 2, cxx + w / 2, cyy + h / 2)), start=200, end=340,
+                   fill=(*person.accent, 255), width=int(round(1 * S)))
+        # нижнее веко
+        dr.arc(_ellipse((cxx - w / 2, cyy - h / 2 - 0.6, cxx + w / 2, cyy + h / 2 + 1.4)),
+               start=10, end=170, fill=(*person.skin[2], 255), width=int(round(1 * S)))
+        # ресницы
+        dr.line([_p(cxx - w / 2 - 0.6, cyy), _p(cxx - w / 2 + 0.6, cyy + 0.4)], fill=(*person.skin[3], 255), width=int(round(1 * S)))
+        dr.line([_p(cxx + w / 2 - 0.6, cyy), _p(cxx + w / 2 + 0.6, cyy + 0.4)], fill=(*person.skin[3], 255), width=int(round(1 * S)))
+
+    eye(eyl, ey, 10, P["h"] * 0.75, P["gz"], P["lid"], False)
+    eye(eyr, ey - 1, 9, P["h"] * 0.75, P["gz"], P["lid"], True)
+
+    # нос: мягкая тень + кончик + ноздри
+    dr.line([_p(65.5, ey + 3), _p(66.5, ey + 9)], fill=(*person.skin[2], 200), width=int(round(1 * S)))
+    dr.line([_p(61, ey + 10), _p(66, ey + 11)], fill=(*person.skin[0], 230), width=int(round(1.4 * S)))
+    dr.line([_p(59.2, ey + 10.5), _p(67.5, ey + 10.5)], fill=(*person.skin[2], 230), width=int(round(1 * S)))
+    dr.ellipse(_ellipse((59.5, ey + 9.5, 60.7, ey + 10.8)), fill=(*person.skin[3], 255))
+    dr.ellipse(_ellipse((66.2, ey + 9.5, 67.4, ey + 10.8)), fill=(*person.skin[3], 255))
+
+    # рот
+    my = ey + 17
+    if P["mo"] > 0:
+        dr.ellipse(_ellipse((63 - P["mw"] / 2, my - 1, 63 + P["mw"] / 2, my + P["mo"])), fill=(*hx("#2A0F14"), 255))
+        dr.line([_p(63 - P["mw"] / 2 + 1, my - 0.5), _p(63 + P["mw"] / 2 - 1, my - 0.5)], fill=(*WHITE, 255), width=int(round(1 * S)))
+        dr.line([_p(63 - P["mw"] / 2, my - 1.2), _p(63 + P["mw"] / 2, my - 1.2)], fill=(*person.lips[0], 255), width=int(round(1.2 * S)))
+    else:
+        # линия губ: уголки вверх/вниз
+        pts = [(63 - P["mw"] / 2, my + P["mc"]), (63 - P["mw"] / 4, my - 0.5), (63, my - 0.8),
+               (63 + P["mw"] / 4, my - 0.5), (63 + P["mw"] / 2, my + P["mc"])]
+        dr.line([_p(x, y) for (x, y) in pts], fill=(*person.lips[0], 255), width=int(round(1.6 * S)))
+        # нижняя губа (светлая)
+        dr.line([_p(63 - P["mw"] / 2 + 1, my + P["mc"] + 1.4), _p(63, my + 1.8), _p(63 + P["mw"] / 2 - 1, my + P["mc"] + 1.4)],
+                fill=(*person.lips[1], 255), width=int(round(1.2 * S)))
+        dr.line([_p(63 - P["mw"] / 2 + 2, my + P["mc"] + 2.6), _p(63 + P["mw"] / 2 - 2, my + P["mc"] + 2.6)],
+                fill=(*person.skin[2], 160), width=int(round(1 * S)))
+
+    # эмоциональные акценты
+    if emo == "warm":
+        for c in (50, 76):
+            dr.ellipse(_ellipse((c - 4, ey + 8, c + 4, ey + 12)), fill=(*person.skin[0], 110))
+    if emo == "afraid":
+        dr.ellipse(_ellipse((84, 33, 86, 38)), fill=(*SHIELD, 220))
+        dr.ellipse(_ellipse((44, 50, 45.5, 55)), fill=(*SHIELD, 200))
+    if emo == "sad":
+        dr.ellipse(_ellipse((80, 48, 81, 52)), fill=(*SHIELD, 200))
+        dr.line([_p(46, ey + 6), _p(58, ey + 7)], fill=(*person.skin[2], 160), width=int(round(1 * S)))
+    if emo == "angry":
+        dr.line([_p(60, ey - 4), _p(66, ey - 4)], fill=(*person.skin[2], 220), width=int(round(1 * S)))
+
+    # ------------------------------------------------ доп. детали
+    if "scar" in person.extras:
+        dr.line([_p(45, 40), _p(53, 33)], fill=(*person.skin[0], 255), width=int(round(1.2 * S)))
+        dr.line([_p(46, 41), _p(54, 34)], fill=(*person.skin[2], 200), width=int(round(1 * S)))
+    if "neuro_port" in person.extras:
+        dr.rectangle(_ellipse((82, 30, 86, 34)), fill=(*METAL_SHADOW, 255))
+        dr.rectangle(_ellipse((83, 31, 85, 33)), fill=(*METAL2, 255))
+        dr.rectangle(_ellipse((83.6, 31.6, 84.6, 32.6)), fill=(*person.accent, 255))
+    if "cyber_eye" in person.extras:
+        dr.arc(_ellipse((eyr - 6.5, ey - 6, eyr + 6.5, ey + 6)), start=0, end=360,
+               fill=(*person.accent2, 255), width=int(round(1.2 * S)))
+        dr.line([_p(77, 39), _p(84, 39)], fill=(*person.accent2, 255), width=int(round(1 * S)))
+    if "earcom" in person.extras:
+        dr.rectangle(_ellipse((83, 40, 89, 52)), fill=(*person.cloth[2], 255))
+        dr.rectangle(_ellipse((85, 42, 88, 50)), fill=(*person.accent2, 255))
+        dr.line([_p(87, 53), _p(84, 59), _p(76, 62)], fill=(*person.cloth[2], 255), width=int(round(1.4 * S)))
+        dr.rectangle(_ellipse((74, 61, 78, 63)), fill=(*person.accent, 255))
+    if "circlet" in person.extras:
+        dr.arc(_ellipse((44, 12, 84, 34)), start=200, end=340, fill=(*person.accent2, 255), width=int(round(1.2 * S)))
+        dr.polygon([_p(62, 20), _p(66, 20), _p(65, 24), _p(63, 24)], fill=(*person.accent, 255))
+    if "synth_seams" in person.extras:
+        dr.line([_p(50, 52), _p(52, 58), _p(51, 66)], fill=(*person.accent2, 220), width=int(round(1 * S)))
+        dr.line([_p(70, 60), _p(72, 68)], fill=(*person.accent2, 220), width=int(round(1 * S)))
+    if "synth_glow" in person.extras:
+        dr.line([_p(43.5, 44), _p(43.5, 53), _p(47, 62), _p(52, 70)], fill=(*person.accent, 180), width=int(round(1 * S)))
+    if person.age >= 55:
+        dr.line([_p(48, 32), _p(60, 31)], fill=(*person.skin[2], 200), width=int(round(1 * S)))
+        dr.line([_p(50, 35), _p(62, 34)], fill=(*person.skin[2], 170), width=int(round(1 * S)))
+        dr.line([_p(58, 58), _p(55, 64)], fill=(*person.skin[2], 170), width=int(round(1 * S)))
+        dr.line([_p(70, 58), _p(72, 63)], fill=(*person.skin[2], 170), width=int(round(1 * S)))
+
+    # ------------------------------------------------ контровой свет по правому контуру
+    sil = Image.new("L", (W, W), 0)
+    sd = ImageDraw.Draw(sil)
+    sd.polygon([_p(x, y + tilt) for (x, y) in head_pts], fill=255)
+    sd.polygon([_p(x, y) for (x, y) in _smooth_poly(back)], fill=255)
+    sd.polygon([_p(x, y) for (x, y) in shoulders], fill=255)
+    sil_arr = np.asarray(sil) > 0
+    edge = np.zeros_like(sil_arr)
+    shifted = np.roll(sil_arr, -1, axis=1)
+    edge |= sil_arr & ~shifted
+    rim_col = np.array(person.rim, dtype=np.float32)
+    arr = np.asarray(img).astype(np.float32)
+    arr[edge] = np.clip(arr[edge] * 0.25 + rim_col * 0.75, 0, 255)
+    img = Image.fromarray(arr.astype(np.uint8))
+
+
+    # ------------------------------------------------ даунскейл 512 → 128 и квантование в палитру
+    small = img.resize((128, 128), Image.Resampling.LANCZOS)
+    # палитра: PALETTE_HD + 4 тона кожи (≤32 цветов)
+    palette = []
+    for c in PALETTE_HD + list(skin):
+        t = tuple(int(v) for v in c)
+        if t not in palette:
+            palette.append(t)
+    if len(palette) > 32:
+        palette = palette[:32]
+    pal_img = Image.new("P", (1, 1))
+    flat = []
+    for c in palette:
+        flat.extend(c)
+    flat.extend([0] * (768 - len(flat)))
+    pal_img.putpalette(flat)
+    out = small.quantize(palette=pal_img, dither=Image.Dither.NONE)
+    # --- контур силуэта 1 px и rim light в 128-пространстве (без «пунктира»)
+    sil128 = Image.new("L", (128, 128), 0)
+    sd128 = ImageDraw.Draw(sil128)
+    sd128.polygon([(int(round(x)), int(round(y + tilt))) for (x, y) in head_pts], fill=255)
+    sd128.polygon([(int(round(x)), int(round(y))) for (x, y) in _smooth_poly(back)], fill=255)
+    sd128.polygon([(int(round(x)), int(round(y))) for (x, y) in shoulders], fill=255)
+    sil_arr = np.asarray(sil128) > 0
+    # эрозия 3x3 → граница силуэта (2 px толщиной после дилатации)
+    er = sil_arr.copy()
+    er[1:, :] &= sil_arr[:-1, :]
+    er[:-1, :] &= sil_arr[1:, :]
+    er[:, 1:] &= sil_arr[:, :-1]
+    er[:, :-1] &= sil_arr[:, 1:]
+    border = sil_arr & ~er
+    rgb = out.convert("RGB")
+    arr = np.asarray(rgb).copy()
+    # 2 px контур: дилатация границы, чтобы убрать цветные «искры» у края
+    bimg = Image.fromarray((border.astype(np.uint8) * 255))
+    bimg = bimg.filter(ImageFilter.MaxFilter(3))
+    border2 = np.asarray(bimg) > 0
+    arr[border2] = np.array(SPACE, dtype=np.uint8)
+    # внутренний контур волос (на 1 px внутрь): тёмный тон волос, а не «искры»
+    hair128 = Image.new("L", (128, 128), 0)
+    hd128 = ImageDraw.Draw(hair128)
+    hd128.polygon([(int(round(x)), int(round(y))) for (x, y) in _smooth_poly(back)], fill=255)
+    hd128.polygon([(int(round(x)), int(round(y))) for (x, y) in _smooth_poly(fringe)], fill=255)
+    hair_arr = np.asarray(hair128) > 0
+    er_h = hair_arr.copy()
+    er_h[1:, :] &= hair_arr[:-1, :]
+    er_h[:-1, :] &= hair_arr[1:, :]
+    er_h[:, 1:] &= hair_arr[:, :-1]
+    er_h[:, :-1] &= hair_arr[:, 1:]
+    hair_edge = (hair_arr & ~er_h) & er  # кромка волос внутри лица/фона
+    arr[hair_edge] = np.array(person.hair[2], dtype=np.uint8)
+    out = Image.fromarray(arr).quantize(palette=pal_img, dither=Image.Dither.NONE)
+    return out
 
 
 def build_portraits() -> list[dict]:
     out = []
-    for person in (TEIRA, KIRA):
-        for idx, emotion in enumerate(EMOTIONS):
-            p = draw_portrait(person, emotion, seed=hash((person.id, emotion)) & 0xFFFF)
+    for person in PEOPLE:
+        for emotion in EMOTIONS:
+            out_img = _hd_render(person, emotion, seed=_portrait_seed(person.id, emotion))
             rel = f"portraits/{person.id}/{emotion}.png"
             path = os.path.join(DLC, rel)
-            colors = p.save_png8(path, max_colors=16)
-            out.append({"characterId": person.id, "characterName": person.name, "emotion": emotion,
-                        "path": rel, "width": 128, "height": 128, "colors": colors,
-                        "bytes": os.path.getsize(path)})
+            os.makedirs(os.path.dirname(path), exist_ok=True)
+            out_img.save(path, format="PNG", optimize=True)
+            colors = len(out_img.getcolors(maxcolors=64) or [])
+            out.append({
+                "characterId": person.id, "characterName": person.name, "role": person.role,
+                "emotion": emotion, "path": rel, "width": 128, "height": 128,
+                "colors": colors, "bytes": os.path.getsize(path),
+            })
     return out
 
 
-# ------------------------------------------------------------------- КАРТОЧКИ
+
+
 def build_card(kind: str, seed: int) -> tuple[Painter, dict]:
     """kind: 'main' | 'side'. 320x180: рамка 9-slice 4 px, шапка 36, арт-окно справа 168x104, футер 30."""
     rnd = random.Random(seed)
@@ -916,7 +1702,7 @@ F16 = _font(16)
 
 
 def build_previews(portraits_meta, cards_meta, bg_meta, comic_meta, fore_meta):
-    from PIL import ImageFont  # noqa: F401  (используется в _font)
+    from PIL import ImageFont  # noqa: F401
 
     def load(rel):
         return Image.open(os.path.join(DLC, rel)).convert("RGB")
@@ -924,22 +1710,27 @@ def build_previews(portraits_meta, cards_meta, bg_meta, comic_meta, fore_meta):
     def label(dr, xy, text, fill=TEXT2, f=F12):
         dr.text(xy, text, fill=fill, font=f)
 
-    # 1) портреты: 2 строки по 6 эмоций, x2 (256x256), подписи
+    row_color = {TEIRA.id: GOLD, KIRA.id: SHIELD, KAIN.id: WARN_LIGHT, SELEN.id: PSI}
+
+    # 1) портреты: 4 строки × 6 эмоций, ×2 (256×256), подписи
     cell = 128 * 2
     pad = 10
-    title_h = 34
-    sheet = Image.new("RGB", (6 * cell + 7 * pad, 2 * (cell + 20) + 3 * pad + title_h + 8), SPACE)
+    title_h = 36
+    rows = len(PEOPLE)
+    sheet_h = title_h + pad + rows * (cell + 20 + pad) + 6
+    sheet = Image.new("RGB", (6 * cell + 7 * pad, sheet_h), SPACE)
     d = ImageDraw.Draw(sheet)
-    label(d, (pad, 8), "DLC XIV «Первый Свет» · портреты 128×128, 6 эмоций (канон 14b), апскейл ×2 nearest", TEXT, F16)
-    for row, person in enumerate((TEIRA, KIRA)):
+    label(d, (pad, 10), "DLC XIV «Первый Свет» · портреты 128×128, 4 персонажа × 6 эмоций (канон 14b), ×2 nearest", TEXT, F16)
+    for row, person in enumerate(PEOPLE):
         y0 = title_h + pad + row * (cell + 20 + pad)
-        label(d, (pad, y0), f"{person.name}  ({person.id}, {person.kind})", GOLD if row == 0 else SHIELD, F14)
+        label(d, (pad, y0), f"{person.name} — {person.role} ({person.id}, {person.kind}, {person.age})",
+              row_color[person.id], F14)
         for col, emo in enumerate(EMOTIONS):
             img = scaled(load(f"portraits/{person.id}/{emo}.png"), 2)
             x = pad + col * (cell + pad)
             y = y0 + 22
             sheet.paste(img, (x, y))
-            label(d, (x + 2, y + cell - 14), emo, GOLD if row == 0 else SHIELD, F12)
+            label(d, (x + 2, y + cell - 14), emo, row_color[person.id], F12)
             d.rectangle([x - 1, y - 1, x + cell, y + cell], outline=METAL_SHADOW)
     sheet_path = os.path.join(SHOTS, "dlc-portraits.png")
     sheet.save(sheet_path)
@@ -981,34 +1772,38 @@ def build_previews(portraits_meta, cards_meta, bg_meta, comic_meta, fore_meta):
     comic = scaled(load(comic_meta["path"]), 2)
     comic.save(os.path.join(SHOTS, "dlc-comic.png"))
 
-    # 5) общий лист-превью (как выглядит в UI: портрет 1x, карточка 1x, фон 1x, комикс 1x)
-    sheet2 = Image.new("RGB", (1600, 900), SPACE)
+    # 5) общий лист-превью: 4×6 портретов (1x) + карточки/фон/комикс/голос справа
+    sheet2 = Image.new("RGB", (1600, 860), SPACE)
     d2 = ImageDraw.Draw(sheet2)
-    label(d2, (16, 10), "DLC XIV «Первый Свет» · арт-срез (task-34): портреты 128×128 ×12, карточки 320×180 ×2+placeholder, фон 640×360, комикс 640×240", TEXT, F16)
-    for row, person in enumerate((TEIRA, KIRA)):
-        y0 = 36 + row * 150
-        label(d2, (16, y0), person.name, GOLD if row == 0 else SHIELD, F14)
+    label(d2, (16, 10), "DLC XIV «Первый Свет» · арт-срез (task-39): 4 персонажа × 6 эмоций 128×128, карточки 320×180, фон 640×360, комикс 640×240", TEXT, F16)
+    for row, person in enumerate(PEOPLE):
+        y0 = 40 + row * 150
+        label(d2, (16, y0), person.name, row_color[person.id], F14)
         for col, emo in enumerate(EMOTIONS):
             img = load(f"portraits/{person.id}/{emo}.png")
             sheet2.paste(img, (16 + col * 140, y0 + 18))
             label(d2, (18 + col * 140, y0 + 148), emo, TEXT2, F12)
-    sheet2.paste(load(cards_meta[0]["path"]), (900, 36))
-    label(d2, (900, 220), "card q_pro_01_first_light (320×180)", GOLD, F12)
-    sheet2.paste(load(cards_meta[1]["path"]), (1230, 36))
-    label(d2, (1230, 220), "card q_pro_02_quiet_dock", SHIELD, F12)
-    sheet2.paste(bg, (16, 330))
-    label(d2, (16, 694), "background station_light_1 (640×360) + параллакс-слой", TEXT2, F12)
-    sheet2.paste(load(comic_meta["path"]), (680, 330))
-    label(d2, (680, 574), "comic q_pro_01_first_light_01 (640×240)", TEXT2, F12)
+    right = 900
+    sheet2.paste(load(cards_meta[0]["path"]), (right, 40))
+    label(d2, (right, 224), "card q_pro_01_first_light (320×180)", GOLD, F12)
+    sheet2.paste(load(cards_meta[1]["path"]), (right + 340, 40))
+    label(d2, (right + 340, 224), "card q_pro_02_quiet_dock", SHIELD, F12)
+    bg_thumb = bg.resize((480, 270), Image.NEAREST)
+    sheet2.paste(bg_thumb, (right, 260))
+    label(d2, (right, 534), "background station_light_1 (640×360 → thumb)", TEXT2, F12)
+    comic_thumb = load(comic_meta["path"]).resize((480, 180), Image.NEAREST)
+    sheet2.paste(comic_thumb, (right, 556))
+    label(d2, (right, 740), "comic q_pro_01_first_light_01 (640×240)", TEXT2, F12)
     total = sum(m["bytes"] for m in portraits_meta + cards_meta) + bg_meta["bytes"] + comic_meta["bytes"] + fore_meta["bytes"]
-    label(d2, (680, 600), f"PNG-8 суммарно: {total/1024:.1f} КБ (лимит 2048 КБ)", OK if total <= 2 * 1024 * 1024 else ENEMY, F14)
-    label(d2, (680, 620), "Палитра: PALETTE_HEX (24) + 2 служебных цвета Части XIII (#3A2B5C, #6BE08A)", TEXT2, F12)
-    label(d2, (680, 638), "Текст в арт не запечён: карточки/комикс оставляют зоны под DOM-бабблы", TEXT2, F12)
-    label(d2, (680, 656), "Портреты: 12 файлов × 128×128, 12–16 цветов, 1 px контур силуэта, Bayer 4×4", TEXT2, F12)
+    label(d2, (right + 500, 556), f"PNG-8: {total/1024:.1f} КБ", OK if total <= 2 * 1024 * 1024 else ENEMY, F16)
+    label(d2, (right + 500, 580), f"портретов: {len(portraits_meta)} файлов", TEXT2, F12)
+    label(d2, (right + 500, 598), "цветов на портрет ≤32", TEXT2, F12)
+    label(d2, (right + 500, 616), "палитра PALETTE_HEX + служебные", TEXT2, F12)
+    label(d2, (right + 500, 634), "текст не запечён (DOM-оверлеи)", TEXT2, F12)
     try:
         voice_img = load("voices/svet_wave.png")
-        sheet2.paste(voice_img, (1400, 330))
-        label(d2, (1400, 462), "voice", TEXT2, F12)
+        sheet2.paste(voice_img, (right + 500, 660))
+        label(d2, (right + 500, 792), "voice svet_wave", TEXT2, F12)
     except FileNotFoundError:
         pass
     sheet2.save(os.path.join(SHOTS, "dlc-preview.png"))
@@ -1038,10 +1833,9 @@ def main() -> int:
         "palette": "PALETTE_HEX (docs/10_art_direction.md §3) + service #3A2B5C/#6BE08A (13d §1.5)",
         "emotions": EMOTIONS,
         "characters": [
-            {"id": TEIRA.id, "nameRu": TEIRA.name, "portraitSize": 128,
-             "portraits": {e: f"portraits/{TEIRA.id}/{e}.png" for e in EMOTIONS}},
-            {"id": KIRA.id, "nameRu": KIRA.name, "portraitSize": 128,
-             "portraits": {e: f"portraits/{KIRA.id}/{e}.png" for e in EMOTIONS}},
+            {"id": person.id, "nameRu": person.name, "role": person.role, "portraitSize": 128,
+             "portraits": {e: f"portraits/{person.id}/{e}.png" for e in EMOTIONS}}
+            for person in PEOPLE
         ],
         "cards": {m["questId"]: m["path"] for m in cards if m.get("questId")},
         "cardPlaceholder": "cards/placeholder.png",

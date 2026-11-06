@@ -13,3 +13,5 @@ tools/gh-*
 docs/shots/gh-*
 *.cpuprofile
 *.log
+apps/web/apps/
+apps/web/docs/

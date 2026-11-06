@@ -465,6 +465,97 @@ export function dlcEnabledOf(world: World | null | undefined): boolean {
   return dlcOf(world)?.enabled ?? false;
 }
 
+// ---------------------------------------------------------------- последствия диалогов (XIV)
+export interface DlcEffectView {
+  kind: string;
+  key?: string;
+  value?: number | string;
+  labelKey?: string;
+  labelRu?: string;
+}
+export interface DlcConsequenceView {
+  tick: number;
+  sceneId: string;
+  nodeId?: string;
+  choiceId?: string;
+  questId?: string;
+  questTitleKey?: string;
+  effects: DlcEffectView[];
+}
+export interface DlcDialogueOptionView {
+  id: string;
+  textKey: string;
+  requiresFlag?: string;
+  available: boolean;
+  check?: { stat: string; dc: number };
+  consequences?: DlcEffectView[];
+}
+export interface DlcDialogueViewLike {
+  sceneId: string;
+  nodeId: string;
+  node: unknown;
+  speaker: import("@sf/data").CharacterDef | null;
+  options: DlcDialogueOptionView[];
+  history: { nodeId: string; speaker?: string; emotion?: string; textKey?: string; choiceId?: string; tick?: number }[];
+  questId: string | null;
+  seed: number;
+  startedTick: number;
+  context?: string;
+  campaignAct?: number;
+}
+
+type DlcExtraApi = {
+  getDlcDialogueView?: (w: World) => DlcDialogueViewLike | null;
+  getDlcConsequences?: (w: World, limit?: number) => DlcConsequenceView[];
+  getDlcModalState?: (w: World) => { dialogueActive: boolean; sceneId?: string; campaign?: boolean; context?: string; pendingEventId?: number | null; priority: string; paused: boolean };
+  isDlcDialogueActive?: (w: World) => boolean;
+};
+
+export function dlcDialogueViewOf(world: World | null | undefined): DlcDialogueViewLike | null {
+  if (!world) return null;
+  try { return (simApi as unknown as DlcExtraApi).getDlcDialogueView?.(world) ?? null; } catch { return null; }
+}
+export function dlcConsequencesOf(world: World | null | undefined, limit = 12): DlcConsequenceView[] {
+  if (!world) return [];
+  try { return (simApi as unknown as DlcExtraApi).getDlcConsequences?.(world, limit) ?? []; } catch { return []; }
+}
+export function dlcModalStateOf(world: World | null | undefined) {
+  if (!world) return null;
+  try { return (simApi as unknown as DlcExtraApi).getDlcModalState?.(world) ?? null; } catch { return null; }
+}
+
+export const DLC_EFFECT_KIND_RU: Record<string, [string, string]> = {
+  flag: ["флаг", "flag"],
+  rep: ["репутация", "reputation"],
+  relation: ["отношения", "relations"],
+  openQuest: ["новый квест", "new quest"],
+  branch: ["ветка сюжета", "story branch"],
+  campaignFlag: ["флаг кампании", "campaign flag"],
+  credits: ["кредиты", "credits"],
+  timeSkip: ["сдвиг времени", "time skip"],
+  chronicle: ["запись в хронику", "chronicle entry"],
+  reward: ["награда", "reward"],
+};
+/** Подпись эффекта: labelRu/labelKey из sim, иначе RU-название kind + ключ/значение. */
+export function dlcEffectLabel(e: DlcEffectView): string {
+  if (e.labelRu) return e.labelRu;
+  if (e.labelKey) return dlcText(e.labelKey);
+  const kind = DLC_EFFECT_KIND_RU[e.kind] ?? [e.kind, e.kind];
+  const base = L(kind[0], kind[1]);
+  const tail = e.key ? ": " + dlcText(String(e.key), String(e.key)) : "";
+  const val = e.value != null ? " " + (typeof e.value === "number" && e.value > 0 ? "+" : "") + String(e.value) : "";
+  return base + tail + val;
+}
+export function dlcPreviewEffects(effects: unknown): DlcEffectView[] {
+  if (!Array.isArray(effects)) return [];
+  return effects.map((raw) => {
+    const e = raw as Record<string, unknown>;
+    if (e.kind) return e as unknown as DlcEffectView;
+    const kind = Object.keys(e).find((k) => k !== "labelKey" && k !== "labelRu") ?? "effect";
+    return { kind, key: e.flag ? String(e.flag) : kind, value: typeof e[kind] === "number" ? e[kind] as number : undefined };
+  });
+}
+
 /** Сигналы в мире (для маркеров карты/HUD). */
 export function dlcSignals(world: World | null | undefined) {
   const d = dlcOf(world);

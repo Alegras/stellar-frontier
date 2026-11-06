@@ -469,3 +469,15 @@ profit_h  = EV / cycle_h × contracts        ≤ 130 000
 - Тесты: packages/sim/test/dlc.test.ts (13) — FSM и награды один раз, диалоги/проверки/эффекты, save mid-dialogue, 4 канала, миграция, детерминизм.
 - Golden hash: c55c7ffe (seed 42, 100 тактов); pnpm test 312/312; typecheck 0; QA data validator PASS=28 FAIL=0 SKIP=1.
 
+
+## 12. Часть XIV · Task-37: one-shot диалогов, последствия, сюжет кампании
+
+- **seenScenes + one-shot**: DlcState.seenScenes (schemaVersion 3); startDlcDialogue отказывает для просмотренной сцены (кроме repeatable) и не подменяет активный диалог; storyStart строго один раз (storySent + статус квеста + seenScenes).
+- **dlc_dialogue_end**: UI-закрытие (✕/Esc) завершает сцену: active=null, сцена в seenScenes, флаг dialogue_closed; шаг dialogue/choice квеста не зависает (продвигается).
+- **Модалки/пауза**: getDlcModalState → {dialogueActive, sceneId, context, campaignAct, pendingEventId, priority: dialogue>event>none, paused}; isDlcDialogueActive. narrativePhase не создаёт новые события при активном диалоге (очередь ждёт); UI паузит по setDialogueModalOpen.
+- **Последствия**: DlcState.consequences + getDlcConsequences(world,limit); getDlcDialogueView().options[i].consequences — предпросмотр (kind/labelKey/labelRu/value). Эффекты: campaignFlag (в fg.campaign.flags + d.flags), relation (CharacterDef.id → d.reputation; empire:<id> → мнение), branch (first-write-wins, иначе branchRequested), ending (campaign.endings + endingHint), items, effectLabelKey.
+- **Квесты**: requiresFlags/requiresAnyFlags в гейтах; modifiers[] (flags/anyFlags/notFlags/creditsDelta/alloysDelta/rep/extraFlags/nextHint/effectLabels) аддитивно, nextHint override, последствия в getDlcConsequences; fallback-таблица Q1→Q2/Q5/Q6 (going_now/diagnose_first/leader_first/no_shots/honest_report/hide_core/teira_only).
+- **Кампания**: campaignPhase запускает сюжетные диалоги один раз: dlg_campaign_act2 (акт II), dlg_campaign_branch (акт II+, после выбора ветки), dlg_campaign_finale (акт V); context=campaign, campaignAct; выборы кампанийных сцен меняют campaign.flags/ветку/endingHint; повторно не открываются.
+- **Тесты**: packages/sim/test/dlc-dialogues.test.ts (8) — one-shot, dlc_dialogue_end, модалки/narrative, consequences/ветка/концовка, save/load mid-dialogue, Q1→Q2 modifiers, кампанийные сцены; dlc.test обновлён под schemaVersion 3.
+- **Гейты**: pnpm test 320/320; sim typecheck 0; QA tools/dialogue-bugs.mjs PASS=10 FAIL=0; golden hash **1bfd9c71** (seed 42, 100 тактов).
+

@@ -297,7 +297,7 @@
 | M9 Campaign/Narrative | **PASS** | панели кампании/аномалий (10/14), unit-тесты campaign/anomalies PASS |
 | M10 Crisis/Balance | **PASS** | полный аудит **1000 сидов × 3 стратегии × 7200 тактов = 3000 партий**: лидер/медиана 1.50–1.62×, ВВП лидера 36–40%, войны 7.6–10.0/100 лет, федерации 1.67–1.71, кризисы 4.16–4.37 (все 5 видов), мегаструктуры 4.71–5.43, поражение 0%, детерминизм OK — §21, docs/balance-log.md §10 |
 | M11 Multiplayer | **PASS** | mp-test 27/27, e2e 2 браузера, parity SP==dedicated; **персистентность**: store-test 8/8, persist-test 13/13; **hardening 1.0**: pg-redis-test 12/12 (живые PG/Redis), HMAC-токены (token-test 5/5), interest management (full_state gzip 36.6 КБ), load-300 PASS (300 WS, 0 ошибок), audit 0 vulns — docs/mp-protocol.md §10–11 |
-| M12 Late Game/1.0 | **PASS** | victory-панель (13), golden hash c55c7ffe; RU — 100% контента и интерфейса, EN — опция (1798/1798, 659 overrides); e2e locale RU↔EN; accessibility axe 0 violations; coverage 88.9% stmts; ESLint 0 errors; CI workflow; конструктор; README «Качество 1.0» |
+| M12 Late Game/1.0 | **PASS** | victory-панель (13), golden hash 1bfd9c71; RU — 100% контента и интерфейса, EN — опция (1798/1798, 659 overrides); e2e locale RU↔EN; accessibility axe 0 violations; coverage 88.9% stmts; ESLint 0 errors; CI workflow; конструктор; README «Качество 1.0» |
 
 ### 16.3. Скриншоты (docs/shots, манифесты manifest.json + manifest-full.json)
 
@@ -412,4 +412,6 @@ EN — опциональный переключатель (не требова�
 
 ## 22. Часть XIII · Древние, расы и Реликтовый Предел (M9c, task-30)
 
-Дата приёмки: 2026-11-04. Golden hash 100 тактов seed 42 = **c55c7ffe** (packages/sim/test/tick.test.ts).
+Дата приёмки: 2026-11-04. Golden hash 100 тактов seed 42 = **1bfd9c71** (packages/sim/test/tick.test.ts).
+
+---

@@ -52,5 +52,61 @@
       "base": 10,
       "grudgeAllowed": true
     }
+  },
+  {
+    "id": "admiral_kain",
+    "nameKey": "char.admiral.name",
+    "titleKey": "char.admiral.title",
+    "portrait": "admiral_kain",
+    "portraits": {
+      "neutral": "portraits/admiral_kain/neutral.png",
+      "warm": "portraits/admiral_kain/warm.png",
+      "cold": "portraits/admiral_kain/cold.png",
+      "angry": "portraits/admiral_kain/angry.png",
+      "afraid": "portraits/admiral_kain/afraid.png",
+      "sad": "portraits/admiral_kain/sad.png"
+    },
+    "emotions": [
+      "neutral",
+      "warm",
+      "cold",
+      "angry",
+      "afraid",
+      "sad"
+    ],
+    "race": "valant",
+    "role": "admiral",
+    "relation": {
+      "base": 15,
+      "grudgeAllowed": true
+    }
+  },
+  {
+    "id": "counselor_selen",
+    "nameKey": "char.counselor.name",
+    "titleKey": "char.counselor.title",
+    "portrait": "counselor_selen",
+    "portraits": {
+      "neutral": "portraits/counselor_selen/neutral.png",
+      "warm": "portraits/counselor_selen/warm.png",
+      "cold": "portraits/counselor_selen/cold.png",
+      "angry": "portraits/counselor_selen/angry.png",
+      "afraid": "portraits/counselor_selen/afraid.png",
+      "sad": "portraits/counselor_selen/sad.png"
+    },
+    "emotions": [
+      "neutral",
+      "warm",
+      "cold",
+      "angry",
+      "afraid",
+      "sad"
+    ],
+    "race": "valant",
+    "role": "counselor",
+    "relation": {
+      "base": 10,
+      "grudgeAllowed": true
+    }
   }
 ]

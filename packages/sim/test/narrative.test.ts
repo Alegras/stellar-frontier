@@ -8,6 +8,7 @@ import {
   chooseEvent, narrativePhase, pendingNarrativeEvents, triggerEvent,
 } from "../src/narrative";
 import { campaignPhase } from "../src/campaign";
+import { endDlcDialogue } from "../src/dlc";
 import { makeEvent, makeWorld, playerId, fgOf } from "./campaignFixtures";
 import type { NarrativeEventDef } from "@sf/data";
 
@@ -170,6 +171,8 @@ describe("события: цепочки и кулдауны", () => {
     world.tick = 1300;
     campaignPhase(world, { missions: [] });
     expect(fgOf(world).campaign.act).toBe(2);
+    // Приоритет модалок: сюжетный диалог кампании мог открыться — закрываем его перед проверкой событий.
+    endDlcDialogue(world);
     world.tick = 1300;
     narrativePhase(world, catalogOf(events));
     expect(pendingNarrativeEvents(world).map((event) => event.id)).toEqual(["late_event"]);

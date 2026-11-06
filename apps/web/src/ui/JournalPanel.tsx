@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { Command } from "@sf/sim";
+import type { World } from "@sf/sim";
 import { DLC_CARD_BY_QUEST, DLC_QUESTS, DLC_QUEST_BY_ID, DLC_TREE } from "@sf/data";
 import type { QuestDef, QuestTreeDef, TreeEdgeDef, TreeQuestNodeDef } from "@sf/data";
 import { Badge, Btn, Panel, Sep } from "./controls";
 import {
-  DLC_CHANNEL_EN, DLC_CHANNEL_RU, L, dlcOf, dlcText, questOf, send, type DlcState,
+  DLC_CHANNEL_EN, DLC_CHANNEL_RU, L, dlcConsequencesOf, dlcEffectLabel, dlcOf, dlcText, questOf, send, type DlcState,
 } from "./fg";
 import { intText, playerEmpire, worldOf } from "./util";
 import type { Game } from "../game/Game";
@@ -70,7 +71,7 @@ export function JournalPanel({ game, state }: FullPanelProps) {
       </div>
       {tab === "active" && <QuestList game={game} quests={active} emptyKey="journal-empty-active" />}
       {tab === "completed" && <QuestList game={game} quests={completed} emptyKey="journal-empty-completed" />}
-      {tab === "chronicle" && <Chronicle d={d} />}
+      {tab === "chronicle" && <Chronicle d={d} world={world} />}
       {tab === "tree" && <QuestTree game={game} d={d} state={state} />}
     </div>
   );
@@ -88,6 +89,7 @@ function QuestList({ game, quests, emptyKey }: { game: Game; quests: QuestDef[];
       {quests.map((q) => {
         const st = d.quests[q.id];
         const card = DLC_CARD_BY_QUEST[q.id];
+        const questFlags = Object.keys({ ...(st?.flags ?? {}), ...(d.flags ?? {}) });
         const step = q.steps[st?.step ?? 0];
         const progress = step ? (st?.stepProgress[step.id] ?? 0) : 0;
         const need = step?.count ?? 1;
@@ -115,6 +117,11 @@ function QuestList({ game, quests, emptyKey }: { game: Game; quests: QuestDef[];
                 {q.rewards.flags?.length ? " · " + q.rewards.flags.join(", ") : ""}
               </div>
               {q.nextHint && <div className="sf-meta" data-testid="quest-next-hint">{L("далее", "next")}: {dlcText(questOf(q.nextHint)?.titleKey)}</div>}
+              {questFlags.length > 0 && (
+                <div className="sf-meta" data-testid={"quest-flags-" + q.id}>
+                  {L("Флаги выбора", "Choice flags")}: {questFlags.slice(0, 6).join(", ")}
+                </div>
+              )}
               <div className="sf-row" style={{ gap: 4, marginTop: 4 }}>
                 <Btn size="sm" variant="primary" disabled={!st || st.status === "completed"}
                   onClick={() => send(game, { type: "dlc_quest_accept", questId: q.id, source: q.source.channel } as unknown as Command)}
@@ -130,12 +137,27 @@ function QuestList({ game, quests, emptyKey }: { game: Game; quests: QuestDef[];
   );
 }
 
-function Chronicle({ d }: { d: DlcState }) {
-  if (d.chronicle.length === 0) {
+function Chronicle({ d, world }: { d: DlcState; world: World }) {
+  const consequences = dlcConsequencesOf(world, 8);
+  if (d.chronicle.length === 0 && consequences.length === 0) {
     return <div className="sf-empty" data-testid="journal-empty-chronicle">{L("Хроника пуста: записи появляются по ходу линии.", "The chronicle is empty: entries appear as the line progresses.")}</div>;
   }
   return (
     <div className="sf-journal__chronicle" data-testid="journal-chronicle">
+      {consequences.length > 0 && (
+        <div className="sf-h" data-testid="journal-consequences">{L("Последствия диалогов", "Dialogue consequences")}</div>
+      )}
+      {consequences.map((c, i) => (
+        <div key={"c" + i} className="sf-line" data-testid={"consequence-entry-" + i} style={{ alignItems: "flex-start" }}>
+          <span className="sf-meta" style={{ width: 64 }}>{"т" + intText(c.tick)}</span>
+          <div style={{ minWidth: 0 }}>
+            <div className="sf-meta">
+              {c.questTitleKey ? dlcText(c.questTitleKey) : c.sceneId}
+              {c.effects.length > 0 ? " · " + c.effects.map((fx) => dlcEffectLabel(fx)).join(" · ") : ""}
+            </div>
+          </div>
+        </div>
+      ))}
       {d.chronicle.map((entry, i) => (
         <div key={i} className="sf-line" data-testid={"chronicle-entry-" + i}>
           <span className="sf-meta" style={{ width: 64 }}>{"т" + intText(entry.tick)}</span>

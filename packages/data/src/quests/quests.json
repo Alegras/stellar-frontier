@@ -71,7 +71,10 @@
     },
     "failPolicy": "soft",
     "checkpoint": true,
-    "nextHint": "q_pro_02_quiet_dock"
+    "nextHint": "q_pro_02_quiet_dock",
+    "effectLabels": [
+      "quest.q1.fx.summary"
+    ]
   },
   {
     "id": "q_pro_02_quiet_dock",
@@ -131,7 +134,67 @@
     },
     "failPolicy": "soft",
     "checkpoint": true,
-    "nextHint": "q_pro_04_courier"
+    "nextHint": "q_pro_04_courier",
+    "modifiers": [
+      {
+        "flags": [
+          "going_now"
+        ],
+        "creditsDelta": 1000,
+        "rep": {
+          "survivors": 5
+        },
+        "nextHint": "q_pro_03_salt_ash",
+        "effectLabels": [
+          "quest.q2.fx.going"
+        ]
+      },
+      {
+        "flags": [
+          "diagnose_first"
+        ],
+        "rep": {
+          "survivors": -5
+        },
+        "effectLabels": [
+          "quest.q2.fx.diagnose"
+        ]
+      },
+      {
+        "flags": [
+          "leader_first"
+        ],
+        "rep": {
+          "survivors": 10
+        },
+        "effectLabels": [
+          "quest.q2.fx.leader"
+        ]
+      },
+      {
+        "flags": [
+          "no_shots"
+        ],
+        "creditsDelta": -2000,
+        "rep": {
+          "survivors": 5
+        },
+        "effectLabels": [
+          "quest.q2.fx.noshots"
+        ]
+      },
+      {
+        "flags": [
+          "escort_first"
+        ],
+        "rep": {
+          "military": 5
+        },
+        "effectLabels": [
+          "quest.q2.fx.escort"
+        ]
+      }
+    ]
   },
   {
     "id": "q_pro_03_salt_ash",
@@ -185,7 +248,8 @@
       ]
     },
     "failPolicy": "soft",
-    "checkpoint": false
+    "checkpoint": false,
+    "nextHint": "q_pro_04_courier"
   },
   {
     "id": "q_pro_04_courier",
@@ -235,7 +299,8 @@
       ]
     },
     "failPolicy": "soft",
-    "checkpoint": false
+    "checkpoint": false,
+    "nextHint": "q_pro_05_inspection"
   },
   {
     "id": "q_pro_05_inspection",
@@ -292,7 +357,56 @@
       ]
     },
     "failPolicy": "soft",
-    "checkpoint": false
+    "checkpoint": false,
+    "modifiers": [
+      {
+        "flags": [
+          "teira_only"
+        ],
+        "creditsDelta": 1500,
+        "rep": {
+          "consortium": 5
+        },
+        "effectLabels": [
+          "quest.q5.fx.teira"
+        ]
+      },
+      {
+        "flags": [
+          "hide_core"
+        ],
+        "creditsDelta": -3000,
+        "rep": {
+          "consortium": -5
+        },
+        "effectLabels": [
+          "quest.q5.fx.hidden"
+        ]
+      },
+      {
+        "flags": [
+          "leader_first"
+        ],
+        "rep": {
+          "military": 10
+        },
+        "effectLabels": [
+          "quest.q5.fx.leader"
+        ]
+      },
+      {
+        "flags": [
+          "no_shots"
+        ],
+        "rep": {
+          "survivors": 5
+        },
+        "effectLabels": [
+          "quest.q5.fx.noshots"
+        ]
+      }
+    ],
+    "nextHint": "q_pro_07_first_frontier"
   },
   {
     "id": "q_pro_06_echo_core",
@@ -344,7 +458,55 @@
     },
     "failPolicy": "soft",
     "checkpoint": false,
-    "nextHint": "q_pro_07_first_frontier"
+    "nextHint": "q_pro_07_first_frontier",
+    "modifiers": [
+      {
+        "flags": [
+          "honest_report"
+        ],
+        "creditsDelta": 2000,
+        "extraFlags": [
+          "q6_short"
+        ],
+        "effectLabels": [
+          "quest.q6.fx.honest"
+        ]
+      },
+      {
+        "flags": [
+          "hide_core"
+        ],
+        "creditsDelta": -6250,
+        "rep": {
+          "npc_teyra_os": -5
+        },
+        "effectLabels": [
+          "quest.q6.fx.hidden"
+        ]
+      },
+      {
+        "flags": [
+          "teira_only"
+        ],
+        "rep": {
+          "npc_teyra_os": 10
+        },
+        "effectLabels": [
+          "quest.q6.fx.teira"
+        ]
+      },
+      {
+        "flags": [
+          "leader_first"
+        ],
+        "extraFlags": [
+          "q6_prisoners"
+        ],
+        "effectLabels": [
+          "quest.q6.fx.leader"
+        ]
+      }
+    ]
   },
   {
     "id": "q_pro_07_first_frontier",

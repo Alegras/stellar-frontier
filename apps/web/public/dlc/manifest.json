@@ -14,6 +14,7 @@
     {
       "id": "teira_os",
       "nameRu": "Тейра Ос",
+      "role": "наставник, командор",
       "portraitSize": 128,
       "portraits": {
         "neutral": "portraits/teira_os/neutral.png",
@@ -27,6 +28,7 @@
     {
       "id": "kira7",
       "nameRu": "Кира-7",
+      "role": "диспетчер Свет-1",
       "portraitSize": 128,
       "portraits": {
         "neutral": "portraits/kira7/neutral.png",
@@ -35,6 +37,34 @@
         "angry": "portraits/kira7/angry.png",
         "afraid": "portraits/kira7/afraid.png",
         "sad": "portraits/kira7/sad.png"
+      }
+    },
+    {
+      "id": "admiral_kain",
+      "nameRu": "Адмирал Кейн Ордо",
+      "role": "адмирал флота",
+      "portraitSize": 128,
+      "portraits": {
+        "neutral": "portraits/admiral_kain/neutral.png",
+        "warm": "portraits/admiral_kain/warm.png",
+        "cold": "portraits/admiral_kain/cold.png",
+        "angry": "portraits/admiral_kain/angry.png",
+        "afraid": "portraits/admiral_kain/afraid.png",
+        "sad": "portraits/admiral_kain/sad.png"
+      }
+    },
+    {
+      "id": "counselor_selen",
+      "nameRu": "Советник Селена Вэр",
+      "role": "советник по стратегии",
+      "portraitSize": 128,
+      "portraits": {
+        "neutral": "portraits/counselor_selen/neutral.png",
+        "warm": "portraits/counselor_selen/warm.png",
+        "cold": "portraits/counselor_selen/cold.png",
+        "angry": "portraits/counselor_selen/angry.png",
+        "afraid": "portraits/counselor_selen/afraid.png",
+        "sad": "portraits/counselor_selen/sad.png"
       }
     }
   ],
@@ -63,122 +93,290 @@
     {
       "characterId": "teira_os",
       "characterName": "Тейра Ос",
+      "role": "наставник, командор",
       "emotion": "neutral",
       "path": "portraits/teira_os/neutral.png",
       "width": 128,
       "height": 128,
-      "colors": 13,
-      "bytes": 2122
+      "colors": 32,
+      "bytes": 5862,
+      "generator": "qwen-image-2.1 (local ComfyUI, seed 424242, edit-denoise 0.72)"
     },
     {
       "characterId": "teira_os",
       "characterName": "Тейра Ос",
+      "role": "наставник, командор",
       "emotion": "warm",
       "path": "portraits/teira_os/warm.png",
       "width": 128,
       "height": 128,
-      "colors": 13,
-      "bytes": 2144
+      "colors": 32,
+      "bytes": 5843,
+      "generator": "qwen-image-2.1 (local ComfyUI, seed 424242, edit-denoise 0.72)"
     },
     {
       "characterId": "teira_os",
       "characterName": "Тейра Ос",
+      "role": "наставник, командор",
       "emotion": "cold",
       "path": "portraits/teira_os/cold.png",
       "width": 128,
       "height": 128,
-      "colors": 13,
-      "bytes": 2112
+      "colors": 32,
+      "bytes": 5989,
+      "generator": "qwen-image-2.1 (local ComfyUI, seed 424242, edit-denoise 0.72)"
     },
     {
       "characterId": "teira_os",
       "characterName": "Тейра Ос",
+      "role": "наставник, командор",
       "emotion": "angry",
       "path": "portraits/teira_os/angry.png",
       "width": 128,
       "height": 128,
-      "colors": 14,
-      "bytes": 2173
+      "colors": 32,
+      "bytes": 6045,
+      "generator": "qwen-image-2.1 (local ComfyUI, seed 424242, edit-denoise 0.72)"
     },
     {
       "characterId": "teira_os",
       "characterName": "Тейра Ос",
+      "role": "наставник, командор",
       "emotion": "afraid",
       "path": "portraits/teira_os/afraid.png",
       "width": 128,
       "height": 128,
-      "colors": 14,
-      "bytes": 2153
+      "colors": 32,
+      "bytes": 5903,
+      "generator": "qwen-image-2.1 (local ComfyUI, seed 424242, edit-denoise 0.72)"
     },
     {
       "characterId": "teira_os",
       "characterName": "Тейра Ос",
+      "role": "наставник, командор",
       "emotion": "sad",
       "path": "portraits/teira_os/sad.png",
       "width": 128,
       "height": 128,
-      "colors": 14,
-      "bytes": 2157
+      "colors": 32,
+      "bytes": 5927,
+      "generator": "qwen-image-2.1 (local ComfyUI, seed 424242, edit-denoise 0.72)"
     },
     {
       "characterId": "kira7",
       "characterName": "Кира-7",
+      "role": "диспетчер Свет-1",
       "emotion": "neutral",
       "path": "portraits/kira7/neutral.png",
       "width": 128,
       "height": 128,
-      "colors": 14,
-      "bytes": 2129
+      "colors": 32,
+      "bytes": 6519,
+      "generator": "qwen-image-2.1 (local ComfyUI, seed 424242, edit-denoise 0.72)"
     },
     {
       "characterId": "kira7",
       "characterName": "Кира-7",
+      "role": "диспетчер Свет-1",
       "emotion": "warm",
       "path": "portraits/kira7/warm.png",
       "width": 128,
       "height": 128,
-      "colors": 14,
-      "bytes": 2147
+      "colors": 32,
+      "bytes": 6510,
+      "generator": "qwen-image-2.1 (local ComfyUI, seed 424242, edit-denoise 0.72)"
     },
     {
       "characterId": "kira7",
       "characterName": "Кира-7",
+      "role": "диспетчер Свет-1",
       "emotion": "cold",
       "path": "portraits/kira7/cold.png",
       "width": 128,
       "height": 128,
-      "colors": 13,
-      "bytes": 2121
+      "colors": 32,
+      "bytes": 6189,
+      "generator": "qwen-image-2.1 (local ComfyUI, seed 424242, edit-denoise 0.72)"
     },
     {
       "characterId": "kira7",
       "characterName": "Кира-7",
+      "role": "диспетчер Свет-1",
       "emotion": "angry",
       "path": "portraits/kira7/angry.png",
       "width": 128,
       "height": 128,
-      "colors": 14,
-      "bytes": 2176
+      "colors": 32,
+      "bytes": 6202,
+      "generator": "qwen-image-2.1 (local ComfyUI, seed 424242, edit-denoise 0.72)"
     },
     {
       "characterId": "kira7",
       "characterName": "Кира-7",
+      "role": "диспетчер Свет-1",
       "emotion": "afraid",
       "path": "portraits/kira7/afraid.png",
       "width": 128,
       "height": 128,
-      "colors": 14,
-      "bytes": 2152
+      "colors": 32,
+      "bytes": 6338,
+      "generator": "qwen-image-2.1 (local ComfyUI, seed 424242, edit-denoise 0.72)"
     },
     {
       "characterId": "kira7",
       "characterName": "Кира-7",
+      "role": "диспетчер Свет-1",
       "emotion": "sad",
       "path": "portraits/kira7/sad.png",
       "width": 128,
       "height": 128,
-      "colors": 13,
-      "bytes": 2155
+      "colors": 32,
+      "bytes": 6408,
+      "generator": "qwen-image-2.1 (local ComfyUI, seed 424242, edit-denoise 0.72)"
+    },
+    {
+      "characterId": "admiral_kain",
+      "characterName": "Адмирал Кейн Ордо",
+      "role": "адмирал флота",
+      "emotion": "neutral",
+      "path": "portraits/admiral_kain/neutral.png",
+      "width": 128,
+      "height": 128,
+      "colors": 32,
+      "bytes": 6723,
+      "generator": "qwen-image-2.1 (local ComfyUI, seed 424242, edit-denoise 0.72)"
+    },
+    {
+      "characterId": "admiral_kain",
+      "characterName": "Адмирал Кейн Ордо",
+      "role": "адмирал флота",
+      "emotion": "warm",
+      "path": "portraits/admiral_kain/warm.png",
+      "width": 128,
+      "height": 128,
+      "colors": 32,
+      "bytes": 6875,
+      "generator": "qwen-image-2.1 (local ComfyUI, seed 424242, edit-denoise 0.72)"
+    },
+    {
+      "characterId": "admiral_kain",
+      "characterName": "Адмирал Кейн Ордо",
+      "role": "адмирал флота",
+      "emotion": "cold",
+      "path": "portraits/admiral_kain/cold.png",
+      "width": 128,
+      "height": 128,
+      "colors": 32,
+      "bytes": 6829,
+      "generator": "qwen-image-2.1 (local ComfyUI, seed 424242, edit-denoise 0.72)"
+    },
+    {
+      "characterId": "admiral_kain",
+      "characterName": "Адмирал Кейн Ордо",
+      "role": "адмирал флота",
+      "emotion": "angry",
+      "path": "portraits/admiral_kain/angry.png",
+      "width": 128,
+      "height": 128,
+      "colors": 32,
+      "bytes": 6917,
+      "generator": "qwen-image-2.1 (local ComfyUI, seed 424242, edit-denoise 0.72)"
+    },
+    {
+      "characterId": "admiral_kain",
+      "characterName": "Адмирал Кейн Ордо",
+      "role": "адмирал флота",
+      "emotion": "afraid",
+      "path": "portraits/admiral_kain/afraid.png",
+      "width": 128,
+      "height": 128,
+      "colors": 32,
+      "bytes": 7021,
+      "generator": "qwen-image-2.1 (local ComfyUI, seed 424242, edit-denoise 0.72)"
+    },
+    {
+      "characterId": "admiral_kain",
+      "characterName": "Адмирал Кейн Ордо",
+      "role": "адмирал флота",
+      "emotion": "sad",
+      "path": "portraits/admiral_kain/sad.png",
+      "width": 128,
+      "height": 128,
+      "colors": 32,
+      "bytes": 6745,
+      "generator": "qwen-image-2.1 (local ComfyUI, seed 424242, edit-denoise 0.72)"
+    },
+    {
+      "characterId": "counselor_selen",
+      "characterName": "Советник Селена Вэр",
+      "role": "советник по стратегии",
+      "emotion": "neutral",
+      "path": "portraits/counselor_selen/neutral.png",
+      "width": 128,
+      "height": 128,
+      "colors": 32,
+      "bytes": 7964,
+      "generator": "qwen-image-2.1 (local ComfyUI, seed 424242, edit-denoise 0.72)"
+    },
+    {
+      "characterId": "counselor_selen",
+      "characterName": "Советник Селена Вэр",
+      "role": "советник по стратегии",
+      "emotion": "warm",
+      "path": "portraits/counselor_selen/warm.png",
+      "width": 128,
+      "height": 128,
+      "colors": 32,
+      "bytes": 8057,
+      "generator": "qwen-image-2.1 (local ComfyUI, seed 424242, edit-denoise 0.72)"
+    },
+    {
+      "characterId": "counselor_selen",
+      "characterName": "Советник Селена Вэр",
+      "role": "советник по стратегии",
+      "emotion": "cold",
+      "path": "portraits/counselor_selen/cold.png",
+      "width": 128,
+      "height": 128,
+      "colors": 32,
+      "bytes": 7988,
+      "generator": "qwen-image-2.1 (local ComfyUI, seed 424242, edit-denoise 0.72)"
+    },
+    {
+      "characterId": "counselor_selen",
+      "characterName": "Советник Селена Вэр",
+      "role": "советник по стратегии",
+      "emotion": "angry",
+      "path": "portraits/counselor_selen/angry.png",
+      "width": 128,
+      "height": 128,
+      "colors": 32,
+      "bytes": 8209,
+      "generator": "qwen-image-2.1 (local ComfyUI, seed 424242, edit-denoise 0.72)"
+    },
+    {
+      "characterId": "counselor_selen",
+      "characterName": "Советник Селена Вэр",
+      "role": "советник по стратегии",
+      "emotion": "afraid",
+      "path": "portraits/counselor_selen/afraid.png",
+      "width": 128,
+      "height": 128,
+      "colors": 32,
+      "bytes": 8113,
+      "generator": "qwen-image-2.1 (local ComfyUI, seed 424242, edit-denoise 0.72)"
+    },
+    {
+      "characterId": "counselor_selen",
+      "characterName": "Советник Селена Вэр",
+      "role": "советник по стратегии",
+      "emotion": "sad",
+      "path": "portraits/counselor_selen/sad.png",
+      "width": 128,
+      "height": 128,
+      "colors": 32,
+      "bytes": 8061,
+      "generator": "qwen-image-2.1 (local ComfyUI, seed 424242, edit-denoise 0.72)"
     },
     {
       "questId": "q_pro_01_first_light",
@@ -241,21 +439,33 @@
       "bytes": 1372
     }
   ],
-  "totalBytes": 44134,
-  "totalKb": 43.1,
+  "totalBytes": 181630,
+  "totalKb": 177.4,
   "sha256_16": {
-    "portraits/teira_os/neutral.png": "51226bd71974fd20",
-    "portraits/teira_os/warm.png": "f06f1d6e0103df22",
-    "portraits/teira_os/cold.png": "7af919f33baf6fc6",
-    "portraits/teira_os/angry.png": "94b4efdce885342f",
-    "portraits/teira_os/afraid.png": "816f68339a462129",
-    "portraits/teira_os/sad.png": "8b8d3e6e538920b4",
-    "portraits/kira7/neutral.png": "1800474e5ddfd25c",
-    "portraits/kira7/warm.png": "34e8b3029dd7a729",
-    "portraits/kira7/cold.png": "4c67736923b9c08d",
-    "portraits/kira7/angry.png": "04dfceb9d53a7e53",
-    "portraits/kira7/afraid.png": "e7b78c168bb56f2a",
-    "portraits/kira7/sad.png": "fc89dd08f7b58124",
+    "portraits/teira_os/neutral.png": "a0d8bd416a5e6965",
+    "portraits/teira_os/warm.png": "9b2a66b594b0146d",
+    "portraits/teira_os/cold.png": "201025a33770230e",
+    "portraits/teira_os/angry.png": "0eaff815fa25a520",
+    "portraits/teira_os/afraid.png": "91983d730b8e6a15",
+    "portraits/teira_os/sad.png": "063834d0c2e4d956",
+    "portraits/kira7/neutral.png": "b10ad48facea8f9a",
+    "portraits/kira7/warm.png": "66aa621461b66936",
+    "portraits/kira7/cold.png": "0073e6ad70e768c2",
+    "portraits/kira7/angry.png": "9349b789eb801b80",
+    "portraits/kira7/afraid.png": "765d507188bd1559",
+    "portraits/kira7/sad.png": "f7af2927c7cb0a3d",
+    "portraits/admiral_kain/neutral.png": "303afe2596ddf32e",
+    "portraits/admiral_kain/warm.png": "6ce3c35a25707456",
+    "portraits/admiral_kain/cold.png": "b098687652c3b1d4",
+    "portraits/admiral_kain/angry.png": "13ab4421f2eb967e",
+    "portraits/admiral_kain/afraid.png": "96c0af6130532477",
+    "portraits/admiral_kain/sad.png": "21f7af5fa604e0bb",
+    "portraits/counselor_selen/neutral.png": "a50c7def2af9bbd8",
+    "portraits/counselor_selen/warm.png": "a0ccea329b8121cf",
+    "portraits/counselor_selen/cold.png": "55621424bb11252e",
+    "portraits/counselor_selen/angry.png": "37ee010f7b36ef72",
+    "portraits/counselor_selen/afraid.png": "7d01379acf715c47",
+    "portraits/counselor_selen/sad.png": "4e9663550df979ad",
     "cards/q_pro_01_first_light.png": "db8f55454e2ec340",
     "cards/q_pro_02_quiet_dock.png": "03b501fe6c7b67a2",
     "cards/placeholder.png": "5c6202514c6f9172",
@@ -263,5 +473,11 @@
     "backgrounds/station_light_1_fore.png": "a6d95d8fda133eee",
     "comics/q_pro_01_first_light_01.png": "50c1f7d6d17d2937",
     "voices/svet_wave.png": "a0f3c28a0da4a186"
+  },
+  "portraitPipeline": {
+    "generator": "qwen-image-2.1-UC-fp8 + qwen3vl_8b (ComfyUI 127.0.0.1:8188)",
+    "neutral": "text-to-image, 1024x1024, 25 steps, cfg 1, euler/simple, seed 424242",
+    "emotions": "qwen-image-2.1 edit from neutral reference, denoise 0.72, same seed",
+    "post": "crop bust -> 128x128 LANCZOS -> unsharp -> PNG-8 32 colors (no dither)"
   }
 }

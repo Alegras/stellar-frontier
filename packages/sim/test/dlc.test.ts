@@ -111,7 +111,7 @@ describe("DLC XIV · feature-flag, миграция, история", () => {
     const world = makeWorld();
     const d = getDlcState(world);
     expect(d.enabled).toBe(true);
-    expect(d.schemaVersion).toBe(2);
+    expect(d.schemaVersion).toBe(3);
     expect(getDlcSaveMeta(world)).toMatchObject({ enabled: true, version: "1.0.0", mode: "full" });
     startStory(world);
     expect(d.storySent).toBe(true);
@@ -141,7 +141,7 @@ describe("DLC XIV · feature-flag, миграция, история", () => {
     const d = ensureDlc(restored);
     expect(d.enabled).toBe(false);
     expect(d.mode).toBe("off");
-    expect(d.schemaVersion).toBe(2);
+    expect(d.schemaVersion).toBe(3);
     expect(d.migratedFromVersion).toBe(0);
     expect(d.flags.dlc_migration_warn).toBe(1);
   });
@@ -234,12 +234,13 @@ describe("DLC XIV · диалоги: выборы, проверки, эффек�
     expect(d.flags.flg_q1_dialogue_end).toBe(1);
   });
 
-  it("startDlcDialogue закрывает предыдущую сцену как interrupted", () => {
+  it("startDlcDialogue не подменяет активную сцену (one-shot, без повторов)", () => {
     const world = makeWorld();
     startStory(world);
     const d = getDlcState(world);
-    expect(startDlcDialogue(world, "dlg_q1", "q_pro_01_first_light").ok).toBe(true);
-    expect(d.flags.dialogue_interrupted).toBeGreaterThanOrEqual(1);
+    const active = d.dialogue!.sceneId;
+    expect(startDlcDialogue(world, "dlg_q1", "q_pro_01_first_light").ok).toBe(false);
+    expect(d.dialogue?.sceneId).toBe(active);
   });
 });
 

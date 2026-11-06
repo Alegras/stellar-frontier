@@ -1,12 +1,12 @@
 {
-  "generatedAt": "2026-11-04T20:08:33.102Z",
+  "generatedAt": "2026-11-06T18:06:35.245Z",
   "dialogueOpenMsSamples": [
-    8
+    3.4
   ],
-  "dialogueOpenMaxMs": 8,
-  "dialogueOpenAvgMs": 8,
-  "treeLayoutMs": 0.1,
-  "zoomFrameMs": 36.5,
+  "dialogueOpenMaxMs": 3.4,
+  "dialogueOpenAvgMs": 3.4,
+  "treeLayoutMs": 0.2,
+  "zoomFrameMs": 13.9,
   "budget": {
     "dialogueOpenMs": 50,
     "treeLayoutMs": 2

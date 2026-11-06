@@ -19,7 +19,7 @@ import type {
 import type { CommandResult, World } from "./types";
 
 export const DLC_VERSION = "1.0.0";
-export const DLC_SCHEMA_VERSION = 2;
+export const DLC_SCHEMA_VERSION = 3;
 export const DLC_BOARD_REFRESH = 10;
 export const DLC_RUMOR_COST = 500;
 export const DLC_RUMOR_TTL = 600;
@@ -52,10 +52,34 @@ export interface DlcHistoryEntry {
   tick: number;
 }
 
+export type DlcConsequenceKind =
+  | "flag" | "rep" | "relation" | "openQuest" | "branch" | "campaignFlag" | "credits" | "chronicle" | "reward";
+
+export interface DlcConsequenceEffect {
+  kind: DlcConsequenceKind;
+  key?: string;
+  value?: number;
+  labelKey?: string;
+  labelRu?: string;
+}
+
+export interface DlcConsequenceEntry {
+  tick: number;
+  sceneId: string;
+  nodeId?: string;
+  choiceId?: string;
+  questId?: string;
+  questTitleKey?: string;
+  effects: DlcConsequenceEffect[];
+}
+
 export interface DlcDialogueState {
   sceneId: string;
   nodeId: string;
   active: boolean;
+  /** dlc — сцена квеста DLC, campaign — сюжетный диалог кампании */
+  context: "dlc" | "campaign";
+  campaignAct?: number;
   history: DlcHistoryEntry[];
   checkResults: Record<string, boolean>;
   choices: Record<string, string>;
@@ -107,6 +131,10 @@ export interface DlcState {
   rumorsGenerated: boolean;
   signalsGenerated: boolean;
   stats: Record<string, number>;
+  /** Просмотренные сцены: по умолчанию one-shot (кроме repeatable). */
+  seenScenes: string[];
+  /** История последствий выборов/наград для панели и журнала. */
+  consequences: DlcConsequenceEntry[];
 }
 
 // ------------------------------------------------------------------ каталог (override для тестов/EN)
@@ -118,6 +146,43 @@ export interface DlcCatalog {
   tree: QuestTreeDef;
   cards: QuestCardDef[];
 }
+
+/** Расширенные (optional) поля данных Части XIV, которые вводит контент. */
+type ExtendedDialogueEffect = DialogueEffectDef & {
+  campaignFlag?: string;
+  relation?: Record<string, number>;
+  branch?: string;
+  ending?: string;
+  effectLabelKey?: string;
+  items?: string[];
+};
+
+interface QuestModifierDef {
+  flags?: string[];
+  anyFlags?: string[];
+  notFlags?: string[];
+  creditsDelta?: number;
+  alloysDelta?: number;
+  rep?: Record<string, number>;
+  extraFlags?: string[];
+  nextHint?: string;
+  effectLabels?: string[];
+}
+
+type ExtendedQuestDef = QuestDef & {
+  requiresFlags?: string[];
+  requiresAnyFlags?: string[];
+  modifiers?: QuestModifierDef[];
+  effectLabels?: string[];
+};
+
+type ExtendedDialogueDef = DialogueDef & { repeatable?: boolean };
+
+export const CAMPAIGN_DIALOGUE_SCENES: Array<{ act: number; scene: string; flag: string; requiresBranch?: boolean }> = [
+  { act: 2, scene: "dlg_campaign_act2", flag: "campaign_dialogue_act2" },
+  { act: 2, scene: "dlg_campaign_branch", flag: "campaign_dialogue_branch", requiresBranch: true },
+  { act: 5, scene: "dlg_campaign_finale", flag: "campaign_dialogue_finale" },
+];
 
 let overrideCatalog: DlcCatalog | null = null;
 
@@ -186,6 +251,8 @@ export function createDlcState(world: World, enabled = true, mode: DlcMode = ena
     rumorsGenerated: false,
     signalsGenerated: false,
     stats: {},
+    seenScenes: [],
+    consequences: [],
   };
 }
 
@@ -220,6 +287,8 @@ export function migrateDlcState(world: World, raw: Partial<DlcState> | null | un
   if (!state.flags || typeof state.flags !== "object") state.flags = {};
   if (!state.reputation || typeof state.reputation !== "object") state.reputation = {};
   if (!state.stats || typeof state.stats !== "object") state.stats = {};
+  if (!Array.isArray(state.seenScenes)) state.seenScenes = [];
+  if (!Array.isArray(state.consequences)) state.consequences = [];
   if (!state.board) state.board = { stationId: null, questIds: [], refreshTick: 0 };
   state.storySent = raw.storySent ?? state.enabled; // старые сейвы не автостартуют
   state.flags["dlc_migration_warn"] = 1;
@@ -284,6 +353,89 @@ function ok(messageRu?: string): CommandResult {
   return result;
 }
 
+function consequenceLabel(kind: DlcConsequenceKind, key?: string): { labelKey: string; labelRu: string } {
+  switch (kind) {
+    case "credits": return { labelKey: "dlc.effect.credits", labelRu: "Кредиты" };
+    case "rep": return { labelKey: "dlc.effect.rep:" + (key ?? ""), labelRu: "Репутация: " + (key ?? "") };
+    case "relation": return { labelKey: "dlc.effect.relation:" + (key ?? ""), labelRu: "Отношения: " + (key ?? "") };
+    case "flag": return { labelKey: "dlc.effect.flag:" + (key ?? ""), labelRu: "Флаг: " + (key ?? "") };
+    case "campaignFlag": return { labelKey: "dlc.effect.campaign:" + (key ?? ""), labelRu: "Сюжет: " + (key ?? "") };
+    case "openQuest": return { labelKey: "dlc.effect.open_quest", labelRu: "Открыт квест" };
+    case "branch": return { labelKey: "dlc.effect.branch:" + (key ?? ""), labelRu: "Ветка: " + (key ?? "") };
+    case "chronicle": return { labelKey: "dlc.effect.chronicle", labelRu: "Запись хроники" };
+    case "reward": return { labelKey: "dlc.effect.reward", labelRu: "Награда" };
+    default: return { labelKey: "dlc.effect.unknown", labelRu: "Последствие" };
+  }
+}
+
+function recordConsequences(d: DlcState, entry: DlcConsequenceEntry): void {
+  if (entry.effects.length === 0) return;
+  d.consequences.push(entry);
+  if (d.consequences.length > 200) d.consequences.splice(0, d.consequences.length - 200);
+}
+
+export function getDlcConsequences(world: World, limit = 20): DlcConsequenceEntry[] {
+  const d = ensureDlc(world);
+  const size = Math.max(1, Math.min(200, Math.floor(limit)));
+  return d.consequences.slice(-size).map((entry) => ({ ...entry, effects: entry.effects.map((effect) => ({ ...effect })) }));
+}
+
+function campaignState(world: World): {
+  flags: Record<string, number>; branch: string; endings: string[];
+} | null {
+  const campaign = world.fg?.campaign;
+  if (!campaign) return null;
+  return campaign as unknown as { flags: Record<string, number>; branch: string; endings: string[] };
+}
+
+function applyCampaignFlag(world: World, d: DlcState, flag: string, effectLabelKey?: string): void {
+  d.flags[flag] = 1;
+  const campaign = campaignState(world);
+  if (!campaign) return;
+  campaign.flags["dlc:" + flag] = 1;
+  // Сюжетные крючки DLC (13b/14d).
+  if (flag === "honest_report") campaign.flags["hook_core_sings"] = 1;
+  if (flag === "hide_core") campaign.flags["hook_archive_debt"] = 1;
+  campaign.flags["dlcConsequence:" + flag] = (campaign.flags["dlcConsequence:" + flag] ?? 0) + 1;
+  void effectLabelKey;
+}
+
+function applyBranch(world: World, branch: string): void {
+  const campaign = campaignState(world);
+  if (!campaign) return;
+  if (campaign.branch === "undecided" && (branch === "federation" || branch === "sovereignty" || branch === "syndicate")) {
+    campaign.branch = branch;
+    campaign.flags["branch:" + branch] = 1;
+  } else {
+    campaign.flags["branchRequested:" + branch] = 1;
+  }
+}
+
+function applyEnding(world: World, ending: string): void {
+  const campaign = campaignState(world);
+  if (!campaign) return;
+  if (!campaign.endings.includes(ending)) campaign.endings.push(ending);
+  campaign.flags["endingHint:" + ending] = 1;
+}
+
+function applyRelation(world: World, d: DlcState, relation: Record<string, number> | undefined): void {
+  if (!relation) return;
+  for (const [key, value] of Object.entries(relation)) {
+    if (key.startsWith("empire:")) {
+      const other = Number(key.slice("empire:".length));
+      if (Number.isFinite(other)) {
+        for (const empire of world.empires) {
+          if (empire.id !== world.playerEmpireId) continue;
+          const link = empire.relations[other];
+          if (link) link.opinion = Math.max(-100, Math.min(100, link.opinion + value));
+        }
+      }
+      continue;
+    }
+    d.reputation[key] = (d.reputation[key] ?? 0) + value;
+  }
+}
+
 function chronicle(world: World, d: DlcState, textKey: string, questId?: string): void {
   d.chronicle.push({ tick: world.tick, textKey, questId: questId ?? d.activeQuestId ?? undefined });
   if (d.chronicle.length > DLC_HISTORY_LIMIT * 4) d.chronicle.splice(0, d.chronicle.length - DLC_HISTORY_LIMIT * 4);
@@ -301,7 +453,15 @@ function questGateOpen(world: World, d: DlcState, def: QuestDef): boolean {
     const q = d.quests[def.source.requiresQuest];
     if (!q || q.status !== "completed") return false;
   }
-  return flagSet(world, d, def.source.requiresFlag);
+  if (!flagSet(world, d, def.source.requiresFlag)) return false;
+  const ext = def as ExtendedQuestDef;
+  if (ext.requiresFlags && ext.requiresFlags.length > 0) {
+    if (!ext.requiresFlags.every((flag) => flagSet(world, d, flag))) return false;
+  }
+  if (ext.requiresAnyFlags && ext.requiresAnyFlags.length > 0) {
+    if (!ext.requiresAnyFlags.some((flag) => flagSet(world, d, flag))) return false;
+  }
+  return true;
 }
 
 function makeAvailable(d: DlcState, questId: string): void {
@@ -423,6 +583,85 @@ function advanceFailedStep(d: DlcState, def: QuestDef, state: DlcQuestState): vo
   }
 }
 
+interface QuestModifierMatch {
+  credits: number;
+  alloys: number;
+  rep: Record<string, number>;
+  extraFlags: string[];
+  nextHint: string | null;
+  labels: string[];
+}
+
+function matchQuestModifiers(d: DlcState, def: QuestDef): QuestModifierMatch {
+  const ext = def as ExtendedQuestDef;
+  const matched: QuestModifierMatch = { credits: 0, alloys: 0, rep: {}, extraFlags: [], nextHint: null, labels: [] };
+  const apply = (mod: QuestModifierDef): void => {
+    const okAll = (mod.flags ?? []).every((flag) => (d.flags[flag] ?? 0) > 0);
+    const okAny = !mod.anyFlags || mod.anyFlags.length === 0 || mod.anyFlags.some((flag) => (d.flags[flag] ?? 0) > 0);
+    const okNot = (mod.notFlags ?? []).every((flag) => (d.flags[flag] ?? 0) === 0);
+    if (!okAll || !okAny || !okNot) return;
+    matched.credits += mod.creditsDelta ?? 0;
+    matched.alloys += mod.alloysDelta ?? 0;
+    for (const [key, value] of Object.entries(mod.rep ?? {})) matched.rep[key] = (matched.rep[key] ?? 0) + value;
+    matched.extraFlags.push(...(mod.extraFlags ?? []));
+    if (mod.nextHint) matched.nextHint = mod.nextHint;
+    matched.labels.push(...(mod.effectLabels ?? []));
+  };
+  for (const mod of ext.modifiers ?? []) apply(mod);
+  // Fallback, пока контент не разложил modifiers: ключевые флаги Q1 влияют на Q2/Q5/Q6.
+  const fallbacks: Record<string, QuestModifierDef[]> = {
+    q_pro_02_quiet_dock: [
+      { flags: ["going_now"], creditsDelta: 1000, rep: { survivors: 5 }, effectLabels: ["quest.q2.fx.going"] },
+      { flags: ["diagnose_first"], rep: { survivors: -5 }, effectLabels: ["quest.q2.fx.diagnose"] },
+      { flags: ["leader_first"], rep: { survivors: 10 }, effectLabels: ["quest.q2.fx.leader"] },
+      { flags: ["no_shots"], rep: { survivors: 5 }, effectLabels: ["quest.q2.fx.noshots"] },
+    ],
+    q_pro_05_inspection: [
+      { flags: ["honest_report"], rep: { consortium: 5 }, effectLabels: ["quest.q5.fx.honest"] },
+      { flags: ["hide_core"], rep: { consortium: -5 }, effectLabels: ["quest.q5.fx.hide"] },
+    ],
+    q_pro_06_echo_core: [
+      { flags: ["hide_core"], creditsDelta: 2000, extraFlags: ["hook_archive_debt"], effectLabels: ["quest.q6.fx.sold"] },
+      { flags: ["honest_report"], extraFlags: ["hook_core_sings"], effectLabels: ["quest.q6.fx.honest"] },
+      { flags: ["teira_only"], rep: { npc_teyra_os: 10 }, effectLabels: ["quest.q6.fx.teira"] },
+    ],
+  };
+  if ((ext.modifiers ?? []).length === 0) for (const mod of fallbacks[def.id] ?? []) apply(mod);
+  return matched;
+}
+
+function applyQuestModifiers(world: World, d: DlcState, def: QuestDef, state: DlcQuestState): string | null {
+  const matched = matchQuestModifiers(d, def);
+  const player = dlcPlayer(world);
+  if (player) {
+    if (matched.credits) player.resources.credits += matched.credits;
+    if (matched.alloys) player.resources.alloys += matched.alloys;
+  }
+  for (const [key, value] of Object.entries(matched.rep)) d.reputation[key] = (d.reputation[key] ?? 0) + value;
+  for (const flag of matched.extraFlags) {
+    d.flags[flag] = 1;
+    if (flag === "hook_core_sings" || flag === "hook_archive_debt") {
+      const campaign = campaignState(world);
+      if (campaign) campaign.flags[flag] = 1;
+    }
+  }
+  const labels = [...matched.labels, ...((def as ExtendedQuestDef).effectLabels ?? [])];
+  recordConsequences(d, {
+    tick: world.tick,
+    sceneId: "quest:" + def.id,
+    questId: def.id,
+    questTitleKey: def.titleKey,
+    effects: [
+      ...(matched.credits ? [{ kind: "reward" as const, key: "credits", value: matched.credits, labelKey: "dlc.effect.credits", labelRu: "Кредиты" }] : []),
+      ...(matched.alloys ? [{ kind: "reward" as const, key: "alloys", value: matched.alloys, labelKey: "dlc.effect.alloys", labelRu: "Сплавы" }] : []),
+      ...Object.entries(matched.rep).map(([key, value]) => ({ kind: "rep" as const, key, value, labelKey: "dlc.effect.rep:" + key, labelRu: "Репутация: " + key })),
+      ...labels.map((labelKey) => ({ kind: "reward" as const, key: labelKey, labelKey, labelRu: "Последствие" })),
+    ],
+  });
+  state.flags["modifiers_applied"] = 1;
+  return matched.nextHint;
+}
+
 function completeQuest(world: World, d: DlcState, def: QuestDef): void {
   const state = d.quests[def.id];
   if (!state || state.rewardsClaimed) return;
@@ -441,6 +680,7 @@ function completeQuest(world: World, d: DlcState, def: QuestDef): void {
   }
   for (const flag of def.rewards.flags ?? []) d.flags[flag] = 1;
   for (const item of def.rewards.items ?? []) d.flags["item:" + item] = 1;
+  const modifierNextHint = applyQuestModifiers(world, d, def, state);
   if (d.activeQuestId === def.id) d.activeQuestId = null;
   chronicle(world, d, def.titleKey, def.id);
   // Опровержение ложных слухов об этом квесте.
@@ -451,9 +691,10 @@ function completeQuest(world: World, d: DlcState, def: QuestDef): void {
       chronicle(world, d, "dlc.chronicle.rumor_refuted", def.id);
     }
   }
-  if (def.nextHint) {
-    makeAvailable(d, def.nextHint);
-    if (!d.offersSeen.includes(def.nextHint)) d.offersSeen.push(def.nextHint);
+  const nextHint = modifierNextHint ?? def.nextHint;
+  if (nextHint) {
+    makeAvailable(d, nextHint);
+    if (!d.offersSeen.includes(nextHint)) d.offersSeen.push(nextHint);
   }
 }
 
@@ -586,21 +827,116 @@ function resolveCheck(world: World, d: DlcState, state: DlcDialogueState, key: s
   return success;
 }
 
-function applyDlcEffects(world: World, d: DlcState, effects: DialogueEffectDef[] | undefined, key: string): void {
+interface EffectMeta {
+  sceneId: string;
+  nodeId?: string;
+  choiceId?: string;
+  questId?: string;
+  questTitleKey?: string;
+}
+
+/** Метки последствий для предпросмотра в UI (без применения). */
+export function describeDlcEffects(effects: DialogueEffectDef[] | undefined): DlcConsequenceEffect[] {
+  if (!effects) return [];
+  const out: DlcConsequenceEffect[] = [];
+  for (const raw of effects) {
+    const effect = raw as ExtendedDialogueEffect;
+    const labelKey = effect.effectLabelKey;
+    const push = (kind: DlcConsequenceKind, key?: string, value?: number): void => {
+      const label = consequenceLabel(kind, key);
+      out.push({ kind, key, value, labelKey: labelKey ?? label.labelKey, labelRu: label.labelRu });
+    };
+    if (effect.credits) push("credits", undefined, effect.credits);
+    for (const [faction, value] of Object.entries(effect.rep ?? {})) push(faction.startsWith("empire:") ? "relation" : "rep", faction, value);
+    for (const [character, value] of Object.entries(effect.relation ?? {})) push("relation", character, value);
+    if (effect.flag) push("flag", effect.flag);
+    if (effect.campaignFlag) push("campaignFlag", effect.campaignFlag);
+    if (effect.openQuest) push("openQuest", effect.openQuest);
+    if (effect.branch) push("branch", effect.branch);
+    if (effect.ending) push("campaignFlag", "ending:" + effect.ending);
+    if (effect.chronicleKey) push("chronicle", effect.chronicleKey);
+    for (const item of effect.items ?? []) push("flag", "item:" + item);
+  }
+  return out;
+}
+
+function applyDlcEffects(
+  world: World,
+  d: DlcState,
+  effects: DialogueEffectDef[] | undefined,
+  key: string,
+  meta: EffectMeta,
+): void {
   if (!effects || effects.length === 0) return;
   if (d.dialogue) {
     if (d.dialogue.appliedEffects.includes(key)) return;
     d.dialogue.appliedEffects.push(key);
   }
   const player = dlcPlayer(world);
-  for (const effect of effects) {
-    if (effect.flag) d.flags[effect.flag] = 1;
-    if (effect.rep) for (const [faction, value] of Object.entries(effect.rep)) d.reputation[faction] = (d.reputation[faction] ?? 0) + value;
-    if (effect.openQuest) makeAvailable(d, effect.openQuest);
-    if (effect.credits && player) player.resources.credits += effect.credits;
+  const recorded: DlcConsequenceEffect[] = [];
+  for (const raw of effects) {
+    const effect = raw as ExtendedDialogueEffect;
+    const labelKey = effect.effectLabelKey;
+    const push = (kind: DlcConsequenceKind, key2?: string, value?: number): void => {
+      const label = consequenceLabel(kind, key2);
+      recorded.push({ kind, key: key2, value, labelKey: labelKey ?? label.labelKey, labelRu: label.labelRu });
+    };
+    if (effect.credits && player) {
+      player.resources.credits += effect.credits;
+      push("credits", undefined, effect.credits);
+    }
+    for (const [faction, value] of Object.entries(effect.rep ?? {})) {
+      if (faction.startsWith("empire:")) {
+        applyRelation(world, d, { [faction]: value });
+        push("relation", faction, value);
+      } else {
+        d.reputation[faction] = (d.reputation[faction] ?? 0) + value;
+        push("rep", faction, value);
+      }
+    }
+    applyRelation(world, d, effect.relation);
+    for (const [character, value] of Object.entries(effect.relation ?? {})) push("relation", character, value);
+    if (effect.flag) {
+      applyCampaignFlag(world, d, effect.flag, labelKey);
+      push("flag", effect.flag);
+    }
+    if (effect.campaignFlag) {
+      const campaign = campaignState(world);
+      if (campaign) campaign.flags[effect.campaignFlag] = 1;
+      d.flags[effect.campaignFlag] = 1;
+      push("campaignFlag", effect.campaignFlag);
+    }
+    if (effect.openQuest) {
+      makeAvailable(d, effect.openQuest);
+      push("openQuest", effect.openQuest);
+    }
+    if (effect.branch) {
+      applyBranch(world, effect.branch);
+      push("branch", effect.branch);
+    }
+    if (effect.ending) {
+      applyEnding(world, effect.ending);
+      push("campaignFlag", "ending:" + effect.ending);
+    }
+    for (const item of effect.items ?? []) {
+      d.flags["item:" + item] = 1;
+      push("flag", "item:" + item);
+    }
     if (effect.timeSkip && effect.timeSkip > 0) world.tick += effect.timeSkip;
-    if (effect.chronicleKey) chronicle(world, d, effect.chronicleKey);
+    if (effect.chronicleKey) {
+      chronicle(world, d, effect.chronicleKey, meta.questId);
+      push("chronicle", effect.chronicleKey);
+    }
   }
+  recordConsequences(d, {
+    tick: world.tick,
+    sceneId: meta.sceneId,
+    nodeId: meta.nodeId,
+    choiceId: meta.choiceId,
+    questId: meta.questId,
+    questTitleKey: meta.questTitleKey,
+    effects: recorded,
+  });
 }
 
 function pushHistory(state: DlcDialogueState, node: DialogueNodeDef, world: World, choiceId?: string): void {
@@ -612,9 +948,43 @@ function pushHistory(state: DlcDialogueState, node: DialogueNodeDef, world: Worl
   state.visited[node.id] = (state.visited[node.id] ?? 0) + 1;
 }
 
+function questTitleKeyOf(questId: string | null): string | undefined {
+  return questId ? dlcQuestById(questId)?.titleKey : undefined;
+}
+
+function markSceneSeen(d: DlcState, sceneId: string): void {
+  if (!d.seenScenes.includes(sceneId)) d.seenScenes.push(sceneId);
+}
+
+/** Сюжетные последствия кампанийного диалога (ветка/концовка). */
+function applyCampaignDialogueOutcome(world: World, d: DlcState, state: DlcDialogueState): void {
+  const campaign = campaignState(world);
+  if (!campaign) return;
+  campaign.flags["dlc_campaign_dialogue_done:" + state.sceneId] = 1;
+  if (d.flags.kira_hostile) {
+    campaign.flags["endingHint:ending_syndicate"] = 1;
+    if (campaign.branch === "undecided") campaign.flags["branchRequested:syndicate"] = 1;
+  } else if (d.flags.kira_debt) {
+    campaign.flags["endingHint:ending_control"] = 1;
+  } else if (d.flags.kira_paid) {
+    campaign.flags["endingHint:ending_seal"] = 1;
+  }
+  if (state.campaignAct === 3) {
+    campaign.flags["dlc_act3_reflection"] = 1;
+  }
+}
+
 function finishDialogue(world: World, d: DlcState, state: DlcDialogueState, node: DialogueNodeDef | null, choseOption: boolean): void {
-  if (node) applyDlcEffects(world, d, node.effects, state.sceneId + ":" + node.id);
+  const meta: EffectMeta = {
+    sceneId: state.sceneId,
+    nodeId: node?.id,
+    questId: state.questId ?? undefined,
+    questTitleKey: questTitleKeyOf(state.questId),
+  };
+  if (node) applyDlcEffects(world, d, node.effects, state.sceneId + ":" + node.id, meta);
   const questId = state.questId;
+  if (state.context === "campaign") applyCampaignDialogueOutcome(world, d, state);
+  markSceneSeen(d, state.sceneId);
   d.flags["dialogue_done:" + state.sceneId] = 1;
   d.dialogue = null;
   chronicle(world, d, "dlc.chronicle.dialogue_done:" + state.sceneId, questId ?? undefined);
@@ -637,7 +1007,10 @@ function runDialogue(world: World, d: DlcState): void {
       return;
     }
     if (node.type === "effect") {
-      applyDlcEffects(world, d, node.effects, state.sceneId + ":" + node.id);
+      applyDlcEffects(world, d, node.effects, state.sceneId + ":" + node.id, {
+        sceneId: state.sceneId, nodeId: node.id, questId: state.questId ?? undefined,
+        questTitleKey: questTitleKeyOf(state.questId),
+      });
       state.nodeId = node.next ?? "";
       continue;
     }
@@ -659,29 +1032,100 @@ function runDialogue(world: World, d: DlcState): void {
   void guard;
 }
 
-export function startDlcDialogue(world: World, sceneId: string, questId: string | null = null): CommandResult {
+export function startDlcDialogue(
+  world: World,
+  sceneId: string,
+  questId: string | null = null,
+  options?: { context?: "dlc" | "campaign"; campaignAct?: number },
+): CommandResult {
   const d = ensureDlc(world);
   if (!d.enabled) return deny("DLC диалогов выключен");
   const def = dlcDialogueById(sceneId);
   if (!def) return deny("Диалог не найден");
   const first = firstNodeOf(def);
   if (!first) return deny("Пустой диалог");
-  if (d.dialogue?.active) {
-    d.flags["dialogue_interrupted"] = (d.flags["dialogue_interrupted"] ?? 0) + 1;
+  // Один активный диалог; повторный старт не подменяет текущую сцену.
+  if (d.dialogue?.active) return deny("Диалог уже открыт");
+  // One-shot: сцена не запускается повторно, если уже просмотрена.
+  if (d.seenScenes.includes(sceneId) && !(def as ExtendedDialogueDef).repeatable) {
+    return deny("Сцена уже просмотрена");
   }
   d.dialogue = {
-    sceneId, nodeId: first.id, active: true, history: [], checkResults: {}, choices: {},
+    sceneId, nodeId: first.id, active: true,
+    context: options?.context ?? "dlc",
+    campaignAct: options?.campaignAct,
+    history: [], checkResults: {}, choices: {},
     startedTick: world.tick, questId, seed: dialogueSeed(world, sceneId, questId),
     appliedEffects: [], visited: {}, nodeStartedTick: world.tick,
   };
-  d.revealedNodes.push(sceneId);
+  if (!d.revealedNodes.includes(sceneId)) d.revealedNodes.push(sceneId);
   runDialogue(world, d);
   return ok("Диалог начат");
 }
 
+/** Низкоуровневое закрытие (без команды): помечает сцену просмотренной. */
 export function endDlcDialogue(world: World): void {
   const d = ensureDlc(world);
+  if (d.dialogue) markSceneSeen(d, d.dialogue.sceneId);
   d.dialogue = null;
+}
+
+/** Команда UI: закрыть оверлей диалога — сцена seen, active не остаётся, квест не зависает. */
+export function dlcDialogueEnd(world: World, empireId: number): CommandResult {
+  const d = ensureDlc(world);
+  if (empireId !== world.playerEmpireId) return deny("Диалог доступен только игроку");
+  const state = d.dialogue;
+  if (!state?.active) return deny("Диалог не открыт");
+  const questId = state.questId;
+  const sceneId = state.sceneId;
+  const context = state.context;
+  markSceneSeen(d, sceneId);
+  d.flags["dialogue_closed:" + sceneId] = 1;
+  d.flags["dialogue_closed"] = (d.flags["dialogue_closed"] ?? 0) + 1;
+  d.dialogue = null;
+  chronicle(world, d, "dlc.chronicle.dialogue_closed:" + sceneId, questId ?? undefined);
+  // Если закрыли шаг-диалог квеста — не оставляем квест зависшим.
+  if (questId && context === "dlc") {
+    const def = dlcQuestById(questId);
+    const questState = d.quests[questId];
+    const step = def?.steps[questState?.step ?? -1];
+    if (questState?.status === "active" && step && (step.type === "dialogue" || step.type === "choice")) {
+      dlcNotifyAction(world, step.type, step.target ?? "");
+      d.flags["dialogue_step_skipped:" + step.id] = 1;
+    }
+  }
+  return ok("Диалог закрыт");
+}
+
+export interface DlcModalState {
+  dialogueActive: boolean;
+  sceneId: string | null;
+  context: "dlc" | "campaign" | null;
+  campaignAct?: number;
+  pendingEventId: string | null;
+  priority: "dialogue" | "event" | "none";
+  paused: boolean;
+}
+
+export function isDlcDialogueActive(world: World): boolean {
+  return !!world.fg?.dlc?.dialogue?.active;
+}
+
+/** Приоритет модалок: диалог > narrative event; пока диалог активен, события не всплывают. */
+export function getDlcModalState(world: World): DlcModalState {
+  const d = ensureDlc(world);
+  const dialogue = d.dialogue?.active ? d.dialogue : null;
+  const pending = world.fg?.narrative?.pending ?? [];
+  const pendingEventId = pending.length > 0 ? pending[0]!.id : null;
+  return {
+    dialogueActive: !!dialogue,
+    sceneId: dialogue?.sceneId ?? null,
+    context: dialogue?.context ?? null,
+    campaignAct: dialogue?.campaignAct,
+    pendingEventId,
+    priority: dialogue ? "dialogue" : pendingEventId ? "event" : "none",
+    paused: !!dialogue || !!pendingEventId,
+  };
 }
 
 /** Продолжение диалога (line/check/effect); choice требует dlcDialogueChoose. */
@@ -731,7 +1175,10 @@ export function dlcDialogueChoose(world: World, empireId: number, nodeId: string
     const success = resolveCheck(world, d, state, key, option.check);
     next = success ? option.check.onSuccess : option.check.onFail;
   }
-  applyDlcEffects(world, d, option.effects, state.sceneId + ":" + node.id + ":" + option.id);
+  applyDlcEffects(world, d, option.effects, state.sceneId + ":" + node.id + ":" + option.id, {
+    sceneId: state.sceneId, nodeId: node.id, choiceId: option.id,
+    questId: state.questId ?? undefined, questTitleKey: questTitleKeyOf(state.questId),
+  });
   pushHistory(state, node, world, choiceId);
   state.nodeId = next;
   runDialogue(world, d);
@@ -834,10 +1281,18 @@ export function getDlcBoard(world: World): DlcState["board"] {
 
 function storyStart(world: World, d: DlcState): void {
   if (d.storySent) return;
-  d.storySent = true;
   const catalog = dlcCatalog();
-  const first = catalog.quests.find((quest) => quest.source.channel === "story_message") ?? catalog.quests[0];
-  if (!first) return;
+  const first = catalog.quests.find((quest) => quest.source.channel === "story_message" && (quest.source.autoStartTick ?? 0) === 0)
+    ?? catalog.quests.find((quest) => quest.source.channel === "story_message")
+    ?? catalog.quests[0];
+  if (!first) { d.storySent = true; return; }
+  const questState = d.quests[first.id];
+  // Уже стартовали (сейв/повторный вызов) — только не теряем флаг.
+  if (!questState || questState.status === "completed" || questState.status === "active") {
+    d.storySent = true;
+    return;
+  }
+  d.storySent = true;
   makeAvailable(d, first.id);
   const accept = dlcAcceptQuest(world, world.playerEmpireId, first.id, "story_message");
   if (accept.ok) {
@@ -845,7 +1300,7 @@ function storyStart(world: World, d: DlcState): void {
     chronicle(world, d, "dlc.chronicle.story_start", first.id);
     if (!d.dialogue?.active) {
       const scene = chooseDialogueForQuest(first.id);
-      if (scene) startDlcDialogue(world, scene, first.id);
+      if (scene && !d.seenScenes.includes(scene)) startDlcDialogue(world, scene, first.id);
     }
   }
 }
@@ -898,6 +1353,39 @@ function hookReachAndKills(world: World, d: DlcState): void {
       d.flags["battles_seen"] = world.battles.length;
     }
   }
+}
+
+/** Сюжетный диалог кампании (один раз на акт): акт II — станция, акт III — СВЕТ. */
+export function maybeStartCampaignDialogue(world: World): CommandResult | null {
+  const d = ensureDlc(world);
+  if (!d.enabled) return null;
+  if (d.dialogue?.active) return null;
+  const pending = world.fg?.narrative?.pending ?? [];
+  if (pending.length > 0) return null;
+  const act = world.fg?.campaign.act ?? 0;
+  const branch = world.fg?.campaign.branch ?? "undecided";
+  for (const entry of CAMPAIGN_DIALOGUE_SCENES) {
+    if (act < entry.act) continue;
+    if (entry.requiresBranch && branch === "undecided") continue;
+    if (d.flags[entry.flag]) continue;
+    if (d.seenScenes.includes(entry.scene)) { d.flags[entry.flag] = 1; continue; }
+    if (!dlcDialogueById(entry.scene)) continue;
+    d.flags[entry.flag] = 1;
+    return startDlcDialogue(world, entry.scene, null, { context: "campaign", campaignAct: entry.act });
+  }
+  return null;
+}
+
+/**
+ * Синхронный старт истории DLC (для Game.newGame/UI): открывает Q1 и оверлей сразу,
+ * без ожидания первого такта. Идемпотентно (storySent/seenScenes).
+ */
+export function bootstrapDlcStory(world: World): CommandResult {
+  const d = ensureDlc(world);
+  if (!d.enabled) return deny("DLC квестов выключен");
+  if (d.storySent) return ok(d.dialogue?.active ? "Диалог уже открыт" : "История уже запущена");
+  storyStart(world, d);
+  return ok(d.dialogue?.active ? "Диалог открыт" : "История запущена");
 }
 
 /** Тик DLC: старт истории, доска, слухи/сигналы, дедлайны, хуки шагов. */
@@ -960,17 +1448,27 @@ export function dlcToggle(world: World, enabled: boolean): CommandResult {
 
 // ------------------------------------------------------------------ аксессоры UI
 
+export interface DlcDialogueOptionView {
+  id: string;
+  textKey: string;
+  requiresFlag?: string;
+  available: boolean;
+  check?: { stat: string; dc: number };
+  /** Предпросмотр последствий выбора (labelKey/labelRu для UI). */
+  consequences: DlcConsequenceEffect[];
+}
+
 export interface DlcDialogueView {
   sceneId: string;
   nodeId: string;
   node: DialogueNodeDef | null;
   speaker: CharacterDef | null;
-  options: Array<{
-    id: string; textKey: string; requiresFlag?: string; available: boolean;
-    check?: { stat: string; dc: number };
-  }>;
+  options: DlcDialogueOptionView[];
   history: DlcHistoryEntry[];
   questId: string | null;
+  questTitleKey?: string;
+  context: "dlc" | "campaign";
+  campaignAct?: number;
   seed: number;
   startedTick: number;
 }
@@ -986,10 +1484,14 @@ export function getDlcDialogueView(world: World): DlcDialogueView | null {
     id: option.id, textKey: option.textKey, requiresFlag: option.requiresFlag,
     available: !option.requiresFlag || flagSet(world, d, option.requiresFlag),
     check: option.check ? { stat: option.check.stat, dc: option.check.dc } : undefined,
+    consequences: describeDlcEffects(option.effects),
   }));
   return {
     sceneId: state.sceneId, nodeId: state.nodeId, node, speaker, options,
-    history: [...state.history], questId: state.questId, seed: state.seed, startedTick: state.startedTick,
+    history: [...state.history], questId: state.questId,
+    questTitleKey: questTitleKeyOf(state.questId),
+    context: state.context, campaignAct: state.campaignAct,
+    seed: state.seed, startedTick: state.startedTick,
   };
 }
 

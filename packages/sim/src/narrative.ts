@@ -11,6 +11,7 @@
 import { NARRATIVE_EVENTS } from "@sf/data";
 import type { EventChoiceDef, NarrativeEventDef } from "@sf/data";
 import type { NarrativeEvent } from "./fullgame";
+import { isDlcDialogueActive } from "./dlc";
 import { ensureFg, pushJournal } from "./fullgame";
 import { empireById, logEvent } from "./economy";
 import { hash32, splitmix32 } from "./prng";
@@ -189,6 +190,9 @@ export function narrativePhase(world: World, override?: Partial<NarrativeCatalog
       }
     }
   }
+
+  // Пока открыт диалог DLC, новые события не всплывают (модалка-приоритет: диалог > событие).
+  if (isDlcDialogueActive(world)) return;
 
   if (catalog.events.length === 0) return;
   if (world.tick % EVENT_CHECK_INTERVAL !== 0) return;

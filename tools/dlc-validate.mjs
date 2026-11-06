@@ -55,6 +55,32 @@ for (const q of quests) {
   for (const k of ["titleKey", "summaryKey"]) if (!q[k]) fail("квест " + q.id + ": " + k, "нет ключа");
   for (const s of q.steps ?? []) if (!s.titleKey) fail("квест " + q.id + " шаг " + s.id + ": titleKey", "нет ключа");
 }
+// B7: квесты с requiresQuest должны быть достижимы по nextHint / модификаторам / эффектам диалогов
+try {
+  const reachable = new Set([FIRST]);
+  const addNext = (from, to) => { if (to && questIds.has(to)) reachable.add(to); };
+  for (const q of quests) for (const m of q.modifiers ?? []) addNext(q.id, m.nextHint);
+  for (const d of dialogues) for (const n of d.nodes ?? []) {
+    for (const e of n.effects ?? []) addNext(null, e.openQuest);
+    for (const o of n.options ?? []) for (const e of o.effects ?? []) addNext(null, e.openQuest);
+  }
+  // доступность по каналам (board/rumor/signal) — сид; story-квесты открываются только nextHint/эффектами
+  const channelOpen = new Set(quests.filter((q) => ["board", "rumor", "signal"].includes(q.source?.channel)).map((q) => q.id));
+  for (const id of channelOpen) reachable.add(id);
+  let changed = true;
+  while (changed) {
+    changed = false;
+    for (const q of quests) {
+      if (!reachable.has(q.id)) continue;
+      for (const m of q.modifiers ?? []) { if (m.nextHint && questIds.has(m.nextHint) && !reachable.has(m.nextHint)) { reachable.add(m.nextHint); changed = true; } }
+      if (q.nextHint && questIds.has(q.nextHint) && !reachable.has(q.nextHint)) { reachable.add(q.nextHint); changed = true; }
+    }
+  }
+  const unreachable = quests.filter((q) => !reachable.has(q.id)).map((q) => q.id);
+  if (unreachable.length === 0) pass("B7: все квесты достижимы по цепочке/каналу", "reachable=" + [...reachable].length + "/" + quests.length);
+  else fail("B7: недостижимые квесты", unreachable.join(",") + " (нужен nextHint/модификатор/эффект)");
+} catch (e) { fail("B7: достижимость цепочки", String(e)); }
+
 const channels = new Set(quests.map((q) => q.source?.channel));
 for (const ch of ["story_message", "board", "rumor", "signal"]) {
   if (channels.has(ch)) pass("канал " + ch + " представлен"); else fail("канал " + ch + " представлен", [...channels].join(","));

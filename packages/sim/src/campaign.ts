@@ -11,6 +11,7 @@
  *  - мягкий провал: миссия становится failed и через retry-окно снова available (не game over).
  */
 import { CAMPAIGN_ACTS, CAMPAIGN_MISSIONS, BRANCHES, ENDINGS, RESOURCE_IDS, SCIENCE_IDS } from "@sf/data";
+import { maybeStartCampaignDialogue } from "./dlc";
 import type {
   BranchDef, CampaignActDef, CampaignMissionDef, EndingDef, MissionObjectiveDef,
 } from "@sf/data";
@@ -608,6 +609,9 @@ export function campaignPhase(world: World, override?: Partial<CampaignCatalog>)
     pushJournal(fg, world.tick, "story", "Начался " + actName(act, catalog) + ".");
     logEvent(world, "system", "good", "Начался " + actName(act, catalog) + ".", undefined, world.playerEmpireId);
   }
+
+  // 1b. Сюжетные диалоги DLC: один раз на акт II/III (см. maybeStartCampaignDialogue).
+  maybeStartCampaignDialogue(world);
 
   // 2. Локи: чистим истёкшие
   if (campaign.locks.length > 0) campaign.locks = campaign.locks.filter((lock) => lock.untilTick > world.tick);

@@ -104,10 +104,16 @@ async function startCampaign(page: Page, opts?: { seed?: number; raceIndex?: num
   return raceId;
 }
 
+async function domClick(page: Page, testId: string): Promise<void> {
+  await page.locator('[data-testid="' + testId + '"]').evaluate((el) => (el as HTMLElement).click());
+}
+
 async function openAncients(page: Page): Promise<void> {
-  await page.locator('[data-testid="btn-open-more"]').first().click();
+  // DLC-диалог такта 0 может перекрывать backdrop'ом клики старых спеков
+  await dismissDialogueOverlay(page);
+  await page.locator('[data-testid="btn-open-more"]').first().evaluate((el) => (el as HTMLElement).click());
   await expect(page.locator('[data-testid="full-panel-menu"]')).toBeVisible({ timeout: 10_000 });
-  await page.locator('[data-testid="panel-open-ancients"]').click();
+  await page.locator('[data-testid="panel-open-ancients"]').evaluate((el) => (el as HTMLElement).click());
   await expect(page.locator('[data-testid="ancients-panel"]')).toBeVisible({ timeout: 10_000 });
 }
 
@@ -161,7 +167,7 @@ test.describe("Часть XIII · Древние (M9c)", () => {
     expect(tick).toBeGreaterThanOrEqual(1200);
 
     await openAncients(page);
-    await page.locator('[data-testid="btn-ancients-tab-line"]').click();
+    await domClick(page, "btn-ancients-tab-line");
     expect(await page.locator('[data-testid^="quest-row-"]').count()).toBeGreaterThanOrEqual(12);
     // до прохождения линии панель показывает активную/доступную миссию
     const accepted = await page.locator('[data-testid^="btn-quest-accept-"]').first().isVisible().catch(() => false);
@@ -178,11 +184,12 @@ test.describe("Часть XIII · Древние (M9c)", () => {
     expect(line.stage).toBeGreaterThanOrEqual(12);
     expect(line.warp).toBe(true);
     expect(line.sector).toBe(true);
-    await page.locator('[data-testid="btn-ancients-tab-legacy"]').click();
+    await dismissDialogueOverlay(page);
+    await domClick(page, "btn-ancients-tab-legacy");
     await expect(page.locator('[data-testid="ancients-tier-0"]')).toBeVisible({ timeout: 8000 });
     const techBtn = page.locator('[data-testid^="btn-ancients-tech-"]').first();
     await expect(techBtn).toBeEnabled({ timeout: 8000 });
-    await techBtn.click();
+    await techBtn.evaluate((el) => (el as HTMLElement).click());
     await expect.poll(async () => (await gameEval(page, (g) => g.world.fg?.ancients?.tech.unlocked.length ?? 0)), { timeout: 8000 }).toBeGreaterThan(0);
     await page.screenshot({ path: shot("22-ancients-a0.png") });
   });
@@ -199,22 +206,23 @@ test.describe("Часть XIII · Древние (M9c)", () => {
     });
     await page.waitForTimeout(300);
     await openAncients(page);
+    await dismissDialogueOverlay(page);
 
     // ---- сектор ----
-    await page.locator('[data-testid="btn-ancients-tab-sector"]').click();
+    await domClick(page, "btn-ancients-tab-sector");
     const sectorRows = page.locator('[data-testid^="sector-row-"]');
     await expect(sectorRows.first()).toBeVisible({ timeout: 10_000 });
     expect(await sectorRows.count(), "сектор Предела: 45 систем").toBe(45);
     expect(await page.locator('[data-testid^="sector-region-"]').count()).toBe(5);
     // выбор системы — клик по внутренней кнопке строки (div-строка сама не кликабельна)
-    await page.locator('[data-testid^="sector-row-"] button').first().click();
+    await page.locator('[data-testid^="sector-row-"] button').first().evaluate((el) => (el as HTMLElement).click());
     await expect(page.locator('[data-testid="btn-sector-enter"]')).toBeEnabled({ timeout: 8000 });
-    await page.locator('[data-testid="btn-sector-enter"]').click();
+    await domClick(page, "btn-sector-enter");
     await expect.poll(async () => gameEval(page, (g) => g.world.fg?.ancients?.sector.active === true), { timeout: 8000 }).toBe(true);
-    await page.locator('[data-testid="btn-sector-scan"]').click();
-    await page.locator('[data-testid="btn-sector-claim"]').click();
+    await domClick(page, "btn-sector-scan");
+    await domClick(page, "btn-sector-claim");
     await page.screenshot({ path: shot("23-ancients-sector-1280.png") });
-    await page.locator('[data-testid="btn-sector-exit"]').click();
+    await domClick(page, "btn-sector-exit");
     await expect.poll(async () => gameEval(page, (g) => g.world.fg?.ancients?.sector.active === false), { timeout: 8000 }).toBe(true);
 
     // ---- варп с карты: кнопка btn-warp вызывает game.requestWarp() и в режиме карты
@@ -239,7 +247,7 @@ test.describe("Часть XIII · Древние (M9c)", () => {
     await targetSelect.selectOption(chosen);
     const warpBtn = page.locator('[data-testid="btn-warp"]');
     await expect(warpBtn).toBeEnabled({ timeout: 8000 });
-    await warpBtn.click();
+    await warpBtn.evaluate((el) => (el as HTMLElement).click());
     await page.waitForTimeout(1200);
     const warpAfter = await gameEval(page, (g) => {
       const p = g.world.empires.find((e) => e.id === g.world.playerEmpireId);

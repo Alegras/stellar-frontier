@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## [0.6.1] — 2026-11-06 · Диалоги и арт: багфикс DLC XIV (task-40)
+
+- Диалоги: one-shot сцен (dlg_q1_briefing не запускается после завершения), закрытие X завершает сцену (нет active/зависшей паузы), приоритет модалок (narrative-event не поверх диалога, без накопления), сброс dismissed/seen при новой игре, save/load mid-dialogue.
+- Кампания: 3 сюжетных диалога (act2/branch/finale) с campaignFlag/relation/branch/ending; consequences/getDlcConsequences; ветка/концовка видны в e2e.
+- B7: Q1-выборы читаются в modifiers Q2/Q5/Q6 (8 флагов), цепочка Q1→Q2→Q3→Q4→Q5→Q7 и Q6→Q7, Q5 достижима после Q4.
+- Арт: 24 портрета (4 персонажа × 6 эмоций) 128×128 сгенерированы локальной **Qwen-Image 2.1** через ComfyUI (RTX 4070 Ti), 32 цвета/PNG-8; manifest 31 ассет/177 КБ; процедурный генератор оставлен историческим.
+- QA: dialogue-bugs 14/14, dlc-validate 32/32, dlc-test 24/24, e2e **53/53**, unit 321/321, golden **1bfd9c71**; acceptance §24.
+- Gift пересобран после Qwen-арта: StellarFrontier.html 2.57 МБ, zip 830 КБ; verify-portable 10/10.
 ## [0.6.0] — 2026-11-04 · DLC XIV «Первый Свет» (M9d-0)
 
 - Первый квест на такте 0: story-диалог 14 узлов/3 выбора, 7 шагов Q1, награда один раз; Q2-крючок.

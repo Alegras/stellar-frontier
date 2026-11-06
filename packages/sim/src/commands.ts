@@ -27,8 +27,8 @@ import {
   sectorClaim, sectorEnter, sectorExit, sectorScan, warpJump, warpRecharge,
 } from "./ancients";
 import {
-  dlcAcceptQuest, dlcBuyRumor, dlcDialogueAdvance, dlcDialogueChoose, dlcNotifyAction, dlcToggle,
-  startDlcDialogue,
+  dlcAcceptQuest, dlcBuyRumor, dlcDialogueAdvance, dlcDialogueChoose, dlcDialogueEnd, dlcNotifyAction,
+  dlcToggle, startDlcDialogue,
 } from "./dlc";
 import { investigateAnomaly, archaeologyStep } from "./anomalies";
 import { buildMegastructure } from "./megastructures";
@@ -551,6 +551,8 @@ export function applyCommandAs(world: World, empireId: number, cmd: Command): Co
       return dlcDialogueChoose(world, empireId, cmd.nodeId, cmd.choiceId);
     case "dlc_dialogue_advance":
       return dlcDialogueAdvance(world, empireId);
+    case "dlc_dialogue_end":
+      return dlcDialogueEnd(world, empireId);
     case "dlc_action":
       return dlcNotifyAction(world, cmd.action, cmd.target);
     case "dlc_buy_rumor":

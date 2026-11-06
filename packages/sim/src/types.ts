@@ -443,6 +443,7 @@ export type Command =
   | { type: "dlc_dialogue_start"; sceneId: string; questId?: string }
   | { type: "dlc_dialogue_choice"; nodeId: string; choiceId: string }
   | { type: "dlc_dialogue_advance" }
+  | { type: "dlc_dialogue_end" }
   | { type: "dlc_action"; action: string; target?: string }
   | { type: "dlc_buy_rumor"; rumorId: string }
   | { type: "dlc_toggle"; enabled: boolean }

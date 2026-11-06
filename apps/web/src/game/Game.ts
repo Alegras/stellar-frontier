@@ -77,7 +77,10 @@ export class Game implements GameApi {
   private overlayPausedGame = false;
   /** пауза из-за модалки случайного события: время стоит, пока игрок не выберет */
   private pausedByEvent = false;
-  private pauseBeforeEvent = false;
+  /** пауза из-за активного диалога DLC/кампании: у диалога приоритет над событиями */
+  private pausedByDialogue = false;
+  /** было ли время на паузе до открытия модалки/диалога */
+  private pauseBeforeModal = false;
   /** откуда состыковались: с карты (демо-кнопка) или из полёта */
   private stationOrigin: "galaxy" | "system" = "system";
   private savedPlayMode: AppMode = "galaxy";
@@ -136,11 +139,14 @@ export class Game implements GameApi {
     const modeConfig = MODE_MAP[modeId] ?? MODE;
     try {
       const world = sim.createWorld(s, modeConfig, BALANCE);
+      // DLC XIV: синхронный запуск story-диалога Q1 (идемпотентно, sim one-shot).
+      try { sim.bootstrapDlcStory(world); } catch { /* DLC может быть выключен/старая сборка */ }
       this.w = world;
       this.accMs = 0;
       this.victoryAcknowledged = false;
       this.pausedByEvent = false;
-      this.pausedByEvent = false;
+      this.pausedByDialogue = false;
+      this.pauseBeforeModal = false;
       this.trackedLogLength = 0;
       this.trackedBattles = 0;
       this.lastAutoSaveTick = -999;
@@ -635,15 +641,30 @@ export class Game implements GameApi {
    */
   setNarrativeModalOpen(open: boolean): void {
     if (open === this.pausedByEvent) return;
-    if (open) {
-      this.pauseBeforeEvent = this.snapshot.paused;
-      this.pausedByEvent = true;
+    if (open && !this.pausedByDialogue) this.pauseBeforeModal = this.snapshot.paused;
+    this.pausedByEvent = open;
+    this.applyModalPause();
+  }
+
+  /**
+   * Диалог DLC/кампании: пока он активен, время стоит, а модалки событий
+   * не открываются (приоритет у диалога). Отдельный флаг от событий, чтобы
+   * закрытие одного оверлея не «будило» игру при другом открытом.
+   */
+  setDialogueModalOpen(open: boolean): void {
+    if (open === this.pausedByDialogue) return;
+    if (open && !this.pausedByEvent) this.pauseBeforeModal = this.snapshot.paused;
+    this.pausedByDialogue = open;
+    this.applyModalPause();
+  }
+
+  private applyModalPause(): void {
+    if (this.pausedByEvent || this.pausedByDialogue) {
       if (this.w) this.w.paused = true;
       this.refresh({ paused: true });
       return;
     }
-    this.pausedByEvent = false;
-    const keepPaused = this.pauseBeforeEvent || this.snapshot.overlay !== "none"
+    const keepPaused = this.pauseBeforeModal || this.snapshot.overlay !== "none"
       || this.snapshot.mode !== "galaxy" || this.snapshot.speed === 0;
     if (this.w) this.w.paused = keepPaused;
     this.refresh({ paused: keepPaused });

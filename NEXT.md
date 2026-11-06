@@ -52,3 +52,11 @@
 - [x] Автомасштабирование: 1280×720…2560×1440 + zoom 80–150%; дерево fit-to-content, без наложений/обрезки; perf PASS (диалог 3.0 мс, дерево 0.20 мс).
 - [x] Гейты: unit 312/312, golden c55c7ffe, dlc-validate 29/29, dlc-test 24/24, e2e DLC 8/8, полный e2e 41/41, gift 2.23 МБ / verify-portable 10/10.
 - [ ] Задел M9d: остальные 52 квеста, 9 каналов, 120 диалогов, арт до 60 карточек (по 14e срез — go/no-go гейт пройден).
+
+## Диалоги/арт: багфикс (task-40, закрыто 2026-11-06)
+
+- [x] one-shot сцен, X→endDlcDialogue, приоритет модалок, сброс dismissed/seen, save/load mid-dialogue — sim+UI.
+- [x] 3 кампанийных диалога с flags/branch/ending; Q1→Q2/Q5/Q6 modifiers; цепочка Q1→Q2→Q3→Q4→Q5→Q7.
+- [x] Арт 4×6 эмоций (24 PNG, manifest 31 ассет).
+- [x] QA: dialogue-bugs 14/14, dlc-validate 32/32, dlc-test 24/24, e2e 53/53, unit 321/321, golden 1bfd9c71, acceptance §24.
+- [ ] Перф-метрики диалогов/дерева — dlc-perf PASS (диалог 2.1 мс, дерево 0.10 мс, кадр 15.6 мс).

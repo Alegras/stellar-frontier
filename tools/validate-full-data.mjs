@@ -530,8 +530,8 @@ if (QX.quests && QX.dialogues && QX.characters && QX.cards && QX.tree && Array.i
   const dqQuestIds = new Set(QX.quests.map((q) => q.id));
   const QCOUNTS = {
     "quests.quests": [QX.quests.length, 8, "=="],
-    "quests.dialogues": [QX.dialogues.length, 3, ">="],
-    "quests.characters": [QX.characters.length, 2, "=="],
+    "quests.dialogues": [QX.dialogues.length, 6, ">="],
+    "quests.characters": [QX.characters.length, 4, ">="],
     "quests.cards": [QX.cards.length, 8, "=="],
     "quests.tree.nodes": [QX.tree.nodes.length, 8, "=="],
     "quests.tree.edges": [QX.tree.edges.length, 10, "=="],
@@ -657,6 +657,72 @@ if (QX.quests && QX.dialogues && QX.characters && QX.cards && QX.tree && Array.i
     for (const f of KEY_FLAGS) if (!flagsSeen.has(f)) fail("dlg_q1_briefing: нет флага " + f);
     ok("dlg_q1_briefing: 14+ узлов, 3 выбора, все 8 ключевых флагов");
   }
+  // кампанийные диалоги и расширенные эффекты
+  const branchIds = new Set(F.branches.map((b) => b.id));
+  const campaignEndingIds = new Set(F.endings.map((e) => e.id));
+  const MAX_NODES = 12, MIN_NODES = 8;
+  const CAMPAIGN_DLGS = ["dlg_campaign_act2", "dlg_campaign_branch", "dlg_campaign_finale"];
+  const effectFields = new Set(["flag","rep","openQuest","timeSkip","credits","chronicleKey","campaignFlag","relation","branch","ending","effectLabelKey","items"]);
+  const allEffectKeys = new Set();
+  const checkEffects = (d, where, effects) => {
+    for (const e of effects ?? []) {
+      for (const k of Object.keys(e)) if (!effectFields.has(k)) fail("dialogue " + d + " " + where + ": неизвестное поле эффекта " + k);
+      if (e.branch && !branchIds.has(e.branch)) fail("dialogue " + d + " " + where + ": branch " + e.branch);
+      if (e.ending && !campaignEndingIds.has(e.ending)) fail("dialogue " + d + " " + where + ": ending " + e.ending);
+      if (e.campaignFlag !== undefined && !e.campaignFlag) fail("dialogue " + d + " " + where + ": пустой campaignFlag");
+      if (e.effectLabelKey) { allEffectKeys.add(e.effectLabelKey); if (!l10nHas(e.effectLabelKey)) fail("dialogue " + d + " " + where + ": нет l10n " + e.effectLabelKey); }
+      for (const [cid, delta] of Object.entries(e.relation ?? {})) {
+        if (!dqCharIds.has(cid)) fail("dialogue " + d + " " + where + ": relation key " + cid + " не CharacterDef.id");
+        if (!Number.isFinite(delta)) fail("dialogue " + d + " " + where + ": relation delta " + cid);
+      }
+      if (e.flag) flagsSeen.add(e.flag);
+    }
+  };
+  for (const d of QX.dialogues) {
+    if (CAMPAIGN_DLGS.includes(d.id)) {
+      if (d.nodes.length < MIN_NODES || d.nodes.length > MAX_NODES) fail("campaign dialogue " + d.id + ": узлов " + d.nodes.length + " (нужно 8..12)");
+      const ch = d.nodes.filter((n) => n.type === "choice").length;
+      if (ch < 2 || ch > 3) fail("campaign dialogue " + d.id + ": значимых выборов " + ch + " (нужно 2..3)");
+      for (const n of d.nodes) {
+        checkEffects(d.id, "node " + n.id, n.effects);
+        for (const o of n.options ?? []) checkEffects(d.id, "node " + n.id + " option " + o.id, o.effects);
+      }
+    }
+  }
+  for (const id of CAMPAIGN_DLGS) if (!dqIds.has(id)) fail("нет кампанийного диалога " + id);
+  const q2 = QX.quests.find((q) => q.id === "q_pro_02_quiet_dock");
+  const q5 = QX.quests.find((q) => q.id === "q_pro_05_inspection");
+  const q6 = QX.quests.find((q) => q.id === "q_pro_06_echo_core");
+  const byIdQ3 = QX.quests.find((q) => q.id === "q_pro_03_salt_ash");
+  const byIdQ4 = QX.quests.find((q) => q.id === "q_pro_04_courier");
+  const modifierFlagKeys = new Set();
+  for (const q of QX.quests) {
+    if (q.requiresFlags && (!Array.isArray(q.requiresFlags) || q.requiresFlags.some((f) => typeof f !== "string" || !f))) fail("quest " + q.id + ": requiresFlags");
+    if (q.requiresAnyFlags) {
+      if (!Array.isArray(q.requiresAnyFlags) || q.requiresAnyFlags.length === 0) fail("quest " + q.id + ": requiresAnyFlags");
+      for (const f of q.requiresAnyFlags) if (typeof f !== "string" || !f) fail("quest " + q.id + ": requiresAnyFlags");
+    }
+    for (const m of q.modifiers ?? []) {
+      for (const f of m.flags ?? []) modifierFlagKeys.add(f);
+      for (const f of m.anyFlags ?? []) modifierFlagKeys.add(f);
+      for (const f of m.notFlags ?? []) modifierFlagKeys.add(f);
+      if (m.creditsDelta !== undefined && !Number.isFinite(m.creditsDelta)) fail("quest " + q.id + " modifier: creditsDelta");
+      if (m.alloysDelta !== undefined && !Number.isFinite(m.alloysDelta)) fail("quest " + q.id + " modifier: alloysDelta");
+      if (m.nextHint && !dqQuestIds.has(m.nextHint)) fail("quest " + q.id + " modifier: nextHint " + m.nextHint);
+      for (const k of m.effectLabels ?? []) { allEffectKeys.add(k); if (!l10nHas(k)) fail("quest " + q.id + " modifier: нет l10n " + k); }
+    }
+    for (const k of q.effectLabels ?? []) { allEffectKeys.add(k); if (!l10nHas(k)) fail("quest " + q.id + ": нет l10n " + k); }
+  }
+  for (const q of [q2, q5, q6]) {
+    if (!q) fail("нет квеста для Q1-последствий");
+    else if (!(q.modifiers ?? []).length) fail("quest " + q.id + ": нет modifiers (Q1-флаги должны влиять)");
+  }
+  if (!(q5 && q5.nextHint === "q_pro_07_first_frontier")) fail("quest q_pro_05_inspection: nextHint должен вести на Q7");
+  if (!(byIdQ3 && byIdQ3.nextHint === "q_pro_04_courier")) fail("quest q_pro_03_salt_ash: nextHint должен вести на Q4");
+  if (!(byIdQ4 && byIdQ4.nextHint === "q_pro_05_inspection")) fail("quest q_pro_04_courier: nextHint должен вести на Q5");
+  const EXPECT_Q1_FLAGS = ["going_now", "diagnose_first", "leader_first", "escort_first", "no_shots", "honest_report", "hide_core", "teira_only"];
+  for (const f of EXPECT_Q1_FLAGS) if (!modifierFlagKeys.has(f)) fail("Q1-флаг " + f + " не влияет ни на один modifier (косметика)");
+  ok("campaign: диалогов " + CAMPAIGN_DLGS.length + ", Q1-флагов в modifiers " + EXPECT_Q1_FLAGS.length + ", effectLabels " + allEffectKeys.size);
   // characters
   for (const c of QX.characters) {
     if (!c.id || !c.nameKey || !l10nHas(c.nameKey)) fail("character " + c.id + ": nameKey");
