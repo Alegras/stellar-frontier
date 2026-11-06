@@ -111,6 +111,25 @@ try {
     fail("file://: панель Древних", String(e).slice(0, 200));
   }
 
+  // M5b: арт сетки /battle/** (манифест через fetch-шим + PNG как data URI)
+  try {
+    const battle = await page.evaluate(async () => {
+      const res = await fetch("/battle/manifest.json");
+      const man = await res.json();
+      const assets = window.__SF_BATTLE_ASSETS__ || {};
+      const first = Object.values(assets)[0];
+      const img = await new Promise((resolve) => {
+        const i = new Image();
+        i.onload = () => resolve({ w: i.naturalWidth, h: i.naturalHeight });
+        i.onerror = () => resolve(null);
+        i.src = first;
+      });
+      return { ready: man.ready, tiles: Object.keys(man.tiles ?? {}).length, units: Object.keys(man.units ?? {}).length, effects: Object.keys(man.effects ?? {}).length, bg: Object.keys(man.backgrounds ?? {}).length, assets: Object.keys(assets).length, first: img };
+    });
+    if (battle.ready && battle.tiles >= 6 && battle.assets >= 28 && battle.first && battle.first.w > 0) pass("file://: арт сетки M5b (28 ассетов, манифест, decode)", "tiles=" + battle.tiles + " units=" + battle.units + " effects=" + battle.effects + " bg=" + battle.bg);
+    else fail("file://: арт сетки M5b", JSON.stringify(battle));
+  } catch (e) { fail("file://: арт сетки M5b", String(e).slice(0, 160)); }
+
   const critic = errors.filter((e) => !/favicon|404/i.test(e));
   if (critic.length === 0) pass("file://: без ошибок консоли"); else fail("file://: ошибки консоли", critic.slice(0, 3).join(" | "));
 } catch (e) {

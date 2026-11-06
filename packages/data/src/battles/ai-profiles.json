@@ -1,0 +1,65 @@
+[
+  {
+    "id": "aggressor",
+    "titleRu": "Агрессор",
+    "descRu": "Давит уроном и убийствами, идёт в упор и игнорирует укрытия; штрафы за ответный урон и overkill низкие.",
+    "weights": {
+      "damage": 1.2,
+      "kill": 1.1,
+      "threatReduction": 0.25,
+      "cover": 0.3,
+      "keyCell": 0.3,
+      "reserve": 0.1,
+      "counterPenalty": -0.3,
+      "overkillPenalty": -0.2,
+      "flagshipBonus": 0
+    },
+    "highlights": [
+      "Урон 1.20, убийство 1.10",
+      "Идёт в упор",
+      "Плохо бережёт стеки"
+    ]
+  },
+  {
+    "id": "kiter",
+    "titleRu": "Кайтер",
+    "descRu": "Держит дистанцию стрельбы, выбирает стрелков и бережёт резерв до 3-го раунда; сильнее всех боится ответного удара.",
+    "weights": {
+      "damage": 0.9,
+      "kill": 0.8,
+      "threatReduction": 1.1,
+      "cover": 0.5,
+      "keyCell": 0.8,
+      "reserve": 0.4,
+      "counterPenalty": -0.9,
+      "overkillPenalty": -0.6,
+      "flagshipBonus": 0
+    },
+    "highlights": [
+      "Снижение threat 1.10",
+      "Отступает на дистанцию",
+      "Бережёт резерв"
+    ]
+  },
+  {
+    "id": "defender",
+    "titleRu": "Защитник",
+    "descRu": "Держит строй и прикрытие, защищает ключевые клетки и свои стеки; предпочитает выгодный размен.",
+    "weights": {
+      "damage": 0.7,
+      "kill": 0.75,
+      "threatReduction": 0.9,
+      "cover": 1.2,
+      "keyCell": 1.1,
+      "reserve": 0.3,
+      "counterPenalty": -0.7,
+      "overkillPenalty": -0.5,
+      "flagshipBonus": 0
+    },
+    "highlights": [
+      "Прикрытие 1.20",
+      "Держит ключевые клетки",
+      "Осторожен в размене"
+    ]
+  }
+]

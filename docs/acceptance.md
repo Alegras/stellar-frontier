@@ -428,15 +428,27 @@ EN — опциональный переключатель (не требова�
 
 ---
 
-## 30. RPG-древо традиций и визуал колоний (task-58, 2026-11-08)
 
-Финальные гейты релиза: typecheck **0**; unit **343/343** (34 файла); golden **8f52b0a6**; полный e2e **67/67 PASS** (5.8 мин). Gift: **3.01 МБ**, zip **1.04 МБ**, verify-portable **10/10**; site синхронизирован; legacy-check 0.
+
+---
+
+## 32. M5b «Сетка командования»: финальная приёмка и релиз v0.8.0 (task-65, 2026-11-08)
+
+Финальные гейты: typecheck **0**; unit **360/360** (35 файлов); golden seed 42 = **3d450e84**; полный e2e **72/72 PASS** (5.6 мин); grid-battle e2e **3/3**; headless grid-verify **7/7**. Gift: **6.23 МБ**, zip **3.59 МБ**, verify-portable **11/11** (включая арт сетки под file://); site синхронизирован.
 
 | # | Требование | Статус | Доказательство |
 |---|---|---|---|
-| 1 | Древо традиций: 7 ветвей, 42 узла+финишеры | **PASS** | e2e traditions-tree: 7 ветвей, 42 узла, финишеры, зум 74%, fit, клик unlock dis_1, перки, 1280×720 |
-| 2 | Визуал колоний: HUD «Колонии системы» | **PASS** | e2e colonies-visual: планета и луна в системе, WebGL-канвас, frame check 500 мс; скриншот flight-colonies-1280.png |
-| 3 | Скриншоты | **PASS** | docs/shots/traditions-tree-1280.png, flight-colonies-1280.png |
-| 4 | Гейты | **PASS** | typecheck 0; unit 343/343; e2e **67/67**; gift verify 10/10 |
+| 1 | Feature flags | **PASS** | sim: `grid_battle` ON по умолчанию, legacy `world.flags.grid_battle=0` OFF; UI: вход только при localStorage `sf.gridBattle=1` (OFF default); e2e flag off + reduced-motion |
+| 2 | Реальный адаптер @sf/battle-grid (не мок) | **PASS** | apps/web/src/ui/grid-battle/adapter.ts → @sf/battle-grid; host в FullGameOverlays с паузой; мок только fallback |
+| 3 | S30 расстановка | **PASS** | 7+3 фронт/резерв, формации, авто/сброс/в бой, coop 90с, список, 1280×720; e2e |
+| 4 | S31 бой | **PASS** | инициатива/раунды/MP/действия/лог; подменю способностей (grid-ability-menu, активные из @sf/data), hover-прогноз урона (LOS/контр-удар); e2e |
+| 5 | S32 итог | **PASS** | потери/трофеи/XP/warScore/MVP/replayHash; возврат на карту; headless battleResult + conversion |
+| 6 | Детерминизм/replay/save | **PASS** | одинаковый seed → replayHash/battleStateHash; serialize/deserialize стабилен; battle-grid unit 17/17 |
+| 7 | Вход с L0 | **PASS** | btn-grid-battle в SystemInspector при своих+враждебных флотах; eligibility guard (FP/стеки/система); e2e |
+| 8 | Паритет с авторезолвом | **PASS** | 200 AI-прогонов: mean |Δloss| .046, within ±10% 85.5%, outcome 100%; малые samples open/mine ≤10%; **известный нюанс:** asteroid LOS sample Δ .64/.35 — оговорён (LOS/дискретность стеков) |
+| 9 | Арт M5b | **PASS** | manifest ready=true/pending=[]; 28 PNG = 6 тайлов + 16 unit strips (6 кадров 64×64) + 4 эффекта (6 кадров) + 2 фона; production 200/decode; portable встраивает 28 ассетов + манифест (fetch/Image-шим), verify 11/11 |
+| 10 | Гейты релиза | **PASS** | typecheck 0; unit 360/360; golden 3d450e84; e2e **72/72**; gift 6.23 МБ/zip 3.59 МБ/verify 11/11; site синхронизирован |
 
-**Скриншоты:** traditions-tree-1280.png, flight-colonies-1280.png, story-ancient-archive.png, dialogue-outcome.png, politics-map-1280.png.
+**Скриншоты:** grid-entry-1280.png, grid-deploy-1280.png, grid-battle-1280.png, grid-result-1280.png, traditions-tree-1280.png, menu-bg-1280.png.
+
+**Известный нюанс:** sample asteroid LOS даёт выброс паритета (Δ .64/.35) при общих критериях mean .046/85.5%/100%; зафиксировано для отдельного балансного прохода, не блокирует релиз.

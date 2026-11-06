@@ -84,6 +84,9 @@ importers:
 
   apps/web:
     dependencies:
+      '@sf/battle-grid':
+        specifier: workspace:*
+        version: link:../../packages/battle-grid
       '@sf/data':
         specifier: workspace:*
         version: link:../../packages/data
@@ -118,6 +121,15 @@ importers:
       vite:
         specifier: ^7.1.5
         version: 7.3.7(@types/node@22.20.5)(tsx@4.23.15)
+
+  packages/battle-grid:
+    dependencies:
+      '@sf/data':
+        specifier: workspace:*
+        version: link:../data
+      '@sf/sim':
+        specifier: workspace:*
+        version: link:../sim
 
   packages/data:
     dependencies:

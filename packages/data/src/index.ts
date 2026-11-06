@@ -78,6 +78,7 @@ export * from "./full/index";
 export * from "./ancients/index";
 export * from "./quests/index";
 export * from "./campaign/index";
+export * from "./battles/index";
 /** Полные ModeConfig для всех режимов (SP-кампания — MODE; кооп/MMO/песочница/испытание — ниже). */
 export const MODE_COOP = modeCoopJson as unknown as ModeConfig;
 export const MODE_MMO = modeMmoJson as unknown as ModeConfig;

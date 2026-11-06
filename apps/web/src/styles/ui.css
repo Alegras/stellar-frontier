@@ -1297,3 +1297,64 @@
 .sf-map-fleet-label { fill:#BFEFFF; font-size:11px; font-family:Consolas,monospace; paint-order:stroke; stroke:#05070E; stroke-width:3px; }
 .sf-map-label--home { border-color:#F5C542 !important; box-shadow:0 0 0 1px #F5C542, 0 0 12px #F5C54266; }
 .sf-map-label__home { color:#F5C542; border:1px solid #F5C542; padding:0 2px; margin-left:2px; font-size:9px; line-height:1.2; }
+
+
+/* ==========================================================================
+   task-62 · M5b «Сетка командования»: S30 расстановка / S31 бой / S32 итог
+   ========================================================================== */
+.sf-gridbattle-layer { position: fixed; inset: 0; z-index: 340; display: flex; align-items: center; justify-content: center; background: rgba(3, 5, 12, .82); padding: 8px; }
+.sf-gridbattle { width: min(1500px, calc(100vw - 24px)); max-height: calc(100vh - 24px); display: flex; flex-direction: column; background: #070C16; border: 2px solid #3A4A66; box-shadow: 0 0 0 2px #05070E, 0 18px 60px rgba(0,0,0,.7); overflow: hidden; }
+.sf-gridbattle__head { display: flex; align-items: center; gap: 8px; padding: 5px 10px; border-bottom: 1px solid #22304A; background: #0A1220; font-size: calc(13px * var(--sf-scale)); }
+.sf-gridbattle__head b { font-size: 1.15em; letter-spacing: .03em; }
+.sf-gridbattle__body { display: grid; grid-template-columns: 270px minmax(0, 1fr) 300px; gap: 6px; padding: 6px; min-height: 0; overflow: hidden; }
+.sf-gridbattle__left, .sf-gridbattle__right { display: flex; flex-direction: column; gap: 6px; min-height: 0; overflow-y: auto; max-height: calc(100vh - 130px); }
+.sf-gridbattle__center { display: flex; flex-direction: column; gap: 5px; min-width: 0; min-height: 0; align-items: stretch; justify-content: flex-start; }
+.sf-gridhex { display: block; width: 100%; height: auto; background: #05070E; border: 1px solid #2A3A56; cursor: crosshair; image-rendering: pixelated; max-height: calc(100vh - 230px); object-fit: contain; }
+.sf-gridroster { display: flex; flex-direction: column; gap: 3px; max-height: 40vh; overflow-y: auto; }
+.sf-gridroster__card { display: grid; grid-template-columns: 16px minmax(0, 1fr); grid-template-rows: auto auto; gap: 0 5px; text-align: left; background: #0C1626; border: 1px solid #22304A; color: var(--sf-text); font: inherit; font-size: calc(10.5px * var(--sf-scale)); padding: 3px 6px; cursor: pointer; }
+.sf-gridroster__card:hover { border-color: var(--sf-accent); }
+.sf-gridroster__card--on { border-color: #F5C542; background: #1A2438; }
+.sf-gridroster__card--reserve { opacity: .62; border-style: dashed; }
+.sf-gridroster__icon { grid-row: 1 / 3; color: #4FC3F7; align-self: center; }
+.sf-gridroster__name { font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sf-gridroster__meta { color: #8FA3BF; font-size: .9em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sf-gridtimer { font-variant-numeric: tabular-nums; color: #A8BAD0; border: 1px solid #2A3A56; background: #101A2E; padding: 1px 7px; font-size: calc(11px * var(--sf-scale)); }
+.sf-gridtimer--low { color: #FFB4A8; border-color: #5A2A2A; }
+.sf-gridactions { display: flex; flex-wrap: wrap; gap: 4px; padding: 4px; border: 1px solid #22304A; background: #0A1220; }
+.sf-gridbattle__hint { min-height: 18px; padding: 2px 4px; color: #A8BAD0; }
+.sf-gridbattle__foot { border-top: 1px solid #22304A; padding: 3px 10px; background: #0A1220; font-size: calc(10px * var(--sf-scale)); }
+.sf-gridinit { display: flex; flex-wrap: wrap; gap: 3px; }
+.sf-gridinit__tok { border: 1px solid #2A3A56; background: #101A2E; color: #A8BAD0; font-size: calc(9.5px * var(--sf-scale)); padding: 1px 4px; white-space: nowrap; }
+.sf-gridinit__tok--on { border-color: #F5C542; color: #F5C542; background: #1A2438; }
+.sf-gridlog { max-height: 160px; overflow-y: auto; display: flex; flex-direction: column; gap: 2px; font-size: calc(10px * var(--sf-scale)); }
+.sf-gridlog__line { border-bottom: 1px dotted #1E2A40; padding: 1px 0; color: #A8BAD0; }
+.sf-gridlog__line--damage { color: #FFD36A; }
+.sf-gridlog__line--death { color: #FF8A8A; }
+.sf-gridlog__line--ability { color: #C9B8FF; }
+.sf-gridbar { height: 6px; border: 1px solid #2A3A56; background: #241016; margin: 3px 0; }
+.sf-gridbar span { display: block; height: 100%; background: #6BE675; }
+.sf-gridlist { max-height: calc(100vh - 220px); overflow: auto; border: 1px solid #2A3A56; background: #070C16; }
+.sf-gridtable { width: 100%; border-collapse: collapse; font-size: calc(10.5px * var(--sf-scale)); }
+.sf-gridtable th, .sf-gridtable td { border: 1px solid #1E2A40; padding: 2px 5px; text-align: left; }
+.sf-gridtable th { background: #101A2E; color: #8FA3BF; font-weight: 600; position: sticky; top: 0; }
+.sf-gridtable__active { background: #16233A; color: #F5C542; }
+.sf-gridresult { padding: 8px 12px; overflow-y: auto; }
+.sf-gridresult h2 { margin: 4px 0 10px; color: #F5C542; letter-spacing: .04em; }
+.sf-gridresult__cols { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px; }
+.sf-gridbattle__body--list { grid-template-columns: 250px minmax(0,1fr) 300px; }
+.sf-ui-chip { display: inline-block; border: 1px solid #2A3A56; background: #101A2E; padding: 0 4px; margin: 1px; font-size: .92em; color: #A8BAD0; }
+[data-reduced="1"] .sf-gridhex, [data-reduced="1"] .sf-gridbattle * { animation: none !important; transition: none !important; }
+@media (max-width: 1100px) {
+  .sf-gridbattle__body { grid-template-columns: 200px minmax(0,1fr); }
+  .sf-gridbattle__right { display: none; }
+  .sf-gridbattle__left, .sf-gridbattle__right { max-height: calc(100vh - 150px); }
+}
+@media (prefers-reduced-motion: reduce) { .sf-gridbattle *, .sf-gridbattle-layer * { animation: none !important; transition: none !important; } }
+
+/* task-62: уведомления игры не перекрывают модальную сетку командования */
+.sf-ui:has(.sf-gridbattle-layer) .sf-notices { display: none !important; }
+
+
+/* task-62 · способности/прогноз урона в HUD сетки */
+.sf-gridabilities { display: flex; flex-wrap: wrap; gap: 3px; border: 1px solid #2A3A56; background: #101A2E; padding: 3px; }
+.sf-gridpreview { border: 1px solid #6B5A1A; background: #1A160A; color: #F5C542; padding: 2px 6px; font-size: calc(10.5px * var(--sf-scale)); }

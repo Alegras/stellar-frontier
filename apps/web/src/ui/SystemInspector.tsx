@@ -5,6 +5,8 @@ import { L, STATION_KIND_EN, tr } from "./fg";
 import {
   costText, findColonyByPlanet, findSystem, fleetsInSystem, enemyFleetsInSystem, isKnown, num, pctText, PLANET_RU, POI_RU, popsOf, playerEmpire, STATION_RU, STAR_RU, fleetCap, empireFleetPower, worldOf, intText, rnd } from "./util";
 
+function gridBattleFlagOn(): boolean { try { return localStorage.getItem("sf.gridBattle") === "1"; } catch { return false; } }
+
 export function SystemInspector({ game, state }: { game: Game; state: GameState }) {
   const world = worldOf(game);
   const sys = world ? findSystem(world, state.selectedSystemId) : null;
@@ -30,6 +32,7 @@ export function SystemInspector({ game, state }: { game: Game; state: GameState 
   const own = sys.ownerId === emp.id;
   const myFleets = fleetsInSystem(game, sys.id);
   const enemies = enemyFleetsInSystem(game, sys.id);
+  const hostileFleets = world.fleets.filter((f) => f.systemId === sys.id && f.empireId !== emp.id && f.ships.length > 0);
   const colonizer = myFleets.find((f) => f.ships.some((s) => s.classId === "colonizer")) ?? null;
   const selectedFleet = state.selectedFleetId != null
     ? (world.fleets.find((f) => f.id === state.selectedFleetId && f.empireId === emp.id) ?? null)
@@ -86,6 +89,16 @@ export function SystemInspector({ game, state }: { game: Game; state: GameState 
         <div className="sf-warn" style={{ fontSize: ".85em" }}>
           ⚠ {L("В системе враждебные флоты", "Hostile fleets in system")}: {enemies.length}
         </div>
+      )}
+
+      {myFleets.length > 0 && (enemies.length > 0 || hostileFleets.length > 0) && gridBattleFlagOn() && (
+        <Btn size="sm" variant="primary" testId="btn-grid-battle"
+          title={L("Только стратегический слой L0; 6DOF-бой в системе не меняется", "Strategic L0 only; in-system 6DOF stays unchanged")}
+          onClick={() => {
+            try { window.dispatchEvent(new CustomEvent("sf:grid-battle", { detail: { systemId: sys.id, systemName: sys.name, seed: sys.id * 97 + emp.id, coop: false } })); } catch { /* noop */ }
+          }}>
+          {L("Сетка командования", "Grid Command")}
+        </Btn>
       )}
 
       <Sep />

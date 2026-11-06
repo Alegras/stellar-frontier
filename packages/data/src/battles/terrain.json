@@ -1,0 +1,117 @@
+[
+  {
+    "id": "void",
+    "code": "P",
+    "titleRu": "Пустота",
+    "descRu": "Открытый космос без укрытий: базовая проходимость и прямая видимость.",
+    "passable": true,
+    "moveCost": 1,
+    "losBlock": false,
+    "coverResist": 0,
+    "accuracyDelta": 0,
+    "effects": [
+      "Без эффектов: базовая местность"
+    ],
+    "highlights": [
+      "Нейтральная местность",
+      "Видимость не блокируется"
+    ]
+  },
+  {
+    "id": "asteroid",
+    "code": "A",
+    "titleRu": "Астероидное поле",
+    "descRu": "Непроходимые глыбы: блокируют линию видимости и дают укрытие соседним гексам (+15% сопротивления стрельбе).",
+    "passable": false,
+    "moveCost": 0,
+    "losBlock": true,
+    "coverResist": 0.15,
+    "accuracyDelta": 0,
+    "effects": [
+      "Непроходимо",
+      "Блокирует LOS",
+      "Соседние гексы: +15% резист от стрельбы"
+    ],
+    "highlights": [
+      "Блокирует LOS",
+      "Укрытие +15% для соседей"
+    ]
+  },
+  {
+    "id": "nebula",
+    "code": "N",
+    "titleRu": "Туманность",
+    "descRu": "Плотный газ: блокирует линию видимости и снижает точность стрелка и цели внутри на 20%.",
+    "passable": true,
+    "moveCost": 1,
+    "losBlock": true,
+    "coverResist": 0,
+    "accuracyDelta": -0.2,
+    "effects": [
+      "Блокирует LOS",
+      "−20% точности внутри"
+    ],
+    "highlights": [
+      "Блокирует LOS",
+      "−20% точности"
+    ]
+  },
+  {
+    "id": "debris",
+    "code": "D",
+    "titleRu": "Обломки",
+    "descRu": "Мелкие обломки: замедляют движение (стоимость 2) и дают укрытие +15% от стрельбы.",
+    "passable": true,
+    "moveCost": 2,
+    "losBlock": false,
+    "coverResist": 0.15,
+    "accuracyDelta": 0,
+    "effects": [
+      "Стоимость входа 2 MP",
+      "Укрытие +15%"
+    ],
+    "highlights": [
+      "Замедляет: 2 MP",
+      "Укрытие +15%"
+    ]
+  },
+  {
+    "id": "minefield",
+    "code": "M",
+    "titleRu": "Минное поле",
+    "descRu": "Вход наносит 8% текущего HP стека; суммарно не более 15% HP за бой.",
+    "passable": true,
+    "moveCost": 1,
+    "losBlock": false,
+    "coverResist": 0,
+    "accuracyDelta": 0,
+    "effects": [
+      "8% текущего HP при входе",
+      "Кап 15% за бой"
+    ],
+    "highlights": [
+      "Урон при входе 8% HP",
+      "Кап 15% за бой"
+    ]
+  },
+  {
+    "id": "gravity_anomaly",
+    "code": "G",
+    "titleRu": "Гравитационная аномалия",
+    "descRu": "Искажение: −10% точности и +1 к стоимости входа (движение стоит на 1 больше).",
+    "passable": true,
+    "moveCost": 1,
+    "losBlock": false,
+    "coverResist": 0,
+    "accuracyDelta": -0.1,
+    "extraCost": 1,
+    "effects": [
+      "+1 стоимость входа",
+      "−10% точности"
+    ],
+    "highlights": [
+      "Дороже на 1 MP",
+      "−10% точности"
+    ]
+  }
+]

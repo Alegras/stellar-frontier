@@ -1,6 +1,6 @@
 {
   "name": "@sf/web",
-  "version": "0.7.3",
+  "version": "0.8.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -14,7 +14,8 @@
     "three": "^0.187.0",
     "@sf/sim": "workspace:*",
     "@sf/data": "workspace:*",
-    "@sf/protocol": "workspace:*"
+    "@sf/protocol": "workspace:*",
+    "@sf/battle-grid": "workspace:*"
   },
   "devDependencies": {
     "vite": "^7.1.5",

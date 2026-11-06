@@ -273,8 +273,15 @@ docs/                    ADR, демо-сценарий, приёмка
 - Карта: политический слой AI-ИИ линий/столиц/статусов/фильтров, клик→панель; сектор Предела скрыт до revealSector и открывается после (слой+туман).
 - Комикс: DOM-пузыри поверх Qwen-арта (1280–2560), портрет/история без наложений.
 - Арт: 24 портрета (4×6) + фон/карточки/комикс, 31 ассет.
-- UI: RPG-древо традиций (7 ветвей, 42 узла+финишеры, зум/fit, unlock/perks) и визуал колоний (HUD «Колонии системы», луны/города в WebGL).
-- QA: story-verify 17/17, гейтинг requiresAncients, story-full 4/4, traditions-tree 1/1, colonies-visual 1/1, legacy-check 0; unit 343/343; e2e **67/67**; golden **8f52b0a6**; acceptance §27–§30; gift 3.01 МБ/verify 10/10, site синхронизирован.
+- UI: RPG-древо традиций (7 ветвей, 42 узла+финишеры, зум/fit, unlock/perks), визуал колоний (HUD, луны/города), GIF-фон меню (постер→GIF, cover, reduced-motion→постер).
+- QA: story-verify 17/17, story-full 4/4, traditions-tree 1/1, colonies-visual 1/1, menu-bg 2/2, legacy-check 0; unit 343/343; e2e **69/69**; golden **8f52b0a6**; acceptance §27–§31; gift 5.23 МБ/verify 10/10, site синхронизирован.
+
+### M5b «Сетка командования» (v0.8.0)
+
+- Новый L0-слой: детерминированная битва 15×11 (@sf/battle-grid), 8 классов/16 способностей/6 террейнов/3 AI-профиля/3 сценария.
+- UI: S30 расстановка (7+3, формации, coop 90с), S31 бой (инициатива/раунды/MP/способности/hover-урон/LOS), S32 итог (потери/трофеи/XP/replayHash, возврат на карту); реальный адаптер, пауза мира, flag UI OFF default (localStorage), sim ON default/legacy 0.
+- Арт Qwen: 28 PNG (тайлы, unit strips 6 кадров, эффекты, фоны), manifest ready; портатив встраивает ассеты.
+- QA: e2e 72/72, grid-battle 3/3, unit 360/360, golden 3d450e84, acceptance §32; gift 6.23 МБ/verify 11/11.
 
 ## Портативная сборка (gift)
 

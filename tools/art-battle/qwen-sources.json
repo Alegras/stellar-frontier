@@ -1,0 +1,286 @@
+{
+  "generator": "qwen-image-2.1 (local ComfyUI)",
+  "steps": 18,
+  "assets": [
+    {
+      "name": "tile_empty",
+      "path": "tools\\art-battle\\qwen-raw\\tile_empty.png",
+      "prompt": "Pixel art game asset, single centered object, an empty deep-space hexagon tile with a few tiny white stars on a very dark navy background, on plain pure black background, crisp pixel shading, limited colour palette, high contrast, no text.  Square composition, object fills the frame.",
+      "seed": 9100,
+      "model": "qwen-image-2.1-UC-fp8",
+      "steps": 18,
+      "w": 1024,
+      "h": 1024
+    },
+    {
+      "name": "tile_asteroid",
+      "path": "tools\\art-battle\\qwen-raw\\tile_asteroid.png",
+      "prompt": "Pixel art game asset, single centered object, a hexagon space tile with grey rocky asteroids and floating stones on a very dark navy background, on plain pure black background, crisp pixel shading, limited colour palette, high contrast, no text.  Square composition, object fills the frame.",
+      "seed": 9101,
+      "model": "qwen-image-2.1-UC-fp8",
+      "steps": 18,
+      "w": 1024,
+      "h": 1024
+    },
+    {
+      "name": "tile_nebula",
+      "path": "tools\\art-battle\\qwen-raw\\tile_nebula.png",
+      "prompt": "Pixel art game asset, single centered object, a hexagon space tile with soft purple and blue nebula clouds on a very dark navy background, on plain pure black background, crisp pixel shading, limited colour palette, high contrast, no text.  Square composition, object fills the frame.",
+      "seed": 9102,
+      "model": "qwen-image-2.1-UC-fp8",
+      "steps": 18,
+      "w": 1024,
+      "h": 1024
+    },
+    {
+      "name": "tile_mines",
+      "path": "tools\\art-battle\\qwen-raw\\tile_mines.png",
+      "prompt": "Pixel art game asset, single centered object, a hexagon space tile with small glowing orange space mines and warning lights on a very dark navy background, on plain pure black background, crisp pixel shading, limited colour palette, high contrast, no text.  Square composition, object fills the frame.",
+      "seed": 9103,
+      "model": "qwen-image-2.1-UC-fp8",
+      "steps": 18,
+      "w": 1024,
+      "h": 1024
+    },
+    {
+      "name": "tile_gravity",
+      "path": "tools\\art-battle\\qwen-raw\\tile_gravity.png",
+      "prompt": "Pixel art game asset, single centered object, a hexagon space tile with a glowing purple gravity anomaly ring and swirl on a very dark navy background, on plain pure black background, crisp pixel shading, limited colour palette, high contrast, no text.  Square composition, object fills the frame.",
+      "seed": 9104,
+      "model": "qwen-image-2.1-UC-fp8",
+      "steps": 18,
+      "w": 1024,
+      "h": 1024
+    },
+    {
+      "name": "tile_wreck",
+      "path": "tools\\art-battle\\qwen-raw\\tile_wreck.png",
+      "prompt": "Pixel art game asset, single centered object, a hexagon space tile with metallic ship wreckage, torn hull plates and debris on a very dark navy background, on plain pure black background, crisp pixel shading, limited colour palette, high contrast, no text.  Square composition, object fills the frame.",
+      "seed": 9105,
+      "model": "qwen-image-2.1-UC-fp8",
+      "steps": 18,
+      "w": 1024,
+      "h": 1024
+    },
+    {
+      "name": "unit_player_corvette",
+      "path": "tools\\art-battle\\qwen-raw\\unit_player_corvette.png",
+      "prompt": "Pixel art game asset, single centered object, a small fast dart-shaped corvette spaceship, top-down three-quarter view spaceship, on plain pure black background, crisp pixel shading, limited colour palette, high contrast, no text. blue and cyan hull markings, cool blue engine glow",
+      "seed": 9201,
+      "model": "qwen-image-2.1-UC-fp8",
+      "steps": 18,
+      "w": 1024,
+      "h": 1024
+    },
+    {
+      "name": "unit_player_frigate",
+      "path": "tools\\art-battle\\qwen-raw\\unit_player_frigate.png",
+      "prompt": "Pixel art game asset, single centered object, a frigate spaceship with two side fins and twin engines, top-down three-quarter view spaceship, on plain pure black background, crisp pixel shading, limited colour palette, high contrast, no text. blue and cyan hull markings, cool blue engine glow",
+      "seed": 9202,
+      "model": "qwen-image-2.1-UC-fp8",
+      "steps": 18,
+      "w": 1024,
+      "h": 1024
+    },
+    {
+      "name": "unit_player_destroyer",
+      "path": "tools\\art-battle\\qwen-raw\\unit_player_destroyer.png",
+      "prompt": "Pixel art game asset, single centered object, a long narrow destroyer spaceship with a spine cannon, top-down three-quarter view spaceship, on plain pure black background, crisp pixel shading, limited colour palette, high contrast, no text. blue and cyan hull markings, cool blue engine glow",
+      "seed": 9203,
+      "model": "qwen-image-2.1-UC-fp8",
+      "steps": 18,
+      "w": 1024,
+      "h": 1024
+    },
+    {
+      "name": "unit_player_cruiser",
+      "path": "tools\\art-battle\\qwen-raw\\unit_player_cruiser.png",
+      "prompt": "Pixel art game asset, single centered object, a bulky cruiser spaceship with several turrets, top-down three-quarter view spaceship, on plain pure black background, crisp pixel shading, limited colour palette, high contrast, no text. blue and cyan hull markings, cool blue engine glow",
+      "seed": 9204,
+      "model": "qwen-image-2.1-UC-fp8",
+      "steps": 18,
+      "w": 1024,
+      "h": 1024
+    },
+    {
+      "name": "unit_player_battleship",
+      "path": "tools\\art-battle\\qwen-raw\\unit_player_battleship.png",
+      "prompt": "Pixel art game asset, single centered object, a heavy battleship spaceship with thick armor and big gun turrets, top-down three-quarter view spaceship, on plain pure black background, crisp pixel shading, limited colour palette, high contrast, no text. blue and cyan hull markings, cool blue engine glow",
+      "seed": 9205,
+      "model": "qwen-image-2.1-UC-fp8",
+      "steps": 18,
+      "w": 1024,
+      "h": 1024
+    },
+    {
+      "name": "unit_player_carrier",
+      "path": "tools\\art-battle\\qwen-raw\\unit_player_carrier.png",
+      "prompt": "Pixel art game asset, single centered object, a flat-decked carrier spaceship with a hangar flight deck, top-down three-quarter view spaceship, on plain pure black background, crisp pixel shading, limited colour palette, high contrast, no text. blue and cyan hull markings, cool blue engine glow",
+      "seed": 9206,
+      "model": "qwen-image-2.1-UC-fp8",
+      "steps": 18,
+      "w": 1024,
+      "h": 1024
+    },
+    {
+      "name": "unit_player_titan",
+      "path": "tools\\art-battle\\qwen-raw\\unit_player_titan.png",
+      "prompt": "Pixel art game asset, single centered object, a massive ornate titan dreadnought spaceship with layered fins, top-down three-quarter view spaceship, on plain pure black background, crisp pixel shading, limited colour palette, high contrast, no text. blue and cyan hull markings, cool blue engine glow",
+      "seed": 9207,
+      "model": "qwen-image-2.1-UC-fp8",
+      "steps": 18,
+      "w": 1024,
+      "h": 1024
+    },
+    {
+      "name": "unit_player_colossus",
+      "path": "tools\\art-battle\\qwen-raw\\unit_player_colossus.png",
+      "prompt": "Pixel art game asset, single centered object, a colossal ring-shaped super-heavy spaceship with a glowing core, top-down three-quarter view spaceship, on plain pure black background, crisp pixel shading, limited colour palette, high contrast, no text. blue and cyan hull markings, cool blue engine glow",
+      "seed": 9208,
+      "model": "qwen-image-2.1-UC-fp8",
+      "steps": 18,
+      "w": 1024,
+      "h": 1024
+    },
+    {
+      "name": "unit_enemy_corvette",
+      "path": "tools\\art-battle\\qwen-raw\\unit_enemy_corvette.png",
+      "prompt": "Pixel art game asset, single centered object, a small fast dart-shaped corvette spaceship, top-down three-quarter view spaceship, on plain pure black background, crisp pixel shading, limited colour palette, high contrast, no text. red and orange hull markings, warm red engine glow",
+      "seed": 9209,
+      "model": "qwen-image-2.1-UC-fp8",
+      "steps": 18,
+      "w": 1024,
+      "h": 1024
+    },
+    {
+      "name": "unit_enemy_frigate",
+      "path": "tools\\art-battle\\qwen-raw\\unit_enemy_frigate.png",
+      "prompt": "Pixel art game asset, single centered object, a frigate spaceship with two side fins and twin engines, top-down three-quarter view spaceship, on plain pure black background, crisp pixel shading, limited colour palette, high contrast, no text. red and orange hull markings, warm red engine glow",
+      "seed": 9210,
+      "model": "qwen-image-2.1-UC-fp8",
+      "steps": 18,
+      "w": 1024,
+      "h": 1024
+    },
+    {
+      "name": "unit_enemy_destroyer",
+      "path": "tools\\art-battle\\qwen-raw\\unit_enemy_destroyer.png",
+      "prompt": "Pixel art game asset, single centered object, a long narrow destroyer spaceship with a spine cannon, top-down three-quarter view spaceship, on plain pure black background, crisp pixel shading, limited colour palette, high contrast, no text. red and orange hull markings, warm red engine glow",
+      "seed": 9211,
+      "model": "qwen-image-2.1-UC-fp8",
+      "steps": 18,
+      "w": 1024,
+      "h": 1024
+    },
+    {
+      "name": "unit_enemy_cruiser",
+      "path": "tools\\art-battle\\qwen-raw\\unit_enemy_cruiser.png",
+      "prompt": "Pixel art game asset, single centered object, a bulky cruiser spaceship with several turrets, top-down three-quarter view spaceship, on plain pure black background, crisp pixel shading, limited colour palette, high contrast, no text. red and orange hull markings, warm red engine glow",
+      "seed": 9212,
+      "model": "qwen-image-2.1-UC-fp8",
+      "steps": 18,
+      "w": 1024,
+      "h": 1024
+    },
+    {
+      "name": "unit_enemy_battleship",
+      "path": "tools\\art-battle\\qwen-raw\\unit_enemy_battleship.png",
+      "prompt": "Pixel art game asset, single centered object, a heavy battleship spaceship with thick armor and big gun turrets, top-down three-quarter view spaceship, on plain pure black background, crisp pixel shading, limited colour palette, high contrast, no text. red and orange hull markings, warm red engine glow",
+      "seed": 9213,
+      "model": "qwen-image-2.1-UC-fp8",
+      "steps": 18,
+      "w": 1024,
+      "h": 1024
+    },
+    {
+      "name": "unit_enemy_carrier",
+      "path": "tools\\art-battle\\qwen-raw\\unit_enemy_carrier.png",
+      "prompt": "Pixel art game asset, single centered object, a flat-decked carrier spaceship with a hangar flight deck, top-down three-quarter view spaceship, on plain pure black background, crisp pixel shading, limited colour palette, high contrast, no text. red and orange hull markings, warm red engine glow",
+      "seed": 9214,
+      "model": "qwen-image-2.1-UC-fp8",
+      "steps": 18,
+      "w": 1024,
+      "h": 1024
+    },
+    {
+      "name": "unit_enemy_titan",
+      "path": "tools\\art-battle\\qwen-raw\\unit_enemy_titan.png",
+      "prompt": "Pixel art game asset, single centered object, a massive ornate titan dreadnought spaceship with layered fins, top-down three-quarter view spaceship, on plain pure black background, crisp pixel shading, limited colour palette, high contrast, no text. red and orange hull markings, warm red engine glow",
+      "seed": 9215,
+      "model": "qwen-image-2.1-UC-fp8",
+      "steps": 18,
+      "w": 1024,
+      "h": 1024
+    },
+    {
+      "name": "unit_enemy_colossus",
+      "path": "tools\\art-battle\\qwen-raw\\unit_enemy_colossus.png",
+      "prompt": "Pixel art game asset, single centered object, a colossal ring-shaped super-heavy spaceship with a glowing core, top-down three-quarter view spaceship, on plain pure black background, crisp pixel shading, limited colour palette, high contrast, no text. red and orange hull markings, warm red engine glow",
+      "seed": 9216,
+      "model": "qwen-image-2.1-UC-fp8",
+      "steps": 18,
+      "w": 1024,
+      "h": 1024
+    },
+    {
+      "name": "fx_laser_shot",
+      "path": "tools\\art-battle\\qwen-raw\\fx_laser_shot.png",
+      "prompt": "Pixel art game asset, single centered object, a bright cyan laser bolt projectile flying horizontally with a glowing trail, on plain pure black background, crisp pixel shading, limited colour palette, high contrast, no text.  Horizontal composition, centered.",
+      "seed": 9400,
+      "model": "qwen-image-2.1-UC-fp8",
+      "steps": 18,
+      "w": 1024,
+      "h": 512
+    },
+    {
+      "name": "fx_kinetic_shot",
+      "path": "tools\\art-battle\\qwen-raw\\fx_kinetic_shot.png",
+      "prompt": "Pixel art game asset, single centered object, an orange kinetic shell tracer with sparks and a smoke trail flying horizontally, on plain pure black background, crisp pixel shading, limited colour palette, high contrast, no text.  Horizontal composition, centered.",
+      "seed": 9401,
+      "model": "qwen-image-2.1-UC-fp8",
+      "steps": 18,
+      "w": 1024,
+      "h": 512
+    },
+    {
+      "name": "fx_shield_hit",
+      "path": "tools\\art-battle\\qwen-raw\\fx_shield_hit.png",
+      "prompt": "Pixel art game asset, single centered object, a cyan hexagonal energy shield impact flash with bright sparks, on plain pure black background, crisp pixel shading, limited colour palette, high contrast, no text.  Horizontal composition, centered.",
+      "seed": 9402,
+      "model": "qwen-image-2.1-UC-fp8",
+      "steps": 18,
+      "w": 1024,
+      "h": 512
+    },
+    {
+      "name": "fx_death_explosion",
+      "path": "tools\\art-battle\\qwen-raw\\fx_death_explosion.png",
+      "prompt": "Pixel art game asset, single centered object, a fiery orange explosion with debris, sparks and a shockwave ring, on plain pure black background, crisp pixel shading, limited colour palette, high contrast, no text.  Horizontal composition, centered.",
+      "seed": 9403,
+      "model": "qwen-image-2.1-UC-fp8",
+      "steps": 18,
+      "w": 1024,
+      "h": 512
+    },
+    {
+      "name": "bg_backdrop",
+      "path": "tools\\art-battle\\qwen-raw\\bg_backdrop.png",
+      "prompt": "Wide cinematic space battle background: distant blue planet, purple nebula, debris field, damaged station silhouette on the right, dark navy palette, stylized pixel-art-inspired game illustration, empty darker center for UI, no ships in foreground, no text.",
+      "seed": 9500,
+      "model": "qwen-image-2.1-UC-fp8",
+      "steps": 18,
+      "w": 1600,
+      "h": 900
+    },
+    {
+      "name": "bg_battlefield2d",
+      "path": "tools\\art-battle\\qwen-raw\\bg_battlefield2d.png",
+      "prompt": "Top-down isometric space battlefield background, dark navy with faint nebula, scattered debris and asteroid patches, subtle grid-like light, stylized pixel-art-inspired game art, no text, no UI.",
+      "seed": 9501,
+      "model": "qwen-image-2.1-UC-fp8",
+      "steps": 18,
+      "w": 1280,
+      "h": 720
+    }
+  ]
+}

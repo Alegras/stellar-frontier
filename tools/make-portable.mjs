@@ -26,10 +26,18 @@ const embedMenu = (text) => text.replace(/\/menu\/[A-Za-z0-9_\/.-]+\.(png|gif)/g
   const mime = url.endsWith(".gif") ? "image/gif" : "image/png";
   return "data:" + mime + ";base64," + readFileSync(file).toString("base64");
 });
+const embedBattle = (text) => text.replace(/\/battle\/[A-Za-z0-9_\/.\-]+\.(png|json)/g, (url) => {
+  const file = PUBLIC + url;
+  if (!existsSync(file)) return url;
+  if (url.endsWith(".json")) return url; // манифест отдаёт fetch-шим
+  return "data:image/png;base64," + readFileSync(file).toString("base64");
+});
 js = embedDlc(js);
 css = embedDlc(css);
 js = embedMenu(js);
 css = embedMenu(css);
+js = embedBattle(js);
+css = embedBattle(css);
 if (embedded.size > 0) console.log("embedded DLC assets:", embedded.size);
 if (js.includes("</script")) throw new Error("bundle contains </script, needs escaping");
 const scriptStart = html.indexOf('<script type="module"');
@@ -57,7 +65,25 @@ const walkDlc = (dir) => {
 };
 if (existsSync(dlcRoot)) walkDlc(dlcRoot);
 const shimCode = readFileSync("tools/portable-shim.js", "utf8");
-const inject = "<script>window.__SF_DLC_ASSETS__=" + JSON.stringify(dlcMap) + ";</script>\n<script>\n" + shimCode + "\n</script>";
+// M5b: арт /battle/** + манифест встраиваем для file:// (Image/fetch-шим)
+const battleRoot = path.join(PUBLIC, "battle");
+const battleMap = {};
+const walkBattle = (dir) => {
+  for (const entry of readdirSync(dir, { withFileTypes: true })) {
+    const full = path.join(dir, entry.name);
+    if (entry.isDirectory()) { walkBattle(full); continue; }
+    if (!entry.name.endsWith(".png")) continue;
+    const rel = "/" + path.relative(PUBLIC, full).split(path.sep).join("/");
+    battleMap[rel] = "data:image/png;base64," + readFileSync(full).toString("base64");
+  }
+};
+if (existsSync(battleRoot)) walkBattle(battleRoot);
+let battleManifest = null;
+try { battleManifest = JSON.parse(readFileSync(path.join(battleRoot, "manifest.json"), "utf8")); } catch { battleManifest = null; }
+const battleJson = JSON.stringify(battleMap).replace(/<\//g, "<\\/");
+const manifestJson = JSON.stringify(battleManifest ?? {}).replace(/<\//g, "<\\/");
+const inject = "<script>window.__SF_DLC_ASSETS__=" + JSON.stringify(dlcMap) + ";window.__SF_BATTLE_ASSETS__=" + battleJson + ";window.__SF_BATTLE_MANIFEST__=" + manifestJson + ";</script>\n<script>\n" + shimCode + "\n</script>";
+console.log("embedded battle assets:", Object.keys(battleMap).length, battleManifest ? manifestJson.length + "b manifest" : "no manifest");
 out = out.replace("<head>", () => "<head>\n" + inject);
 writeFileSync("StellarFrontier.html", out);
 console.log("written", out.length, "bytes", jsPath, cssPath);

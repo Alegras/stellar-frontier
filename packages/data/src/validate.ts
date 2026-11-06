@@ -6,6 +6,8 @@
 import { z } from "zod";
 import {
   BUILDINGS, DESIGNS, DISTRICTS, HULLS, JOBS, MISSIONS, MODULES, RESOURCES, TECHS, WEAPONS, RESOURCE_BY_ID,
+  BATTLE_ABILITIES, BATTLE_AI_PROFILES, BATTLE_CLASSES, BATTLE_SCENARIOS, BATTLE_TERRAIN,
+  battleAbilitySchema, battleAiProfileSchema, battleClassSchema, battleScenarioSchema, battleTerrainSchema,
 } from "./index";
 
 const ids = (arr: { id: string }[]) => {
@@ -94,4 +96,42 @@ for (const d of DESIGNS) {
 
 for (const r of RESOURCES) if (!(r.id in RESOURCE_BY_ID)) throw new Error("resource map broken");
 if (!DESIGNS.some((d) => d.classId === "frigate")) throw new Error("no starter frigate design");
+// ---- Battle-контент (Сетка командования, M5b) ----
+check("battle-classes", battleClassSchema, BATTLE_CLASSES);
+check("battle-abilities", battleAbilitySchema, BATTLE_ABILITIES);
+check("battle-terrain", battleTerrainSchema, BATTLE_TERRAIN);
+check("battle-ai-profiles", battleAiProfileSchema, BATTLE_AI_PROFILES);
+for (const s of BATTLE_SCENARIOS) battleScenarioSchema.parse(s);
+const btlClassIds = ids(BATTLE_CLASSES);
+const btlAbilityIds = ids(BATTLE_ABILITIES);
+const btlTerrainIds = ids(BATTLE_TERRAIN);
+ids(BATTLE_AI_PROFILES);
+ids(BATTLE_SCENARIOS);
+if (BATTLE_CLASSES.length !== 8) throw new Error("battle-classes: " + BATTLE_CLASSES.length + " (need 8)");
+if (BATTLE_ABILITIES.length !== 16) throw new Error("battle-abilities: " + BATTLE_ABILITIES.length + " (need 16)");
+if (BATTLE_ABILITIES.filter((a) => a.kind === "active").length !== 10) throw new Error("battle-abilities: active != 10");
+if (BATTLE_ABILITIES.filter((a) => a.kind === "passive").length !== 6) throw new Error("battle-abilities: passive != 6");
+if (BATTLE_TERRAIN.length !== 6) throw new Error("battle-terrain: " + BATTLE_TERRAIN.length + " (need 6)");
+if (BATTLE_AI_PROFILES.length !== 3) throw new Error("battle-ai-profiles: " + BATTLE_AI_PROFILES.length + " (need 3)");
+if (BATTLE_SCENARIOS.length !== 3) throw new Error("battle-scenarios: " + BATTLE_SCENARIOS.length + " (need 3)");
+const btlPassiveIds = new Set<string>();
+for (const c of BATTLE_CLASSES) {
+  if (c.hpStack !== c.hpPerHull * c.maxStack) throw new Error("class " + c.id + ": hpStack");
+  if (c.damageStack !== Math.round(c.dpsPerHull * c.maxStack * 3)) throw new Error("class " + c.id + ": damageStack");
+  if (btlPassiveIds.has(c.passiveAbility.id)) throw new Error("class passive duplicate: " + c.passiveAbility.id);
+  btlPassiveIds.add(c.passiveAbility.id);
+  if (c.passiveAbilityId !== c.passiveAbility.id) throw new Error("class " + c.id + ": passiveAbilityId mismatch");
+}
+const codes = new Set(BATTLE_TERRAIN.map((t) => t.code));
+if (codes.size !== 6) throw new Error("battle-terrain: duplicate codes");
+for (const s of BATTLE_SCENARIOS) {
+  const stacks = [...s.attacker.stacks, ...s.defender.stacks];
+  for (const st of stacks) {
+    if (!btlClassIds.has(st.classId)) throw new Error("scenario " + s.id + ": unknown class " + st.classId);
+    if (st.facing < 0 || st.facing > 5) throw new Error("scenario " + s.id + ": facing " + st.facing);
+  }
+  for (const t of s.terrainPreset.terrainIds) if (!btlTerrainIds.has(t)) throw new Error("scenario " + s.id + ": unknown terrain " + t);
+}
+void btlAbilityIds;
+console.log("battle content: classes 8, abilities 16 (10+6), terrain 6, ai 3, scenarios 3");
 console.log("data validation passed");

@@ -96,3 +96,17 @@
 - [x] 7 ветвей/42 узла+финишеры, зум 74%, fit, unlock dis_1, перки, 1280 — traditions-tree 1/1.
 - [x] HUD «Колонии системы», планета/луна/города/орбитальные станции, WebGL frame check — colonies-visual 1/1.
 - [x] typecheck 0, unit 343/343, полный e2e **67/67**, gift 3.01 МБ/zip 1.04 МБ/verify 10/10, acceptance §30.
+
+## GIF-фон меню и релиз v0.7.3 (2026-11-08)
+
+- [x] Постер→GIF, decoding=async, object-fit:cover, reduced-motion только постер; menu-bg 2/2; скриншоты menu-bg-1280/menu-bg-reduced-1280.
+- [x] CSS восстановлен после усечения (ui.css 1299 строк, sf-tradtree/trad-grid + полный menu-bg).
+- [x] typecheck 0, unit 343/343, полный e2e **69/69**, gift 5.23 МБ/zip 2.91 МБ/verify 10/10, acceptance §31; сайт синхронизирован.
+
+## M5b «Сетка командования» (task-65, закрыто 2026-11-08, v0.8.0)
+
+- [x] @sf/battle-grid: 8 классов/16 способностей/6 террейнов/3 профиля/3 сценария; детерминизм/replay/save.
+- [x] S30/S31/S32 UI, реальный адаптер, пауза, вход с L0, способности/hover-урон, reduced-motion; flag UI OFF default/sim ON default.
+- [x] Арт 28 PNG (16 unit strips ×6), manifest ready, portable ассеты + fetch/Image-шим.
+- [x] typecheck 0, unit 360/360, golden 3d450e84, e2e **72/72**, gift 6.23 МБ/zip 3.59 МБ/verify 11/11, acceptance §32.
+- [ ] Известный нюанс: asteroid LOS sample паритета (Δ .64/.35) — отдельный балансный проход.

@@ -71,7 +71,23 @@
 | `admiral_kain` | «Адмирал Кейн Ордо», адмирал флота (кампания, Act2/branch/finale) | холодный металл-тон кожи, седой ёжик, кибер-глаз с золотым кольцом, старые шрамы, чёрно-синий мундир с погонами, золотые планки и колодка |
 | `counselor_selen` | «Советник Селена Вэр», советник по стратегии | тёплая оливковая кожа, длинные тёмно-фиолетовые волосы с пси-прядью, серебряный обруч с камнем, воротник-стойка, серебро + голубой акцент |
 
-## 2.2. GIF главного меню: космическая битва (task-60/63, локальные Qwen-Image + Wan2.2)
+## 2.3. Арт гекс-битвы M5b (task-63): локальная Qwen-Image + пиксель-пост
+
+Требование заказчика: **все боевые изображения — исходники из локальной Qwen-Image 2.1**, процедурная генерация «с нуля» не используется; допустим только пиксель-пост (палитра/даунскейл/hex-маска/прозрачность/анимационные strips).
+
+**Контракт с UI (согласован с ui-engineer):** база `apps/web/public/battle/`, манифест `/battle/manifest.json`.
+| Группа | Пути | Размер/кадры |
+|---|---|---|
+| Тайлы | `tiles/{empty,dust,asteroid,nebula,mines,gravity,wreck}.png` | 32×36 pointy-top, strips: static 1, asteroid/nebula/gravity 4, mines 6; anchor [16,18] |
+| Юниты | `units/{player,enemy}/{corvette,frigate,destroyer,cruiser,battleship,carrier,titan,colossus}.png` | 64×64, 6 кадров `[idle_0,idle_1,move_0,move_1,attack_0,attack_1]`, anchor [32,56] |
+| Эффекты | `effects/{laser_shot,kinetic_shot,shield_hit,death_explosion}.png` | 64×64, 6 кадров, no-loop |
+| Фон | `bg/battle-backdrop.png` 1920×1080, `bg/battlefield-2d.png` 640×360 | Qwen, ≤32 цветов |
+
+**Qwen-исходники:** `qwen-image-2.1-UC-fp8` (UNETLoader) + `qwen3vl_8b_int8_convrot` (CLIP type `qwen_image`, cpu) + `qwen_image_2.1_vae_bf16`, t2i 1024×1024 (эффекты 1024×512, фон 1600×900/1280×720), **18 шагов**, cfg 1, euler/simple; seed'ы группы: тайлы 9100+i, юниты 9200+idx, эффекты 9400+i, фон 9500/9501. Промпт-схема: «Pixel art game asset, single centered object, <описание>, on plain pure black background, crisp pixel shading, limited colour palette, no text»; фракции — blue/cyan (player) и red/orange (enemy). Скрипт: `tools/art-battle/qwen_battle_sources.py` (ждёт пустую очередь ComfyUI, resume по готовым raw, пишет `tools/art-battle/qwen-raw/sources.json` с prompt/seed/model).
+
+**Пост-обработка (`tools/art-battle/postprocess_battle_art.py`):** chroma-key чёрного фона (flood fill от краёв, внутренние тёмные пиксели сохраняются) → crop/fit → палитра проекта (≤32, тайлы ≤3 цветов по 15a §7.7) → strips. Кадры анимации — **пост-обработка одного Qwen-исходника**: asteroid — поворот, nebula — сдвиг, mines — пульс яркости, gravity — зум; юниты — bob/bank, усиление свечения двигателей, отдача + вспышка на attack-кадрах; эффекты — движение/масштаб/затухание. В manifest каждый ассет имеет `source {prompt,seed,model,steps}`, у strips — `frameSource: postprocess(Qwen source: ...)`. Валидатор: `python tools/art-battle/validate_battle_art.py` (manifest↔файлы, палитра, альфа, hex-углы, anchor, бюджеты ≤5 МБ, наличие Qwen-метаданных; корректно работает в частичном состоянии с `pending`).
+
+**Статус (готово):** 28 Qwen-исходников сгенерированы (6 тайлов + 16 юнитов player/enemy + 4 эффекта + 2 фона), пост-обработка выполнена, `/battle/manifest.json` — `ready=true, pending=[]`, total **625 КБ** (лимит 5 МБ), палитра 26 цветов. Валидатор `python tools/art-battle/validate_battle_art.py` — **OK** (размеры/strips/альфа/hex-углы/anchor/≤32 цветов/Qwen-метаданные). UI-проверка production preview: все **28 PNG /battle/** → 200, decode OK, 404 нет. Юниты — strips по 6 кадров (не fallback). Превью: docs/shots/battle-tiles.png, battle-units.png, battle-effects.png, battle-preview.png.
 
 Зацикленная GIF и постер для главного меню — **только локальные модели** (ComfyUI 127.0.0.1:8188), без облака.
 

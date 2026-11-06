@@ -1,0 +1,242 @@
+[
+  {
+    "id": "corvette",
+    "code": "CV",
+    "titleRu": "Корвет",
+    "roleRu": "Рой / разведка",
+    "descRu": "Быстрый и дешёвый класс: много корпусов в стеке, высокая инициатива, слабый урон по одиночной цели. Основа экранирования и добора инициативы.",
+    "passiveAbilityId": "swarm",
+    "passiveAbility": {
+      "id": "swarm",
+      "titleRu": "Рой",
+      "descRu": "+15% уклонения, если в соседнем гексе есть союзный стек корветов.",
+      "effectRu": "+15% уклонение при соседнем корвете"
+    },
+    "hpPerHull": 310,
+    "maxStack": 12,
+    "hpStack": 3720,
+    "dpsPerHull": 14,
+    "damageStack": 504,
+    "initiative": 13,
+    "mp": 7,
+    "atk": 9,
+    "def": 8,
+    "range": 4,
+    "fp": 6,
+    "highlights": [
+      "12 корпусов в стеке",
+      "Инициатива 13 — ходит первым",
+      "Поддержка роем: +15% уклонения рядом"
+    ]
+  },
+  {
+    "id": "frigate",
+    "code": "FR",
+    "titleRu": "Фрегат",
+    "roleRu": "Скрин / эскорт",
+    "descRu": "Универсальный эскорт: прикрывает союзные стеки от ракет и торпед, держит среднюю дистанцию.",
+    "passiveAbilityId": "screen",
+    "passiveAbility": {
+      "id": "screen",
+      "titleRu": "Скрин",
+      "descRu": "−30% урона ракет и торпед по союзным стекам в радиусе 1 гекса.",
+      "effectRu": "−30% урона ракет/торпед союзникам в радиусе 1"
+    },
+    "hpPerHull": 590,
+    "maxStack": 10,
+    "hpStack": 5900,
+    "dpsPerHull": 22,
+    "damageStack": 660,
+    "initiative": 11,
+    "mp": 6,
+    "atk": 10,
+    "def": 9,
+    "range": 5,
+    "fp": 13,
+    "highlights": [
+      "Защита союзников от ракет",
+      "Средняя инициатива и урон",
+      "Дешёвый эскорт для тяжёлых стеков"
+    ]
+  },
+  {
+    "id": "destroyer",
+    "code": "DD",
+    "titleRu": "Эсминец",
+    "roleRu": "Торпедный удар",
+    "descRu": "Ударный класс: разовый торпедный залп с повышенным уроном, средняя броня.",
+    "passiveAbilityId": "torpedo_salvo",
+    "passiveAbility": {
+      "id": "torpedo_salvo",
+      "titleRu": "Торпедный залп",
+      "descRu": "1 раз за бой: +100% урона по цели (дальность 5).",
+      "effectRu": "1/бой: +100% урона, дальность 5"
+    },
+    "hpPerHull": 1080,
+    "maxStack": 8,
+    "hpStack": 8640,
+    "dpsPerHull": 40,
+    "damageStack": 960,
+    "initiative": 10,
+    "mp": 5,
+    "atk": 12,
+    "def": 10,
+    "range": 5,
+    "fp": 24,
+    "highlights": [
+      "Торпедный залп 1/бой",
+      "Хороший урон за цену",
+      "Уязвим в ближнем бою"
+    ]
+  },
+  {
+    "id": "cruiser",
+    "code": "CA",
+    "titleRu": "Крейсер",
+    "roleRu": "Ударный залп",
+    "descRu": "Линейный боевой класс: сильный залп, если стек не двигался в этот ход.",
+    "passiveAbilityId": "strike_volley",
+    "passiveAbility": {
+      "id": "strike_volley",
+      "titleRu": "Ударный залп",
+      "descRu": "+25% урона, если стек не двигался в этот ход.",
+      "effectRu": "+25% урона без движения"
+    },
+    "hpPerHull": 2150,
+    "maxStack": 6,
+    "hpStack": 12900,
+    "dpsPerHull": 80,
+    "damageStack": 1440,
+    "initiative": 9,
+    "mp": 4,
+    "atk": 13,
+    "def": 12,
+    "range": 6,
+    "fp": 55,
+    "highlights": [
+      "+25% урона стоя на месте",
+      "Баланс атаки и защиты",
+      "Основа линии боя"
+    ]
+  },
+  {
+    "id": "battleship",
+    "code": "BB",
+    "titleRu": "Линкор",
+    "roleRu": "Тяжёлая броня",
+    "descRu": "Тяжёлый класс: много HP и брони, снижает урон от оружия S и M.",
+    "passiveAbilityId": "heavy_armor",
+    "passiveAbility": {
+      "id": "heavy_armor",
+      "titleRu": "Тяжёлая броня",
+      "descRu": "−20% урона от оружия размером S и M.",
+      "effectRu": "−20% урона S/M"
+    },
+    "hpPerHull": 4450,
+    "maxStack": 3,
+    "hpStack": 13350,
+    "dpsPerHull": 170,
+    "damageStack": 1530,
+    "initiative": 8,
+    "mp": 3,
+    "atk": 15,
+    "def": 14,
+    "range": 6,
+    "fp": 130,
+    "highlights": [
+      "Максимальная броня",
+      "−20% урона S/M",
+      "Медленный: MP 3"
+    ]
+  },
+  {
+    "id": "titan",
+    "code": "TT",
+    "titleRu": "Титан",
+    "roleRu": "Аура командования",
+    "descRu": "Самый мощный стек: огромный урон и аура, повышающая ATK союзников.",
+    "passiveAbilityId": "command_aura",
+    "passiveAbility": {
+      "id": "command_aura",
+      "titleRu": "Аура командования",
+      "descRu": "+10% ATK союзным стекам в радиусе 2 гексов.",
+      "effectRu": "+10% ATK союзникам в радиусе 2"
+    },
+    "hpPerHull": 10400,
+    "maxStack": 2,
+    "hpStack": 20800,
+    "dpsPerHull": 300,
+    "damageStack": 1800,
+    "initiative": 6,
+    "mp": 2,
+    "atk": 17,
+    "def": 17,
+    "range": 6,
+    "fp": 300,
+    "highlights": [
+      "Самый сильный стек (1800 урона)",
+      "Аура +10% ATK",
+      "Всего 2 корпуса"
+    ]
+  },
+  {
+    "id": "carrier",
+    "code": "CVN",
+    "titleRu": "Носитель",
+    "roleRu": "Ангар",
+    "descRu": "Авианесущий класс: выпускает звено дронов, бьёт на большой дистанции.",
+    "passiveAbilityId": "hangar",
+    "passiveAbility": {
+      "id": "hangar",
+      "titleRu": "Ангар",
+      "descRu": "1 раз за 3 раунда: выпускает звено дронов (200 HP, урон 300, 2 раунда).",
+      "effectRu": "Дроны: 200 HP, 300 урона, 2 раунда"
+    },
+    "hpPerHull": 5500,
+    "maxStack": 2,
+    "hpStack": 11000,
+    "dpsPerHull": 90,
+    "damageStack": 540,
+    "initiative": 7,
+    "mp": 3,
+    "atk": 12,
+    "def": 11,
+    "range": 7,
+    "fp": 160,
+    "highlights": [
+      "Дальность 7",
+      "Звено дронов 1/3 раунда",
+      "Слабый корпус для своего класса"
+    ]
+  },
+  {
+    "id": "colossus",
+    "code": "CL",
+    "titleRu": "Колосс",
+    "roleRu": "Осадное орудие",
+    "descRu": "Осадный класс: почти бесполезен против флота, но сносит станции и защиту.",
+    "passiveAbilityId": "siege_gun",
+    "passiveAbility": {
+      "id": "siege_gun",
+      "titleRu": "Осадное орудие",
+      "descRu": "×3 урона по неподвижным целям (станции, «защита»); в бою с флотом почти бесполезен.",
+      "effectRu": "×3 урона по станциям и защите"
+    },
+    "hpPerHull": 6700,
+    "maxStack": 1,
+    "hpStack": 6700,
+    "dpsPerHull": 20,
+    "damageStack": 60,
+    "initiative": 5,
+    "mp": 2,
+    "atk": 6,
+    "def": 16,
+    "range": 3,
+    "fp": 60,
+    "highlights": [
+      "×3 урона по станциям",
+      "Один корпус в стеке",
+      "Почти бесполезен в поле"
+    ]
+  }
+]

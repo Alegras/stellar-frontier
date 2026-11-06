@@ -9,6 +9,7 @@ import type { PanelId } from "./fullgame-registry";
 import { DialogueOverlay } from "./DialogueOverlay";
 import { AiWorldEventModal } from "./WorldPoliticsPanel";
 import { worldOf } from "./util";
+import { GridBattleOverlay } from "./grid-battle/GridBattleOverlay";
 
 // PanelId/PANEL_TITLES/PANEL_REGISTRY живут в fullgame-registry.ts (без JSX), чтобы
 // react-refresh не ругался на смешанные экспорты. Здесь только компоненты.
@@ -100,6 +101,7 @@ export function FullGameOverlays({ game, state }: { game: Game; state: GameState
   }, [game, state.started, state.seed]);
   const [dismissed, setDismissed] = useState<string[]>([]);
   const [lastPendingId, setLastPendingId] = useState<string | null>(null);
+  const [gridBattle, setGridBattle] = useState<{ seed: number; coop: boolean; systemName: string } | null>(null);
 
   const pending = fg?.narrative.pending ?? [];
   const eventRaw = pending.find((e) => !dismissed.includes(e.id)) ?? null;
@@ -118,12 +120,26 @@ export function FullGameOverlays({ game, state }: { game: Game; state: GameState
 
   // Пока открыта модалка события — игровое время стоит до выбора (и очередь не растёт).
   useEffect(() => {
-    game.setNarrativeModalOpen(!!event);
-  }, [event?.id, game]);
+    game.setNarrativeModalOpen(!!event || !!gridBattle);
+  }, [event?.id, gridBattle, game]);
   useEffect(() => () => game.setNarrativeModalOpen(false), [game]);
 
   const activeCrises = (fg?.crises ?? []).filter((c) => !c.defeated);
   const mp = fg?.multiplayer;
+
+  useEffect(() => {
+    const onGrid = (ev: Event) => {
+      const detail = (ev as CustomEvent).detail as { seed?: number; coop?: boolean; systemId?: number } | undefined;
+      let flag = "1";
+      try { flag = localStorage.getItem("sf.gridBattle") ?? "0"; } catch { /* noop */ }
+      if (flag === "0") return;
+      const world = worldOf(game);
+      const system = world && detail?.systemId != null ? world.systems.find((s) => s.id === detail.systemId) : null;
+      setGridBattle({ seed: detail?.seed ?? 42, coop: Boolean(detail?.coop), systemName: system?.name ?? "Вега-II" });
+    };
+    window.addEventListener("sf:grid-battle", onGrid);
+    return () => window.removeEventListener("sf:grid-battle", onGrid);
+  }, [game]);
 
   return (
     <div data-testid="fullgame-overlays" style={{ position: "absolute", inset: 0, pointerEvents: "none" }}>
@@ -149,6 +165,11 @@ export function FullGameOverlays({ game, state }: { game: Game; state: GameState
       {mp?.enabled && (
         <div className="sf-mp-overlay" style={{ pointerEvents: "auto" }}>
           <MPStatusHud game={game} state={state} />
+        </div>
+      )}
+      {gridBattle && (
+        <div style={{ pointerEvents: "auto" }}>
+          <GridBattleOverlay game={game} coop={gridBattle.coop} seed={gridBattle.seed} onClose={() => setGridBattle(null)} />
         </div>
       )}
       {event && (

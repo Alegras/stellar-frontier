@@ -1,0 +1,184 @@
+{
+  "version": 1,
+  "scenarios": [
+    {
+      "id": "demo_open_field",
+      "titleRu": "Открытое поле: линия против роя",
+      "descRu": "Эталонный бой на пустой местности: тяжёлая линия против корветного роя. Проверка инициативы и фокуса.",
+      "seed": 1001,
+      "objective": "annihilation",
+      "terrainPreset": {
+        "nameRu": "Пустота",
+        "terrainIds": [
+          "void"
+        ]
+      },
+      "attacker": {
+        "factionRu": "Империя игрока",
+        "stacks": [
+          {
+            "classId": "cruiser",
+            "count": 2,
+            "facing": 0,
+            "reserve": false
+          },
+          {
+            "classId": "battleship",
+            "count": 1,
+            "facing": 0,
+            "reserve": false
+          },
+          {
+            "classId": "frigate",
+            "count": 2,
+            "facing": 0,
+            "reserve": true
+          }
+        ]
+      },
+      "defender": {
+        "factionRu": "Рваная Стая",
+        "stacks": [
+          {
+            "classId": "corvette",
+            "count": 3,
+            "facing": 3,
+            "reserve": false
+          },
+          {
+            "classId": "destroyer",
+            "count": 1,
+            "facing": 3,
+            "reserve": false
+          }
+        ]
+      },
+      "expected": {
+        "roundsPlayed": 3,
+        "winner": "attacker",
+        "replayHash": "92b07d6b"
+      }
+    },
+    {
+      "id": "demo_asteroid_belt",
+      "titleRu": "Астероидный пояс: укрытия и LOS",
+      "descRu": "Бой среди астероидов: проверка блокировки LOS, укрытий и обхода.",
+      "seed": 1002,
+      "objective": "annihilation",
+      "terrainPreset": {
+        "nameRu": "Астероидный пояс",
+        "terrainIds": [
+          "asteroid",
+          "void",
+          "debris"
+        ]
+      },
+      "attacker": {
+        "factionRu": "Империя игрока",
+        "stacks": [
+          {
+            "classId": "carrier",
+            "count": 1,
+            "facing": 0,
+            "reserve": false
+          },
+          {
+            "classId": "cruiser",
+            "count": 1,
+            "facing": 0,
+            "reserve": false
+          },
+          {
+            "classId": "corvette",
+            "count": 2,
+            "facing": 0,
+            "reserve": true
+          }
+        ]
+      },
+      "defender": {
+        "factionRu": "Гегемония",
+        "stacks": [
+          {
+            "classId": "battleship",
+            "count": 1,
+            "facing": 3,
+            "reserve": false
+          },
+          {
+            "classId": "frigate",
+            "count": 2,
+            "facing": 3,
+            "reserve": false
+          }
+        ]
+      },
+      "expected": {
+        "roundsPlayed": 18,
+        "winner": "attacker",
+        "replayHash": "6aa9e7e9"
+      }
+    },
+    {
+      "id": "demo_mine_nebula",
+      "titleRu": "Минное поле и туманность: риск и точность",
+      "descRu": "Бой в туманности с минными полями: проверка штрафов точности и урона при входе.",
+      "seed": 1003,
+      "objective": "annihilation",
+      "terrainPreset": {
+        "nameRu": "Туманность с минами",
+        "terrainIds": [
+          "nebula",
+          "minefield",
+          "gravity_anomaly",
+          "void"
+        ]
+      },
+      "attacker": {
+        "factionRu": "Империя игрока",
+        "stacks": [
+          {
+            "classId": "destroyer",
+            "count": 2,
+            "facing": 0,
+            "reserve": false
+          },
+          {
+            "classId": "cruiser",
+            "count": 1,
+            "facing": 0,
+            "reserve": false
+          },
+          {
+            "classId": "frigate",
+            "count": 1,
+            "facing": 0,
+            "reserve": true
+          }
+        ]
+      },
+      "defender": {
+        "factionRu": "Отступники",
+        "stacks": [
+          {
+            "classId": "titan",
+            "count": 1,
+            "facing": 3,
+            "reserve": false
+          },
+          {
+            "classId": "colossus",
+            "count": 1,
+            "facing": 3,
+            "reserve": false
+          }
+        ]
+      },
+      "expected": {
+        "roundsPlayed": 4,
+        "winner": "defender",
+        "replayHash": "3766d206"
+      }
+    }
+  ]
+}

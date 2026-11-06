@@ -8,6 +8,8 @@
     "packages/sim/src",
     "packages/sim/test",
     "packages/data/src",
+    "packages/battle-grid/src",
+    "packages/battle-grid/test",
     "vitest.config.ts",
     "apps/web/playwright.config.ts"
   ]

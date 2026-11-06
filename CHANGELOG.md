@@ -1,8 +1,17 @@
 # CHANGELOG
 
+## [0.8.0] — 2026-11-08 · M5b «Сетка командования»
+
+- Новый слой L0: @sf/battle-grid — детерминированная пошаговая битва 15×11 (hex odd-r, pointy-top), 8 классов/16 способностей/6 террейнов/3 AI-профиля/3 сценария.
+- S30 расстановка (7+3, формации, авто/сброс/в бой, coop 90с), S31 бой (инициатива/раунды/MP/действия/лог, способности, hover-урон/LOS), S32 итог (потери/трофеи/XP/война/MVP/replayHash, возврат на карту).
+- UI: реальный адаптер @sf/battle-grid, host в FullGameOverlays с паузой, вход btn-grid-battle с L0; feature flag: sim ON default/legacy 0, UI localStorage OFF default; reduced-motion.
+- Арт Qwen: 28 PNG (6 тайлов, 16 unit strips ×6 кадров 64×64, 4 эффекта ×6, 2 фона 1920×1080/640×360), manifest ready, портатив встраивает ассеты.
+- Паритет: 200 AI-прогонов mean |Δloss| .046, within ±10% 85.5%, outcome 100%; известный нюанс asteroid LOS sample (Δ .64/.35).
+- QA: typecheck 0; unit 360/360; golden 3d450e84; e2e **72/72**; grid-battle 3/3; headless grid-verify 7/7; acceptance §32; gift 6.23 МБ/zip 3.59 МБ/verify 11/11; site синхронизирован.
 ## [0.7.3.2] — 2026-11-08 · Портативная сборка с GIF-меню
 
 - Single-file portable встраивает /menu/*.gif и *.png как data URI; консоль без ERR_FILE_NOT_FOUND, verify-portable 10/10.
+- QA: menu-bg 2/2 (cover/reduced-motion), полный e2e **69/69**, unit 343/343, acceptance §31; gift 5.23 МБ/zip 2.91 МБ.
 
 ## [0.7.3.1] — 2026-11-08 · Интеграция GIF-меню и фикс CSS
 

@@ -1,0 +1,359 @@
+[
+  {
+    "id": "focus_fire",
+    "titleRu": "Сосредоточенный залп",
+    "descRu": "Свой стек получает +50% урона до конца раунда.",
+    "kind": "active",
+    "source": "admiral",
+    "costOk": 1,
+    "cooldownRounds": 2,
+    "targeting": {
+      "type": "self"
+    },
+    "effect": {
+      "damageMult": 0.5
+    },
+    "limits": {
+      "oncePerRound": true
+    },
+    "highlights": [
+      "+50% урона до конца раунда",
+      "ОК 1, КД 2"
+    ],
+    "iconId": "ab_focus_fire"
+  },
+  {
+    "id": "emergency_repair",
+    "titleRu": "Экстренный ремонт",
+    "descRu": "Свой стек восстанавливает 10% корпуса; один раз за бой на стек.",
+    "kind": "active",
+    "source": "admiral",
+    "costOk": 2,
+    "cooldownRounds": 3,
+    "targeting": {
+      "type": "self"
+    },
+    "effect": {
+      "healPctHull": 0.1
+    },
+    "limits": {
+      "oncePerBattle": true
+    },
+    "highlights": [
+      "+10% корпуса",
+      "1 раз на стек за бой"
+    ],
+    "iconId": "ab_emergency_repair"
+  },
+  {
+    "id": "ew_jam",
+    "titleRu": "РЭБ-помехи",
+    "descRu": "Вражеский стек теряет 2 инициативы до конца раунда и наносит −20% урона.",
+    "kind": "active",
+    "source": "admiral",
+    "costOk": 2,
+    "cooldownRounds": 3,
+    "targeting": {
+      "type": "enemy_stack"
+    },
+    "effect": {
+      "initiativeDelta": -2,
+      "damageMult": -0.2
+    },
+    "limits": {},
+    "highlights": [
+      "−2 инициативы цели",
+      "−20% урона цели"
+    ],
+    "iconId": "ab_ew_jam"
+  },
+  {
+    "id": "torpedo_fan",
+    "titleRu": "Торпедный веер",
+    "descRu": "По линии длиной 3 гекса: 60% урона каждому стеку на линии.",
+    "kind": "active",
+    "source": "admiral",
+    "costOk": 3,
+    "cooldownRounds": 4,
+    "targeting": {
+      "type": "line",
+      "length": 3,
+      "direction": "facing_or_any"
+    },
+    "effect": {
+      "damageMult": 0.6,
+      "perTarget": true,
+      "damageType": "explosive"
+    },
+    "limits": {
+      "oncePerRound": true
+    },
+    "highlights": [
+      "60% урона по линии 3 гекса",
+      "Задевает всех на линии"
+    ],
+    "iconId": "ab_torpedo_fan"
+  },
+  {
+    "id": "shield_barrier",
+    "titleRu": "Щитовой барьер",
+    "descRu": "Свой стек получает +30% DEF до своего следующего хода.",
+    "kind": "active",
+    "source": "admiral",
+    "costOk": 1,
+    "cooldownRounds": 2,
+    "targeting": {
+      "type": "self"
+    },
+    "effect": {
+      "defMult": 0.3
+    },
+    "limits": {},
+    "highlights": [
+      "+30% DEF",
+      "Действует до следующего хода"
+    ],
+    "iconId": "ab_shield_barrier"
+  },
+  {
+    "id": "interceptors",
+    "titleRu": "Дроны-перехватчики",
+    "descRu": "Свой стек получает −40% входящего урона на 1 раунд.",
+    "kind": "active",
+    "source": "admiral",
+    "costOk": 2,
+    "cooldownRounds": 3,
+    "targeting": {
+      "type": "self"
+    },
+    "effect": {
+      "incomingDamageMult": -0.4
+    },
+    "limits": {
+      "oncePerRound": true
+    },
+    "highlights": [
+      "−40% входящего урона",
+      "Длится 1 раунд"
+    ],
+    "iconId": "ab_interceptors"
+  },
+  {
+    "id": "tactical_retreat",
+    "titleRu": "Тактический отход",
+    "descRu": "Свой стек перемещается на 2 гекса без ответного удара.",
+    "kind": "active",
+    "source": "admiral",
+    "costOk": 1,
+    "cooldownRounds": 3,
+    "targeting": {
+      "type": "self"
+    },
+    "effect": {
+      "moveHexes": 2,
+      "noCounter": true
+    },
+    "limits": {},
+    "highlights": [
+      "Отход на 2 гекса",
+      "Без ответного удара"
+    ],
+    "iconId": "ab_tactical_retreat"
+  },
+  {
+    "id": "reserve",
+    "titleRu": "Резерв",
+    "descRu": "Вводит 1 стек из резерва в свой тыл; не более 1 раза за раунд.",
+    "kind": "active",
+    "source": "admiral",
+    "costOk": 2,
+    "cooldownRounds": 2,
+    "targeting": {
+      "type": "reserve"
+    },
+    "effect": {
+      "deployReserve": 1
+    },
+    "limits": {
+      "oncePerRound": true
+    },
+    "highlights": [
+      "Ввод стека из резерва",
+      "1 раз за раунд"
+    ],
+    "iconId": "ab_reserve"
+  },
+  {
+    "id": "boarding",
+    "titleRu": "Абордаж",
+    "descRu": "Абордаж вражеского стека с +20% к шансу; один раз за бой.",
+    "kind": "active",
+    "source": "admiral",
+    "costOk": 2,
+    "cooldownRounds": 0,
+    "targeting": {
+      "type": "enemy_stack"
+    },
+    "effect": {
+      "boardingChanceBonus": 0.2
+    },
+    "limits": {
+      "oncePerBattle": true
+    },
+    "highlights": [
+      "+20% к шансу абордажа",
+      "1 раз за бой"
+    ],
+    "iconId": "ab_boarding"
+  },
+  {
+    "id": "reactor_overload",
+    "titleRu": "Перегрузка реактора",
+    "descRu": "Все свои стеки получают +25% урона на 1 раунд и −10% DEF.",
+    "kind": "active",
+    "source": "admiral",
+    "costOk": 2,
+    "cooldownRounds": 5,
+    "targeting": {
+      "type": "all_allies"
+    },
+    "effect": {
+      "damageMult": 0.25,
+      "defMult": -0.1
+    },
+    "limits": {
+      "oncePerRound": true
+    },
+    "highlights": [
+      "+25% урона всем своим",
+      "−10% DEF на раунд"
+    ],
+    "iconId": "ab_reactor_overload"
+  },
+  {
+    "id": "veteran",
+    "titleRu": "Ветеран",
+    "descRu": "Пассив: +5% ATK всем своим стекам.",
+    "kind": "passive",
+    "source": "admiral",
+    "costOk": 0,
+    "cooldownRounds": 0,
+    "targeting": {
+      "type": "all_allies"
+    },
+    "effect": {
+      "atkMult": 0.05
+    },
+    "limits": {},
+    "highlights": [
+      "+5% ATK",
+      "Пассив"
+    ],
+    "iconId": "ab_veteran"
+  },
+  {
+    "id": "logist",
+    "titleRu": "Логист",
+    "descRu": "Пассив: +1 MP всем своим стекам.",
+    "kind": "passive",
+    "source": "admiral",
+    "costOk": 0,
+    "cooldownRounds": 0,
+    "targeting": {
+      "type": "all_allies"
+    },
+    "effect": {
+      "mpFlat": 1
+    },
+    "limits": {},
+    "highlights": [
+      "+1 MP",
+      "Пассив"
+    ],
+    "iconId": "ab_logist"
+  },
+  {
+    "id": "shieldsmith",
+    "titleRu": "Щитовик",
+    "descRu": "Пассив: +10% максимального щита своим стекам.",
+    "kind": "passive",
+    "source": "admiral",
+    "costOk": 0,
+    "cooldownRounds": 0,
+    "targeting": {
+      "type": "all_allies"
+    },
+    "effect": {
+      "shieldMaxMult": 0.1
+    },
+    "limits": {},
+    "highlights": [
+      "+10% макс. щита",
+      "Пассив"
+    ],
+    "iconId": "ab_shieldsmith"
+  },
+  {
+    "id": "sniper",
+    "titleRu": "Снайпер",
+    "descRu": "Пассив: +1 дальность своим стекам.",
+    "kind": "passive",
+    "source": "admiral",
+    "costOk": 0,
+    "cooldownRounds": 0,
+    "targeting": {
+      "type": "all_allies"
+    },
+    "effect": {
+      "rangeFlat": 1
+    },
+    "limits": {},
+    "highlights": [
+      "+1 дальность",
+      "Пассив"
+    ],
+    "iconId": "ab_sniper"
+  },
+  {
+    "id": "fortitude",
+    "titleRu": "Стойкость",
+    "descRu": "Пассив: +1 мораль своим стекам.",
+    "kind": "passive",
+    "source": "admiral",
+    "costOk": 0,
+    "cooldownRounds": 0,
+    "targeting": {
+      "type": "all_allies"
+    },
+    "effect": {
+      "moraleFlat": 1
+    },
+    "limits": {},
+    "highlights": [
+      "+1 мораль",
+      "Пассив"
+    ],
+    "iconId": "ab_fortitude"
+  },
+  {
+    "id": "tactician",
+    "titleRu": "Тактик",
+    "descRu": "Пассив: +1 очко командования (ОК) за раунд.",
+    "kind": "passive",
+    "source": "admiral",
+    "costOk": 0,
+    "cooldownRounds": 0,
+    "targeting": {
+      "type": "all_allies"
+    },
+    "effect": {
+      "commandPointsFlat": 1
+    },
+    "limits": {},
+    "highlights": [
+      "+1 ОК/раунд",
+      "Пассив"
+    ],
+    "iconId": "ab_tactician"
+  }
+]

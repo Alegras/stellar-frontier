@@ -921,6 +921,57 @@ if (BRIDGES) {
   ok("bridges: " + list.length + " мостиков 0→I … IV→V (журнал/хроника)");
 }
 
+// ---------- Сетка командования (M5b): battle-контент ----------
+const BT = {
+  classes: load("battles/classes.json"),
+  abilities: load("battles/abilities.json"),
+  terrain: load("battles/terrain.json"),
+  ai: load("battles/ai-profiles.json"),
+  scenarios: load("battles/sample-battles.json"),
+};
+if (BT.classes && BT.abilities && BT.terrain && BT.ai && BT.scenarios) {
+  dupCheck("battle.classes", BT.classes);
+  dupCheck("battle.abilities", BT.abilities);
+  dupCheck("battle.terrain", BT.terrain);
+  dupCheck("battle.aiProfiles", BT.ai);
+  const BTL_COUNTS = {
+    "battle.classes": [BT.classes.length, 8, "=="],
+    "battle.abilities": [BT.abilities.length, 16, "=="],
+    "battle.terrain": [BT.terrain.length, 6, "=="],
+    "battle.aiProfiles": [BT.ai.length, 3, "=="],
+    "battle.scenarios": [(BT.scenarios.scenarios || []).length, 3, "=="],
+  };
+  for (const [name, [got, want, op]] of Object.entries(BTL_COUNTS)) {
+    const bad = op === "==" ? got !== want : got < want;
+    if (bad) fail("count " + name + "=" + got + " (ожидалось " + op + " " + want + ")");
+    else ok("count " + name + "=" + got);
+  }
+  const active = BT.abilities.filter((a) => a.kind === "active").length;
+  const passive = BT.abilities.filter((a) => a.kind === "passive").length;
+  if (active !== 10 || passive !== 6) fail("battle.abilities: active " + active + ", passive " + passive + " (нужно 10+6)");
+  const classIds = new Set(BT.classes.map((c) => c.id));
+  const terrainIds = new Set(BT.terrain.map((t) => t.id));
+  for (const c of BT.classes) {
+    if (c.hpStack !== c.hpPerHull * c.maxStack) fail("battle class " + c.id + ": hpStack");
+    if (c.damageStack !== Math.round(c.dpsPerHull * c.maxStack * 3)) fail("battle class " + c.id + ": damageStack");
+    if (!c.passiveAbility || c.passiveAbilityId !== c.passiveAbility.id) fail("battle class " + c.id + ": passiveAbility");
+    if (!Array.isArray(c.highlights) || c.highlights.length < 2) fail("battle class " + c.id + ": highlights");
+  }
+  for (const a of BT.abilities) {
+    if (!a.iconId || a.iconId !== "ab_" + a.id) fail("battle ability " + a.id + ": iconId");
+    if (!Array.isArray(a.highlights) || a.highlights.length < 2) fail("battle ability " + a.id + ": highlights");
+  }
+  for (const t of BT.terrain) if (!t.effects?.length || !t.highlights?.length) fail("battle terrain " + t.id + ": effects/highlights");
+  for (const s of BT.scenarios.scenarios || []) {
+    for (const st of [...s.attacker.stacks, ...s.defender.stacks]) {
+      if (!classIds.has(st.classId)) fail("battle scenario " + s.id + ": class " + st.classId);
+      if (!(st.facing >= 0 && st.facing <= 5)) fail("battle scenario " + s.id + ": facing " + st.facing);
+    }
+    for (const t of s.terrainPreset.terrainIds) if (!terrainIds.has(t)) fail("battle scenario " + s.id + ": terrain " + t);
+  }
+  ok("battle: 8 классов, 16 способностей (10+6), 6 terrain, 3 AI, 3 сценария");
+}
+
 // ---------- итог ----------
 console.log("");
 if (warns.length) console.log("предупреждений: " + warns.length);
