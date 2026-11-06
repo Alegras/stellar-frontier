@@ -13,6 +13,7 @@ export { createWorld, getFleetPower, getEmpireFleetPower, getFleetCap, getScore,
   getMissionDef } from "./queries";
 export { tick } from "./tick";
 export { applyCommand, applyCommandAs, findPath } from "./commands";
+export { canColonizePlanet } from "./economy";
 export { autoResolve, applyBattleRecord } from "./combat";
 export { serializeWorld, deserializeWorld, SIM_VERSION } from "./save";
 // Реэкспорт типов контента для UI/рендера (единственный источник — @sf/data).

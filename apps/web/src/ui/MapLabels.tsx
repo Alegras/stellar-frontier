@@ -504,6 +504,41 @@ export function MapLabels({ game, state, onPick, onEnter }: MapLabelsProps) {
           </>
         );
       })()}
+      {layer === "political" && world && (() => {
+        const proj = game.mapProject;
+        if (!proj) return null;
+        const pid = world.playerEmpireId;
+        const moving = world.fleets.filter((f) => f.empireId === pid && f.ships.length > 0 && f.status === "moving" && f.path.length > 0);
+        if (moving.length === 0) return null;
+        const jumpTicks = Math.max(1, world.balance?.fleetSpeedTicksPerJump ?? 1);
+        return (
+          <svg className="sf-map-fleet-lines" aria-hidden="true" data-testid="map-fleets">
+            {moving.map((f) => {
+              const current = world.systems[f.systemId];
+              const targetId = f.path[Math.min(f.pathIndex, f.path.length - 1)];
+              const target = world.systems[targetId];
+              if (!current || !target) return null;
+              const p0 = proj(current.x, current.y), p1 = proj(target.x, target.y);
+              if (!p0 || !p1) return null;
+              const fraction = 1 - Math.min(1, Math.max(0, f.jumpTicksLeft / jumpTicks));
+              const x = p0.x + (p1.x - p0.x) * fraction;
+              const y = p0.y + (p1.y - p0.y) * fraction;
+              const route = [current, ...f.path.slice(Math.min(f.pathIndex, f.path.length - 1)).map((id) => world.systems[id])]
+                .filter((sys): sys is NonNullable<typeof sys> => Boolean(sys))
+                .map((sys) => proj(sys.x, sys.y))
+                .filter((p): p is { x: number; y: number } => p !== null);
+              return (
+                <g key={"fleet-" + f.id} data-testid={"map-fleet-" + f.id}>
+                  {route.length > 1 && <polyline className="sf-map-fleet-route" points={route.map((p) => p.x + "," + p.y).join(" ")} />}
+                  <circle cx={x} cy={y} r={8} className="sf-map-fleet-halo" />
+                  <polygon points={x + "," + (y - 6) + " " + (x + 5) + "," + (y + 5) + " " + (x - 5) + "," + (y + 5)} className="sf-map-fleet-icon" />
+                  <text x={x + 10} y={y + 4} className="sf-map-fleet-label">{f.name} → {target.name}</text>
+                </g>
+              );
+            })}
+          </svg>
+        );
+      })()}
       {layer === "political" && (() => {
         const dlc = world ? dlcOf(world) : null;
         const proj = game.mapProject;
@@ -619,6 +654,7 @@ export function MapLabels({ game, state, onPick, onEnter }: MapLabelsProps) {
           "sf-map-label--p" + item.prio,
           item.selected ? "sf-map-label--sel" : "",
           item.battle ? "sf-map-label--battle" : "",
+          item.capital ? "sf-map-label--home" : "",
           item.dot ? "sf-map-label--dot" : "",
         ].filter(Boolean).join(" ");
         const dot = item.battle ? "#FF5A5A" : item.capital ? "#F5C542" : item.own ? "#4FC3F7" : item.unknown ? "#5C6878" : "#8FA3BF";
@@ -653,6 +689,7 @@ export function MapLabels({ game, state, onPick, onEnter }: MapLabelsProps) {
           >
             <span className="sf-map-label__dot" style={{ background: item.dot ? "#5C6878" : dot }} />
             {!item.dot && <span className="sf-nowrap">{item.name}</span>}
+            {item.capital && <span className="sf-map-label__home">ДОМ</span>}
           </button>
         );
       })}

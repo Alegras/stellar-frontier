@@ -273,7 +273,8 @@ docs/                    ADR, демо-сценарий, приёмка
 - Карта: политический слой AI-ИИ линий/столиц/статусов/фильтров, клик→панель; сектор Предела скрыт до revealSector и открывается после (слой+туман).
 - Комикс: DOM-пузыри поверх Qwen-арта (1280–2560), портрет/история без наложений.
 - Арт: 24 портрета (4×6) + фон/карточки/комикс, 31 ассет.
-- QA: story-verify 17/17, гейтинг requiresAncients, story-full 4/4, legacy-check 0; unit 340/340; e2e **65/65**; golden **8f52b0a6**; acceptance §27/§28/§29; gift 2.99 МБ/verify 10/10, site синхронизирован.
+- UI: RPG-древо традиций (7 ветвей, 42 узла+финишеры, зум/fit, unlock/perks) и визуал колоний (HUD «Колонии системы», луны/города в WebGL).
+- QA: story-verify 17/17, гейтинг requiresAncients, story-full 4/4, traditions-tree 1/1, colonies-visual 1/1, legacy-check 0; unit 343/343; e2e **67/67**; golden **8f52b0a6**; acceptance §27–§30; gift 3.01 МБ/verify 10/10, site синхронизирован.
 
 ## Портативная сборка (gift)
 

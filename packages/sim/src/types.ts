@@ -42,6 +42,10 @@ export interface Planet {
   size: number;        // 1..5
   orbit: number;       // индекс орбиты (для 3D-сцены)
   orbitRadius: number; // игровые единицы (для 3D)
+  /** Для лун: id планеты-родителя (в той же системе); иначе undefined. */
+  parentPlanetId?: number;
+  /** true — луна (3D: вращается вокруг родителя; колонизация только при колонии/владении родителем). */
+  isMoon?: boolean;
   habitability: number; // 0..100 для колонизации
   deposits: PlanetDeposits;
   ownerId: number;      // 0 = никто

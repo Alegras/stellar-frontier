@@ -5,7 +5,7 @@
  */
 import { BUILDING_BY_ID, DESIGN_BY_ID, DISTRICT_BY_ID } from "@sf/data";
 import { applyCommandAs, findPath } from "./commands";
-import { districtCapacity, empireById, logEvent, popsTotal } from "./economy";
+import { canColonizePlanet, districtCapacity, empireById, logEvent, popsTotal } from "./economy";
 import { getEmpireFleetPower, getFleetCap, getProjectedIncome } from "./queries";
 import { computeHops, PIRATE_EMPIRE_ID } from "./galaxy";
 import { advancedOf, ensureFg } from "./fullgame";
@@ -70,7 +70,7 @@ function expansionStep(world: World, empire: Empire, ai: NonNullable<Empire["ai"
   const here = world.systems[colonizerFleet.systemId];
   if (here) {
     for (const planet of here.planets) {
-      if (planet.ownerId === 0 && planet.colonyId === 0 && planet.habitability >= 40) {
+      if (canColonizePlanet(world, empire.id, planet).ok) {
         const result = applyCommandAs(world, empire.id, { type: "colonize", fleetId: colonizerFleet.id, planetId: planet.id });
         if (result.ok) {
           ai.colonizeCooldown = 4;
@@ -90,7 +90,7 @@ function expansionStep(world: World, empire: Empire, ai: NonNullable<Empire["ai"
     if (distance <= 0) continue;
     let hasTarget = false;
     for (const planet of system.planets) {
-      if (planet.ownerId === 0 && planet.colonyId === 0 && planet.habitability >= 40) {
+      if (canColonizePlanet(world, empire.id, planet).ok) {
         hasTarget = true;
         break;
       }

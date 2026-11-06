@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-06T21:52:54.176Z",
+  "generatedAt": "2026-11-06T22:27:27.892Z",
   "baseURL": "http://127.0.0.1:5173",
   "screens": [
     {
@@ -23,7 +23,7 @@
           "id": "label-content-name-mismatch",
           "impact": "serious",
           "help": "Elements must have their visible text as part of their accessible name",
-          "nodes": 8
+          "nodes": 9
         }
       ]
     },
@@ -48,7 +48,7 @@
           "id": "label-content-name-mismatch",
           "impact": "serious",
           "help": "Elements must have their visible text as part of their accessible name",
-          "nodes": 8
+          "nodes": 9
         }
       ]
     },
@@ -64,7 +64,7 @@
           "id": "label-content-name-mismatch",
           "impact": "serious",
           "help": "Elements must have their visible text as part of their accessible name",
-          "nodes": 8
+          "nodes": 9
         }
       ]
     }

@@ -187,7 +187,7 @@ export class SystemView implements SceneView {
     this.camera = new THREE.PerspectiveCamera(70, aspect, 5, SCENE_FAR_M);
 
     // --- сцена системы (в Реликтовом Пределе — холодная палитра и опасности)
-    this.sysScene = new SystemScene(this.scene, this.system, this.rng, this.sectorVariant);
+    this.sysScene = new SystemScene(this.scene, this.system, this.rng, this.sectorVariant, world?.colonies ?? []);
     this.scene.add(this.sysScene.root);
     // --- варп «Наследие»: визуал раскрутки/прыжка
     this.warpEffects = new WarpEffects(this.scene, this.rng);

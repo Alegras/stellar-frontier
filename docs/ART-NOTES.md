@@ -71,6 +71,24 @@
 | `admiral_kain` | «Адмирал Кейн Ордо», адмирал флота (кампания, Act2/branch/finale) | холодный металл-тон кожи, седой ёжик, кибер-глаз с золотым кольцом, старые шрамы, чёрно-синий мундир с погонами, золотые планки и колодка |
 | `counselor_selen` | «Советник Селена Вэр», советник по стратегии | тёплая оливковая кожа, длинные тёмно-фиолетовые волосы с пси-прядью, серебряный обруч с камнем, воротник-стойка, серебро + голубой акцент |
 
+## 2.2. GIF главного меню: космическая битва (task-60/63, локальные Qwen-Image + Wan2.2)
+
+Зацикленная GIF и постер для главного меню — **только локальные модели** (ComfyUI 127.0.0.1:8188), без облака.
+
+| Этап | Параметры |
+|---|---|
+| Ключевой кадр | Qwen-Image 2.1 (UNET `qwen-image-2.1-UC-fp8.safetensors`, CLIP `qwen3vl_8b_int8_convrot.safetensors` type `qwen_image`, VAE `qwen_image_2.1_vae_bf16.safetensors`), 1280×704, 25 шагов, cfg 1, euler/simple, **seed 6001**; промпт: космическая битва у синей планеты и повреждённой станции, корвет стреляет лучом, три рейдера с красным свечением, взрывы/обломки, туманность, стилизованный pixel-art game illustration, no text |
+| Видео | Wan2.2 ti2v 5B (`wan2.2_ti2v_5B_fp16.safetensors`, UNETLoader), VAE `wan2.2_vae.safetensors`, CLIP `umt5_xxl_fp8_e4m3fn_scaled.safetensors` (type `wan`, cpu); граф `LoadImage(keyframe) → Wan22ImageToVideoLatent(832×480, length 33)` + `CLIPTextEncode` pos/neg → `KSampler(seed 7001, steps 20, cfg 5.0, uni_pc/simple, denoise 1.0)` → `VAEDecode` → `SaveWEBM(vp9, 12 fps, crf 26)`; рендер ~5 мин на RTX 4070 Ti |
+| Сборка GIF | 33 кадра → crossfade 8 кадров (последний плавно переходит в первый — бесшовный loop) → 480×270 LANCZOS → ffmpeg `palettegen(max_colors=96)` + `paletteuse(dither=bayer:bayer_scale=4)`, `-loop 0`, 12 fps |
+| Постер | keyframe → cover-crop 16:9 → 640×360 PNG-8 (256 цветов) |
+
+**Файлы:** `apps/web/public/menu/stellar-battle.gif` (480×270, 40 кадров, **1.72 МБ**, `loop=0`, duration 80 ms) и `apps/web/public/menu/stellar-battle-poster.png` (640×360, 136 КБ). Превью: `docs/shots/menu-battle.png`.
+
+**Проверка:** Pillow — `frames=40, loop=0, duration=80ms`; production preview — `GET /menu/stellar-battle.gif` → 200, `image/gif`, decode 480×270; постер → 200/decode 640×360; `/dlc/` и `/menu/` без 404. Fallback не понадобился (видео-модель отработала с первого прогона).
+
+**Воспроизведение:** `python tools/art-dlc/menu_keyframe.py` (Qwen-кадр) → `python tools/art-dlc/menu_video_test.py` (Wan2.2 I2V, сохраняет `tools/art-dlc/menu-raw/video_test.webm`) → `python tools/art-dlc/build_menu_gif.py` (GIF+постер). ComfyUI поднимается командой `python_embeded\python.exe -s ComfyUI\main.py --windows-standalone-build --listen 127.0.0.1 --port 8188` с `PYTHONUTF8=1` (иначе падает на emoji в логах rgthree).
+
+> UI-интеграция GIF в главное меню — зона ui-engineer: ассеты лежат по стабильным путям `/menu/stellar-battle.gif` и `/menu/stellar-battle-poster.png` (постер можно показывать до загрузки GIF; `prefers-reduced-motion` — показывать постер).
 ## 2.1. Комикс, фон и карточки (task-45: локальная Qwen-Image)
 
 Все фоновые ассеты DLC тоже сгенерированы локальной **Qwen-Image 2.1** (ComfyUI 127.0.0.1:8188),

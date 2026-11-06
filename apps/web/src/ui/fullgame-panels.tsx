@@ -66,6 +66,20 @@ export function PanelHost({ panel, game, state, onClose, coopCallbacks, coopLobb
  * Глобальные оверлеи полной игры, которые Lead монтирует один раз в App:
  * события кампании (модалка выбора), кризис-алерты, HUD мультиплеера.
  */
+
+const RESOURCE_RU: Record<string, string> = {
+  credits: "кредиты", alloys: "сплавы", energy: "энергия", minerals: "минералы", food: "пища", goods: "товары",
+  influence: "влияние", unity: "единство", population: "население",
+};
+function campaignEffectRu(target: string, value: number): string {
+  const sign = value > 0 ? "+" : "";
+  if (target.startsWith("science.")) return "наука (" + target.slice(8) + ") " + sign + value;
+  if (target.startsWith("flag:")) return "флаг кампании: " + target.slice(5);
+  if (target.startsWith("rep.")) return "отношения: " + target.slice(4) + " " + sign + value;
+  if (target.startsWith("opinion:")) return "мнение империи " + target.slice(8) + " " + sign + value;
+  return (RESOURCE_RU[target] ?? target) + " " + sign + value;
+}
+
 export function FullGameOverlays({ game, state }: { game: Game; state: GameState }) {
   const world = worldOf(game);
   const fg = fgOf(world);
@@ -176,9 +190,9 @@ export function FullGameOverlays({ game, state }: { game: Game; state: GameState
                   </Btn>
                 </div>
                 <div className="sf-meta">
-                  {ch.effects.map((e) => e.target + " " + (e.value > 0 ? "+" : "") + e.value).join(" · ") || L("без прямых эффектов", "no direct effects")}
-                  {ch.missionId ? " · " + L("выдача миссии", "starts mission") + " " + ch.missionId : ""}
-                  {ch.flag ? " · " + L("флаг", "flag") + " " + ch.flag : ""}
+                  {ch.effects.map((e) => campaignEffectRu(e.target, e.value)).join(" · ") || L("без прямых эффектов", "no direct effects")}
+                  {ch.missionId ? " · " + L("новая миссия", "new mission") : ""}
+                  {ch.flag ? " · " + L("особый исход", "special outcome") : ""}
                 </div>
               </div>
             ))}

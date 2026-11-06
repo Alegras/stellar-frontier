@@ -425,18 +425,18 @@ EN — опциональный переключатель (не требова�
 
 ---
 
-## 29. Линия Древних 13b: Архив Ансаров и Контакт с Молчащими (task-56/57/58, 2026-11-08)
 
-Golden seed 42 = **8f52b0a6**; typecheck 0; unit **340/340**; story-verify **17/17 PASS**; story-full e2e **4/4**; полный e2e **65/65 PASS** (5.5 мин). Gift: **2.99 МБ**, zip **1.04 МБ**, verify-portable **10/10**; site синхронизирован.
+---
+
+## 30. RPG-древо традиций и визуал колоний (task-58, 2026-11-08)
+
+Финальные гейты релиза: typecheck **0**; unit **343/343** (34 файла); golden **8f52b0a6**; полный e2e **67/67 PASS** (5.8 мин). Gift: **3.01 МБ**, zip **1.04 МБ**, verify-portable **10/10**; site синхронизирован; legacy-check 0.
 
 | # | Требование | Статус | Доказательство |
 |---|---|---|---|
-| 1 | 2 новые сцены Древних | **PASS** | dlg_campaign_ancient_archive (main_01_rift_rumor, 18 узлов/2 выбора) и dlg_campaign_ancient_contact (main_03_truth, 23/3); dialogues.json 15 (3 Q1 + 12 кампанийных) |
-| 2 | 103 outcome-узла | **PASS** | story-verify: 103 outcome=true (line, l10n); e2e outcome-бейдж на архиве/актах |
-| 3 | Gating requiresAncients | **PASS** | сцены не стартуют без Древних и стартуют с enabled=true; e2e story-full: архив при включённых Древних; порядок ancient_contact раньше act3_truth (scene-флаги) |
-| 4 | 17 camp_ancient_* флагов, отношения, claim/unlock | **PASS** | archive_open/teira/sealed, expedition_fleet/drones/refuse; contact_listen/silence/answer/map/core/nothing/reveal/keep/use; unlock main_03_truth/main_03_megastructure; endingHint whisper/seal; e2e флаг camp_ancient_* |
-| 5 | Старые сцены/фразы отсутствуют | **PASS** | legacy-check 78 файлов, legacyHits=0, positiveHits=142 (добавлены ancient ids/namespace) |
-| 6 | Триггеры 12 сцен без дублей | **PASS** | story-verify: 12 сцен по одной (11 mission + epilogue), campaign_scene:*=12, повтор → null |
-| 7 | Гейты релиза | **PASS** | typecheck 0; unit 340/340; golden 8f52b0a6; story-verify 17/17; e2e 65/65; gift/site verify 10/10 |
+| 1 | Древо традиций: 7 ветвей, 42 узла+финишеры | **PASS** | e2e traditions-tree: 7 ветвей, 42 узла, финишеры, зум 74%, fit, клик unlock dis_1, перки, 1280×720 |
+| 2 | Визуал колоний: HUD «Колонии системы» | **PASS** | e2e colonies-visual: планета и луна в системе, WebGL-канвас, frame check 500 мс; скриншот flight-colonies-1280.png |
+| 3 | Скриншоты | **PASS** | docs/shots/traditions-tree-1280.png, flight-colonies-1280.png |
+| 4 | Гейты | **PASS** | typecheck 0; unit 343/343; e2e **67/67**; gift verify 10/10 |
 
-**Скриншоты:** story-ancient-archive.png, story-act0-outcome.png, story-act1-hegemon.png, story-teira-arc.png, dialogue-outcome.png, dialogue-campaign.png.
+**Скриншоты:** traditions-tree-1280.png, flight-colonies-1280.png, story-ancient-archive.png, dialogue-outcome.png, politics-map-1280.png.

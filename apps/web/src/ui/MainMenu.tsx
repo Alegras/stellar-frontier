@@ -21,6 +21,7 @@ function applyRaceIfNeeded(game: Game, raceId: string): void {
 export function MainMenu({ game, onOpenLobby }: { game: Game; onOpenLobby?: () => void }) {
   const [seed, setSeed] = useState("");
   const [busy, setBusy] = useState(false);
+  const [gifReady, setGifReady] = useState(false);
   const [help, setHelp] = useState(false);
   const [demo, setDemo] = useState(true);
   const [raceId, setRaceId] = useState<string>(PLAYABLE_RACES[0]?.id ?? "");
@@ -73,7 +74,15 @@ export function MainMenu({ game, onOpenLobby }: { game: Game; onOpenLobby?: () =
 
   return (
     <div className="sf-menu" data-testid="main-menu" tabIndex={0} role="region" aria-label={L("Главное меню", "Main menu")}>
-      <div className="sf-menu-inner">
+      <div className="sf-menu-bg" aria-hidden="true" data-testid="menu-bg">
+        {/* постер — placeholder до загрузки GIF; при prefers-reduced-motion остаётся только он */}
+        <img className="sf-menu-bg__poster" src="/menu/stellar-battle-poster.png" alt="" decoding="async" data-testid="menu-bg-poster" />
+        <img className={"sf-menu-bg__gif" + (gifReady ? " sf-menu-bg__gif--ready" : "")} src="/menu/stellar-battle.gif" alt=""
+          decoding="async" data-testid="menu-bg-gif"
+          onLoad={() => setGifReady(true)}
+          onError={(e) => { e.currentTarget.style.display = "none"; }} />
+      </div>
+    <div className="sf-menu-inner">
         <div className="sf-menu-main">
           <h1 className="sf-menu-logo">STELLAR FRONTIER</h1>
           <div className="sf-menu-tag">{L("4X-стратегия × космосимулятор", "4X strategy × space sim")}</div>

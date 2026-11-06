@@ -43,6 +43,16 @@ export function FlightHUD({ game, state }: { game: Game; state: GameState }) {
     return d.signals.filter((s) => s.systemId === state.activeSystemId);
   })();
 
+  const coloniesHere = (() => {
+    const world = game.hasWorld ? game.world : null;
+    if (!world || state.activeSystemId == null) return [];
+    const planets = world.systems.find((sys) => sys.id === state.activeSystemId)?.planets ?? [];
+    return world.colonies.filter((c) => c.systemId === state.activeSystemId).map((c) => {
+      const planet = planets.find((pl) => pl.id === c.planetId);
+      return { colony: c, planet, isMoon: Boolean(planet?.isMoon) };
+    });
+  })();
+
   const shield01 = tel.shieldMax > 0 ? tel.shield / tel.shieldMax : 0;
   const hull01 = tel.hullMax > 0 ? tel.hull / tel.hullMax : 0;
   const heat01 = Math.max(0, Math.min(1.2, tel.heat / 100));
@@ -63,6 +73,20 @@ export function FlightHUD({ game, state }: { game: Game; state: GameState }) {
           </div>
         ))}
       </div>
+      {coloniesHere.length > 0 && (
+        <div className="sf-hud-block" style={{ top: 168, right: 18, maxWidth: 260 }} data-testid="flight-colonies">
+          <Panel title={L("Колонии системы", "System colonies") + " · " + intText(coloniesHere.length)} testId="flight-colonies-panel">
+            {coloniesHere.map(({ colony, planet, isMoon }) => (
+              <div key={colony.id} className="sf-line" data-testid={"flight-colony-" + colony.planetId}>
+                <span>{isMoon ? "☾" : "◍"}</span>
+                <span className="sf-nowrap">{planet?.name ?? colony.name}</span>
+                <span className="sf-spacer" />
+                <span className="sf-meta">{isMoon ? L("луна", "moon") : L("планета", "planet")} · {intText(colony.pops.workers + colony.pops.specialists + colony.pops.rulers)} {L("поп.", "pops")}</span>
+              </div>
+            ))}
+          </Panel>
+        </div>
+      )}
       {tel.nearPlanetId != null && (
         <div className="sf-hud-block" style={{ top: 60, left: 18 }} data-testid="flight-planet">
           <Panel title={L("Планета", "Planet") + " · " + tel.nearPlanetName} testId="flight-planet-panel">

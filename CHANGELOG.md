@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## [0.7.3] — 2026-11-08 · RPG-древо, колонии, флот, GIF
+
+- Традиции: RPG-древо с центральным корнем, 7 ветвями, карточками текста/эффектов, SVG-связями, зумом/паном.
+- Колонизация: луны с отдельными колониями, орбитальные станции и города на планетах/лунах.
+- Карта: траектории и иконки движущихся флотов, метка «ДОМ» у домашней системы.
+- Модалки: реже (кулдаун 120 тактов, максимум 2 в очереди), выборы показывают русские последствия.
+- Главное меню: зацикленная GIF космической битвы (Qwen Image + Wan2.2), постер и reduced-motion.
+- Версии: каждый деплой получает новый номер (0.7.3, затем 0.7.3.1 и т.д.).
+
 ## [0.7.2] — 2026-11-08 · Полная история 0–V (task-51/52/54/55)
 
 - Полёт: **F — скан системы** с корабля (флот в текущей системе), подсказка в HUD/справке.
@@ -9,7 +18,8 @@
 - Story: 12 кампанийных сцен (11 mission + epilogue): act0_relic, teira_arc, act1_hegemon, kira_arc, act2_council, act3_truth, act4_legacy, act4_betrayal, final_door, epilogue; + Древние 13b: ancient_archive/ancient_contact (requiresAncients); 103 outcome-узла; 5 мостиков (0→I…IV→V) в журнале; story-script v2 — 6 актов/18 сцен/16 развилок/40 вариантов/4 директивы/8 эпилогов.
 - Флаги/отношения: camp_relic_*, camp_voice_*, camp_hegemon_vassal/rejected, camp_teira_arc_*, camp_kira_arc_*, camp_ancient_* (17), kira_debt; отношения teira_os/kain/kira7/selen; unlock main_01_rift_rumor/main_03_truth/main_03_megastructure.
 - l10n ru/en 1584↔1584; legacy-сцены/фразы удалены (legacy-check 0), docs/legacy-removed-keys.md, docs/story-script.md.
-- QA: story-verify 17/17 (12 сцен/103 outcome/13b gating), story-full 4/4, unit 340/340, golden 8f52b0a6, полный e2e 65/65, acceptance §27/§28/§29; gift 2.99 МБ/zip 1.04 МБ/verify 10/10; site синхронизирован.
+- UI: RPG-древо традиций (7 ветвей, 42 узла+финишеры, зум 74%, unlock/perks) и визуал колоний (HUD «Колонии системы», луны/города/орбитальные станции в WebGL).
+- QA: story-verify 17/17 (12 сцен/103 outcome/13b gating), story-full 4/4, traditions-tree 1/1, colonies-visual 1/1, unit 343/343, golden 8f52b0a6, полный e2e 67/67, acceptance §27/§28/§29/§30; gift 3.01 МБ/zip 1.04 МБ/verify 10/10; site синхронизирован.
 ## [0.7.1] — 2026-11-07 · Финальная история/карта/арт v0.7 (task-46/47/48)
 
 - Story: 6 Gemini-сцен (акты II–V: 5 mission-сцен + эпилог); legacy-сцены/триггеры и 239 l10n-ключей удалены; endingHint/unlockMission (20/13); 20 payoff-флагов (requiresFlag) в поздних сценах; l10n ru/en 1407↔1407.

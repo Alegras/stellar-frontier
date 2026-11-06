@@ -6,7 +6,7 @@
 import { BUILDING_BY_ID, DESIGN_BY_ID, DISTRICT_BY_ID, RESOURCE_BY_ID, TECH_BY_ID } from "@sf/data";
 import type { BuildingDef, DistrictDef, TechDef } from "@sf/data";
 import {
-  clamp, createColony, createFleet, empireById, findPlanet, logEvent, removeFleet, zeroResources,
+  canColonizePlanet, clamp, createColony, createFleet, empireById, findPlanet, logEvent, removeFleet, zeroResources,
 } from "./economy";
 import { applyBattleRecord } from "./combat";
 import { canAfford, getBuildCost, getEmpireFleetPower, getFleetCap } from "./queries";
@@ -172,8 +172,8 @@ export function applyCommandAs(world: World, empireId: number, cmd: Command): Co
       const planet = findPlanet(world, cmd.planetId);
       if (!planet) return deny("Планета не найдена");
       if (planet.systemId !== fleet.systemId) return deny("Флот не в этой системе");
-      if (planet.ownerId !== 0 || planet.colonyId !== 0) return deny("Планета уже занята");
-      if (planet.habitability < 40) return deny("Планета непригодна для колонизации");
+      const colonizeCheck = canColonizePlanet(world, empireId, planet);
+      if (!colonizeCheck.ok) return deny(colonizeCheck.reasonRu ?? "Колонизация невозможна");
       const colonizer = fleet.ships.find((ship) => ship.classId === "colonizer");
       if (!colonizer) return deny("Нужен корабль-колонизатор");
       const cost = colonyCostFor(world, empireId);

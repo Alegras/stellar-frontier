@@ -296,6 +296,36 @@ function makePlanet(
   };
 }
 
+/** Детерминированная луна у планеты-родителя. */
+function makeMoon(rng: RngState, planetId: number, systemId: number, parent: Planet, index: number): Planet {
+  const types: PlanetType[] = ["continental", "ocean", "tundra", "desert", "savanna", "arctic"];
+  const type = types[nextInt(rng, types.length)] ?? "tundra";
+  const size = nextRange(rng, 1, 2);
+  const habitability = Math.min(100, Math.max(40, HABITABILITY[type] + nextRange(rng, -8, 8)));
+  const deposits: PlanetDeposits = {
+    minerals: nextRange(rng, 0, 3),
+    energy: nextRange(rng, 0, 2),
+    rare: type === "arctic" ? nextRange(rng, 0, 1) : 0,
+  };
+  return {
+    id: planetId,
+    systemId,
+    name: parent.name + "-" + String.fromCharCode(65 + index),
+    type,
+    size,
+    orbit: parent.orbit,
+    orbitRadius: parent.orbitRadius + 260 + index * 160,
+    parentPlanetId: parent.id,
+    isMoon: true,
+    habitability,
+    deposits,
+    ownerId: 0,
+    colonyId: 0,
+    anomaly: nextInt(rng, 100) < 6 ? NAMES.anomalyNames[nextInt(rng, NAMES.anomalyNames.length)] : "",
+    scanned: false,
+  };
+}
+
 function makeStationMarket(rng: RngState): StationMarket {
   const market: StationMarket = {};
   const tradeable = ["energy", "minerals", "food", "alloys", "goods"] as const;
@@ -432,6 +462,20 @@ export function generateGalaxy(seed: number, mode: ModeConfig, balance: BalanceC
     if (score < bestScore) {
       bestScore = score;
       capitalSystemId = system.id;
+    }
+  }
+
+  // Луны генерируются отдельным RNG после всей галактики: не сдвигаем существующие id
+  // планет/POI/станций и не меняем детерминизм остальной генерации.
+  let nextMoonPlanetId = planetId;
+  const moonRng = seedRng((seed ^ 0x6d6f6f6e) >>> 0);
+  for (const system of systems) {
+    for (const parent of [...system.planets]) {
+      if (nextInt(moonRng, 100) >= 18) continue;
+      const moonCount = nextInt(moonRng, 100) < 25 ? 2 : 1;
+      for (let moonIndex = 0; moonIndex < moonCount; moonIndex++) {
+        system.planets.push(makeMoon(moonRng, nextMoonPlanetId++, system.id, parent, moonIndex));
+      }
     }
   }
 

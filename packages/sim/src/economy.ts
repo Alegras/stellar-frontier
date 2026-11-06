@@ -124,6 +124,24 @@ export function planetOfColony(world: World, colony: Colony): Planet | null {
   return findPlanet(world, colony.planetId);
 }
 
+/**
+ * Можно ли колонизировать планету: свободна, пригодна (>=40), а для луны —
+ * у империи уже есть колония на родителе или родитель ей принадлежит.
+ */
+export function canColonizePlanet(world: World, empireId: number, planet: Planet): { ok: boolean; reasonRu?: string } {
+  if (planet.ownerId !== 0 || planet.colonyId !== 0) return { ok: false, reasonRu: "Планета уже занята" };
+  if (planet.habitability < 40) return { ok: false, reasonRu: "Планета непригодна для колонизации" };
+  if (planet.isMoon) {
+    const parent = planet.parentPlanetId !== undefined ? findPlanet(world, planet.parentPlanetId) : null;
+    if (!parent) return { ok: false, reasonRu: "У луны нет родительской планеты" };
+    const parentColony = world.colonies.some((colony) => colony.planetId === parent.id && colony.empireId === empireId);
+    if (parent.ownerId !== empireId && !parentColony) {
+      return { ok: false, reasonRu: "Сначала нужна колония или владение родительской планетой" };
+    }
+  }
+  return { ok: true };
+}
+
 export function popsTotal(pops: PopCounts): number {
   return pops.workers + pops.specialists + pops.rulers;
 }

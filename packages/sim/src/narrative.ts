@@ -23,11 +23,11 @@ import type { Empire, World } from "./types";
 /** Проверка пула событий раз в N тактов (детерминированно, дешево). */
 export const EVENT_CHECK_INTERVAL = 5;
 /** Сколько событий может «висеть» одновременно. */
-export const MAX_PENDING_EVENTS = 3;
+export const MAX_PENDING_EVENTS = 2;
 /** Срок жизни необработанного события. */
 export const EVENT_TTL_TICKS = 150;
 /** Минимальный интервал между новыми событиями. */
-export const EVENT_COOLDOWN_TICKS = 25;
+export const EVENT_COOLDOWN_TICKS = 120;
 /** Минимальный интервал между шагами цепочки. */
 export const CHAIN_COOLDOWN_TICKS = 60;
 

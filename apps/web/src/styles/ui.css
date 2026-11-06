@@ -1225,3 +1225,67 @@
 
 /* task-51 · узел-исход кампанийного диалога подсвечен как последствие */
 .sf-dlg__text--outcome { border-left: 3px solid #C9B8FF; background: #101A2E; }
+
+
+/* ==========================================================================
+   task-58 · традиции: RPG-древо (корень, 7 ветвей, SVG-requires, зум/пан)
+   ========================================================================== */
+.sf-trad-grid { display: grid; grid-template-columns: 260px minmax(0, 1fr); grid-template-areas: "stats tree" "perks perks"; gap: 8px; align-items: stretch; }
+.sf-trad-grid [data-testid="traditions-stats"] { grid-area: stats; }
+.sf-trad-grid .sf-trad-tree { grid-area: tree; min-width: 0; min-height: 0; }
+.sf-trad-grid .sf-trad-perks { grid-area: perks; min-width: 0; }
+.sf-tradtree { display: flex; flex-direction: column; height: min(62vh, 620px); min-height: 340px; border: 1px solid #2A3A56; background: #070C16; position: relative; overflow: hidden; }
+.sf-tradtree__toolbar { display: flex; align-items: center; gap: 6px; padding: 3px 6px; border-bottom: 1px solid #22304A; background: #0A1220; z-index: 4; }
+.sf-tradtree__tool { background: #101A2E; border: 1px solid #2A3A56; color: var(--sf-text); font: inherit; font-size: 12px; padding: 1px 7px; cursor: pointer; }
+.sf-tradtree__tool:hover { border-color: var(--sf-accent); }
+.sf-tradtree__zoom { min-width: 42px; text-align: center; font-size: 11px; color: var(--sf-text-2); }
+.sf-tradtree__viewport { position: relative; flex: 1 1 auto; min-height: 0; overflow: hidden; cursor: grab; touch-action: none; background: radial-gradient(circle at 50% 50%, #0E1A2E 0%, #050912 70%); }
+.sf-tradtree__viewport:active { cursor: grabbing; }
+.sf-tradtree__canvas { position: relative; transform-origin: 0 0; will-change: transform; }
+.sf-tradtree__lines { position: absolute; inset: 0; pointer-events: none; z-index: 1; }
+.sf-tradroot { position: absolute; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; background: #141B2E; border: 2px solid #C9B8FF; box-shadow: 0 0 24px rgba(201, 184, 255, .25); z-index: 4; text-align: center; }
+.sf-tradroot b { font-size: 16px; color: #F5C542; letter-spacing: .04em; }
+.sf-tradbranch { position: absolute; transform: translate(-50%, -50%); z-index: 5; background: #0A1220; border: 1px solid; padding: 2px 6px; font: inherit; font-size: 11px; cursor: pointer; white-space: nowrap; }
+.sf-tradbranch--on { box-shadow: 0 0 0 1px currentColor; }
+.sf-tradnode {
+  position: absolute; transform: translate(-50%, -50%); z-index: 3;
+  display: flex; flex-direction: column; gap: 2px; padding: 4px 7px;
+  background: #0C1626; border: 1px solid #2A3A56; color: var(--sf-text); font: inherit;
+  text-align: left; cursor: pointer; overflow: hidden; box-shadow: 2px 2px 0 rgba(0, 0, 0, .5);
+}
+.sf-tradnode:hover { background: #16233A; z-index: 6; }
+.sf-tradnode__title { font-size: 12px; font-weight: 700; color: #E8EEF7; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sf-tradnode__desc { font-size: 10px; line-height: 1.15; color: var(--sf-text-2); overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+.sf-tradnode__fx { font-size: 9px; line-height: 1.1; color: #8FA3BF; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sf-tradnode__foot { display: flex; align-items: center; justify-content: space-between; gap: 4px; margin-top: auto; font-size: 9px; color: var(--sf-text-3); }
+.sf-tradnode--unlocked { border-color: #3F7A4A !important; background: #0F2218; }
+.sf-tradnode--unlocked .sf-tradnode__title { color: #6BE675; }
+.sf-tradnode--ready { border-color: #C8A23A !important; box-shadow: 0 0 10px rgba(245, 197, 66, .22); }
+.sf-tradnode--ready .sf-tradnode__foot { color: #F5C542; }
+.sf-tradnode--locked { opacity: .5; }
+.sf-tradnode--poor { opacity: .72; }
+.sf-tradnode--finisher { background: #1A1630; border-width: 2px; }
+.sf-tradnode--finisher .sf-tradnode__title { color: #C9B8FF; }
+.sf-tradnode--selected { box-shadow: 0 0 0 1px rgba(245, 197, 66, .55), 2px 2px 0 rgba(0, 0, 0, .5); }
+.sf-sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+@media (max-width: 1100px) {
+  .sf-trad-grid { grid-template-columns: minmax(0, 1fr); grid-template-areas: "stats" "tree" "perks"; }
+  .sf-tradtree { height: 52vh; }
+}
+
+/* ==========================================================================
+   Главное меню: анимированный фон (Qwen/Wan) с постером и reduced-motion
+   ========================================================================== */
+.sf-menu-bg { position: absolute; inset: 0; overflow: hidden; z-index: 0; background: #05070E; }
+.sf-menu-bg__poster, .sf-menu-bg__gif { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+.sf-menu-bg__gif { opacity: 0; transition: opacity .55s ease; }
+.sf-menu-bg__gif--ready { opacity: 1; }
+.sf-menu-bg::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(90deg, rgba(5, 7, 14, .92) 0%, rgba(5, 7, 14, .62) 42%, rgba(5, 7, 14, .28) 70%, rgba(5, 7, 14, .55) 100%),
+    linear-gradient(0deg, rgba(5, 7, 14, .75) 0%, rgba(5, 7, 14, 0) 40%);
+}
+@media (prefers-reduced-motion: reduce) {
+  .sf-menu-bg__gif { display: none !important; }
+  .sf-menu-bg__poster { display: block !important; }
+}

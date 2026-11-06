@@ -535,9 +535,10 @@ function makeEmpire(world: World, id: number, name: string, color: string, isPla
 /** Гарантирует в системе планету с обитаемостью не ниже minHab (мутирует первую неподходящую). */
 function ensureHabitable(system: StarSystem, minHab: number, rng: RngState): Planet {
   for (const planet of system.planets) {
-    if (planet.habitability >= minHab && planet.ownerId === 0) return planet;
+    if (!planet.isMoon && planet.habitability >= minHab && planet.ownerId === 0) return planet;
   }
   for (const planet of system.planets) {
+    if (planet.isMoon) continue;
     if (planet.ownerId !== 0) continue;
     if (planet.type === "gas_giant" || planet.habitability > 0) continue;
     planet.type = "continental";
@@ -830,6 +831,7 @@ export function createWorld(
       if (hops[system.id] !== hop) continue;
       for (const planet of system.planets) {
         if (extraColonies.length >= 2) break;
+        if (planet.isMoon) continue;
         if (planet.ownerId !== 0 || planet.colonyId !== 0) continue;
         if (planet.habitability < 40) continue;
         extraColonies.push(planet);
@@ -838,7 +840,7 @@ export function createWorld(
   }
   for (const planet of systems[playerCapitalId].planets) {
     if (extraColonies.length >= 2) break;
-    if (planet.ownerId !== 0) continue;
+    if (planet.isMoon || planet.ownerId !== 0) continue;
     if (planet.habitability >= 40) extraColonies.push(planet);
   }
   for (const planet of extraColonies) {
@@ -887,7 +889,7 @@ export function createWorld(
       const h = hops[system.id];
       if (h < 1 || h > 3) continue;
       for (const planet of system.planets) {
-        if (planet.habitability < 40 || planet.ownerId !== 0 || planet.colonyId !== 0) continue;
+        if (planet.isMoon || planet.habitability < 40 || planet.ownerId !== 0 || planet.colonyId !== 0) continue;
         second = planet;
         break;
       }

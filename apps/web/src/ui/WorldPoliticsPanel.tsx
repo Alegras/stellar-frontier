@@ -244,7 +244,8 @@ export function AiWorldEventModal({ game, state }: { game: FullPanelProps["game"
   const world = worldOf(game);
   const [hidden, setHidden] = useState<string[]>([]);
   const events = useMemo(() => (world ? aiWorldEventsOf(world) : []), [world, state.tick]);
-  const ev = events.find((e) => !hidden.includes(e.id));
+  const MODAL_KINDS = ["call_to_arms", "accession_offer", "vassalization_demand", "centralization_vote"];
+  const ev = events.find((e) => !hidden.includes(e.id) && MODAL_KINDS.includes(e.kind));
   useEffect(() => {
     if (!ev) return;
     game.setNarrativeModalOpen(true);

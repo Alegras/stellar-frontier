@@ -5,7 +5,7 @@
  * Всё процедурно: flat shading, vertex colors, CanvasTexture только для спрайтов короны/туманностей.
  */
 import * as THREE from "three";
-import type { Planet, PlanetType, StarSystem, StarType } from "@sf/sim";
+import type { Colony, Planet, PlanetType, StarSystem, StarType } from "@sf/sim";
 import { PAL, makeGlowTexture, planetColors, starColor, starRadiusM } from "./palette";
 import { clamp01, hash01 } from "./util";
 import { Rng } from "./rng";
@@ -41,6 +41,10 @@ export interface OrbitBody {
   mesh: THREE.Mesh;
   ring: THREE.Mesh | null;
   spin: number;
+  /** для лун: родительское тело и радиус лунной орбиты вокруг него */
+  parent?: OrbitBody;
+  moonOrbitRadiusM?: number;
+  moonSpeed?: number;
 }
 
 export interface StationVisual {
@@ -115,6 +119,9 @@ export class SystemScene {
   readonly sector: SectorVariant | null;
   /** Аномалии/POI сектора: визуальные маркеры и координаты (для HUD/контактов). */
   readonly sectorMarkers: { kind: string; name: string; position: THREE.Vector3 }[] = [];
+  /** task-58: колониальные огни/орбитальные станции (для e2e/диагностики). */
+  readonly colonyVisuals: { planetId: number; isMoon: boolean; cities: number; orbital: boolean }[] = [];
+  private readonly colonyOrbits: { group: THREE.Group; body: OrbitBody; speed: number }[] = [];
 
   private readonly disposables: Disposable[] = [];
   private readonly coronaSprites: { sprite: THREE.Sprite; base: number; phase: number }[] = [];
@@ -128,6 +135,7 @@ export class SystemScene {
     private readonly system: StarSystem,
     private readonly rng: Rng,
     sector: SectorVariant | null = null,
+    private readonly colonies: Colony[] = [],
   ) {
     this.sector = sector;
     this.starType = system.star;
@@ -140,6 +148,7 @@ export class SystemScene {
     this.buildPlanets();
     this.buildBelt();
     this.buildStation();
+    this.buildColonies();
     this.buildStarfield();
     this.buildNebulae();
     this.buildSectorFeatures();
@@ -288,30 +297,22 @@ export class SystemScene {
 
   // ---------------------------------------------------------------- planets
   private buildPlanets(): void {
-    const planets = this.system.planets ?? [];
-    planets.forEach((planet, index) => {
-      const orbitRadiusM = resolveOrbitRadius(planet, index);
-      const radiusM = resolvePlanetRadius(planet);
-      const angle = this.rng.range(0, Math.PI * 2);
-      const position = new THREE.Vector3(
-        Math.cos(angle) * orbitRadiusM,
-        this.rng.range(-0.015, 0.015) * orbitRadiusM,
-        Math.sin(angle) * orbitRadiusM,
-      );
+    const all = this.system.planets ?? [];
+    const byId = new Map<number, OrbitBody>();
 
+    const spawn = (planet: Planet, position: THREE.Vector3, radiusM: number, parent?: OrbitBody): OrbitBody => {
       const mesh = this.buildPlanetMesh(planet, radiusM);
       mesh.position.copy(position);
       this.root.add(mesh);
 
       let ring: THREE.Mesh | null = null;
-      if (planet.type === "gas_giant") {
+      if (!planet.isMoon && planet.type === "gas_giant") {
         ring = this.buildRingMesh(planet, radiusM);
         ring.position.copy(position);
         ring.rotation.x = -Math.PI / 2 + this.rng.range(-0.12, 0.12);
         this.root.add(ring);
       }
-
-      if (planet.type !== "barren" && planet.type !== "asteroid_belt") {
+      if (!planet.isMoon && planet.type !== "barren" && planet.type !== "asteroid_belt") {
         const atmo = new THREE.Mesh(
           this.track(new THREE.SphereGeometry(radiusM * 1.055, 14, 10)),
           this.basic({
@@ -325,18 +326,113 @@ export class SystemScene {
         atmo.position.copy(position);
         this.root.add(atmo);
       }
-
-      this.bodies.push({
-        planet,
-        radiusM,
-        orbitRadiusM,
-        angle,
-        position,
-        mesh,
-        ring,
+      const body: OrbitBody = {
+        planet, radiusM,
+        orbitRadiusM: position.length(),
+        angle: Math.atan2(position.z, position.x),
+        position, mesh, ring,
         spin: this.rng.range(0.01, 0.05) * this.rng.sign(),
-      });
-    });
+        parent,
+        moonOrbitRadiusM: parent ? position.distanceTo(parent.position) : undefined,
+        moonSpeed: parent ? this.rng.range(0.035, 0.075) : undefined,
+      };
+      this.bodies.push(body);
+      byId.set(planet.id, body);
+      return body;
+    };
+
+    for (const planet of all.filter((p) => !p.isMoon)) {
+      const index = all.indexOf(planet);
+      const orbitRadiusM = resolveOrbitRadius(planet, index);
+      const radiusM = resolvePlanetRadius(planet);
+      const angle = this.rng.range(0, Math.PI * 2);
+      const position = new THREE.Vector3(
+        Math.cos(angle) * orbitRadiusM,
+        this.rng.range(-0.015, 0.015) * orbitRadiusM,
+        Math.sin(angle) * orbitRadiusM,
+      );
+      spawn(planet, position, radiusM);
+    }
+
+    for (const planet of all.filter((p) => p.isMoon)) {
+      const parent = planet.parentPlanetId != null ? byId.get(planet.parentPlanetId) : undefined;
+      const radiusM = Math.max(280, Math.round(resolvePlanetRadius(planet) * 0.42));
+      const parentOrbit = parent?.planet.orbitRadius ?? 0;
+      const orbitR = parent && planet.orbitRadius != null ? Math.max(700, Math.abs(planet.orbitRadius - parentOrbit)) : 1500;
+      const angle = this.rng.range(0, Math.PI * 2);
+      const position = parent
+        ? new THREE.Vector3(
+            parent.position.x + Math.cos(angle) * orbitR,
+            parent.position.y + this.rng.range(-0.08, 0.08) * orbitR,
+            parent.position.z + Math.sin(angle) * orbitR,
+          )
+        : new THREE.Vector3(Math.cos(angle) * orbitR, 0, Math.sin(angle) * orbitR);
+      spawn(planet, position, radiusM, parent);
+    }
+  }
+
+  /** task-58: города на поверхности + орбитальные станции/спутники у колоний, отдельные иконки у лун. */
+  private buildColonies(): void {
+    const colonies = this.colonies.filter((c) => c.systemId === this.system.id);
+    if (colonies.length === 0) return;
+    const cityGeo = this.track(new THREE.BoxGeometry(1, 1, 1));
+    for (const colony of colonies) {
+      const body = this.bodies.find((b) => b.planet.id === colony.planetId);
+      if (!body) continue;
+      const isMoon = Boolean(body.planet.isMoon);
+      const cityMat = this.basic({ color: isMoon ? "#B8E6FF" : "#FFE9A8" });
+      const glowMat = this.basic({ color: isMoon ? PAL.psi : PAL.warn, transparent: true, opacity: 0.75, blending: THREE.AdditiveBlending, depthWrite: false });
+      const cities = new THREE.Group();
+      const workers = colony.pops?.workers ?? 0;
+      const count = isMoon ? 2 : Math.max(3, Math.min(7, 3 + Math.floor(workers / 10)));
+      for (let i = 0; i < count; i++) {
+        const t = colony.id * 0.73 + i * 2.399;
+        const lat = Math.asin(-0.75 + 1.5 * ((Math.sin(t * 1.7) + 1) / 2));
+        const lon = t * 2.1 + colony.planetId * 0.37;
+        const dir = new THREE.Vector3(Math.cos(lat) * Math.cos(lon), Math.sin(lat), Math.cos(lat) * Math.sin(lon)).normalize();
+        const city = new THREE.Mesh(cityGeo, cityMat);
+        city.position.copy(dir).multiplyScalar(body.radiusM * 1.012);
+        city.scale.set(body.radiusM * (isMoon ? 0.085 : 0.04), body.radiusM * 0.025, body.radiusM * (isMoon ? 0.06 : 0.045));
+        city.lookAt(dir.clone().multiplyScalar(body.radiusM * 3));
+        cities.add(city);
+        if (i % 2 === 0) {
+          const glow = new THREE.Mesh(cityGeo, glowMat);
+          glow.position.copy(dir).multiplyScalar(body.radiusM * 1.03);
+          glow.scale.set(body.radiusM * 0.09, body.radiusM * 0.012, body.radiusM * 0.09);
+          glow.lookAt(dir.clone().multiplyScalar(body.radiusM * 3));
+          cities.add(glow);
+        }
+      }
+      body.mesh.add(cities);
+
+      const group = new THREE.Group();
+      group.position.copy(body.position);
+      const orbitR = body.radiusM * 1.85;
+      const ring = new THREE.Mesh(
+        this.track(new THREE.TorusGeometry(orbitR, Math.max(6, body.radiusM * 0.014), 6, 40)),
+        this.basic({ color: PAL.gold, transparent: true, opacity: 0.35, blending: THREE.AdditiveBlending, depthWrite: false }),
+      );
+      ring.rotation.x = Math.PI / 2;
+      group.add(ring);
+      const station = new THREE.Mesh(
+        this.track(new THREE.OctahedronGeometry(Math.max(18, body.radiusM * 0.055), 0)),
+        this.basic({ color: PAL.white }),
+      );
+      station.position.set(orbitR, 0, 0);
+      group.add(station);
+      for (let i = 0; i < 2; i++) {
+        const sat = new THREE.Mesh(
+          this.track(new THREE.SphereGeometry(Math.max(10, body.radiusM * 0.022), 6, 4)),
+          this.basic({ color: i === 0 ? PAL.shield : PAL.gold }),
+        );
+        const a = i * Math.PI + 0.6;
+        sat.position.set(Math.cos(a) * orbitR * 1.12, Math.sin(a) * body.radiusM * 0.18, Math.sin(a) * orbitR * 1.12);
+        group.add(sat);
+      }
+      this.root.add(group);
+      this.colonyOrbits.push({ group, body, speed: isMoon ? 0.5 : 0.22 });
+      this.colonyVisuals.push({ planetId: colony.planetId, isMoon, cities: count, orbital: true });
+    }
   }
 
   /** Сфера с плоскими зонами цвета (газовые — полосы, каменные — «пятна»). */
@@ -787,6 +883,21 @@ export class SystemScene {
       body.mesh.rotation.y += body.spin * dt;
       if (body.ring) body.ring.rotation.z += dt * 0.02;
     }
+    // луны вращаются вокруг родительской планеты; колониальные станции следуют за телом
+    for (const body of this.bodies) {
+      if (!body.parent || !body.moonOrbitRadiusM) continue;
+      body.angle += (body.moonSpeed ?? 0.05) * dt;
+      body.position.set(
+        body.parent.position.x + Math.cos(body.angle) * body.moonOrbitRadiusM,
+        body.parent.position.y + Math.sin(body.angle * 1.7) * body.moonOrbitRadiusM * 0.06,
+        body.parent.position.z + Math.sin(body.angle) * body.moonOrbitRadiusM,
+      );
+      body.mesh.position.copy(body.position);
+    }
+    for (const orbit of this.colonyOrbits) {
+      orbit.group.position.copy(orbit.body.position);
+      orbit.group.rotation.y += dt * orbit.speed;
+    }
     for (const belt of this.belts) belt.rotation.y += dt * 0.004;
     this.starSpin += dt * 0.15;
     for (const corona of this.coronaSprites) {
@@ -838,6 +949,8 @@ export class SystemScene {
     this.bodies.length = 0;
     this.belts.length = 0;
     this.coronaSprites.length = 0;
+    this.colonyOrbits.length = 0;
+    this.colonyVisuals.length = 0;
     this.station = null;
   }
 }

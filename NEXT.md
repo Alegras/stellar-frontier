@@ -90,3 +90,9 @@
 - [x] dlg_campaign_ancient_archive (main_01_rift_rumor) + dlg_campaign_ancient_contact (main_03_truth), requiresAncients gating; 103 outcome, 15 диалогов, 17 camp_ancient_*.
 - [x] story-verify 17/17, story-full 4/4, unit 340/340, golden 8f52b0a6, полный e2e **65/65**, acceptance §29.
 - [x] gift 2.99 МБ/zip 1.04 МБ/verify 10/10, site синхронизирован; legacy-check 0.
+
+## UI: древо традиций и визуал колоний (task-58, закрыто 2026-11-08)
+
+- [x] 7 ветвей/42 узла+финишеры, зум 74%, fit, unlock dis_1, перки, 1280 — traditions-tree 1/1.
+- [x] HUD «Колонии системы», планета/луна/города/орбитальные станции, WebGL frame check — colonies-visual 1/1.
+- [x] typecheck 0, unit 343/343, полный e2e **67/67**, gift 3.01 МБ/zip 1.04 МБ/verify 10/10, acceptance §30.
