@@ -86,7 +86,7 @@
 
 - 24 PNG 128×128 (4×6), PNG-8, каждый **20–22 цвета** (лимит task-39 — 32), суммарно портреты **≈ 51 КБ** (~2.1 КБ/кадр).
 - Весь арт DLC (24 портрета + 3 карточки + фон + параллакс + комикс + голос) — **31 PNG ≈ 82 КБ**, лимит 2 МБ соблюдён с запасом.
-- Валидаторы: `python tools/art-dlc/validate_dlc_art.py` (пути/эмоции/размеры/цвета/бюджеты/сверка с characters.json и manifest.json) — OK; QA: `tools/dlc-validate.mjs` — PASS (арт 24 эмоции, бюджет 80 КБ, 31 файл), `tools/dialogue-bugs.mjs` — PASS («арт: 4×6 эмоций — 24 PNG»).
+- Валидаторы: `python tools/art-dlc/validate_dlc_art.py` (пути/эмоции/размеры/цвета/бюджеты/сверка с characters.json и manifest.json) — OK; QA: `tools/dlc-validate.mjs` — PASS (арт 24 эмоции, бюджет 177 КБ, 31 файл), `tools/dialogue-bugs.mjs` — PASS («арт: 4×6 эмоций — 24 PNG»).
 Скриншоты: `docs/shots/dlc-portraits.png` (сетка 4×6 ×2), `dlc-preview.png`, `dlc-ui-dialog.png` (адмирал Кейн), `dlc-ui-dialog-selen.png` (советник Селена).
 
 ## 5. Правки/перегенерация

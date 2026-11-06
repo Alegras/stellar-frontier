@@ -16,7 +16,7 @@
 - Арт: 2 портрета ×6 эмоций, карточки, фон, комикс (19 PNG, 43 КБ).
 - Feature-flag dlc_quests, миграция старых сейвов, save/load mid-dialogue, seeded checks без сейв-скама.
 - QA: dlc-validate 29/29, dlc-test 24/24, e2e DLC 8/8 (+perf), меню-рас 4/4, acceptance §23; golden c55c7ffe; unit 312/312; полный e2e 41/41.
-- Gift пересобран (StellarFrontier.html 2.23 МБ, DLC-арт встроен, zip 673 КБ), verify-portable 10/10 через file://.
+- Gift пересобран c Qwen-артом (StellarFrontier.html 2.57 МБ, zip 830 КБ), verify-portable 10/10 через file://.
 - **Автомасштабирование:** меню рас без фиксированной max-height — тайлы саморасширяются, текст не выходит за карточки; дерево fit-to-content; e2e `menu-autoscale` 4/4 на 1280×720…2560×1440, полный e2e 41/41.
 
 ## [0.5.0] — 2026-11-04 · Часть XIII: Древние, расы и Реликтовый Предел (M9c)
