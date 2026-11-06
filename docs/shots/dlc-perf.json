@@ -1,0 +1,14 @@
+{
+  "generatedAt": "2026-11-04T20:08:33.102Z",
+  "dialogueOpenMsSamples": [
+    8
+  ],
+  "dialogueOpenMaxMs": 8,
+  "dialogueOpenAvgMs": 8,
+  "treeLayoutMs": 0.1,
+  "zoomFrameMs": 36.5,
+  "budget": {
+    "dialogueOpenMs": 50,
+    "treeLayoutMs": 2
+  }
+}

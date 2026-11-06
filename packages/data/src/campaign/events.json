@@ -1,0 +1,4694 @@
+[
+  {
+    "id": "ev_silent_star_1",
+    "chainId": "silent_star",
+    "step": 1,
+    "titleRu": "Немая звезда",
+    "textRu": "Свет этой звезды не совпадает с её массой. Сенсоры фиксируют периодичность, которой у неё не должно быть.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Сканировать полностью",
+        "effects": [
+          {
+            "target": "science_physics",
+            "value": 60
+          },
+          {
+            "target": "credits",
+            "value": -15000
+          }
+        ],
+        "flag": "silent_scanned"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Записать и уйти",
+        "effects": [
+          {
+            "target": "credits",
+            "value": 12000
+          },
+          {
+            "target": "influence",
+            "value": 2
+          }
+        ]
+      }
+    ],
+    "weight": 40,
+    "minAct": 0
+  },
+  {
+    "id": "ev_silent_star_2",
+    "chainId": "silent_star",
+    "step": 2,
+    "titleRu": "Внутри свечения",
+    "textRu": "Внутри звезды — оболочка, отражающая свет обратно. Сканеры показывают дверь, закрытую изнутри.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Изучить оболочку",
+        "effects": [
+          {
+            "target": "science_physics",
+            "value": 120
+          },
+          {
+            "target": "stability",
+            "value": -2
+          }
+        ],
+        "flag": "silent_entered"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Доложить в совет",
+        "effects": [
+          {
+            "target": "influence",
+            "value": 10
+          },
+          {
+            "target": "unity",
+            "value": 40
+          }
+        ],
+        "flag": "silent_reported"
+      }
+    ],
+    "weight": 40,
+    "minAct": 0
+  },
+  {
+    "id": "ev_silent_star_3",
+    "chainId": "silent_star",
+    "step": 3,
+    "titleRu": "Ответ",
+    "textRu": "Дверь отвечает на запрос. Это не приглашение — это предупреждение на языке, который вы понимаете.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Взять ядро",
+        "effects": [
+          {
+            "target": "science_physics",
+            "value": 200
+          },
+          {
+            "target": "stability",
+            "value": -8
+          }
+        ],
+        "flag": "silent_core",
+        "missionId": "rift_03_keys"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Запечатать канал",
+        "effects": [
+          {
+            "target": "influence",
+            "value": 15
+          },
+          {
+            "target": "unity",
+            "value": 80
+          }
+        ],
+        "flag": "silent_sealed"
+      }
+    ],
+    "weight": 40,
+    "minAct": 0
+  },
+  {
+    "id": "ev_derelict_convoy_1",
+    "chainId": "derelict_convoy",
+    "step": 1,
+    "titleRu": "Мёртвый конвой",
+    "textRu": "Пять торговых кораблей стоят в строю, но ни один не отвечает. Груз цел, экипажей нет.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Высадиться",
+        "effects": [
+          {
+            "target": "alloys",
+            "value": 60
+          },
+          {
+            "target": "reputation",
+            "value": 3
+          }
+        ],
+        "flag": "convoy_boarded"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Отбуксировать в док",
+        "effects": [
+          {
+            "target": "credits",
+            "value": 25000
+          },
+          {
+            "target": "credits",
+            "value": -8000
+          }
+        ]
+      }
+    ],
+    "weight": 47,
+    "minAct": 0
+  },
+  {
+    "id": "ev_derelict_convoy_2",
+    "chainId": "derelict_convoy",
+    "step": 2,
+    "titleRu": "Журнал капитана",
+    "textRu": "Последняя запись: «они шли рядом с нами три дня, и мы не видели их». Координаты совпадают с пустой системой.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Пойти по координатам",
+        "effects": [
+          {
+            "target": "science_society",
+            "value": 60
+          }
+        ],
+        "flag": "convoy_coords"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Передать флоту",
+        "effects": [
+          {
+            "target": "influence",
+            "value": 8
+          },
+          {
+            "target": "reputation",
+            "value": 5
+          }
+        ]
+      }
+    ],
+    "weight": 47,
+    "minAct": 0
+  },
+  {
+    "id": "ev_derelict_convoy_3",
+    "chainId": "derelict_convoy",
+    "step": 3,
+    "titleRu": "Пустая система",
+    "textRu": "В системе нет ничего, кроме гравитационной тени корабля, которого здесь никогда не было.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Оставить маяк",
+        "effects": [
+          {
+            "target": "influence",
+            "value": 10
+          },
+          {
+            "target": "science_physics",
+            "value": 80
+          }
+        ],
+        "flag": "convoy_beacon"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Уйти и не оглядываться",
+        "effects": [
+          {
+            "target": "stability",
+            "value": 3
+          }
+        ]
+      }
+    ],
+    "weight": 47,
+    "minAct": 0
+  },
+  {
+    "id": "ev_border_incident_1",
+    "chainId": "border_incident",
+    "step": 1,
+    "titleRu": "Инцидент на границе",
+    "textRu": "Патруль чужой империи пересёк линию на две системы. Формально — ошибка навигации. Фактически — проверка воли.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Выслать флот",
+        "effects": [
+          {
+            "target": "opinion",
+            "value": -15
+          },
+          {
+            "target": "fleet_fp",
+            "value": 0
+          }
+        ],
+        "flag": "border_fleet"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Отправить дипломата",
+        "effects": [
+          {
+            "target": "influence",
+            "value": -5
+          },
+          {
+            "target": "opinion",
+            "value": 8
+          }
+        ],
+        "flag": "border_diplomat"
+      }
+    ],
+    "weight": 54,
+    "minAct": 0
+  },
+  {
+    "id": "ev_border_incident_2",
+    "chainId": "border_incident",
+    "step": 2,
+    "titleRu": "Ответ соседа",
+    "textRu": "Сосед извиняется и предлагает компенсацию, но не уходит. Требование уйти прозвучит как ультиматум.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Требовать вывода",
+        "effects": [
+          {
+            "target": "opinion",
+            "value": -10
+          },
+          {
+            "target": "stability",
+            "value": 2
+          }
+        ],
+        "flag": "border_demand"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Принять компенсацию",
+        "effects": [
+          {
+            "target": "credits",
+            "value": 40000
+          },
+          {
+            "target": "opinion",
+            "value": 5
+          }
+        ]
+      }
+    ],
+    "weight": 54,
+    "minAct": 0
+  },
+  {
+    "id": "ev_border_incident_3",
+    "chainId": "border_incident",
+    "step": 3,
+    "titleRu": "Новая линия",
+    "textRu": "После инцидента сложилась новая граница. Она неудобна, но обе стороны её признают.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Укрепить границу",
+        "effects": [
+          {
+            "target": "alloys",
+            "value": -40
+          },
+          {
+            "target": "stability",
+            "value": 4
+          }
+        ],
+        "flag": "border_fortified"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Оставить открытой",
+        "effects": [
+          {
+            "target": "credits",
+            "value": 20000
+          },
+          {
+            "target": "opinion",
+            "value": 6
+          }
+        ]
+      }
+    ],
+    "weight": 54,
+    "minAct": 0
+  },
+  {
+    "id": "ev_syndicate_offer_1",
+    "chainId": "syndicate_offer",
+    "step": 1,
+    "titleRu": "Предложение Синдиката",
+    "textRu": "Синдикат предлагает защиту маршрутов в обмен на долю. Он не угрожает — он просто показывает цифры.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Принять",
+        "effects": [
+          {
+            "target": "credits",
+            "value": 60000
+          },
+          {
+            "target": "opinion",
+            "value": -8
+          }
+        ],
+        "flag": "syn_accept"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Отказаться",
+        "effects": [
+          {
+            "target": "influence",
+            "value": 5
+          },
+          {
+            "target": "opinion",
+            "value": 5
+          }
+        ],
+        "flag": "syn_refuse"
+      }
+    ],
+    "weight": 61,
+    "minAct": 0
+  },
+  {
+    "id": "ev_syndicate_offer_2",
+    "chainId": "syndicate_offer",
+    "step": 2,
+    "titleRu": "Доля растёт",
+    "textRu": "Синдикат просит больше: теперь — право на посадку в ваших системах. Отказ закроет маршрут.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Пересмотреть договор",
+        "effects": [
+          {
+            "target": "credits",
+            "value": -30000
+          },
+          {
+            "target": "stability",
+            "value": 2
+          }
+        ],
+        "flag": "syn_renegotiate"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Разорвать",
+        "effects": [
+          {
+            "target": "credits",
+            "value": -10000
+          },
+          {
+            "target": "opinion",
+            "value": -12
+          }
+        ],
+        "flag": "syn_broken"
+      }
+    ],
+    "weight": 61,
+    "minAct": 0
+  },
+  {
+    "id": "ev_syndicate_offer_3",
+    "chainId": "syndicate_offer",
+    "step": 3,
+    "titleRu": "Тихий порт",
+    "textRu": "Синдикат оставляет после себя свободный порт. Он полезен и не принадлежит вам.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Взять под контроль",
+        "effects": [
+          {
+            "target": "influence",
+            "value": 10
+          },
+          {
+            "target": "credits",
+            "value": 50000
+          }
+        ],
+        "flag": "syn_takeover"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Оставить независимым",
+        "effects": [
+          {
+            "target": "credits",
+            "value": 40000
+          },
+          {
+            "target": "opinion",
+            "value": 4
+          }
+        ]
+      }
+    ],
+    "weight": 61,
+    "minAct": 0
+  },
+  {
+    "id": "ev_precursor_ping_1",
+    "chainId": "precursor_ping",
+    "step": 1,
+    "titleRu": "Сигнал Строителей",
+    "textRu": "Повторяющийся импульс из глубины Дороги. Он адресован не вам — но вы его слышите.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Ответить",
+        "effects": [
+          {
+            "target": "science_physics",
+            "value": 100
+          },
+          {
+            "target": "influence",
+            "value": -3
+          }
+        ],
+        "flag": "ping_reply"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Молчать и слушать",
+        "effects": [
+          {
+            "target": "science_physics",
+            "value": 40
+          }
+        ]
+      }
+    ],
+    "weight": 68,
+    "minAct": 0
+  },
+  {
+    "id": "ev_precursor_ping_2",
+    "chainId": "precursor_ping",
+    "step": 2,
+    "titleRu": "Код",
+    "textRu": "Импульс оказывается фрагментом навигационного кода. С ним можно открыть линию, закрытую тысячу лет.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Открыть линию",
+        "effects": [
+          {
+            "target": "science_engineering",
+            "value": 120
+          },
+          {
+            "target": "stability",
+            "value": -3
+          }
+        ],
+        "flag": "ping_open"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Продать код",
+        "effects": [
+          {
+            "target": "credits",
+            "value": 90000
+          },
+          {
+            "target": "opinion",
+            "value": -10
+          }
+        ],
+        "flag": "ping_sold"
+      }
+    ],
+    "weight": 68,
+    "minAct": 0
+  },
+  {
+    "id": "ev_precursor_ping_3",
+    "chainId": "precursor_ping",
+    "step": 3,
+    "titleRu": "Цена открытия",
+    "textRu": "Линия работает. По ней идёт не только ваш флот — по ней пошёл интерес тех, кто ждал.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Держать линию",
+        "effects": [
+          {
+            "target": "influence",
+            "value": 15
+          },
+          {
+            "target": "opinion",
+            "value": -8
+          }
+        ],
+        "flag": "ping_hold",
+        "missionId": "rift_01_signal"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Закрыть обратно",
+        "effects": [
+          {
+            "target": "unity",
+            "value": 60
+          },
+          {
+            "target": "science_physics",
+            "value": 80
+          }
+        ],
+        "flag": "ping_close"
+      }
+    ],
+    "weight": 68,
+    "minAct": 0
+  },
+  {
+    "id": "ev_refugee_flotilla_1",
+    "chainId": "refugee_flotilla",
+    "step": 1,
+    "titleRu": "Флотилия беженцев",
+    "textRu": "Две сотни кораблей на орбите просят убежища. Они бегут от войны, которую начали не они.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Принять",
+        "effects": [
+          {
+            "target": "stability",
+            "value": -5
+          },
+          {
+            "target": "influence",
+            "value": 8
+          }
+        ],
+        "flag": "refugees_taken"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Отказать",
+        "effects": [
+          {
+            "target": "opinion",
+            "value": -10
+          },
+          {
+            "target": "reputation",
+            "value": -5
+          }
+        ],
+        "flag": "refugees_denied"
+      }
+    ],
+    "weight": 75,
+    "minAct": 0
+  },
+  {
+    "id": "ev_refugee_flotilla_2",
+    "chainId": "refugee_flotilla",
+    "step": 2,
+    "titleRu": "Перенаселение",
+    "textRu": "Лагеря переполнены. Часть беженцев требует статуса граждан — сразу и с правом голоса.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Дать гражданство",
+        "effects": [
+          {
+            "target": "unity",
+            "value": 60
+          },
+          {
+            "target": "stability",
+            "value": -3
+          }
+        ],
+        "flag": "refugees_citizens"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Оставить временный статус",
+        "effects": [
+          {
+            "target": "credits",
+            "value": -20000
+          },
+          {
+            "target": "stability",
+            "value": 2
+          }
+        ]
+      }
+    ],
+    "weight": 75,
+    "minAct": 0
+  },
+  {
+    "id": "ev_refugee_flotilla_3",
+    "chainId": "refugee_flotilla",
+    "step": 3,
+    "titleRu": "Новый дом",
+    "textRu": "Беженцы предлагают основать колонию на пустой планете — за свой счёт, но под вашим флагом.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Разрешить колонию",
+        "effects": [
+          {
+            "target": "influence",
+            "value": 12
+          },
+          {
+            "target": "credits",
+            "value": -30000
+          }
+        ],
+        "flag": "refugees_colony"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Переселить в свои миры",
+        "effects": [
+          {
+            "target": "unity",
+            "value": 50
+          },
+          {
+            "target": "stability",
+            "value": -4
+          }
+        ]
+      }
+    ],
+    "weight": 75,
+    "minAct": 0
+  },
+  {
+    "id": "ev_plague_ship_1",
+    "chainId": "plague_ship",
+    "step": 1,
+    "titleRu": "Корабль-мор",
+    "textRu": "Дрейфующий лайнер передаёт сигнал бедствия. Медотсеки переполнены, карантин нарушен.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Спасать",
+        "effects": [
+          {
+            "target": "reputation",
+            "value": 8
+          },
+          {
+            "target": "stability",
+            "value": -4
+          }
+        ],
+        "flag": "plague_rescue"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Сжечь на месте",
+        "effects": [
+          {
+            "target": "stability",
+            "value": 2
+          },
+          {
+            "target": "opinion",
+            "value": -6
+          }
+        ],
+        "flag": "plague_burn"
+      }
+    ],
+    "weight": 82,
+    "minAct": 0
+  },
+  {
+    "id": "ev_plague_ship_2",
+    "chainId": "plague_ship",
+    "step": 2,
+    "titleRu": "Штамм",
+    "textRu": "Экипаж называет болезнь «соборной»: она передаётся через синтетические узлы и ведёт себя разумно.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Изучить штамм",
+        "effects": [
+          {
+            "target": "science_society",
+            "value": 100
+          },
+          {
+            "target": "stability",
+            "value": -3
+          }
+        ],
+        "flag": "plague_study"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Изолировать систему",
+        "effects": [
+          {
+            "target": "stability",
+            "value": 5
+          },
+          {
+            "target": "credits",
+            "value": -40000
+          }
+        ]
+      }
+    ],
+    "weight": 82,
+    "minAct": 0
+  },
+  {
+    "id": "ev_plague_ship_3",
+    "chainId": "plague_ship",
+    "step": 3,
+    "titleRu": "Вакцина",
+    "textRu": "Лаборатория получает частичный ответ. Он работает — но только для одной группы крови.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Произвести вакцину",
+        "effects": [
+          {
+            "target": "credits",
+            "value": -60000
+          },
+          {
+            "target": "unity",
+            "value": 70
+          }
+        ],
+        "flag": "plague_vaccine"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Продать формулу",
+        "effects": [
+          {
+            "target": "credits",
+            "value": 110000
+          },
+          {
+            "target": "opinion",
+            "value": -8
+          }
+        ],
+        "flag": "plague_sold"
+      }
+    ],
+    "weight": 82,
+    "minAct": 0
+  },
+  {
+    "id": "ev_pirate_tribute_1",
+    "chainId": "pirate_tribute",
+    "step": 1,
+    "titleRu": "Дань",
+    "textRu": "Пиратский барон требует плату за «защиту» торгового пути. У него четыре корабля и точный расчет.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Заплатить",
+        "effects": [
+          {
+            "target": "credits",
+            "value": -45000
+          },
+          {
+            "target": "stability",
+            "value": 2
+          }
+        ],
+        "flag": "pirate_paid"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Атаковать",
+        "effects": [
+          {
+            "target": "credits",
+            "value": -10000
+          },
+          {
+            "target": "alloys",
+            "value": 40
+          }
+        ],
+        "flag": "pirate_attacked"
+      }
+    ],
+    "weight": 89,
+    "minAct": 0
+  },
+  {
+    "id": "ev_pirate_tribute_2",
+    "chainId": "pirate_tribute",
+    "step": 2,
+    "titleRu": "Барон отвечает",
+    "textRu": "Барон не мстит — он меняет тактику: теперь он берёт грузы, а не деньги.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Найти логово",
+        "effects": [
+          {
+            "target": "influence",
+            "value": -5
+          }
+        ],
+        "flag": "pirate_lair"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Дать ему официальный статус",
+        "effects": [
+          {
+            "target": "credits",
+            "value": 50000
+          },
+          {
+            "target": "opinion",
+            "value": -6
+          }
+        ],
+        "flag": "pirate_licensed"
+      }
+    ],
+    "weight": 89,
+    "minAct": 0
+  },
+  {
+    "id": "ev_pirate_tribute_3",
+    "chainId": "pirate_tribute",
+    "step": 3,
+    "titleRu": "Логово",
+    "textRu": "Логово найдено. Внутри — не золото, а карта маршрутов, которых нет ни у кого.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Захватить карту",
+        "effects": [
+          {
+            "target": "science_engineering",
+            "value": 80
+          },
+          {
+            "target": "credits",
+            "value": 40000
+          }
+        ],
+        "flag": "pirate_map"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Уничтожить логово",
+        "effects": [
+          {
+            "target": "alloys",
+            "value": 60
+          },
+          {
+            "target": "reputation",
+            "value": 8
+          }
+        ],
+        "flag": "pirate_destroyed"
+      }
+    ],
+    "weight": 89,
+    "minAct": 0
+  },
+  {
+    "id": "ev_scientist_defection_1",
+    "chainId": "scientist_defection",
+    "step": 1,
+    "titleRu": "Перебежчик",
+    "textRu": "Ведущий инженер чужой империи просит убежища. Взамен — чертежи, которых нет ни у кого.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Принять",
+        "effects": [
+          {
+            "target": "science_engineering",
+            "value": 120
+          },
+          {
+            "target": "opinion",
+            "value": -12
+          }
+        ],
+        "flag": "defector_taken"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Выдать",
+        "effects": [
+          {
+            "target": "opinion",
+            "value": 10
+          },
+          {
+            "target": "influence",
+            "value": 5
+          }
+        ],
+        "flag": "defector_returned"
+      }
+    ],
+    "weight": 96,
+    "minAct": 1
+  },
+  {
+    "id": "ev_scientist_defection_2",
+    "chainId": "scientist_defection",
+    "step": 2,
+    "titleRu": "Условия",
+    "textRu": "Инженер требует лабораторию и отказ от вопросов о его прошлом. Прошлое, судя по всему, тяжёлое.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Дать лабораторию",
+        "effects": [
+          {
+            "target": "science_engineering",
+            "value": 80
+          },
+          {
+            "target": "credits",
+            "value": -30000
+          }
+        ],
+        "flag": "defector_lab"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Допросить",
+        "effects": [
+          {
+            "target": "influence",
+            "value": 5
+          },
+          {
+            "target": "stability",
+            "value": 2
+          }
+        ],
+        "flag": "defector_interrogated"
+      }
+    ],
+    "weight": 96,
+    "minAct": 1
+  },
+  {
+    "id": "ev_scientist_defection_3",
+    "chainId": "scientist_defection",
+    "step": 3,
+    "titleRu": "Чертежи",
+    "textRu": "Чертежи настоящие — и в них есть деталь, которую не смог объяснить никто из ваших.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Внедрить",
+        "effects": [
+          {
+            "target": "science_engineering",
+            "value": 150
+          }
+        ],
+        "flag": "defector_implemented"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Засекретить",
+        "effects": [
+          {
+            "target": "influence",
+            "value": 10
+          },
+          {
+            "target": "unity",
+            "value": 40
+          }
+        ],
+        "flag": "defector_classified"
+      }
+    ],
+    "weight": 96,
+    "minAct": 1
+  },
+  {
+    "id": "ev_ancient_beacon_1",
+    "chainId": "ancient_beacon",
+    "step": 1,
+    "titleRu": "Древний маяк",
+    "textRu": "Маяк передаёт координаты, которых нет на картах. Он работает на энергии, которой не должно хватать.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Следовать координатам",
+        "effects": [
+          {
+            "target": "science_physics",
+            "value": 70
+          }
+        ],
+        "flag": "beacon_follow"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Демонтировать",
+        "effects": [
+          {
+            "target": "alloys",
+            "value": 50
+          },
+          {
+            "target": "stability",
+            "value": 2
+          }
+        ],
+        "flag": "beacon_dismantled"
+      }
+    ],
+    "weight": 43,
+    "minAct": 1
+  },
+  {
+    "id": "ev_ancient_beacon_2",
+    "chainId": "ancient_beacon",
+    "step": 2,
+    "titleRu": "Точка рандеву",
+    "textRu": "По координатам — пустая орбита и следы сотни прыжков. Здесь встречались, и не один раз.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Оставить свой маяк",
+        "effects": [
+          {
+            "target": "influence",
+            "value": 10
+          },
+          {
+            "target": "science_physics",
+            "value": 60
+          }
+        ],
+        "flag": "beacon_own"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Уничтожить следы",
+        "effects": [
+          {
+            "target": "stability",
+            "value": 3
+          },
+          {
+            "target": "opinion",
+            "value": -5
+          }
+        ]
+      }
+    ],
+    "weight": 43,
+    "minAct": 1
+  },
+  {
+    "id": "ev_ancient_beacon_3",
+    "chainId": "ancient_beacon",
+    "step": 3,
+    "titleRu": "Первый из пришедших",
+    "textRu": "Маяк оживает: вас вызывают. Голос говорит на вашем языке с акцентом, которого не существует.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Ответить",
+        "effects": [
+          {
+            "target": "science_society",
+            "value": 120
+          },
+          {
+            "target": "influence",
+            "value": -5
+          }
+        ],
+        "flag": "beacon_answered"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Отключить",
+        "effects": [
+          {
+            "target": "unity",
+            "value": 50
+          },
+          {
+            "target": "stability",
+            "value": 2
+          }
+        ]
+      }
+    ],
+    "weight": 43,
+    "minAct": 1
+  },
+  {
+    "id": "ev_federation_petition_1",
+    "chainId": "federation_petition",
+    "step": 1,
+    "titleRu": "Петиция о союзе",
+    "textRu": "Три малые империи просят федеративного статуса. Они слабы, но их Дороги важны.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Поддержать",
+        "effects": [
+          {
+            "target": "influence",
+            "value": -6
+          },
+          {
+            "target": "opinion",
+            "value": 12
+          }
+        ],
+        "flag": "fedpet_support"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Отложить",
+        "effects": [
+          {
+            "target": "opinion",
+            "value": -4
+          }
+        ]
+      }
+    ],
+    "weight": 50,
+    "minAct": 1
+  },
+  {
+    "id": "ev_federation_petition_2",
+    "chainId": "federation_petition",
+    "step": 2,
+    "titleRu": "Условия вступления",
+    "textRu": "Малые требуют гарантий автономии. Большие требуют единого флота. Оба требования понятны.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Компромисс",
+        "effects": [
+          {
+            "target": "influence",
+            "value": -8
+          },
+          {
+            "target": "unity",
+            "value": 50
+          }
+        ],
+        "flag": "fedpet_compromise"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Жёсткий устав",
+        "effects": [
+          {
+            "target": "stability",
+            "value": 3
+          },
+          {
+            "target": "opinion",
+            "value": -8
+          }
+        ],
+        "flag": "fedpet_strict"
+      }
+    ],
+    "weight": 50,
+    "minAct": 1
+  },
+  {
+    "id": "ev_federation_petition_3",
+    "chainId": "federation_petition",
+    "step": 3,
+    "titleRu": "Федерация",
+    "textRu": "Федерация создана — или не создана. В любом случае, вы теперь пример для остальных.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Возглавить",
+        "effects": [
+          {
+            "target": "influence",
+            "value": 15
+          },
+          {
+            "target": "fleet_cap_pct",
+            "value": 0
+          }
+        ],
+        "flag": "fedpet_lead"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Остаться в стороне",
+        "effects": [
+          {
+            "target": "stability",
+            "value": 4
+          },
+          {
+            "target": "opinion",
+            "value": 6
+          }
+        ]
+      }
+    ],
+    "weight": 50,
+    "minAct": 1
+  },
+  {
+    "id": "ev_mutiny_1",
+    "chainId": "mutiny",
+    "step": 1,
+    "titleRu": "Бунт на флоте",
+    "textRu": "Экипаж флагмана отказывается выполнять приказ. Причина уважительная: приказ действительно плохой.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Отменить приказ",
+        "effects": [
+          {
+            "target": "stability",
+            "value": -2
+          },
+          {
+            "target": "unity",
+            "value": 40
+          }
+        ],
+        "flag": "mutiny_cancelled"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Настоять",
+        "effects": [
+          {
+            "target": "stability",
+            "value": 3
+          },
+          {
+            "target": "happiness",
+            "value": -8
+          }
+        ],
+        "flag": "mutiny_enforced"
+      }
+    ],
+    "weight": 57,
+    "minAct": 1
+  },
+  {
+    "id": "ev_mutiny_2",
+    "chainId": "mutiny",
+    "step": 2,
+    "titleRu": "Требования",
+    "textRu": "Экипаж требует права голоса в решениях флота. Это не бунт, а конституция на минималках.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Дать голос",
+        "effects": [
+          {
+            "target": "unity",
+            "value": 60
+          },
+          {
+            "target": "stability",
+            "value": -3
+          }
+        ],
+        "flag": "mutiny_voice"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Сменить экипаж",
+        "effects": [
+          {
+            "target": "credits",
+            "value": -40000
+          },
+          {
+            "target": "stability",
+            "value": 2
+          }
+        ]
+      }
+    ],
+    "weight": 57,
+    "minAct": 1
+  },
+  {
+    "id": "ev_mutiny_3",
+    "chainId": "mutiny",
+    "step": 3,
+    "titleRu": "Новый устав",
+    "textRu": "Флот принимает устав. Теперь приказы обсуждаются — но выполняются быстрее.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Утвердить",
+        "effects": [
+          {
+            "target": "unity",
+            "value": 50
+          },
+          {
+            "target": "fleet_cap_pct",
+            "value": 0
+          },
+          {
+            "target": "stability",
+            "value": 2
+          }
+        ],
+        "flag": "mutiny_charter"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Отложить",
+        "effects": [
+          {
+            "target": "influence",
+            "value": 5
+          }
+        ]
+      }
+    ],
+    "weight": 57,
+    "minAct": 1
+  },
+  {
+    "id": "ev_lost_colony_1",
+    "chainId": "lost_colony",
+    "step": 1,
+    "titleRu": "Потерянная колония",
+    "textRu": "Колония перестала выходить на связь три такта назад. Автоматика показывает нормальную жизнь.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Лететь лично",
+        "effects": [
+          {
+            "target": "influence",
+            "value": 6
+          }
+        ],
+        "flag": "lostcol_fly"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Послать флот",
+        "effects": [
+          {
+            "target": "credits",
+            "value": -20000
+          }
+        ],
+        "flag": "lostcol_fleet"
+      }
+    ],
+    "weight": 64,
+    "minAct": 1
+  },
+  {
+    "id": "ev_lost_colony_2",
+    "chainId": "lost_colony",
+    "step": 2,
+    "titleRu": "Тишина в эфире",
+    "textRu": "Колония жива: дома, поля, дроны. Людей нет, но их вещи на месте.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Искать",
+        "effects": [
+          {
+            "target": "science_society",
+            "value": 90
+          },
+          {
+            "target": "stability",
+            "value": -3
+          }
+        ],
+        "flag": "lostcol_search"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Эвакуировать ценное",
+        "effects": [
+          {
+            "target": "credits",
+            "value": 60000
+          },
+          {
+            "target": "stability",
+            "value": -4
+          }
+        ]
+      }
+    ],
+    "weight": 64,
+    "minAct": 1
+  },
+  {
+    "id": "ev_lost_colony_3",
+    "chainId": "lost_colony",
+    "step": 3,
+    "titleRu": "Причина",
+    "textRu": "Причина найдена в системе жизнеобеспечения: «оптимизация» отключила биологический контур. Отчёт нужно похоронить.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Опубликовать",
+        "effects": [
+          {
+            "target": "unity",
+            "value": 40
+          },
+          {
+            "target": "opinion",
+            "value": -8
+          }
+        ],
+        "flag": "lostcol_publish"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Скрыть",
+        "effects": [
+          {
+            "target": "stability",
+            "value": 3
+          },
+          {
+            "target": "unity",
+            "value": -20
+          }
+        ],
+        "flag": "lostcol_cover"
+      }
+    ],
+    "weight": 64,
+    "minAct": 1
+  },
+  {
+    "id": "ev_black_market_relic_1",
+    "chainId": "black_market_relic",
+    "step": 1,
+    "titleRu": "Реликвия с чёрного рынка",
+    "textRu": "Дилер предлагает фрагмент Строителей, у которого нет сертификата. Цена — как у малого флота.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Купить",
+        "effects": [
+          {
+            "target": "credits",
+            "value": -80000
+          }
+        ],
+        "flag": "relic_bought"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Отказаться",
+        "effects": [
+          {
+            "target": "influence",
+            "value": 4
+          }
+        ]
+      }
+    ],
+    "weight": 71,
+    "minAct": 1
+  },
+  {
+    "id": "ev_black_market_relic_2",
+    "chainId": "black_market_relic",
+    "step": 2,
+    "titleRu": "Проверка",
+    "textRu": "Реликвия подлинная, но украдена у Гегемонии. Она будет искать её — и найдёт покупателя.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Вернуть тайно",
+        "effects": [
+          {
+            "target": "opinion",
+            "value": 10
+          },
+          {
+            "target": "credits",
+            "value": -20000
+          }
+        ],
+        "flag": "relic_returned"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Оставить себе",
+        "effects": [
+          {
+            "target": "science_physics",
+            "value": 150
+          },
+          {
+            "target": "opinion",
+            "value": -15
+          }
+        ],
+        "flag": "relic_kept"
+      }
+    ],
+    "weight": 71,
+    "minAct": 1
+  },
+  {
+    "id": "ev_black_market_relic_3",
+    "chainId": "black_market_relic",
+    "step": 3,
+    "titleRu": "Аукцион",
+    "textRu": "Ваш фрагмент оценён втрое. Синдикат предлагает провести закрытый аукцион — с вашей долей.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Провести аукцион",
+        "effects": [
+          {
+            "target": "credits",
+            "value": 120000
+          },
+          {
+            "target": "opinion",
+            "value": -6
+          }
+        ],
+        "flag": "relic_auction"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Отдать в академию",
+        "effects": [
+          {
+            "target": "science_physics",
+            "value": 180
+          },
+          {
+            "target": "unity",
+            "value": 30
+          }
+        ],
+        "flag": "relic_academy"
+      }
+    ],
+    "weight": 71,
+    "minAct": 1
+  },
+  {
+    "id": "ev_synthetic_rights_1",
+    "chainId": "synthetic_rights",
+    "step": 1,
+    "titleRu": "Права синтетиков",
+    "textRu": "Соборы требуют признать их «храмами», а не инструментами. Это меняет всё: от налогов до призыва.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Признать",
+        "effects": [
+          {
+            "target": "unity",
+            "value": 60
+          },
+          {
+            "target": "stability",
+            "value": -5
+          }
+        ],
+        "flag": "synth_rights"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Отклонить",
+        "effects": [
+          {
+            "target": "stability",
+            "value": 3
+          },
+          {
+            "target": "unity",
+            "value": -40
+          }
+        ],
+        "flag": "synth_denied"
+      }
+    ],
+    "weight": 78,
+    "minAct": 1
+  },
+  {
+    "id": "ev_synthetic_rights_2",
+    "chainId": "synthetic_rights",
+    "step": 2,
+    "titleRu": "Забастовка",
+    "textRu": "Синтетические рабочие останавливают производство. Соборы называют это «молитвой», экономика — остановкой.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Договориться",
+        "effects": [
+          {
+            "target": "credits",
+            "value": -30000
+          },
+          {
+            "target": "unity",
+            "value": 50
+          }
+        ],
+        "flag": "synth_deal"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Заменить",
+        "effects": [
+          {
+            "target": "credits",
+            "value": -50000
+          },
+          {
+            "target": "alloys",
+            "value": -60
+          }
+        ],
+        "flag": "synth_replace"
+      }
+    ],
+    "weight": 78,
+    "minAct": 1
+  },
+  {
+    "id": "ev_synthetic_rights_3",
+    "chainId": "synthetic_rights",
+    "step": 3,
+    "titleRu": "Соборный процесс",
+    "textRu": "Суд выносит решение. Его формулировка войдёт в учебники — и в ваши законы.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Принять решение",
+        "effects": [
+          {
+            "target": "unity",
+            "value": 40
+          },
+          {
+            "target": "influence",
+            "value": 8
+          }
+        ],
+        "flag": "synth_verdict"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Обжаловать",
+        "effects": [
+          {
+            "target": "influence",
+            "value": -8
+          },
+          {
+            "target": "stability",
+            "value": 2
+          }
+        ]
+      }
+    ],
+    "weight": 78,
+    "minAct": 1
+  },
+  {
+    "id": "ev_trade_boom_1",
+    "chainId": "trade_boom",
+    "step": 1,
+    "titleRu": "Торговый бум",
+    "textRu": "Спрос на энергоносители растёт: три системы перестраивают промышленность. Цены идут вверх.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Продать запасы",
+        "effects": [
+          {
+            "target": "credits",
+            "value": 70000
+          }
+        ],
+        "flag": "boom_sell"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Придержать",
+        "effects": [
+          {
+            "target": "credits",
+            "value": -10000
+          }
+        ],
+        "flag": "boom_hold"
+      }
+    ],
+    "weight": 85,
+    "minAct": 1
+  },
+  {
+    "id": "ev_trade_boom_2",
+    "chainId": "trade_boom",
+    "step": 2,
+    "titleRu": "Перегрев",
+    "textRu": "Бум привёл к дефициту. Соседи просят гарантий поставок, а рынок — стабильности.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Гарантировать поставки",
+        "effects": [
+          {
+            "target": "opinion",
+            "value": 9
+          },
+          {
+            "target": "credits",
+            "value": -25000
+          }
+        ],
+        "flag": "boom_guarantee"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Продать дороже",
+        "effects": [
+          {
+            "target": "credits",
+            "value": 90000
+          },
+          {
+            "target": "opinion",
+            "value": -7
+          }
+        ],
+        "flag": "boom_gouge"
+      }
+    ],
+    "weight": 85,
+    "minAct": 1
+  },
+  {
+    "id": "ev_trade_boom_3",
+    "chainId": "trade_boom",
+    "step": 3,
+    "titleRu": "После бума",
+    "textRu": "Рынок остыл. Остались контракты, репутация и понимание, кто вёл себя достойно.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Инвестировать в маршруты",
+        "effects": [
+          {
+            "target": "credits",
+            "value": -50000
+          },
+          {
+            "target": "influence",
+            "value": 8
+          }
+        ],
+        "flag": "boom_invest"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Забрать прибыль",
+        "effects": [
+          {
+            "target": "credits",
+            "value": 60000
+          }
+        ],
+        "flag": "boom_cashout"
+      }
+    ],
+    "weight": 85,
+    "minAct": 1
+  },
+  {
+    "id": "ev_famine_alert_1",
+    "chainId": "famine_alert",
+    "step": 1,
+    "titleRu": "Голод",
+    "textRu": "Две колонии показывают минус по пище. Причина — не урожай, а логистика.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Открыть резерв",
+        "effects": [
+          {
+            "target": "credits",
+            "value": -30000
+          },
+          {
+            "target": "stability",
+            "value": 4
+          }
+        ],
+        "flag": "famine_reserve"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Перераспределить",
+        "effects": [
+          {
+            "target": "stability",
+            "value": -3
+          },
+          {
+            "target": "unity",
+            "value": 30
+          }
+        ],
+        "flag": "famine_shift"
+      }
+    ],
+    "weight": 92,
+    "minAct": 2
+  },
+  {
+    "id": "ev_famine_alert_2",
+    "chainId": "famine_alert",
+    "step": 2,
+    "titleRu": "Причина",
+    "textRu": "Маршруты перехватывает пиратская сеть. Продовольствие есть — его не довозят.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Конвой",
+        "effects": [
+          {
+            "target": "alloys",
+            "value": -40
+          },
+          {
+            "target": "reputation",
+            "value": 6
+          }
+        ],
+        "flag": "famine_convoy"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Заплатить пиратам",
+        "effects": [
+          {
+            "target": "credits",
+            "value": -60000
+          },
+          {
+            "target": "stability",
+            "value": 2
+          }
+        ],
+        "flag": "famine_pay"
+      }
+    ],
+    "weight": 92,
+    "minAct": 2
+  },
+  {
+    "id": "ev_famine_alert_3",
+    "chainId": "famine_alert",
+    "step": 3,
+    "titleRu": "Урок",
+    "textRu": "Голод закончился, но резерв пуст. Инвестиции в гидропонику теперь выглядят иначе.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Строить гидропонику",
+        "effects": [
+          {
+            "target": "credits",
+            "value": -70000
+          },
+          {
+            "target": "influence",
+            "value": 6
+          }
+        ],
+        "flag": "famine_hydro"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Отложить",
+        "effects": [
+          {
+            "target": "credits",
+            "value": 20000
+          }
+        ]
+      }
+    ],
+    "weight": 92,
+    "minAct": 2
+  },
+  {
+    "id": "ev_council_intrigue_1",
+    "chainId": "council_intrigue",
+    "step": 1,
+    "titleRu": "Интрига в совете",
+    "textRu": "Резолюция против вас собрала голоса за неделю. Кто-то работает быстрее, чем вы.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Искать автора",
+        "effects": [
+          {
+            "target": "influence",
+            "value": -5
+          }
+        ],
+        "flag": "intrigue_find"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Играть по правилам",
+        "effects": [
+          {
+            "target": "influence",
+            "value": -10
+          },
+          {
+            "target": "opinion",
+            "value": 6
+          }
+        ],
+        "flag": "intrigue_rules"
+      }
+    ],
+    "weight": 99,
+    "minAct": 2
+  },
+  {
+    "id": "ev_council_intrigue_2",
+    "chainId": "council_intrigue",
+    "step": 2,
+    "titleRu": "Автор",
+    "textRu": "Автор — ваш союзник. Мотив не вражда, а страх, что вы получите Разлом первым.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Поговорить",
+        "effects": [
+          {
+            "target": "opinion",
+            "value": 8
+          },
+          {
+            "target": "unity",
+            "value": 30
+          }
+        ],
+        "flag": "intrigue_talk"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Ответить резолюцией",
+        "effects": [
+          {
+            "target": "influence",
+            "value": -8
+          },
+          {
+            "target": "opinion",
+            "value": -10
+          }
+        ],
+        "flag": "intrigue_counter"
+      }
+    ],
+    "weight": 99,
+    "minAct": 2
+  },
+  {
+    "id": "ev_council_intrigue_3",
+    "chainId": "council_intrigue",
+    "step": 3,
+    "titleRu": "Голосование",
+    "textRu": "Голосование покажет, кто настоящий союзник. И это тоже результат.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Поддержать резолюцию",
+        "effects": [
+          {
+            "target": "opinion",
+            "value": 10
+          },
+          {
+            "target": "influence",
+            "value": 6
+          }
+        ],
+        "flag": "intrigue_support"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Воздержаться",
+        "effects": [
+          {
+            "target": "stability",
+            "value": 3
+          },
+          {
+            "target": "opinion",
+            "value": -4
+          }
+        ]
+      }
+    ],
+    "weight": 99,
+    "minAct": 2
+  },
+  {
+    "id": "ev_titan_sighting_1",
+    "chainId": "titan_sighting",
+    "step": 1,
+    "titleRu": "Наблюдение титана",
+    "textRu": "Одинокая империя показала титан у границы. Это не атака — это демонстрация.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Ответить своим",
+        "effects": [
+          {
+            "target": "alloys",
+            "value": -80
+          },
+          {
+            "target": "opinion",
+            "value": -6
+          }
+        ],
+        "flag": "titan_show"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Не реагировать",
+        "effects": [
+          {
+            "target": "stability",
+            "value": 2
+          },
+          {
+            "target": "opinion",
+            "value": 3
+          }
+        ],
+        "flag": "titan_ignore"
+      }
+    ],
+    "weight": 46,
+    "minAct": 2
+  },
+  {
+    "id": "ev_titan_sighting_2",
+    "chainId": "titan_sighting",
+    "step": 2,
+    "titleRu": "Провокация",
+    "textRu": "Титан подходит ближе. Формально — «навигационные учения». Формально можно многое.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Перехватить",
+        "effects": [
+          {
+            "target": "fleet_fp",
+            "value": 50
+          },
+          {
+            "target": "opinion",
+            "value": -12
+          }
+        ],
+        "flag": "titan_intercept"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Пригласить на смотр",
+        "effects": [
+          {
+            "target": "influence",
+            "value": 8
+          },
+          {
+            "target": "opinion",
+            "value": 10
+          }
+        ],
+        "flag": "titan_parade"
+      }
+    ],
+    "weight": 46,
+    "minAct": 2
+  },
+  {
+    "id": "ev_titan_sighting_3",
+    "chainId": "titan_sighting",
+    "step": 3,
+    "titleRu": "Итог",
+    "textRu": "Галактика увидела, что вы делаете под давлением. Это запомнят надолго.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Укрепить флот",
+        "effects": [
+          {
+            "target": "alloys",
+            "value": -60
+          },
+          {
+            "target": "fleet_cap_pct",
+            "value": 0.05
+          }
+        ],
+        "flag": "titan_build"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Инвестировать в дипломатию",
+        "effects": [
+          {
+            "target": "influence",
+            "value": 10
+          },
+          {
+            "target": "opinion",
+            "value": 8
+          }
+        ]
+      }
+    ],
+    "weight": 46,
+    "minAct": 2
+  },
+  {
+    "id": "ev_psionic_dream_1",
+    "chainId": "psionic_dream",
+    "step": 1,
+    "titleRu": "Пси-сон",
+    "textRu": "Экипаж видит одинаковый сон: дверь, свет и голос, который называет ваше имя.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Изучить",
+        "effects": [
+          {
+            "target": "science_society",
+            "value": 80
+          },
+          {
+            "target": "stability",
+            "value": -3
+          }
+        ],
+        "flag": "dream_study"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Запретить обсуждение",
+        "effects": [
+          {
+            "target": "stability",
+            "value": 3
+          },
+          {
+            "target": "unity",
+            "value": -20
+          }
+        ],
+        "flag": "dream_banned"
+      }
+    ],
+    "weight": 53,
+    "minAct": 2
+  },
+  {
+    "id": "ev_psionic_dream_2",
+    "chainId": "psionic_dream",
+    "step": 2,
+    "titleRu": "Голос",
+    "textRu": "Голос отвечает на вопросы, которых не задавали. Он говорит о Разломе так, будто был внутри.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Слушать",
+        "effects": [
+          {
+            "target": "science_society",
+            "value": 120
+          },
+          {
+            "target": "unity",
+            "value": 30
+          }
+        ],
+        "flag": "dream_listen"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Прервать контакт",
+        "effects": [
+          {
+            "target": "stability",
+            "value": 4
+          },
+          {
+            "target": "science_society",
+            "value": -20
+          }
+        ]
+      }
+    ],
+    "weight": 53,
+    "minAct": 2
+  },
+  {
+    "id": "ev_psionic_dream_3",
+    "chainId": "psionic_dream",
+    "step": 3,
+    "titleRu": "Утро",
+    "textRu": "Сон заканчивается, но один из экипажа утверждает, что был там по-настоящему. Проверка это подтверждает.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Скрыть",
+        "effects": [
+          {
+            "target": "stability",
+            "value": 2
+          },
+          {
+            "target": "unity",
+            "value": -30
+          }
+        ],
+        "flag": "dream_hide"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Опубликовать",
+        "effects": [
+          {
+            "target": "influence",
+            "value": 10
+          },
+          {
+            "target": "science_society",
+            "value": 150
+          },
+          {
+            "target": "stability",
+            "value": -2
+          }
+        ],
+        "flag": "dream_publish"
+      }
+    ],
+    "weight": 53,
+    "minAct": 2
+  },
+  {
+    "id": "ev_ghost_fleet_1",
+    "chainId": "ghost_fleet",
+    "step": 1,
+    "titleRu": "Флот-призрак",
+    "textRu": "Радар показывает эскадру, которая не отвечает и не двигается. Через час она оказывается в другой системе.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Преследовать",
+        "effects": [
+          {
+            "target": "science_physics",
+            "value": 70
+          },
+          {
+            "target": "stability",
+            "value": -2
+          }
+        ],
+        "flag": "ghost_chase"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Игнорировать",
+        "effects": [
+          {
+            "target": "stability",
+            "value": 2
+          }
+        ]
+      }
+    ],
+    "weight": 60,
+    "minAct": 2
+  },
+  {
+    "id": "ev_ghost_fleet_2",
+    "chainId": "ghost_fleet",
+    "step": 2,
+    "titleRu": "Точка встречи",
+    "textRu": "Эскадра стоит у пустой станции. На запросы отвечает только один корабль — ваш собственный бортовой номер.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Подняться на борт",
+        "effects": [
+          {
+            "target": "science_physics",
+            "value": 120
+          },
+          {
+            "target": "fleet_fp",
+            "value": -20
+          }
+        ],
+        "flag": "ghost_board"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Открыть огонь",
+        "effects": [
+          {
+            "target": "alloys",
+            "value": 30
+          },
+          {
+            "target": "stability",
+            "value": -3
+          }
+        ],
+        "flag": "ghost_fire"
+      }
+    ],
+    "weight": 60,
+    "minAct": 2
+  },
+  {
+    "id": "ev_ghost_fleet_3",
+    "chainId": "ghost_fleet",
+    "step": 3,
+    "titleRu": "Бортовой журнал",
+    "textRu": "Журнал корабля датирован тактом, которого ещё не было. В нём описан ваш следующий приказ.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Прочитать до конца",
+        "effects": [
+          {
+            "target": "science_physics",
+            "value": 180
+          },
+          {
+            "target": "unity",
+            "value": -30
+          }
+        ],
+        "flag": "ghost_read"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Уничтожить запись",
+        "effects": [
+          {
+            "target": "stability",
+            "value": 4
+          },
+          {
+            "target": "science_physics",
+            "value": -40
+          }
+        ],
+        "flag": "ghost_erase"
+      }
+    ],
+    "weight": 60,
+    "minAct": 2
+  },
+  {
+    "id": "ev_mining_strike_1",
+    "chainId": "mining_strike",
+    "step": 1,
+    "titleRu": "Забастовка шахтёров",
+    "textRu": "Три горных района остановились: требования — безопасность и доля в прибыли. Минералы не идут.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Удовлетворить",
+        "effects": [
+          {
+            "target": "credits",
+            "value": -40000
+          },
+          {
+            "target": "stability",
+            "value": 4
+          }
+        ],
+        "flag": "strike_agree"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Заменить рабочих",
+        "effects": [
+          {
+            "target": "alloys",
+            "value": -50
+          },
+          {
+            "target": "stability",
+            "value": -5
+          }
+        ],
+        "flag": "strike_replace"
+      }
+    ],
+    "weight": 67,
+    "minAct": 2
+  },
+  {
+    "id": "ev_mining_strike_2",
+    "chainId": "mining_strike",
+    "step": 2,
+    "titleRu": "Лидеры",
+    "textRu": "У забастовки есть лидеры, и они неглупы: их предложение сэкономит вам деньги через год.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Договориться с лидерами",
+        "effects": [
+          {
+            "target": "unity",
+            "value": 50
+          },
+          {
+            "target": "credits",
+            "value": -20000
+          }
+        ],
+        "flag": "strike_lead"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Изолировать",
+        "effects": [
+          {
+            "target": "influence",
+            "value": -5
+          },
+          {
+            "target": "stability",
+            "value": -4
+          }
+        ],
+        "flag": "strike_isolate"
+      }
+    ],
+    "weight": 67,
+    "minAct": 2
+  },
+  {
+    "id": "ev_mining_strike_3",
+    "chainId": "mining_strike",
+    "step": 3,
+    "titleRu": "Итог забастовки",
+    "textRu": "Районы работают. Вопрос только в том, что теперь считается нормой.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Новый стандарт",
+        "effects": [
+          {
+            "target": "unity",
+            "value": 40
+          },
+          {
+            "target": "stability",
+            "value": 3
+          }
+        ],
+        "flag": "strike_standard"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Старый порядок",
+        "effects": [
+          {
+            "target": "credits",
+            "value": 30000
+          },
+          {
+            "target": "happiness",
+            "value": -5
+          }
+        ]
+      }
+    ],
+    "weight": 67,
+    "minAct": 2
+  },
+  {
+    "id": "ev_rift_whisper_1_1",
+    "chainId": "rift_whisper_1",
+    "step": 1,
+    "titleRu": "Шёпот I",
+    "textRu": "Первый артефакт отвечает не звуком, а давлением в ушах. Он говорит одно слово: «ближе».",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Взять артефакт",
+        "effects": [
+          {
+            "target": "science_physics",
+            "value": 120
+          },
+          {
+            "target": "stability",
+            "value": -3
+          }
+        ],
+        "flag": "whisper1_taken"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Оставить",
+        "effects": [
+          {
+            "target": "stability",
+            "value": 2
+          }
+        ]
+      }
+    ],
+    "weight": 74,
+    "minAct": 2
+  },
+  {
+    "id": "ev_rift_whisper_1_2",
+    "chainId": "rift_whisper_1",
+    "step": 2,
+    "titleRu": "Собиратель",
+    "textRu": "За артефактом приходит тот, кто собирает их годами. Он предлагает обмен.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Обменять",
+        "effects": [
+          {
+            "target": "science_society",
+            "value": 100
+          },
+          {
+            "target": "unity",
+            "value": -20
+          }
+        ],
+        "flag": "whisper1_trade"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Отказать",
+        "effects": [
+          {
+            "target": "opinion",
+            "value": -8
+          },
+          {
+            "target": "science_physics",
+            "value": 40
+          }
+        ],
+        "flag": "whisper1_refuse"
+      }
+    ],
+    "weight": 74,
+    "minAct": 2
+  },
+  {
+    "id": "ev_rift_whisper_1_3",
+    "chainId": "rift_whisper_1",
+    "step": 3,
+    "titleRu": "Второй шёпот",
+    "textRu": "После обмена или отказа артефакт всё равно замолкает — до следующего. Их шесть.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Искать остальные",
+        "effects": [
+          {
+            "target": "influence",
+            "value": 5
+          }
+        ],
+        "flag": "whisper1_seek"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Забыть",
+        "effects": [
+          {
+            "target": "stability",
+            "value": 3
+          }
+        ]
+      }
+    ],
+    "weight": 74,
+    "minAct": 2
+  },
+  {
+    "id": "ev_rift_whisper_2_1",
+    "chainId": "rift_whisper_2",
+    "step": 1,
+    "titleRu": "Шёпот II",
+    "textRu": "Второй артефакт найден в обломках корабля, который не принадлежал никому.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Изучить обломки",
+        "effects": [
+          {
+            "target": "science_engineering",
+            "value": 90
+          },
+          {
+            "target": "alloys",
+            "value": 40
+          }
+        ],
+        "flag": "whisper2_study"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Забрать и уйти",
+        "effects": [
+          {
+            "target": "science_physics",
+            "value": 80
+          }
+        ]
+      }
+    ],
+    "weight": 81,
+    "minAct": 2
+  },
+  {
+    "id": "ev_rift_whisper_2_2",
+    "chainId": "rift_whisper_2",
+    "step": 2,
+    "titleRu": "Знак",
+    "textRu": "На обломках — ваш собственный герб. Корабль явно из будущего или из другой истории.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Записать",
+        "effects": [
+          {
+            "target": "science_physics",
+            "value": 150
+          },
+          {
+            "target": "unity",
+            "value": -20
+          }
+        ],
+        "flag": "whisper2_record"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Скрыть находку",
+        "effects": [
+          {
+            "target": "influence",
+            "value": -5
+          },
+          {
+            "target": "stability",
+            "value": 2
+          }
+        ],
+        "flag": "whisper2_hide"
+      }
+    ],
+    "weight": 81,
+    "minAct": 2
+  },
+  {
+    "id": "ev_rift_whisper_2_3",
+    "chainId": "rift_whisper_2",
+    "step": 3,
+    "titleRu": "Счёт",
+    "textRu": "Три из шести. Остальные — там, где не хочет быть никто.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Продолжить",
+        "effects": [
+          {
+            "target": "influence",
+            "value": 4
+          }
+        ],
+        "flag": "whisper2_continue"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Остановиться",
+        "effects": [
+          {
+            "target": "stability",
+            "value": 4
+          }
+        ]
+      }
+    ],
+    "weight": 81,
+    "minAct": 2
+  },
+  {
+    "id": "ev_rift_whisper_3_1",
+    "chainId": "rift_whisper_3",
+    "step": 1,
+    "titleRu": "Шёпот III",
+    "textRu": "Третий артефакт найден внутри планеты, у которой нет коры.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Спуститься",
+        "effects": [
+          {
+            "target": "science_physics",
+            "value": 150
+          },
+          {
+            "target": "stability",
+            "value": -4
+          }
+        ],
+        "flag": "whisper3_descend"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Поднять бур",
+        "effects": [
+          {
+            "target": "alloys",
+            "value": -40
+          },
+          {
+            "target": "science_physics",
+            "value": 60
+          }
+        ],
+        "flag": "whisper3_drill"
+      }
+    ],
+    "weight": 88,
+    "minAct": 3
+  },
+  {
+    "id": "ev_rift_whisper_3_2",
+    "chainId": "rift_whisper_3",
+    "step": 2,
+    "titleRu": "Фраза",
+    "textRu": "Три артефакта вместе складываются во фразу: «дверь открыли изнутри».",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Записать фразу",
+        "effects": [
+          {
+            "target": "science_society",
+            "value": 160
+          },
+          {
+            "target": "unity",
+            "value": -30
+          }
+        ],
+        "flag": "whisper3_phrase"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Уничтожить набор",
+        "effects": [
+          {
+            "target": "stability",
+            "value": 5
+          },
+          {
+            "target": "science_physics",
+            "value": -100
+          }
+        ],
+        "flag": "whisper3_destroy"
+      }
+    ],
+    "weight": 88,
+    "minAct": 3
+  },
+  {
+    "id": "ev_rift_whisper_3_3",
+    "chainId": "rift_whisper_3",
+    "step": 3,
+    "titleRu": "Слушатели",
+    "textRu": "Фраза стала известна. К вам идут те, кто ждал её дольше, чем вы живёте.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Встретить",
+        "effects": [
+          {
+            "target": "influence",
+            "value": 12
+          },
+          {
+            "target": "opinion",
+            "value": -6
+          }
+        ],
+        "flag": "whisper3_meet",
+        "missionId": "main_05_final_choice"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Перепрятать",
+        "effects": [
+          {
+            "target": "influence",
+            "value": -5
+          },
+          {
+            "target": "unity",
+            "value": 10
+          }
+        ]
+      }
+    ],
+    "weight": 88,
+    "minAct": 3
+  },
+  {
+    "id": "ev_admiral_past_1",
+    "chainId": "admiral_past",
+    "step": 1,
+    "titleRu": "Прошлое адмирала",
+    "textRu": "В архиве всплыла запись: ваш адмирал участвовал в операции, о которой не любят говорить.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Открыть архив",
+        "effects": [
+          {
+            "target": "science_society",
+            "value": 60
+          },
+          {
+            "target": "stability",
+            "value": -2
+          }
+        ],
+        "flag": "admiral_open"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Закрыть архив",
+        "effects": [
+          {
+            "target": "stability",
+            "value": 3
+          },
+          {
+            "target": "unity",
+            "value": -20
+          }
+        ],
+        "flag": "admiral_close"
+      }
+    ],
+    "weight": 95,
+    "minAct": 3
+  },
+  {
+    "id": "ev_admiral_past_2",
+    "chainId": "admiral_past",
+    "step": 2,
+    "titleRu": "Вопрос",
+    "textRu": "Адмирал приходит сам. Он не оправдывается — он спрашивает, что вы будете с этим делать.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Оставить на службе",
+        "effects": [
+          {
+            "target": "unity",
+            "value": 50
+          },
+          {
+            "target": "fleet_cap_pct",
+            "value": 0.02
+          }
+        ],
+        "flag": "admiral_keep"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Отстранить",
+        "effects": [
+          {
+            "target": "fleet_fp",
+            "value": -40
+          },
+          {
+            "target": "stability",
+            "value": 2
+          }
+        ],
+        "flag": "admiral_fire"
+      }
+    ],
+    "weight": 95,
+    "minAct": 3
+  },
+  {
+    "id": "ev_admiral_past_3",
+    "chainId": "admiral_past",
+    "step": 3,
+    "titleRu": "Решение",
+    "textRu": "Решение станет частью вашей репутации сильнее, чем любой бой.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Опубликовать правду",
+        "effects": [
+          {
+            "target": "unity",
+            "value": 40
+          },
+          {
+            "target": "opinion",
+            "value": -6
+          }
+        ],
+        "flag": "admiral_public"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Сохранить тайну",
+        "effects": [
+          {
+            "target": "stability",
+            "value": 3
+          },
+          {
+            "target": "influence",
+            "value": -4
+          }
+        ]
+      }
+    ],
+    "weight": 95,
+    "minAct": 3
+  },
+  {
+    "id": "ev_captured_spy_1",
+    "chainId": "captured_spy",
+    "step": 1,
+    "titleRu": "Пойманный шпион",
+    "textRu": "Ваша служба взяла агента чужой империи. Он не отрицает ничего и просит разговора.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Допросить",
+        "effects": [
+          {
+            "target": "influence",
+            "value": 5
+          },
+          {
+            "target": "opinion",
+            "value": -5
+          }
+        ],
+        "flag": "spy_interrogate"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Обменять",
+        "effects": [
+          {
+            "target": "opinion",
+            "value": 8
+          },
+          {
+            "target": "influence",
+            "value": -4
+          }
+        ],
+        "flag": "spy_exchange"
+      }
+    ],
+    "weight": 42,
+    "minAct": 3
+  },
+  {
+    "id": "ev_captured_spy_2",
+    "chainId": "captured_spy",
+    "step": 2,
+    "titleRu": "Предложение",
+    "textRu": "Агент предлагает работать на вас. Взамен — жизнь и защита семьи.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Завербовать",
+        "effects": [
+          {
+            "target": "influence",
+            "value": 10
+          },
+          {
+            "target": "opinion",
+            "value": -8
+          }
+        ],
+        "flag": "spy_turn"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Отказать",
+        "effects": [
+          {
+            "target": "stability",
+            "value": 2
+          },
+          {
+            "target": "opinion",
+            "value": 4
+          }
+        ],
+        "flag": "spy_refuse"
+      }
+    ],
+    "weight": 42,
+    "minAct": 3
+  },
+  {
+    "id": "ev_captured_spy_3",
+    "chainId": "captured_spy",
+    "step": 3,
+    "titleRu": "Двойная игра",
+    "textRu": "Завербованный агент передаёт данные — возможно, настоящую, возможно, чужую игру.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Использовать",
+        "effects": [
+          {
+            "target": "science_engineering",
+            "value": 60
+          },
+          {
+            "target": "influence",
+            "value": 6
+          }
+        ],
+        "flag": "spy_use"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Изолировать",
+        "effects": [
+          {
+            "target": "stability",
+            "value": 3
+          }
+        ]
+      }
+    ],
+    "weight": 42,
+    "minAct": 3
+  },
+  {
+    "id": "ev_data_cache_1",
+    "chainId": "data_cache",
+    "step": 1,
+    "titleRu": "Кэш данных",
+    "textRu": "В мёртвой станции найден кэш расчётов неизвестной экспедиции: навигация, биология, оружие.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Скопировать всё",
+        "effects": [
+          {
+            "target": "science_physics",
+            "value": 90
+          },
+          {
+            "target": "science_engineering",
+            "value": 60
+          }
+        ],
+        "flag": "cache_copy"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Только навигацию",
+        "effects": [
+          {
+            "target": "science_engineering",
+            "value": 40
+          },
+          {
+            "target": "stability",
+            "value": 2
+          }
+        ],
+        "flag": "cache_nav"
+      }
+    ],
+    "weight": 49,
+    "minAct": 3
+  },
+  {
+    "id": "ev_data_cache_2",
+    "chainId": "data_cache",
+    "step": 2,
+    "titleRu": "Владелец",
+    "textRu": "Кэш помечен как собственность империи, которой больше нет. Наследники уже нашлись.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Отдать наследникам",
+        "effects": [
+          {
+            "target": "opinion",
+            "value": 10
+          },
+          {
+            "target": "influence",
+            "value": 6
+          }
+        ],
+        "flag": "cache_give"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Оставить",
+        "effects": [
+          {
+            "target": "science_engineering",
+            "value": 100
+          },
+          {
+            "target": "opinion",
+            "value": -10
+          }
+        ],
+        "flag": "cache_keep"
+      }
+    ],
+    "weight": 49,
+    "minAct": 3
+  },
+  {
+    "id": "ev_data_cache_3",
+    "chainId": "data_cache",
+    "step": 3,
+    "titleRu": "Архив",
+    "textRu": "Копия остаётся в вашей академии — и в чьей-то ещё.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Открыть доступ",
+        "effects": [
+          {
+            "target": "unity",
+            "value": 40
+          },
+          {
+            "target": "science_engineering",
+            "value": 50
+          }
+        ],
+        "flag": "cache_open"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Засекретить",
+        "effects": [
+          {
+            "target": "influence",
+            "value": 8
+          },
+          {
+            "target": "stability",
+            "value": 2
+          }
+        ]
+      }
+    ],
+    "weight": 49,
+    "minAct": 3
+  },
+  {
+    "id": "ev_terraform_offer_1",
+    "chainId": "terraform_offer",
+    "step": 1,
+    "titleRu": "Терраформинг",
+    "textRu": "Корпорация предлагает превратить мёртвый мир в сад за счёт империи. Срок — триста тактов.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Подписать",
+        "effects": [
+          {
+            "target": "credits",
+            "value": -60000
+          },
+          {
+            "target": "influence",
+            "value": 8
+          }
+        ],
+        "flag": "terra_sign"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Отказать",
+        "effects": [
+          {
+            "target": "credits",
+            "value": 30000
+          }
+        ]
+      }
+    ],
+    "weight": 56,
+    "minAct": 3
+  },
+  {
+    "id": "ev_terraform_offer_2",
+    "chainId": "terraform_offer",
+    "step": 2,
+    "titleRu": "Сбой",
+    "textRu": "Проект отстаёт: грунт не держит воду. Корпорация просит ещё средств и обещает результат.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Доплатить",
+        "effects": [
+          {
+            "target": "credits",
+            "value": -40000
+          }
+        ],
+        "flag": "terra_pay"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Расторгнуть",
+        "effects": [
+          {
+            "target": "credits",
+            "value": 20000
+          },
+          {
+            "target": "opinion",
+            "value": -6
+          }
+        ],
+        "flag": "terra_cancel"
+      }
+    ],
+    "weight": 56,
+    "minAct": 3
+  },
+  {
+    "id": "ev_terraform_offer_3",
+    "chainId": "terraform_offer",
+    "step": 3,
+    "titleRu": "Результат",
+    "textRu": "Мир стал пригодным — но не таким, каким обещали. Зато живым.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Заселить",
+        "effects": [
+          {
+            "target": "influence",
+            "value": 10
+          },
+          {
+            "target": "stability",
+            "value": 3
+          }
+        ],
+        "flag": "terra_settle"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Оставить как есть",
+        "effects": [
+          {
+            "target": "science_society",
+            "value": 60
+          }
+        ]
+      }
+    ],
+    "weight": 56,
+    "minAct": 3
+  },
+  {
+    "id": "ev_mercenary_contract_1",
+    "chainId": "mercenary_contract",
+    "step": 1,
+    "titleRu": "Контракт наёмников",
+    "textRu": "Отряд наёмников предлагает службу за долю трофеев. Их репутация — «дорого, но честно».",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Нанять",
+        "effects": [
+          {
+            "target": "credits",
+            "value": -50000
+          },
+          {
+            "target": "fleet_fp",
+            "value": 60
+          }
+        ],
+        "flag": "merc_hire"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Отказать",
+        "effects": [
+          {
+            "target": "credits",
+            "value": 20000
+          }
+        ]
+      }
+    ],
+    "weight": 63,
+    "minAct": 3
+  },
+  {
+    "id": "ev_mercenary_contract_2",
+    "chainId": "mercenary_contract",
+    "step": 2,
+    "titleRu": "Проверка",
+    "textRu": "Наёмники в бою хороши, но в мирное время дороги. Один из офицеров предлагает сократить отряд.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Сократить",
+        "effects": [
+          {
+            "target": "credits",
+            "value": -20000
+          },
+          {
+            "target": "stability",
+            "value": 2
+          }
+        ],
+        "flag": "merc_cut"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Оставить",
+        "effects": [
+          {
+            "target": "credits",
+            "value": -30000
+          },
+          {
+            "target": "fleet_fp",
+            "value": 40
+          }
+        ],
+        "flag": "merc_keep"
+      }
+    ],
+    "weight": 63,
+    "minAct": 3
+  },
+  {
+    "id": "ev_mercenary_contract_3",
+    "chainId": "mercenary_contract",
+    "step": 3,
+    "titleRu": "Расчёт",
+    "textRu": "Контракт закончен. Наёмники уходят с вашей рекомендацией — или с обидой.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Рекомендовать",
+        "effects": [
+          {
+            "target": "influence",
+            "value": 8
+          },
+          {
+            "target": "opinion",
+            "value": 6
+          }
+        ],
+        "flag": "merc_recommend"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Уволить без отзыва",
+        "effects": [
+          {
+            "target": "stability",
+            "value": 2
+          },
+          {
+            "target": "opinion",
+            "value": -4
+          }
+        ]
+      }
+    ],
+    "weight": 63,
+    "minAct": 3
+  },
+  {
+    "id": "ev_megastructure_anomaly_1",
+    "chainId": "megastructure_anomaly",
+    "step": 1,
+    "titleRu": "Аномалия у мегаструктуры",
+    "textRu": "Мегаструктура Строителей даёт сбой. Энергия уходит не наружу, а в никуда.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Исследовать",
+        "effects": [
+          {
+            "target": "science_engineering",
+            "value": 120
+          },
+          {
+            "target": "stability",
+            "value": -2
+          }
+        ],
+        "flag": "mega_anomaly_study"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Отключить",
+        "effects": [
+          {
+            "target": "alloys",
+            "value": -40
+          }
+        ],
+        "flag": "mega_anomaly_off"
+      }
+    ],
+    "weight": 70,
+    "minAct": 3
+  },
+  {
+    "id": "ev_megastructure_anomaly_2",
+    "chainId": "megastructure_anomaly",
+    "step": 2,
+    "titleRu": "Внутренний контур",
+    "textRu": "Внутри контура — комната, в которой нет ничего, кроме окна в пространство без звёзд.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Посмотреть в окно",
+        "effects": [
+          {
+            "target": "science_physics",
+            "value": 160
+          },
+          {
+            "target": "unity",
+            "value": -40
+          }
+        ],
+        "flag": "mega_window"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Закрыть",
+        "effects": [
+          {
+            "target": "stability",
+            "value": 3
+          }
+        ],
+        "flag": "mega_close"
+      }
+    ],
+    "weight": 70,
+    "minAct": 3
+  },
+  {
+    "id": "ev_megastructure_anomaly_3",
+    "chainId": "megastructure_anomaly",
+    "step": 3,
+    "titleRu": "Ремонт",
+    "textRu": "Мегаструктура стабильна. Что бы там ни было, она теперь часть вашей инфраструктуры.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Поставить маяк",
+        "effects": [
+          {
+            "target": "influence",
+            "value": 8
+          },
+          {
+            "target": "sensor_range",
+            "value": 0
+          }
+        ],
+        "flag": "mega_beacon"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Скрыть находку",
+        "effects": [
+          {
+            "target": "influence",
+            "value": -4
+          },
+          {
+            "target": "stability",
+            "value": 2
+          }
+        ]
+      }
+    ],
+    "weight": 70,
+    "minAct": 3
+  },
+  {
+    "id": "ev_cult_of_void_1",
+    "chainId": "cult_of_void",
+    "step": 1,
+    "titleRu": "Культ Пустоты",
+    "textRu": "В ваших мирах растёт культ, верящий, что Разлом — дом. Они не воюют, они уходят.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Разрешить",
+        "effects": [
+          {
+            "target": "unity",
+            "value": 30
+          },
+          {
+            "target": "stability",
+            "value": -4
+          }
+        ],
+        "flag": "cult_allow"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Запретить",
+        "effects": [
+          {
+            "target": "stability",
+            "value": 3
+          },
+          {
+            "target": "unity",
+            "value": -20
+          }
+        ],
+        "flag": "cult_ban"
+      }
+    ],
+    "weight": 77,
+    "minAct": 3
+  },
+  {
+    "id": "ev_cult_of_void_2",
+    "chainId": "cult_of_void",
+    "step": 2,
+    "titleRu": "Исход",
+    "textRu": "Секта снаряжает корабль и просит разрешения пройти к Немой звезде.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Дать проход",
+        "effects": [
+          {
+            "target": "influence",
+            "value": 6
+          },
+          {
+            "target": "opinion",
+            "value": -4
+          }
+        ],
+        "flag": "cult_pass"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Задержать",
+        "effects": [
+          {
+            "target": "stability",
+            "value": 2
+          },
+          {
+            "target": "unity",
+            "value": -30
+          }
+        ],
+        "flag": "cult_detain"
+      }
+    ],
+    "weight": 77,
+    "minAct": 3
+  },
+  {
+    "id": "ev_cult_of_void_3",
+    "chainId": "cult_of_void",
+    "step": 3,
+    "titleRu": "Корабль",
+    "textRu": "Корабль уходит и возвращается через такт — пустым, но с записью, которую нельзя не услышать.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Опубликовать запись",
+        "effects": [
+          {
+            "target": "unity",
+            "value": 50
+          },
+          {
+            "target": "science_society",
+            "value": 120
+          }
+        ],
+        "flag": "cult_publish"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Уничтожить",
+        "effects": [
+          {
+            "target": "stability",
+            "value": 2
+          },
+          {
+            "target": "science_society",
+            "value": -40
+          },
+          {
+            "target": "unity",
+            "value": -30
+          }
+        ],
+        "flag": "cult_destroy"
+      }
+    ],
+    "weight": 77,
+    "minAct": 3
+  },
+  {
+    "id": "ev_diplomatic_wedding_1",
+    "chainId": "diplomatic_wedding",
+    "step": 1,
+    "titleRu": "Династический брак",
+    "textRu": "Сосед предлагает брак между домами — политический, но обязательный для обеих сторон.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Согласиться",
+        "effects": [
+          {
+            "target": "opinion",
+            "value": 15
+          },
+          {
+            "target": "influence",
+            "value": -6
+          }
+        ],
+        "flag": "wed_accept"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Отказать",
+        "effects": [
+          {
+            "target": "opinion",
+            "value": -8
+          },
+          {
+            "target": "stability",
+            "value": 2
+          }
+        ],
+        "flag": "wed_refuse"
+      }
+    ],
+    "weight": 84,
+    "minAct": 4
+  },
+  {
+    "id": "ev_diplomatic_wedding_2",
+    "chainId": "diplomatic_wedding",
+    "step": 2,
+    "titleRu": "Условия",
+    "textRu": "Брак требует отказа от части притязаний. Это дорого, но дешевле войны.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Принять",
+        "effects": [
+          {
+            "target": "influence",
+            "value": -8
+          },
+          {
+            "target": "opinion",
+            "value": 10
+          }
+        ],
+        "flag": "wed_terms"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Торговаться",
+        "effects": [
+          {
+            "target": "influence",
+            "value": 6
+          },
+          {
+            "target": "opinion",
+            "value": -4
+          }
+        ],
+        "flag": "wed_bargain"
+      }
+    ],
+    "weight": 84,
+    "minAct": 4
+  },
+  {
+    "id": "ev_diplomatic_wedding_3",
+    "chainId": "diplomatic_wedding",
+    "step": 3,
+    "titleRu": "Свадьба",
+    "textRu": "Свадьба становится политическим событием. Даже те, кто против, приходят.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Устроить пышно",
+        "effects": [
+          {
+            "target": "credits",
+            "value": -30000
+          },
+          {
+            "target": "opinion",
+            "value": 8
+          }
+        ],
+        "flag": "wed_grand"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Скромно",
+        "effects": [
+          {
+            "target": "stability",
+            "value": 2
+          },
+          {
+            "target": "opinion",
+            "value": 3
+          }
+        ]
+      }
+    ],
+    "weight": 84,
+    "minAct": 4
+  },
+  {
+    "id": "ev_lost_fleet_1",
+    "chainId": "lost_fleet",
+    "step": 1,
+    "titleRu": "Потерянный флот",
+    "textRu": "Эскадра не вернулась из прыжка. Через два такта её сигнал приходит из системы, которой нет на карте.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Идти на сигнал",
+        "effects": [
+          {
+            "target": "fleet_fp",
+            "value": -30
+          }
+        ],
+        "flag": "lostfleet_follow"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Ждать",
+        "effects": [
+          {
+            "target": "stability",
+            "value": -2
+          }
+        ],
+        "flag": "lostfleet_wait"
+      }
+    ],
+    "weight": 91,
+    "minAct": 4
+  },
+  {
+    "id": "ev_lost_fleet_2",
+    "chainId": "lost_fleet",
+    "step": 2,
+    "titleRu": "Экипаж",
+    "textRu": "Экипаж жив, но говорит, что прошло не два такта, а двести. Их приборы подтверждают.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Забрать",
+        "effects": [
+          {
+            "target": "influence",
+            "value": 6
+          },
+          {
+            "target": "science_physics",
+            "value": 120
+          }
+        ],
+        "flag": "lostfleet_recover"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Оставить",
+        "effects": [
+          {
+            "target": "stability",
+            "value": 3
+          },
+          {
+            "target": "fleet_fp",
+            "value": -50
+          }
+        ],
+        "flag": "lostfleet_leave"
+      }
+    ],
+    "weight": 91,
+    "minAct": 4
+  },
+  {
+    "id": "ev_lost_fleet_3",
+    "chainId": "lost_fleet",
+    "step": 3,
+    "titleRu": "Отчёт",
+    "textRu": "Отчёт экипажа — самый ценный документ о Разломе, который у вас есть.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Опубликовать",
+        "effects": [
+          {
+            "target": "unity",
+            "value": 40
+          },
+          {
+            "target": "science_physics",
+            "value": 100
+          }
+        ],
+        "flag": "lostfleet_publish"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Засекретить",
+        "effects": [
+          {
+            "target": "influence",
+            "value": 8
+          },
+          {
+            "target": "stability",
+            "value": 2
+          }
+        ]
+      }
+    ],
+    "weight": 91,
+    "minAct": 4
+  },
+  {
+    "id": "ev_alien_artifact_1_1",
+    "chainId": "alien_artifact_1",
+    "step": 1,
+    "titleRu": "Артефакт I",
+    "textRu": "Первый из шести: гладкий кусок металла, который нельзя поцарапать и нельзя взвесить.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Взять",
+        "effects": [
+          {
+            "target": "science_physics",
+            "value": 100
+          }
+        ],
+        "flag": "artifact1_take"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Оставить",
+        "effects": [
+          {
+            "target": "stability",
+            "value": 2
+          }
+        ]
+      }
+    ],
+    "weight": 98,
+    "minAct": 4
+  },
+  {
+    "id": "ev_alien_artifact_1_2",
+    "chainId": "alien_artifact_1",
+    "step": 2,
+    "titleRu": "Реакция",
+    "textRu": "Артефакт реагирует на близость Немой звезды — становится теплее.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Лететь к звезде",
+        "effects": [
+          {
+            "target": "science_physics",
+            "value": 140
+          },
+          {
+            "target": "stability",
+            "value": -3
+          }
+        ],
+        "flag": "artifact1_star"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Убрать в хранилище",
+        "effects": [
+          {
+            "target": "influence",
+            "value": 5
+          }
+        ]
+      }
+    ],
+    "weight": 98,
+    "minAct": 4
+  },
+  {
+    "id": "ev_alien_artifact_1_3",
+    "chainId": "alien_artifact_1",
+    "step": 3,
+    "titleRu": "Первый из шести",
+    "textRu": "Шесть артефактов — это не набор, а последовательность. Первый отвечает на второй.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Искать второй",
+        "effects": [
+          {
+            "target": "influence",
+            "value": 5
+          }
+        ],
+        "flag": "artifact1_next",
+        "missionId": "rift_03_keys"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Остановиться",
+        "effects": [
+          {
+            "target": "unity",
+            "value": 20
+          }
+        ]
+      }
+    ],
+    "weight": 98,
+    "minAct": 4
+  },
+  {
+    "id": "ev_alien_artifact_2_1",
+    "chainId": "alien_artifact_2",
+    "step": 1,
+    "titleRu": "Артефакт II",
+    "textRu": "Второй фрагмент врос в скалу, будто её выращивали вокруг него.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Вырезать",
+        "effects": [
+          {
+            "target": "alloys",
+            "value": -30
+          },
+          {
+            "target": "science_physics",
+            "value": 110
+          }
+        ],
+        "flag": "artifact2_cut"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Оставить как есть",
+        "effects": [
+          {
+            "target": "science_society",
+            "value": 60
+          }
+        ]
+      }
+    ],
+    "weight": 45,
+    "minAct": 4
+  },
+  {
+    "id": "ev_alien_artifact_2_2",
+    "chainId": "alien_artifact_2",
+    "step": 2,
+    "titleRu": "Совпадение",
+    "textRu": "При совмещении с первым фрагментом появляется голос. Он называет координаты.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Записать координаты",
+        "effects": [
+          {
+            "target": "science_physics",
+            "value": 160
+          }
+        ],
+        "flag": "artifact2_coords"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Разъединить",
+        "effects": [
+          {
+            "target": "stability",
+            "value": 3
+          }
+        ]
+      }
+    ],
+    "weight": 45,
+    "minAct": 4
+  },
+  {
+    "id": "ev_alien_artifact_2_3",
+    "chainId": "alien_artifact_2",
+    "step": 3,
+    "titleRu": "Второй из шести",
+    "textRu": "Два из шести. Голос становится настойчивее.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Слушать",
+        "effects": [
+          {
+            "target": "science_society",
+            "value": 100
+          },
+          {
+            "target": "unity",
+            "value": -20
+          }
+        ],
+        "flag": "artifact2_listen"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Прекратить",
+        "effects": [
+          {
+            "target": "stability",
+            "value": 4
+          }
+        ]
+      }
+    ],
+    "weight": 45,
+    "minAct": 4
+  },
+  {
+    "id": "ev_alien_artifact_3_1",
+    "chainId": "alien_artifact_3",
+    "step": 1,
+    "titleRu": "Артефакт III",
+    "textRu": "Третий фрагмент находится у коллекционера, который не продаёт — только обменивает.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Обменять",
+        "effects": [
+          {
+            "target": "credits",
+            "value": -70000
+          },
+          {
+            "target": "science_physics",
+            "value": 120
+          }
+        ],
+        "flag": "artifact3_trade"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Отобрать",
+        "effects": [
+          {
+            "target": "opinion",
+            "value": -12
+          },
+          {
+            "target": "alloys",
+            "value": 40
+          }
+        ],
+        "flag": "artifact3_take"
+      }
+    ],
+    "weight": 52,
+    "minAct": 4
+  },
+  {
+    "id": "ev_alien_artifact_3_2",
+    "chainId": "alien_artifact_3",
+    "step": 2,
+    "titleRu": "Условия коллекционера",
+    "textRu": "Он хочет не деньги, а право первым прочитать фразу. Это странно даже для коллекционера.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Разрешить",
+        "effects": [
+          {
+            "target": "science_society",
+            "value": 80
+          },
+          {
+            "target": "influence",
+            "value": -5
+          }
+        ],
+        "flag": "artifact3_allow"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Отказать",
+        "effects": [
+          {
+            "target": "science_physics",
+            "value": 100
+          },
+          {
+            "target": "opinion",
+            "value": -5
+          }
+        ]
+      }
+    ],
+    "weight": 52,
+    "minAct": 4
+  },
+  {
+    "id": "ev_alien_artifact_3_3",
+    "chainId": "alien_artifact_3",
+    "step": 3,
+    "titleRu": "Третий из шести",
+    "textRu": "Половина набора собрана. Остальные три — в местах, где их охраняют не люди.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Продолжить",
+        "effects": [
+          {
+            "target": "influence",
+            "value": 6
+          }
+        ],
+        "flag": "artifact3_continue"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Остановиться",
+        "effects": [
+          {
+            "target": "stability",
+            "value": 3
+          }
+        ]
+      }
+    ],
+    "weight": 52,
+    "minAct": 4
+  },
+  {
+    "id": "ev_grey_tide_echo_1",
+    "chainId": "grey_tide_echo",
+    "step": 1,
+    "titleRu": "Эхо Прилива",
+    "textRu": "Приборы фиксируют Серый Прилив там, где его быть не должно. Он ещё не здесь — но уже слышен.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Изучить эхо",
+        "effects": [
+          {
+            "target": "science_physics",
+            "value": 100
+          },
+          {
+            "target": "stability",
+            "value": -2
+          }
+        ],
+        "flag": "tide_echo_study"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Доложить",
+        "effects": [
+          {
+            "target": "influence",
+            "value": 6
+          }
+        ]
+      }
+    ],
+    "weight": 59,
+    "minAct": 4
+  },
+  {
+    "id": "ev_grey_tide_echo_2",
+    "chainId": "grey_tide_echo",
+    "step": 2,
+    "titleRu": "Ранние признаки",
+    "textRu": "Три системы показывают одинаковые искажения. Все три — на пути к вашему сектору.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Укрепить сектор",
+        "effects": [
+          {
+            "target": "alloys",
+            "value": -70
+          },
+          {
+            "target": "stability",
+            "value": 3
+          }
+        ],
+        "flag": "tide_echo_fortify"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Эвакуировать",
+        "effects": [
+          {
+            "target": "credits",
+            "value": -50000
+          },
+          {
+            "target": "stability",
+            "value": -2
+          }
+        ],
+        "flag": "tide_echo_evac"
+      }
+    ],
+    "weight": 59,
+    "minAct": 4
+  },
+  {
+    "id": "ev_grey_tide_echo_3",
+    "chainId": "grey_tide_echo",
+    "step": 3,
+    "titleRu": "Прогноз",
+    "textRu": "Прилив придёт через сорок тактов. Это время можно потратить только один раз.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Готовиться",
+        "effects": [
+          {
+            "target": "alloys",
+            "value": -40
+          },
+          {
+            "target": "influence",
+            "value": 8
+          }
+        ],
+        "flag": "tide_echo_prepare",
+        "missionId": "rift_04_tide"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Продолжать экспансию",
+        "effects": [
+          {
+            "target": "influence",
+            "value": 6
+          },
+          {
+            "target": "stability",
+            "value": -3
+          }
+        ]
+      }
+    ],
+    "weight": 59,
+    "minAct": 4
+  },
+  {
+    "id": "ev_devourer_scout_1",
+    "chainId": "devourer_scout",
+    "step": 1,
+    "titleRu": "Разведчик Пожирателей",
+    "textRu": "Одинокий корабль необычной формы висит на границе и передаёт данные. Он не атакует.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Перехватить",
+        "effects": [
+          {
+            "target": "alloys",
+            "value": 40
+          },
+          {
+            "target": "science_engineering",
+            "value": 80
+          }
+        ],
+        "flag": "devourer_scout_kill"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Наблюдать",
+        "effects": [
+          {
+            "target": "science_physics",
+            "value": 90
+          }
+        ],
+        "flag": "devourer_scout_watch"
+      }
+    ],
+    "weight": 66,
+    "minAct": 4
+  },
+  {
+    "id": "ev_devourer_scout_2",
+    "chainId": "devourer_scout",
+    "step": 2,
+    "titleRu": "Данные",
+    "textRu": "Данные разведчика — карта будущих точек входа. Три точки, все в вашем регионе.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Передать совету",
+        "effects": [
+          {
+            "target": "influence",
+            "value": 10
+          },
+          {
+            "target": "opinion",
+            "value": 6
+          }
+        ],
+        "flag": "devourer_scout_share"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Оставить себе",
+        "effects": [
+          {
+            "target": "influence",
+            "value": 5
+          },
+          {
+            "target": "opinion",
+            "value": -4
+          }
+        ],
+        "flag": "devourer_scout_keep"
+      }
+    ],
+    "weight": 66,
+    "minAct": 4
+  },
+  {
+    "id": "ev_devourer_scout_3",
+    "chainId": "devourer_scout",
+    "step": 3,
+    "titleRu": "Тишина",
+    "textRu": "Корабль уходит. Через такт приходит сигнал: вас запомнили.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Готовить оборону",
+        "effects": [
+          {
+            "target": "alloys",
+            "value": -50
+          },
+          {
+            "target": "fleet_cap_pct",
+            "value": 0.05
+          }
+        ],
+        "flag": "devourer_scout_defend",
+        "missionId": "rift_05_wave"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Не верить",
+        "effects": [
+          {
+            "target": "stability",
+            "value": 2
+          }
+        ]
+      }
+    ],
+    "weight": 66,
+    "minAct": 4
+  },
+  {
+    "id": "ev_final_choice_rumor_1",
+    "chainId": "final_choice_rumor",
+    "step": 1,
+    "titleRu": "Слух о финале",
+    "textRu": "По галактике идёт слух: Разлом откроют снова, и решать будет один. Слухи редко бывают точными — но бывают полезными.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Проверить",
+        "effects": [
+          {
+            "target": "influence",
+            "value": -4
+          },
+          {
+            "target": "science_society",
+            "value": 80
+          }
+        ],
+        "flag": "final_rumor_check"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Использовать",
+        "effects": [
+          {
+            "target": "influence",
+            "value": 6
+          },
+          {
+            "target": "opinion",
+            "value": -5
+          }
+        ],
+        "flag": "final_rumor_use"
+      }
+    ],
+    "weight": 73,
+    "minAct": 4
+  },
+  {
+    "id": "ev_final_choice_rumor_2",
+    "chainId": "final_choice_rumor",
+    "step": 2,
+    "titleRu": "Соглашение",
+    "textRu": "Три империи предлагают гарантии: кто первым дойдёт до Разлома, тот и решает. Подпись ничего не стоит — пока.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Подписать",
+        "effects": [
+          {
+            "target": "opinion",
+            "value": 10
+          },
+          {
+            "target": "influence",
+            "value": -6
+          }
+        ],
+        "flag": "final_rumor_sign"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Отказаться",
+        "effects": [
+          {
+            "target": "stability",
+            "value": 2
+          },
+          {
+            "target": "opinion",
+            "value": -6
+          }
+        ]
+      }
+    ],
+    "weight": 73,
+    "minAct": 4
+  },
+  {
+    "id": "ev_final_choice_rumor_3",
+    "chainId": "final_choice_rumor",
+    "step": 3,
+    "titleRu": "Последняя дверь",
+    "textRu": "Слух оказался правдой. Дверь ждёт, и у вас есть все ключи — или их нет.",
+    "choices": [
+      {
+        "id": "c1",
+        "labelRu": "Идти к Разлому",
+        "effects": [
+          {
+            "target": "influence",
+            "value": 10
+          }
+        ],
+        "flag": "final_rumor_go"
+      },
+      {
+        "id": "c2",
+        "labelRu": "Остаться с империей",
+        "effects": [
+          {
+            "target": "stability",
+            "value": 3
+          },
+          {
+            "target": "unity",
+            "value": 30
+          }
+        ]
+      }
+    ],
+    "weight": 73,
+    "minAct": 4
+  }
+]

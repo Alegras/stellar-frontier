@@ -1,0 +1,470 @@
+[
+  {
+    "id": "ev_sector_01",
+    "ru": "Шёпот в тишине",
+    "descRu": "Вход в Немую звезду: сенсоры глохнут, в эфире — чужой шёпот на языке лада.",
+    "triggerRu": "system_trait=silent_star",
+    "choices": [
+      {
+        "id": "listen",
+        "ru": "Слушать",
+        "effects": {
+          "choir_attention": 20,
+          "science_society": 15
+        },
+        "flag": "listened_whisper"
+      },
+      {
+        "id": "mute",
+        "ru": "Заглушить",
+        "effects": {
+          "science_physics": 25
+        }
+      }
+    ]
+  },
+  {
+    "id": "ev_sector_02",
+    "ru": "Страж пробуждается",
+    "descRu": "Вы вынесли реликвию, не заплатив Стражам. Протокол требует отклика.",
+    "triggerRu": "flag=relic_taken_without_trial",
+    "choices": [
+      {
+        "id": "apologize",
+        "ru": "Извиниться",
+        "effects": {
+          "diplo_opinion": -10
+        },
+        "flag": "warden_apology"
+      },
+      {
+        "id": "fight",
+        "ru": "Принять бой",
+        "effects": {
+          "kill_fp": 2000,
+          "war_score": 5
+        }
+      }
+    ]
+  },
+  {
+    "id": "ev_sector_03",
+    "ru": "Караван Отступников",
+    "descRu": "Восемь процентов шансов на такт: караван Отступников идёт через ваш сектор с грузом ядер.",
+    "triggerRu": "random=8%_per_tick",
+    "choices": [
+      {
+        "id": "attack",
+        "ru": "Атаковать",
+        "effects": {
+          "cores": 2,
+          "fallen_relation": -20
+        }
+      },
+      {
+        "id": "buy",
+        "ru": "Купить",
+        "effects": {
+          "cores": 2,
+          "credits": -50000
+        }
+      }
+    ]
+  },
+  {
+    "id": "ev_sector_04",
+    "ru": "Хор слышит",
+    "descRu": "Шум достиг 80. Волна уже в пути, и у вас есть два способа переждать.",
+    "triggerRu": "noise>=80",
+    "choices": [
+      {
+        "id": "run",
+        "ru": "Бежать",
+        "effects": {
+          "choir_attention": 40
+        },
+        "flag": "wave_now"
+      },
+      {
+        "id": "hide",
+        "ru": "Спрятаться в тени звезды",
+        "effects": {
+          "stability": -8
+        },
+        "flag": "hidden_wave"
+      }
+    ]
+  },
+  {
+    "id": "ev_sector_05",
+    "ru": "Сад поёт",
+    "descRu": "Вход в Сады Ансаров: звук, который слышно кожей, и выбор — записать или срезать.",
+    "triggerRu": "region=ansari_gardens",
+    "choices": [
+      {
+        "id": "record",
+        "ru": "Записать",
+        "effects": {
+          "relics": 1,
+          "science_society": 20
+        }
+      },
+      {
+        "id": "cut",
+        "ru": "Срезать",
+        "effects": {
+          "quarantine": 1,
+          "goods": 20
+        }
+      }
+    ]
+  },
+  {
+    "id": "ev_sector_06",
+    "ru": "Ядро-хранилище",
+    "descRu": "У вас кончились ядра. В хранилище ещё одно, но Стражи смотрят.",
+    "triggerRu": "cores==0",
+    "choices": [
+      {
+        "id": "take",
+        "ru": "Взять",
+        "effects": {
+          "cores": 1,
+          "warden_relation": -10
+        }
+      },
+      {
+        "id": "leave",
+        "ru": "Оставить",
+        "effects": {
+          "warden_relation": 5
+        }
+      }
+    ]
+  },
+  {
+    "id": "ev_sector_07",
+    "ru": "Печать Врат",
+    "descRu": "Осмотр Врат: печать можно активировать или продать тем, кто ждёт.",
+    "triggerRu": "poi=sector_gate_ring",
+    "choices": [
+      {
+        "id": "activate",
+        "ru": "Активировать",
+        "effects": {
+          "gate_pairs": 1,
+          "stability": 5
+        }
+      },
+      {
+        "id": "sell",
+        "ru": "Продать",
+        "effects": {
+          "credits": 120000,
+          "choir_attention": 30
+        }
+      }
+    ]
+  },
+  {
+    "id": "ev_sector_08",
+    "ru": "Мёртвый адмирал",
+    "descRu": "Гробница адмирала открыта: вскрыть саркофаг или почтить память.",
+    "triggerRu": "poi=poi_anc_01",
+    "choices": [
+      {
+        "id": "open",
+        "ru": "Вскрыть",
+        "effects": {
+          "admiral_exp": 2,
+          "stability": -3
+        }
+      },
+      {
+        "id": "honor",
+        "ru": "Почтить",
+        "effects": {
+          "relics": 1,
+          "unity": 10
+        }
+      }
+    ]
+  },
+  {
+    "id": "ev_sector_09",
+    "ru": "Предательство Отступников",
+    "descRu": "Пять процентов на такт: союзники-Отступники предают ваш маршрут.",
+    "triggerRu": "fallen_alliance=1",
+    "choices": [
+      {
+        "id": "forgive",
+        "ru": "Простить",
+        "effects": {
+          "fallen_relation": -5
+        }
+      },
+      {
+        "id": "break",
+        "ru": "Разорвать союз",
+        "effects": {
+          "fallen_relation": -40,
+          "war_score": 10
+        }
+      }
+    ]
+  },
+  {
+    "id": "ev_sector_10",
+    "ru": "Зов",
+    "descRu": "Сорок процентов при Шуме ≥ 60: автопилот тянет к гнезду, HUD искажается.",
+    "triggerRu": "noise>=60",
+    "choices": [
+      {
+        "id": "resist",
+        "ru": "Сопротивляться",
+        "effects": {
+          "energy": -30,
+          "stability": -5
+        }
+      },
+      {
+        "id": "surrender",
+        "ru": "Сдаться",
+        "effects": {
+          "choir_attention": 50,
+          "flag": "taken_by_choir"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ev_sector_11",
+    "ru": "Живое ядро",
+    "descRu": "Найдено живое ядро: взять его в реактор или уничтожить, чтобы Хор не прозвучал.",
+    "triggerRu": "poi=poi_anc_29",
+    "choices": [
+      {
+        "id": "take",
+        "ru": "Взять",
+        "effects": {
+          "invasion": 0.08,
+          "cores": 1
+        }
+      },
+      {
+        "id": "destroy",
+        "ru": "Уничтожить",
+        "effects": {
+          "choir_attention": -25,
+          "cores": -1
+        }
+      }
+    ]
+  },
+  {
+    "id": "ev_sector_12",
+    "ru": "Архив открыт",
+    "descRu": "Репутация Ансаров ≥ 30: Архив отвечает. Войти по праву или взломать.",
+    "triggerRu": "ansari_relation>=30",
+    "choices": [
+      {
+        "id": "enter",
+        "ru": "Войти",
+        "effects": {
+          "science_prod": 0.05
+        },
+        "flag": "archive_opened"
+      },
+      {
+        "id": "hack",
+        "ru": "Взломать",
+        "effects": {
+          "kill_fp": 3000,
+          "warden_relation": -30
+        }
+      }
+    ]
+  },
+  {
+    "id": "ev_sector_13",
+    "ru": "Садовник спит",
+    "descRu": "Спящий механизм в Садах: разбудить его или оставить тишину.",
+    "triggerRu": "region=ansari_gardens",
+    "choices": [
+      {
+        "id": "wake",
+        "ru": "Разбудить",
+        "effects": {
+          "kill_fp": 800
+        }
+      },
+      {
+        "id": "leave",
+        "ru": "Уйти",
+        "effects": {
+          "stability": 5
+        }
+      }
+    ]
+  },
+  {
+    "id": "ev_sector_14",
+    "ru": "Тихий маяк",
+    "descRu": "В Пустошах тихий маяк передаёт карту — но он передаёт её не только вам.",
+    "triggerRu": "region=quiet_wastes",
+    "choices": [
+      {
+        "id": "answer",
+        "ru": "Ответить",
+        "effects": {
+          "map_reveal": 1,
+          "choir_attention": 10
+        }
+      },
+      {
+        "id": "ignore",
+        "ru": "Игнорировать",
+        "effects": {
+          "choir_attention": 40
+        }
+      }
+    ]
+  },
+  {
+    "id": "ev_sector_15",
+    "ru": "Голод Хора",
+    "descRu": "Волна прошла, оставив систему без звезды. Помочь ей или уйти дальше.",
+    "triggerRu": "flag=wave_passed",
+    "choices": [
+      {
+        "id": "help",
+        "ru": "Помочь системе",
+        "effects": {
+          "stability": -12,
+          "relics": 1
+        }
+      },
+      {
+        "id": "leave",
+        "ru": "Уйти",
+        "effects": {
+          "fallen_relation": -5
+        }
+      }
+    ]
+  },
+  {
+    "id": "ev_sector_16",
+    "ru": "Семя",
+    "descRu": "Найдено «Семя Сада»: вывезти — карантин, посадить — живой металл.",
+    "triggerRu": "poi=poi_anc_31",
+    "choices": [
+      {
+        "id": "export",
+        "ru": "Вывезти",
+        "effects": {
+          "quarantine": 1
+        }
+      },
+      {
+        "id": "plant",
+        "ru": "Посадить",
+        "effects": {
+          "living_metal": 5
+        }
+      }
+    ]
+  },
+  {
+    "id": "ev_sector_17",
+    "ru": "Сейф Врат",
+    "descRu": "Смерть рядом с Вратами: заплатить за восстановление сейфа или рискнуть.",
+    "triggerRu": "near_gate_death=1",
+    "choices": [
+      {
+        "id": "pay",
+        "ru": "Заплатить",
+        "effects": {
+          "credits": -80000,
+          "relics": 2
+        }
+      },
+      {
+        "id": "risk",
+        "ru": "Рискнуть",
+        "effects": {
+          "relics": -2,
+          "stability": -5
+        }
+      }
+    ]
+  },
+  {
+    "id": "ev_sector_18",
+    "ru": "Резонанс",
+    "descRu": "A5 и три цепочки: время включить резонанс или отложить его.",
+    "triggerRu": "tech=a5_resonance AND chains>=3",
+    "choices": [
+      {
+        "id": "activate",
+        "ru": "Включить",
+        "effects": {
+          "ansari_power": 0.25,
+          "choir_attention": 50
+        }
+      },
+      {
+        "id": "postpone",
+        "ru": "Отложить",
+        "effects": {
+          "stability": 5
+        }
+      }
+    ]
+  },
+  {
+    "id": "ev_sector_19",
+    "ru": "Волна в галактике",
+    "descRu": "Вторжение: вернуться в галактику или остаться в Пределе.",
+    "triggerRu": "invasion=1",
+    "choices": [
+      {
+        "id": "return",
+        "ru": "Вернуться",
+        "effects": {
+          "galaxy_saved": 1,
+          "stability": 5
+        }
+      },
+      {
+        "id": "stay",
+        "ru": "Остаться",
+        "effects": {
+          "sector_lost": 1
+        }
+      }
+    ]
+  },
+  {
+    "id": "ev_sector_20",
+    "ru": "Уход",
+    "descRu": "Двенадцать миссий пройдены, стабильность ≥ 70: запечатать наследие или отдать его.",
+    "triggerRu": "quest_index>=12 AND stability>=70",
+    "choices": [
+      {
+        "id": "seal",
+        "ru": "Запечатать",
+        "effects": {
+          "ending_seal": 1
+        }
+      },
+      {
+        "id": "give",
+        "ru": "Отдать",
+        "effects": {
+          "ending_give": 1
+        }
+      }
+    ]
+  }
+]

@@ -1,0 +1,911 @@
+[
+  {
+    "id": "x_phys_gravity_1",
+    "school": "physics",
+    "tier": 2,
+    "ru": "Гравитационная линза",
+    "descRu": "+1 прыжок дальности сенсоров.",
+    "cost": 292,
+    "effects": [
+      {
+        "kind": "modifier",
+        "target": "sensor_range",
+        "value": 1
+      }
+    ],
+    "weight": 55,
+    "requires": [
+      "phys_scanners_1"
+    ]
+  },
+  {
+    "id": "x_phys_graviton_2",
+    "school": "physics",
+    "tier": 3,
+    "ru": "Гравитоника II",
+    "descRu": "+1 прыжок дальности сенсоров, +10% скорость аномалий.",
+    "cost": 612,
+    "effects": [
+      {
+        "kind": "modifier",
+        "target": "sensor_range",
+        "value": 1
+      },
+      {
+        "kind": "modifier",
+        "target": "anomaly_speed",
+        "value": 0.1
+      }
+    ],
+    "weight": 45,
+    "requires": [
+      "x_phys_gravity_1"
+    ]
+  },
+  {
+    "id": "x_phys_tachyon",
+    "school": "physics",
+    "tier": 4,
+    "ru": "Тахионный сенсор",
+    "descRu": "+2 прыжка дальности сенсоров.",
+    "cost": 1476,
+    "effects": [
+      {
+        "kind": "modifier",
+        "target": "sensor_range",
+        "value": 2
+      }
+    ],
+    "weight": 30,
+    "requires": [
+      "x_phys_graviton_2"
+    ]
+  },
+  {
+    "id": "x_phys_sensor_array",
+    "school": "physics",
+    "tier": 5,
+    "ru": "Дальняя сенсорная сеть",
+    "descRu": "+3 прыжка сенсоров, +20% скорость аномалий.",
+    "cost": 3640,
+    "effects": [
+      {
+        "kind": "modifier",
+        "target": "sensor_range",
+        "value": 3
+      },
+      {
+        "kind": "modifier",
+        "target": "anomaly_speed",
+        "value": 0.2
+      }
+    ],
+    "weight": 15,
+    "requires": [
+      "x_phys_tachyon"
+    ],
+    "unlocks": [
+      "megastructure:sentinel_array"
+    ]
+  },
+  {
+    "id": "x_phys_shield_matrix",
+    "school": "physics",
+    "tier": 3,
+    "ru": "Щитовая матрица",
+    "descRu": "+15% максимума щитов.",
+    "cost": 612,
+    "effects": [
+      {
+        "kind": "modifier",
+        "target": "shield_max",
+        "value": 0.15
+      }
+    ],
+    "weight": 45,
+    "requires": [
+      "phys_shields_3"
+    ]
+  },
+  {
+    "id": "x_phys_shield_phased",
+    "school": "physics",
+    "tier": 4,
+    "ru": "Фазовые щиты",
+    "descRu": "+20% щитов, +20% регенерации.",
+    "cost": 1476,
+    "effects": [
+      {
+        "kind": "modifier",
+        "target": "shield_max",
+        "value": 0.2
+      },
+      {
+        "kind": "modifier",
+        "target": "shield_regen",
+        "value": 0.2
+      }
+    ],
+    "weight": 30,
+    "requires": [
+      "x_phys_shield_matrix"
+    ]
+  },
+  {
+    "id": "x_phys_shield_singular",
+    "school": "physics",
+    "tier": 5,
+    "ru": "Сингулярный барьер",
+    "descRu": "+25% щитов, −10% урон щитам от термооружия.",
+    "cost": 3640,
+    "effects": [
+      {
+        "kind": "modifier",
+        "target": "shield_max",
+        "value": 0.25
+      },
+      {
+        "kind": "modifier",
+        "target": "resist_thermal",
+        "value": 0.1
+      }
+    ],
+    "weight": 15,
+    "requires": [
+      "x_phys_shield_phased"
+    ]
+  },
+  {
+    "id": "x_phys_reactor_fusion",
+    "school": "physics",
+    "tier": 3,
+    "ru": "Термоядерный реактор",
+    "descRu": "+20% выходной мощности.",
+    "cost": 612,
+    "effects": [
+      {
+        "kind": "modifier",
+        "target": "power",
+        "value": 0.2
+      }
+    ],
+    "weight": 45,
+    "requires": [
+      "phys_reactor_2"
+    ]
+  },
+  {
+    "id": "x_phys_reactor_annihilation",
+    "school": "physics",
+    "tier": 4,
+    "ru": "Аннигиляционный реактор",
+    "descRu": "+25% мощности, +5% энергии.",
+    "cost": 1476,
+    "effects": [
+      {
+        "kind": "modifier",
+        "target": "power",
+        "value": 0.25
+      },
+      {
+        "kind": "modifier",
+        "target": "energy_prod",
+        "value": 0.05
+      }
+    ],
+    "weight": 30,
+    "requires": [
+      "x_phys_reactor_fusion"
+    ]
+  },
+  {
+    "id": "x_phys_reactor_zero",
+    "school": "physics",
+    "tier": 5,
+    "ru": "Реактор нулевой точки",
+    "descRu": "+30% мощности.",
+    "cost": 3640,
+    "effects": [
+      {
+        "kind": "modifier",
+        "target": "power",
+        "value": 0.3
+      }
+    ],
+    "weight": 15,
+    "requires": [
+      "x_phys_reactor_annihilation"
+    ]
+  },
+  {
+    "id": "x_phys_lance",
+    "school": "physics",
+    "tier": 4,
+    "ru": "Термическая копьё",
+    "descRu": "+20% урона энергии.",
+    "cost": 1476,
+    "effects": [
+      {
+        "kind": "modifier",
+        "target": "energy_dmg",
+        "value": 0.2
+      }
+    ],
+    "weight": 30,
+    "requires": [
+      "phys_plasma_2"
+    ]
+  },
+  {
+    "id": "x_phys_disruptor",
+    "school": "physics",
+    "tier": 5,
+    "ru": "Дезинтегратор",
+    "descRu": "+25% урона энергии, +10% урона оружия.",
+    "cost": 3640,
+    "effects": [
+      {
+        "kind": "modifier",
+        "target": "energy_dmg",
+        "value": 0.25
+      },
+      {
+        "kind": "modifier",
+        "target": "weapon_damage",
+        "value": 0.1
+      }
+    ],
+    "weight": 15,
+    "requires": [
+      "x_phys_lance"
+    ]
+  },
+  {
+    "id": "x_phys_fsd_1",
+    "school": "physics",
+    "tier": 3,
+    "ru": "FSD IV",
+    "descRu": "+2 св. года дальности прыжка.",
+    "cost": 612,
+    "effects": [
+      {
+        "kind": "modifier",
+        "target": "fsd_range",
+        "value": 2
+      }
+    ],
+    "weight": 50,
+    "requires": [
+      "phys_reactor_2"
+    ]
+  },
+  {
+    "id": "x_phys_fsd_2",
+    "school": "physics",
+    "tier": 4,
+    "ru": "FSD V",
+    "descRu": "+2 св. года дальности, −20% время зарядки.",
+    "cost": 1476,
+    "effects": [
+      {
+        "kind": "modifier",
+        "target": "fsd_range",
+        "value": 2
+      },
+      {
+        "kind": "modifier",
+        "target": "fsd_charge",
+        "value": -0.2
+      }
+    ],
+    "weight": 30,
+    "requires": [
+      "x_phys_fsd_1"
+    ]
+  },
+  {
+    "id": "x_phys_grav_engine",
+    "school": "physics",
+    "tier": 5,
+    "ru": "Гравитационный двигатель",
+    "descRu": "+15% скорости флотов, +1 прыжок FSD.",
+    "cost": 3640,
+    "effects": [
+      {
+        "kind": "modifier",
+        "target": "fleet_speed_pct",
+        "value": 0.15
+      },
+      {
+        "kind": "modifier",
+        "target": "fsd_range",
+        "value": 1
+      }
+    ],
+    "weight": 15,
+    "requires": [
+      "x_phys_fsd_2"
+    ]
+  },
+  {
+    "id": "x_soc_census",
+    "school": "society",
+    "tier": 2,
+    "ru": "Галактическая перепись",
+    "descRu": "+10% влияния.",
+    "cost": 252,
+    "effects": [
+      {
+        "kind": "modifier",
+        "target": "influence_prod",
+        "value": 0.1
+      }
+    ],
+    "weight": 50,
+    "requires": [
+      "soc_administration_1"
+    ]
+  },
+  {
+    "id": "x_soc_colonial_admin",
+    "school": "society",
+    "tier": 2,
+    "ru": "Колониальная администрация",
+    "descRu": "−15% стоимость колоний.",
+    "cost": 252,
+    "effects": [
+      {
+        "kind": "modifier",
+        "target": "colony_cost",
+        "value": -0.15
+      }
+    ],
+    "weight": 50,
+    "requires": [
+      "soc_expansion_1"
+    ]
+  },
+  {
+    "id": "x_soc_colonial_union",
+    "school": "society",
+    "tier": 3,
+    "ru": "Колониальный союз",
+    "descRu": "−15% стоимость колоний, +3 стабильности.",
+    "cost": 528,
+    "effects": [
+      {
+        "kind": "modifier",
+        "target": "colony_cost",
+        "value": -0.15
+      },
+      {
+        "kind": "modifier",
+        "target": "stability",
+        "value": 3
+      }
+    ],
+    "weight": 40,
+    "requires": [
+      "x_soc_colonial_admin"
+    ]
+  },
+  {
+    "id": "x_soc_megacity",
+    "school": "society",
+    "tier": 4,
+    "ru": "Мегаполисы",
+    "descRu": "+2 жилья на колонию, +1 слот зданий.",
+    "cost": 1275,
+    "effects": [
+      {
+        "kind": "modifier",
+        "target": "housing",
+        "value": 2
+      },
+      {
+        "kind": "modifier",
+        "target": "building_slots",
+        "value": 1
+      }
+    ],
+    "weight": 28,
+    "requires": [
+      "x_soc_colonial_union"
+    ]
+  },
+  {
+    "id": "x_soc_galactic_law",
+    "school": "society",
+    "tier": 3,
+    "ru": "Галактическое право",
+    "descRu": "+10 мнения со всеми.",
+    "cost": 528,
+    "effects": [
+      {
+        "kind": "modifier",
+        "target": "diplo_opinion",
+        "value": 10
+      }
+    ],
+    "weight": 40,
+    "requires": [
+      "soc_governance_1"
+    ]
+  },
+  {
+    "id": "x_soc_galactic_court",
+    "school": "society",
+    "tier": 4,
+    "ru": "Галактический суд",
+    "descRu": "+15 мнения, +10% военного счёта.",
+    "cost": 1275,
+    "effects": [
+      {
+        "kind": "modifier",
+        "target": "diplo_opinion",
+        "value": 15
+      },
+      {
+        "kind": "modifier",
+        "target": "war_score",
+        "value": 0.1
+      }
+    ],
+    "weight": 28,
+    "requires": [
+      "x_soc_galactic_law"
+    ]
+  },
+  {
+    "id": "x_soc_psy_academy",
+    "school": "society",
+    "tier": 4,
+    "ru": "Пси-академия",
+    "descRu": "+20% единства.",
+    "cost": 1275,
+    "effects": [
+      {
+        "kind": "modifier",
+        "target": "unity_prod",
+        "value": 0.2
+      }
+    ],
+    "weight": 28,
+    "requires": [
+      "soc_psionics_1"
+    ]
+  },
+  {
+    "id": "x_soc_psi_chorus",
+    "school": "society",
+    "tier": 5,
+    "ru": "Пси-хор",
+    "descRu": "+25% единства, открывает пси-щит.",
+    "cost": 3143,
+    "effects": [
+      {
+        "kind": "modifier",
+        "target": "unity_prod",
+        "value": 0.25
+      },
+      {
+        "kind": "modifier",
+        "target": "psi_unlock",
+        "value": 1
+      }
+    ],
+    "weight": 14,
+    "requires": [
+      "x_soc_psy_academy"
+    ]
+  },
+  {
+    "id": "x_soc_xeno_integration",
+    "school": "society",
+    "tier": 3,
+    "ru": "Ксено-интеграция",
+    "descRu": "+10% роста населения, +2 стабильности.",
+    "cost": 528,
+    "effects": [
+      {
+        "kind": "modifier",
+        "target": "pop_growth",
+        "value": 0.1
+      },
+      {
+        "kind": "modifier",
+        "target": "stability",
+        "value": 2
+      }
+    ],
+    "weight": 40,
+    "requires": [
+      "soc_xenology_1"
+    ]
+  },
+  {
+    "id": "x_soc_education_net",
+    "school": "society",
+    "tier": 3,
+    "ru": "Образовательная сеть",
+    "descRu": "+10% науки.",
+    "cost": 528,
+    "effects": [
+      {
+        "kind": "modifier",
+        "target": "science_prod",
+        "value": 0.1
+      }
+    ],
+    "weight": 40,
+    "requires": [
+      "soc_education_2"
+    ]
+  },
+  {
+    "id": "x_soc_propaganda",
+    "school": "society",
+    "tier": 4,
+    "ru": "Государственная пропаганда",
+    "descRu": "+15% единства, +3 стабильности.",
+    "cost": 1275,
+    "effects": [
+      {
+        "kind": "modifier",
+        "target": "unity_prod",
+        "value": 0.15
+      },
+      {
+        "kind": "modifier",
+        "target": "stability",
+        "value": 3
+      }
+    ],
+    "weight": 28,
+    "requires": [
+      "soc_politics_1"
+    ]
+  },
+  {
+    "id": "x_soc_meritocracy",
+    "school": "society",
+    "tier": 3,
+    "ru": "Меритократия",
+    "descRu": "+1 влияние в такт.",
+    "cost": 528,
+    "effects": [
+      {
+        "kind": "modifier",
+        "target": "influence_flat",
+        "value": 1
+      }
+    ],
+    "weight": 40,
+    "requires": [
+      "soc_administration_1"
+    ]
+  },
+  {
+    "id": "x_soc_ritual_calendar",
+    "school": "society",
+    "tier": 5,
+    "ru": "Ритуальный календарь",
+    "descRu": "+10 стабильности, +20% единства.",
+    "cost": 3143,
+    "effects": [
+      {
+        "kind": "modifier",
+        "target": "stability",
+        "value": 10
+      },
+      {
+        "kind": "modifier",
+        "target": "unity_prod",
+        "value": 0.2
+      }
+    ],
+    "weight": 14,
+    "requires": [
+      "x_soc_psi_chorus"
+    ]
+  },
+  {
+    "id": "x_eng_sentinel_array",
+    "school": "engineering",
+    "tier": 3,
+    "ru": "Сеть Сентри",
+    "descRu": "Открывает мегаструктуру «Сенсорная сеть».",
+    "cost": 556,
+    "effects": [
+      {
+        "kind": "modifier",
+        "target": "sensor_range",
+        "value": 1
+      }
+    ],
+    "weight": 45,
+    "requires": [
+      "eng_fsd_1"
+    ],
+    "unlocks": [
+      "megastructure:sentinel_array"
+    ]
+  },
+  {
+    "id": "x_eng_gate",
+    "school": "engineering",
+    "tier": 3,
+    "ru": "Технология Врат",
+    "descRu": "Открывает мегаструктуру «Врата».",
+    "cost": 556,
+    "effects": [],
+    "weight": 45,
+    "requires": [
+      "eng_fsd_2"
+    ],
+    "unlocks": [
+      "megastructure:gate"
+    ]
+  },
+  {
+    "id": "x_eng_star_forge",
+    "school": "engineering",
+    "tier": 4,
+    "ru": "Звёздная кузня",
+    "descRu": "Открывает мегаструктуру «Звёздная кузня»; +15% сплавов.",
+    "cost": 1342,
+    "effects": [
+      {
+        "kind": "modifier",
+        "target": "alloys_prod",
+        "value": 0.15
+      }
+    ],
+    "weight": 30,
+    "requires": [
+      "eng_metallurgy_2"
+    ],
+    "unlocks": [
+      "megastructure:star_forge"
+    ]
+  },
+  {
+    "id": "x_eng_ring_habitat",
+    "school": "engineering",
+    "tier": 4,
+    "ru": "Кольцевые миры",
+    "descRu": "Открывает мегаструктуру «Мир-кольцо».",
+    "cost": 1342,
+    "effects": [
+      {
+        "kind": "modifier",
+        "target": "housing",
+        "value": 2
+      }
+    ],
+    "weight": 30,
+    "requires": [
+      "x_eng_star_forge"
+    ],
+    "unlocks": [
+      "megastructure:ring_habitat"
+    ]
+  },
+  {
+    "id": "x_eng_dyson",
+    "school": "engineering",
+    "tier": 5,
+    "ru": "Сфера Дайсона",
+    "descRu": "Открывает мегаструктуру «Сфера Дайсона»; +20% энергии.",
+    "cost": 3309,
+    "effects": [
+      {
+        "kind": "modifier",
+        "target": "energy_prod",
+        "value": 0.2
+      }
+    ],
+    "weight": 15,
+    "requires": [
+      "x_eng_ring_habitat"
+    ],
+    "unlocks": [
+      "megastructure:dyson_sphere"
+    ]
+  },
+  {
+    "id": "x_eng_nexus",
+    "school": "engineering",
+    "tier": 5,
+    "ru": "Научный Нексус",
+    "descRu": "Открывает мегаструктуру «Научный Нексус»; +15% науки.",
+    "cost": 3309,
+    "effects": [
+      {
+        "kind": "modifier",
+        "target": "science_prod",
+        "value": 0.15
+      }
+    ],
+    "weight": 15,
+    "requires": [
+      "x_eng_dyson"
+    ],
+    "unlocks": [
+      "megastructure:science_nexus"
+    ]
+  },
+  {
+    "id": "x_eng_beacon",
+    "school": "engineering",
+    "tier": 4,
+    "ru": "Маяк флота",
+    "descRu": "Открывает мегаструктуру «Маяк»; +10% флотского лимита.",
+    "cost": 1342,
+    "effects": [
+      {
+        "kind": "modifier",
+        "target": "fleet_cap_pct",
+        "value": 0.1
+      }
+    ],
+    "weight": 30,
+    "requires": [
+      "eng_logistics_2"
+    ],
+    "unlocks": [
+      "megastructure:beacon"
+    ]
+  },
+  {
+    "id": "x_eng_titan_forge",
+    "school": "engineering",
+    "tier": 5,
+    "ru": "Титановая верфь",
+    "descRu": "−10% стоимость кораблей, открывает титан.",
+    "cost": 3309,
+    "effects": [
+      {
+        "kind": "modifier",
+        "target": "ship_cost_pct",
+        "value": -0.1
+      }
+    ],
+    "weight": 15,
+    "requires": [
+      "eng_hull_4"
+    ],
+    "unlocks": [
+      "hull:hull_titan"
+    ]
+  },
+  {
+    "id": "x_eng_armor_crystal",
+    "school": "engineering",
+    "tier": 4,
+    "ru": "Кристаллическая броня",
+    "descRu": "+25% брони.",
+    "cost": 1342,
+    "effects": [
+      {
+        "kind": "modifier",
+        "target": "armor_max",
+        "value": 0.25
+      }
+    ],
+    "weight": 30,
+    "requires": [
+      "eng_armor_3"
+    ]
+  },
+  {
+    "id": "x_eng_armor_adaptive",
+    "school": "engineering",
+    "tier": 5,
+    "ru": "Адаптивная броня",
+    "descRu": "+25% брони, −20% стоимость ремонта.",
+    "cost": 3309,
+    "effects": [
+      {
+        "kind": "modifier",
+        "target": "armor_max",
+        "value": 0.25
+      },
+      {
+        "kind": "modifier",
+        "target": "repair_cost",
+        "value": -0.2
+      }
+    ],
+    "weight": 15,
+    "requires": [
+      "x_eng_armor_crystal"
+    ]
+  },
+  {
+    "id": "x_eng_drive_warp",
+    "school": "engineering",
+    "tier": 4,
+    "ru": "Варп-двигатели",
+    "descRu": "+15% скорости флотов.",
+    "cost": 1342,
+    "effects": [
+      {
+        "kind": "modifier",
+        "target": "fleet_speed_pct",
+        "value": 0.15
+      }
+    ],
+    "weight": 30,
+    "requires": [
+      "eng_thrusters_2"
+    ]
+  },
+  {
+    "id": "x_eng_drive_inertial",
+    "school": "engineering",
+    "tier": 5,
+    "ru": "Инерционные компенсаторы",
+    "descRu": "+20% скорости флотов, +5% урона.",
+    "cost": 3309,
+    "effects": [
+      {
+        "kind": "modifier",
+        "target": "fleet_speed_pct",
+        "value": 0.2
+      },
+      {
+        "kind": "modifier",
+        "target": "weapon_damage",
+        "value": 0.05
+      }
+    ],
+    "weight": 15,
+    "requires": [
+      "x_eng_drive_warp"
+    ]
+  },
+  {
+    "id": "x_eng_mega_2",
+    "school": "engineering",
+    "tier": 5,
+    "ru": "Инженерия мегаструктур II",
+    "descRu": "−15% стоимость мегаструктур.",
+    "cost": 3309,
+    "effects": [
+      {
+        "kind": "modifier",
+        "target": "megastructure_cost",
+        "value": -0.15
+      }
+    ],
+    "weight": 15,
+    "requires": [
+      "eng_megastructure_1"
+    ]
+  },
+  {
+    "id": "x_eng_fleet_doctrine",
+    "school": "engineering",
+    "tier": 4,
+    "ru": "Флотские доктрины",
+    "descRu": "+1 слот доктрины, −10% апкип.",
+    "cost": 1342,
+    "effects": [
+      {
+        "kind": "modifier",
+        "target": "doctrine_slots",
+        "value": 1
+      },
+      {
+        "kind": "modifier",
+        "target": "fleet_upkeep_pct",
+        "value": -0.1
+      }
+    ],
+    "weight": 30,
+    "requires": [
+      "eng_logistics_1"
+    ]
+  }
+]

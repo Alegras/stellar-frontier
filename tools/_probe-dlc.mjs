@@ -1,0 +1,13 @@
+import * as data from "@sf/data";
+import * as sim from "@sf/sim";
+const w = sim.createWorld(42, data.MODE, data.BALANCE);
+sim.ensureFg(w);
+const d0 = sim.getDlcState ? sim.getDlcState(w) : null;
+console.log("state0", JSON.stringify({ enabled: d0?.enabled, mode: d0?.mode, schema: d0?.schemaVersion, storySent: d0?.storySent, quests: Object.keys(d0?.quests ?? {}).length, dialogue: d0?.dialogue }));
+sim.tick(w, 1000);
+const d = sim.getDlcState(w);
+console.log("afterTick", JSON.stringify({ tick: w.tick, storySent: d.storySent, activeQuest: d.activeQuestId, dialogue: d.dialogue && { scene: d.dialogue.sceneId, node: d.dialogue.nodeId, active: d.dialogue.active } }));
+console.log("view", JSON.stringify(sim.getDlcDialogueView?.(w)));
+console.log("journal", JSON.stringify(sim.getDlcJournal(w).slice(0, 2)));
+console.log("board", JSON.stringify(sim.getDlcBoard(w)));
+console.log("tree", JSON.stringify({ nodes: sim.getDlcTree(w).nodes.length, edges: sim.getDlcTree(w).edges.length }));

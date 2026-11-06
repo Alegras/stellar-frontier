@@ -1,0 +1,53 @@
+{
+  "generatedAt": "2026-11-04T20:07:22.899Z",
+  "baseURL": "http://127.0.0.1:5173",
+  "screens": [
+    {
+      "screen": "menu",
+      "violations": 0,
+      "critical": 0,
+      "serious": 0,
+      "moderate": 0,
+      "minor": 0,
+      "details": []
+    },
+    {
+      "screen": "map",
+      "violations": 0,
+      "critical": 0,
+      "serious": 0,
+      "moderate": 0,
+      "minor": 0,
+      "details": []
+    },
+    {
+      "screen": "station",
+      "violations": 0,
+      "critical": 0,
+      "serious": 0,
+      "moderate": 0,
+      "minor": 0,
+      "details": []
+    },
+    {
+      "screen": "market-panel",
+      "violations": 0,
+      "critical": 0,
+      "serious": 0,
+      "moderate": 0,
+      "minor": 0,
+      "details": []
+    },
+    {
+      "screen": "ancients-panel",
+      "violations": 0,
+      "critical": 0,
+      "serious": 0,
+      "moderate": 0,
+      "minor": 0,
+      "details": []
+    }
+  ],
+  "consoleErrors": [],
+  "pageErrors": []
+}

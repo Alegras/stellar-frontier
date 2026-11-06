@@ -1,0 +1,468 @@
+[
+  {
+    "id": "anc_m01_beacon",
+    "index": 1,
+    "act": 2,
+    "titleRu": "Маяк Ансаров",
+    "briefingRu": "Исследователь передаёт: «В системе — конструкция. Не станция, не корабль. Тонкая, сорок километров, висит в точке Лагранжа. Она передаёт. Один тон. Раз в сорок лет». Звезда рядом — немая: света много, масса не та. Решите, что вы делаете с сигналом, которому сорок тысяч лет: отвечаете, слушаете или глушите. Уйти можно в любой момент.",
+    "objectives": [
+      {
+        "id": "visit_beacon",
+        "type": "visit",
+        "target": "sys_ansari_beacon"
+      },
+      {
+        "id": "scan_layers",
+        "type": "scan",
+        "count": 3
+      },
+      {
+        "id": "beacon_seen",
+        "type": "flag",
+        "target": "beacon_seen"
+      }
+    ],
+    "rewards": {
+      "relics": 2,
+      "codex": [
+        "cx_beacon_1",
+        "cx_beacon_2",
+        "cx_beacon_3",
+        "cx_relic"
+      ],
+      "flag": "beacon_seen"
+    },
+    "unlocks": [
+      "A0"
+    ]
+  },
+  {
+    "id": "anc_m02_tuning",
+    "index": 2,
+    "act": 2,
+    "titleRu": "Камертон",
+    "briefingRu": "Узел Дорог. Три струны, четвёртая оборвана. В центре — конструкция, похожая на Маяк, но меньше: два кольца, между ними пустота, и в пустоте что-то держит ноту. Страж не атакует. Страж ждёт. Он говорит на языке, которого вы не знаете, но интонация читается: «покажи, что слышишь». Три раза.",
+    "objectives": [
+      {
+        "id": "visit_knot",
+        "type": "visit",
+        "target": "sys_tuning_knot"
+      },
+      {
+        "id": "tuning_rounds",
+        "type": "scan",
+        "count": 3
+      },
+      {
+        "id": "tuning_done",
+        "type": "flag",
+        "target": "tuning_done"
+      }
+    ],
+    "rewards": {
+      "relics": 3,
+      "codex": [
+        "cx_ansari_name",
+        "cx_roads",
+        "cx_tuning_trial",
+        "cx_lad_script"
+      ],
+      "flag": "tuning_done"
+    },
+    "unlocks": [
+      "A1"
+    ],
+    "requiresFlags": [
+      "beacon_seen"
+    ]
+  },
+  {
+    "id": "anc_m03_dead_light",
+    "index": 3,
+    "act": 2,
+    "titleRu": "Немой свет",
+    "briefingRu": "Звезда мертва, но светит. Оболочка без ядра — как колокол без языка. У оболочки уже стоят трое: корабли-соборы, сросшиеся из гражданских судов, и они поют. Они извлекают то, что осталось в оболочке: ядро. Если оно им достанется, у них будет ещё один голос.",
+    "objectives": [
+      {
+        "id": "visit_muted",
+        "type": "visit",
+        "target": "sys_muted_1"
+      },
+      {
+        "id": "scan_shell",
+        "type": "scan",
+        "count": 3
+      },
+      {
+        "id": "keep_relics",
+        "type": "relics",
+        "count": 3
+      }
+    ],
+    "rewards": {
+      "relics": 3,
+      "cores": 1,
+      "codex": [
+        "cx_muted_stars",
+        "cx_fallen"
+      ],
+      "flag": "muted_star_seen"
+    },
+    "unlocks": [],
+    "requiresFlags": [
+      "beacon_seen"
+    ]
+  },
+  {
+    "id": "anc_m04_warden_word",
+    "index": 4,
+    "act": 3,
+    "titleRu": "Слово Стражей",
+    "briefingRu": "Хроника Лада — не книга. Это зал, в котором каждая стена — запись голосом, и голоса звучат одновременно. Стражи впускают вас, но не приветствуют: «Ты пришёл за словом. Слово будет, если ты выдержишь свой собственный звук». Дальше — два испытания: зачем вы здесь и кто вы.",
+    "objectives": [
+      {
+        "id": "visit_kermur",
+        "type": "visit",
+        "target": "sys_kermur"
+      },
+      {
+        "id": "chronicle_scan",
+        "type": "scan",
+        "count": 2
+      },
+      {
+        "id": "truth_a",
+        "type": "flag",
+        "target": "truth_a"
+      }
+    ],
+    "rewards": {
+      "relics": 4,
+      "cores": 1,
+      "codex": [
+        "cx_accord_era",
+        "cx_schism",
+        "cx_truth_a_1",
+        "cx_truth_a_2"
+      ],
+      "flag": "truth_a"
+    },
+    "unlocks": [
+      "A2"
+    ],
+    "requiresFlags": [
+      "tuning_done"
+    ]
+  },
+  {
+    "id": "anc_m05_road_that_isnt",
+    "index": 5,
+    "act": 3,
+    "titleRu": "Дорога, которой нет",
+    "briefingRu": "Отступники вскрыли узел, который Ансары погасили полтора миллиона лет назад. Внутри — обрывок струны: дорога, которой нет ни на одной карте. Они уходят по ней, и с той стороны что-то отвечает. Не словами. Повтором.",
+    "objectives": [
+      {
+        "id": "visit_broken",
+        "type": "visit",
+        "target": "sys_broken_knot"
+      },
+      {
+        "id": "road_scan",
+        "type": "scan",
+        "count": 2
+      },
+      {
+        "id": "choir_contact",
+        "type": "flag",
+        "target": "choir_contact"
+      }
+    ],
+    "rewards": {
+      "relics": 4,
+      "codex": [
+        "cx_choir_war",
+        "cx_choir_1",
+        "cx_echo",
+        "cx_attention"
+      ],
+      "flag": "choir_contact"
+    },
+    "unlocks": [],
+    "requiresFlags": [
+      "tuning_done"
+    ]
+  },
+  {
+    "id": "anc_m06_singing_core",
+    "index": 6,
+    "act": 3,
+    "titleRu": "Ядро, что поёт",
+    "briefingRu": "Девять километров мёртвого корпуса. Внутри — свет: не аварийный, а ровный, как в храме, где забыли выключить. В центре — то, что Стражи называют Кер-Ас: ядро. Вокруг него спит Страж, и ему не сказали, что война кончилась.",
+    "objectives": [
+      {
+        "id": "visit_shell",
+        "type": "visit",
+        "target": "sys_shell"
+      },
+      {
+        "id": "take_core",
+        "type": "cores",
+        "count": 1
+      },
+      {
+        "id": "reactor_gate",
+        "type": "tech",
+        "target": "a2_ansari_reactor"
+      }
+    ],
+    "rewards": {
+      "relics": 5,
+      "cores": 1,
+      "tech": "a3_warp_drive",
+      "codex": [
+        "cx_shell",
+        "cx_core",
+        "cx_warp_core"
+      ],
+      "flag": "warden_core"
+    },
+    "unlocks": [
+      "A3"
+    ],
+    "requiresFlags": [
+      "tuning_done"
+    ]
+  },
+  {
+    "id": "anc_m07_hall_one_voice",
+    "index": 7,
+    "act": 3,
+    "titleRu": "Собор одного голоса",
+    "briefingRu": "Вас пригласили. Не взяли в плен — пригласили, с уважением, на «слушание». В центре построения висит корабль, который когда-то был городом, а теперь стал собором. Внутри поют. Вам обещают, что вы услышите голос своего народа — и не лгут.",
+    "objectives": [
+      {
+        "id": "visit_hall",
+        "type": "visit",
+        "target": "sys_fallen_hall"
+      },
+      {
+        "id": "fallen_relation",
+        "type": "relation",
+        "target": "fallen",
+        "count": 20
+      },
+      {
+        "id": "truth_b",
+        "type": "flag",
+        "target": "truth_b"
+      }
+    ],
+    "rewards": {
+      "relics": 5,
+      "cores": 2,
+      "codex": [
+        "cx_unison",
+        "cx_truth_b_1",
+        "cx_truth_b_2",
+        "cx_singer"
+      ],
+      "flag": "truth_b"
+    },
+    "unlocks": [],
+    "requiresFlags": [
+      "truth_a"
+    ]
+  },
+  {
+    "id": "anc_m08_three_keys",
+    "index": 8,
+    "act": 4,
+    "titleRu": "Три ключа",
+    "briefingRu": "Два кольца, восемьсот километров между ними, и в зазоре — звёзды, которых нет на карте. Врата не портал: это инструмент, который натягивает струну там, где её не было. Нужны три камертона. У вас есть два и почти есть третий.",
+    "objectives": [
+      {
+        "id": "visit_val_an",
+        "type": "visit",
+        "target": "sys_val_an"
+      },
+      {
+        "id": "keys_relics",
+        "type": "relics",
+        "count": 3
+      },
+      {
+        "id": "gates_open",
+        "type": "flag",
+        "target": "gates_open"
+      }
+    ],
+    "rewards": {
+      "relics": 4,
+      "cores": 1,
+      "codex": [
+        "cx_val_an",
+        "cx_harm_key",
+        "cx_wardens"
+      ],
+      "flag": "gates_open"
+    },
+    "unlocks": [
+      "A4",
+      "gates"
+    ],
+    "requiresFlags": [
+      "truth_a"
+    ]
+  },
+  {
+    "id": "anc_m09_first_rift",
+    "index": 9,
+    "act": 4,
+    "titleRu": "Первый разрыв",
+    "briefingRu": "Варп-двигатель не «летит быстрее». Он делает то, чего не делает FSD: он игнорирует партитуру. Прыжок в любую точку в радиусе шестидесяти световых лет, вне Дорог, вне расписания. Раскрутка шестьдесят секунд, и всё это время вы звучите так громко, что вас слышно за галактикой.",
+    "objectives": [
+      {
+        "id": "visit_rift_test",
+        "type": "visit",
+        "target": "sys_rift_test"
+      },
+      {
+        "id": "first_warp",
+        "type": "warp_jump",
+        "count": 1
+      },
+      {
+        "id": "warp_proven",
+        "type": "flag",
+        "target": "warp_proven"
+      }
+    ],
+    "rewards": {
+      "relics": 4,
+      "cores": 1,
+      "codex": [
+        "cx_unknown_worlds",
+        "cx_core"
+      ],
+      "flag": "warp_proven"
+    },
+    "unlocks": [
+      "warp"
+    ],
+    "requiresFlags": [
+      "gates_open"
+    ]
+  },
+  {
+    "id": "anc_m10_beyond_gate",
+    "index": 10,
+    "act": 4,
+    "titleRu": "За Вратами",
+    "briefingRu": "Сорок пять систем. Ни одной гиперлинии. Звёзды горят, но молчат: ни радиошума, ни маяков, ни чужих переговоров. В центре — три корабля-города, и они не отвечают. Не потому что враждебны. Потому что разговаривать — это то, что они перестали делать полтора миллиона лет назад.",
+    "objectives": [
+      {
+        "id": "visit_ir",
+        "type": "visit",
+        "target": "sys_ir_1"
+      },
+      {
+        "id": "sector_scans",
+        "type": "sector_scan",
+        "count": 3
+      },
+      {
+        "id": "sector_open",
+        "type": "flag",
+        "target": "sector_open"
+      }
+    ],
+    "rewards": {
+      "relics": 3,
+      "codex": [
+        "cx_ir_lad",
+        "cx_silent",
+        "cx_ark"
+      ],
+      "flag": "sector_open"
+    },
+    "unlocks": [
+      "sector"
+    ],
+    "requiresFlags": [
+      "warp_proven"
+    ]
+  },
+  {
+    "id": "anc_m11_choir_hears",
+    "index": 11,
+    "act": 5,
+    "titleRu": "Хор слышит",
+    "briefingRu": "«Камень Лада» — не камень. Это первая звезда, которую Ансары сделали тихой. Рядом — гнездо Хора: оно ест соседнюю звезду, и когда доест, услышит Камень. Молчащая ждёт вас на оболочке. Она скажет одну фразу, и эта фраза перевернёт всё.",
+    "objectives": [
+      {
+        "id": "visit_lad",
+        "type": "visit",
+        "target": "sys_lad_stone"
+      },
+      {
+        "id": "sector_deep",
+        "type": "sector_scan",
+        "count": 5
+      },
+      {
+        "id": "kill_nest",
+        "type": "kill_fp",
+        "count": 400
+      },
+      {
+        "id": "truth_c",
+        "type": "flag",
+        "target": "truth_c"
+      }
+    ],
+    "rewards": {
+      "relics": 3,
+      "cores": 1,
+      "codex": [
+        "cx_truth_c_1",
+        "cx_truth_c_2",
+        "cx_lad_stone",
+        "cx_silent_alliance"
+      ],
+      "flag": "truth_c"
+    },
+    "unlocks": [],
+    "requiresFlags": [
+      "sector_open"
+    ]
+  },
+  {
+    "id": "anc_m12_legacy",
+    "index": 12,
+    "act": 5,
+    "titleRu": "Наследие",
+    "briefingRu": "Три вещи лежат перед вами. Маяк — счётчик, который можно выключить. Врата — инструмент, который можно забрать. И тишина — то, чему Ансары учились полтора миллиона лет. Вы можете запечатать наследие, взять его себе или отдать галактике. Все три варианта работают.",
+    "objectives": [
+      {
+        "id": "final_choice",
+        "type": "flag",
+        "target": "legacy_final"
+      }
+    ],
+    "rewards": {
+      "codex": [
+        "cx_end_seal",
+        "cx_end_use",
+        "cx_end_give"
+      ],
+      "flag": "legacy_final"
+    },
+    "unlocks": [
+      "ending",
+      "A5"
+    ],
+    "requiresFlags": [
+      "truth_c"
+    ]
+  }
+]

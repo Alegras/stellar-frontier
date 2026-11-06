@@ -1,0 +1,13 @@
+import { chromium } from "@playwright/test";
+import { pathToFileURL } from "node:url";
+const browser = await chromium.launch({ channel: "chrome", args: [] });
+const page = await browser.newPage({ viewport: { width: 1600, height: 900 } });
+const errs = [];
+page.on("pageerror", (e) => errs.push(e.message));
+page.on("console", (m) => { if (m.type() === "error") errs.push(m.text()); });
+await page.goto(pathToFileURL("C:/Users/vawum/AppData/Local/Temp/sf-gift-test2/StellarFrontier.html").href, { waitUntil: "domcontentloaded" });
+await page.waitForTimeout(2200);
+await page.locator('[data-testid="btn-mode-campaign"]').first().click();
+await page.waitForTimeout(2200);
+console.log(JSON.stringify({ politicalMap: await page.locator('[data-testid="political-map"]').count(), legend: await page.locator('[data-testid^="political-legend-"]').count(), errors: errs.length, sample: errs.slice(0, 3) }));
+await browser.close();

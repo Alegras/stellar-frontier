@@ -1,0 +1,440 @@
+[
+  {
+    "id": "hull_corvette",
+    "ru": "Корпус «Стриж»",
+    "classId": "corvette",
+    "mass": 80,
+    "maxMass": 120,
+    "hullHp": 180,
+    "armorBase": 40,
+    "shieldBase": 90,
+    "slots": {
+      "small": 2,
+      "medium": 1,
+      "large": 0,
+      "utility": 3,
+      "internal": 2
+    },
+    "costAlloys": 12,
+    "baseSpeed": 480,
+    "boostSpeed": 620,
+    "pitchDegS": 42,
+    "buildTicks": 3,
+    "requiredTech": null,
+    "roles": [
+      "scout",
+      "screen"
+    ],
+    "lengthM": 60
+  },
+  {
+    "id": "hull_frigate",
+    "ru": "Корпус «Клинок»",
+    "classId": "frigate",
+    "mass": 140,
+    "maxMass": 210,
+    "hullHp": 340,
+    "armorBase": 90,
+    "shieldBase": 160,
+    "slots": {
+      "small": 3,
+      "medium": 1,
+      "large": 0,
+      "utility": 4,
+      "internal": 2
+    },
+    "costAlloys": 25,
+    "baseSpeed": 420,
+    "boostSpeed": 540,
+    "pitchDegS": 36,
+    "buildTicks": 5,
+    "requiredTech": "eng_hull_1",
+    "roles": [
+      "escort",
+      "anti-fighter"
+    ],
+    "lengthM": 110
+  },
+  {
+    "id": "hull_destroyer",
+    "ru": "Корпус «Молот»",
+    "classId": "destroyer",
+    "mass": 260,
+    "maxMass": 380,
+    "hullHp": 620,
+    "armorBase": 180,
+    "shieldBase": 280,
+    "slots": {
+      "small": 0,
+      "medium": 2,
+      "large": 1,
+      "utility": 5,
+      "internal": 3
+    },
+    "costAlloys": 45,
+    "baseSpeed": 380,
+    "boostSpeed": 470,
+    "pitchDegS": 30,
+    "buildTicks": 8,
+    "requiredTech": "eng_hull_2",
+    "roles": [
+      "line",
+      "anti-cruiser"
+    ],
+    "lengthM": 200
+  },
+  {
+    "id": "hull_cruiser",
+    "ru": "Корпус «Копьё»",
+    "classId": "cruiser",
+    "mass": 480,
+    "maxMass": 700,
+    "hullHp": 1250,
+    "armorBase": 380,
+    "shieldBase": 520,
+    "slots": {
+      "small": 0,
+      "medium": 2,
+      "large": 2,
+      "utility": 6,
+      "internal": 4
+    },
+    "costAlloys": 90,
+    "baseSpeed": 320,
+    "boostSpeed": 400,
+    "pitchDegS": 24,
+    "buildTicks": 14,
+    "requiredTech": "eng_hull_3",
+    "roles": [
+      "line",
+      "siege"
+    ],
+    "lengthM": 400
+  },
+  {
+    "id": "hull_battleship",
+    "ru": "Корпус «Бастион»",
+    "classId": "battleship",
+    "mass": 900,
+    "maxMass": 1300,
+    "hullHp": 2600,
+    "armorBase": 800,
+    "shieldBase": 1050,
+    "slots": {
+      "small": 0,
+      "medium": 3,
+      "large": 3,
+      "utility": 8,
+      "internal": 5
+    },
+    "costAlloys": 180,
+    "baseSpeed": 260,
+    "boostSpeed": 330,
+    "pitchDegS": 18,
+    "buildTicks": 22,
+    "requiredTech": "eng_hull_4",
+    "roles": [
+      "capital"
+    ],
+    "lengthM": 800
+  },
+  {
+    "id": "hull_titan",
+    "ru": "Корпус «Левиафан»",
+    "classId": "titan",
+    "mass": 1800,
+    "maxMass": 2600,
+    "hullHp": 6200,
+    "armorBase": 1800,
+    "shieldBase": 2400,
+    "slots": {
+      "small": 0,
+      "medium": 6,
+      "large": 6,
+      "utility": 10,
+      "internal": 6
+    },
+    "costAlloys": 420,
+    "baseSpeed": 200,
+    "boostSpeed": 250,
+    "pitchDegS": 12,
+    "buildTicks": 40,
+    "requiredTech": "eng_hull_5",
+    "roles": [
+      "supercapital"
+    ],
+    "lengthM": 1600
+  },
+  {
+    "id": "hull_colossus",
+    "ru": "Корпус «Молчание»",
+    "classId": "colossus",
+    "mass": 1600,
+    "maxMass": 2200,
+    "hullHp": 4000,
+    "armorBase": 1500,
+    "shieldBase": 1200,
+    "slots": {
+      "small": 0,
+      "medium": 0,
+      "large": 4,
+      "utility": 6,
+      "internal": 6
+    },
+    "costAlloys": 2000,
+    "baseSpeed": 180,
+    "boostSpeed": 220,
+    "pitchDegS": 10,
+    "buildTicks": 60,
+    "requiredTech": "eng_colossus_1",
+    "roles": [
+      "planet_killer"
+    ],
+    "lengthM": 2000
+  },
+  {
+    "id": "hull_carrier",
+    "ru": "Корпус «Улей»",
+    "classId": "carrier",
+    "mass": 1200,
+    "maxMass": 1800,
+    "hullHp": 3200,
+    "armorBase": 900,
+    "shieldBase": 1400,
+    "slots": {
+      "small": 0,
+      "medium": 2,
+      "large": 2,
+      "utility": 9,
+      "internal": 6
+    },
+    "costAlloys": 550,
+    "baseSpeed": 240,
+    "boostSpeed": 300,
+    "pitchDegS": 14,
+    "buildTicks": 28,
+    "requiredTech": "eng_carrier_1",
+    "roles": [
+      "carrier",
+      "strike"
+    ],
+    "lengthM": 1200
+  },
+  {
+    "id": "hull_shuttle",
+    "ru": "Шаттл «Пыль»",
+    "classId": "shuttle",
+    "mass": 20,
+    "maxMass": 30,
+    "hullHp": 60,
+    "armorBase": 5,
+    "shieldBase": 20,
+    "slots": {
+      "small": 0,
+      "medium": 0,
+      "large": 0,
+      "utility": 1,
+      "internal": 2
+    },
+    "costAlloys": 6,
+    "baseSpeed": 380,
+    "boostSpeed": 460,
+    "pitchDegS": 50,
+    "buildTicks": 2,
+    "requiredTech": null,
+    "roles": [
+      "transport"
+    ],
+    "lengthM": 30
+  },
+  {
+    "id": "hull_science",
+    "ru": "Исследователь «Око»",
+    "classId": "science",
+    "mass": 30,
+    "maxMass": 45,
+    "hullHp": 90,
+    "armorBase": 10,
+    "shieldBase": 40,
+    "slots": {
+      "small": 0,
+      "medium": 0,
+      "large": 0,
+      "utility": 2,
+      "internal": 2
+    },
+    "costAlloys": 12,
+    "baseSpeed": 420,
+    "boostSpeed": 520,
+    "pitchDegS": 46,
+    "buildTicks": 4,
+    "requiredTech": null,
+    "roles": [
+      "exploration"
+    ],
+    "lengthM": 40
+  },
+  {
+    "id": "hull_trader",
+    "ru": "Торговец «Вьюк»",
+    "classId": "trader",
+    "mass": 90,
+    "maxMass": 140,
+    "hullHp": 220,
+    "armorBase": 20,
+    "shieldBase": 60,
+    "slots": {
+      "small": 0,
+      "medium": 0,
+      "large": 0,
+      "utility": 2,
+      "internal": 4
+    },
+    "costAlloys": 20,
+    "baseSpeed": 340,
+    "boostSpeed": 420,
+    "pitchDegS": 30,
+    "buildTicks": 5,
+    "requiredTech": null,
+    "roles": [
+      "trade"
+    ],
+    "lengthM": 120
+  },
+  {
+    "id": "hull_trader_large",
+    "ru": "Торговец «Караван»",
+    "classId": "trader",
+    "mass": 260,
+    "maxMass": 360,
+    "hullHp": 600,
+    "armorBase": 120,
+    "shieldBase": 200,
+    "slots": {
+      "small": 0,
+      "medium": 0,
+      "large": 0,
+      "utility": 3,
+      "internal": 6
+    },
+    "costAlloys": 60,
+    "baseSpeed": 280,
+    "boostSpeed": 340,
+    "pitchDegS": 22,
+    "buildTicks": 10,
+    "requiredTech": "eng_logistics_2",
+    "roles": [
+      "trade",
+      "bulk"
+    ],
+    "lengthM": 260
+  },
+  {
+    "id": "hull_miner",
+    "ru": "Шахтёр «Кирка»",
+    "classId": "miner",
+    "mass": 110,
+    "maxMass": 160,
+    "hullHp": 260,
+    "armorBase": 60,
+    "shieldBase": 90,
+    "slots": {
+      "small": 0,
+      "medium": 0,
+      "large": 0,
+      "utility": 2,
+      "internal": 4
+    },
+    "costAlloys": 22,
+    "baseSpeed": 300,
+    "boostSpeed": 380,
+    "pitchDegS": 28,
+    "buildTicks": 5,
+    "requiredTech": null,
+    "roles": [
+      "mining"
+    ],
+    "lengthM": 130
+  },
+  {
+    "id": "hull_colonizer",
+    "ru": "Колонизатор «Ковчег»",
+    "classId": "colonizer",
+    "mass": 140,
+    "maxMass": 200,
+    "hullHp": 300,
+    "armorBase": 30,
+    "shieldBase": 80,
+    "slots": {
+      "small": 0,
+      "medium": 0,
+      "large": 0,
+      "utility": 2,
+      "internal": 4
+    },
+    "costAlloys": 30,
+    "baseSpeed": 260,
+    "boostSpeed": 320,
+    "pitchDegS": 24,
+    "buildTicks": 8,
+    "requiredTech": null,
+    "roles": [
+      "colonization"
+    ],
+    "lengthM": 180
+  },
+  {
+    "id": "hull_troopship",
+    "ru": "Десантный «Клин»",
+    "classId": "troopship",
+    "mass": 200,
+    "maxMass": 280,
+    "hullHp": 450,
+    "armorBase": 120,
+    "shieldBase": 160,
+    "slots": {
+      "small": 0,
+      "medium": 1,
+      "large": 0,
+      "utility": 3,
+      "internal": 4
+    },
+    "costAlloys": 55,
+    "baseSpeed": 300,
+    "boostSpeed": 360,
+    "pitchDegS": 20,
+    "buildTicks": 10,
+    "requiredTech": "eng_logistics_1",
+    "roles": [
+      "invasion"
+    ],
+    "lengthM": 180
+  },
+  {
+    "id": "hull_tanker",
+    "ru": "Топливовоз «Цистерна»",
+    "classId": "tanker",
+    "mass": 180,
+    "maxMass": 240,
+    "hullHp": 400,
+    "armorBase": 90,
+    "shieldBase": 120,
+    "slots": {
+      "small": 0,
+      "medium": 0,
+      "large": 0,
+      "utility": 2,
+      "internal": 5
+    },
+    "costAlloys": 40,
+    "baseSpeed": 290,
+    "boostSpeed": 350,
+    "pitchDegS": 22,
+    "buildTicks": 8,
+    "requiredTech": null,
+    "roles": [
+      "logistics"
+    ],
+    "lengthM": 160
+  }
+]

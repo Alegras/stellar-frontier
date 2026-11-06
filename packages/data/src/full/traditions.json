@@ -1,0 +1,592 @@
+[
+  {
+    "id": "discovery",
+    "ru": "Открытие",
+    "descRu": "Наука и первопроходство: быстрее находить и понимать.",
+    "color": "#4FC3F7",
+    "nodes": [
+      {
+        "id": "dis_1",
+        "treeId": "discovery",
+        "index": 0,
+        "ru": "Любознательность",
+        "descRu": "+10% ко всем потокам науки.",
+        "cost": 400,
+        "requires": [],
+        "effects": {
+          "science_prod": 0.1
+        }
+      },
+      {
+        "id": "dis_2",
+        "treeId": "discovery",
+        "index": 1,
+        "ru": "Научная экспедиция",
+        "descRu": "+1 очко науки каждой школе в такт.",
+        "cost": 600,
+        "requires": [
+          "dis_1"
+        ],
+        "effects": {
+          "science_flat_per_school": 1
+        }
+      },
+      {
+        "id": "dis_3",
+        "treeId": "discovery",
+        "index": 2,
+        "ru": "Дальние сенсоры",
+        "descRu": "+1 прыжок дальности сенсоров.",
+        "cost": 900,
+        "requires": [
+          "dis_2"
+        ],
+        "effects": {
+          "sensor_range": 1
+        }
+      },
+      {
+        "id": "dis_4",
+        "treeId": "discovery",
+        "index": 3,
+        "ru": "Полевые лаборатории",
+        "descRu": "+25% скорость исследования аномалий.",
+        "cost": 1350,
+        "requires": [
+          "dis_3"
+        ],
+        "effects": {
+          "anomaly_speed": 0.25
+        }
+      },
+      {
+        "id": "dis_5",
+        "treeId": "discovery",
+        "index": 4,
+        "ru": "Три гипотезы",
+        "descRu": "+1 альтернатива при выборе технологии.",
+        "cost": 2025,
+        "requires": [
+          "dis_4"
+        ],
+        "effects": {
+          "extra_tech_choice": 1
+        }
+      }
+    ],
+    "finisher": {
+      "id": "dis_finisher",
+      "ru": "Первопроходец",
+      "descRu": "После открытия новой системы +20% науки на 20 тактов.",
+      "effects": {
+        "science_burst": 0.2,
+        "science_burst_ticks": 20
+      }
+    }
+  },
+  {
+    "id": "expansion",
+    "ru": "Экспансия",
+    "descRu": "Расширение границ: колонии, жильё, влияние.",
+    "color": "#6BE675",
+    "nodes": [
+      {
+        "id": "exp_1",
+        "treeId": "expansion",
+        "index": 0,
+        "ru": "Колониальный устав",
+        "descRu": "−15% стоимость колонии.",
+        "cost": 400,
+        "requires": [],
+        "effects": {
+          "colony_cost": -0.15
+        }
+      },
+      {
+        "id": "exp_2",
+        "treeId": "expansion",
+        "index": 1,
+        "ru": "Типовое жильё",
+        "descRu": "+1 жильё в каждой колонии.",
+        "cost": 600,
+        "requires": [
+          "exp_1"
+        ],
+        "effects": {
+          "housing": 1
+        }
+      },
+      {
+        "id": "exp_3",
+        "treeId": "expansion",
+        "index": 2,
+        "ru": "Волны переселения",
+        "descRu": "+10% роста населения.",
+        "cost": 900,
+        "requires": [
+          "exp_2"
+        ],
+        "effects": {
+          "pop_growth": 0.1
+        }
+      },
+      {
+        "id": "exp_4",
+        "treeId": "expansion",
+        "index": 3,
+        "ru": "Форпосты фронтира",
+        "descRu": "−20% стоимость аутпоста.",
+        "cost": 1350,
+        "requires": [
+          "exp_3"
+        ],
+        "effects": {
+          "outpost_cost": -0.2
+        }
+      },
+      {
+        "id": "exp_5",
+        "treeId": "expansion",
+        "index": 4,
+        "ru": "Голос границы",
+        "descRu": "+2 влияния в такт.",
+        "cost": 2025,
+        "requires": [
+          "exp_4"
+        ],
+        "effects": {
+          "influence_flat": 2
+        }
+      }
+    ],
+    "finisher": {
+      "id": "exp_finisher",
+      "ru": "Фронтир",
+      "descRu": "Новая колония сразу получает 5 попов.",
+      "effects": {
+        "new_colony_pops": 5
+      }
+    }
+  },
+  {
+    "id": "domination",
+    "ru": "Доминирование",
+    "descRu": "Война как инструмент: флот, урон, доктрины.",
+    "color": "#FF5A5A",
+    "nodes": [
+      {
+        "id": "dom_1",
+        "treeId": "domination",
+        "index": 0,
+        "ru": "Военный призыв",
+        "descRu": "+5% флотского лимита.",
+        "cost": 400,
+        "requires": [],
+        "effects": {
+          "fleet_cap_pct": 0.05
+        }
+      },
+      {
+        "id": "dom_2",
+        "treeId": "domination",
+        "index": 1,
+        "ru": "Наступательная школа",
+        "descRu": "+10% урона флота.",
+        "cost": 600,
+        "requires": [
+          "dom_1"
+        ],
+        "effects": {
+          "weapon_damage": 0.1
+        }
+      },
+      {
+        "id": "dom_3",
+        "treeId": "domination",
+        "index": 2,
+        "ru": "Академия адмиралов",
+        "descRu": "+10% опыта адмиралов.",
+        "cost": 900,
+        "requires": [
+          "dom_2"
+        ],
+        "effects": {
+          "admiral_exp": 0.1
+        }
+      },
+      {
+        "id": "dom_4",
+        "treeId": "domination",
+        "index": 3,
+        "ru": "Тыл и снабжение",
+        "descRu": "−15% апкип флота.",
+        "cost": 1350,
+        "requires": [
+          "dom_3"
+        ],
+        "effects": {
+          "fleet_upkeep_pct": -0.15
+        }
+      },
+      {
+        "id": "dom_5",
+        "treeId": "domination",
+        "index": 4,
+        "ru": "Уставные доктрины",
+        "descRu": "+1 слот доктрины.",
+        "cost": 2025,
+        "requires": [
+          "dom_4"
+        ],
+        "effects": {
+          "doctrine_slots": 1
+        }
+      }
+    ],
+    "finisher": {
+      "id": "dom_finisher",
+      "ru": "Тотальная война",
+      "descRu": "+25% военного счёта в войнах.",
+      "effects": {
+        "war_score": 0.25
+      }
+    }
+  },
+  {
+    "id": "prosperity",
+    "ru": "Процветание",
+    "descRu": "Экономика: энергия, минералы, товары, стройка.",
+    "color": "#F5C542",
+    "nodes": [
+      {
+        "id": "pro_1",
+        "treeId": "prosperity",
+        "index": 0,
+        "ru": "Энергетический баланс",
+        "descRu": "+10% производства энергии.",
+        "cost": 400,
+        "requires": [],
+        "effects": {
+          "energy_prod": 0.1
+        }
+      },
+      {
+        "id": "pro_2",
+        "treeId": "prosperity",
+        "index": 1,
+        "ru": "Открытые забои",
+        "descRu": "+10% добычи минералов.",
+        "cost": 600,
+        "requires": [
+          "pro_1"
+        ],
+        "effects": {
+          "minerals_prod": 0.1
+        }
+      },
+      {
+        "id": "pro_3",
+        "treeId": "prosperity",
+        "index": 2,
+        "ru": "Потребительский стандарт",
+        "descRu": "+10% производства товаров.",
+        "cost": 900,
+        "requires": [
+          "pro_2"
+        ],
+        "effects": {
+          "goods_prod": 0.1
+        }
+      },
+      {
+        "id": "pro_4",
+        "treeId": "prosperity",
+        "index": 3,
+        "ru": "Городские кварталы",
+        "descRu": "+1 слот зданий на планете.",
+        "cost": 1350,
+        "requires": [
+          "pro_3"
+        ],
+        "effects": {
+          "building_slots": 1
+        }
+      },
+      {
+        "id": "pro_5",
+        "treeId": "prosperity",
+        "index": 4,
+        "ru": "Общественный договор",
+        "descRu": "+15% стабильности.",
+        "cost": 2025,
+        "requires": [
+          "pro_4"
+        ],
+        "effects": {
+          "stability_pct": 0.15
+        }
+      }
+    ],
+    "finisher": {
+      "id": "pro_finisher",
+      "ru": "Золотой век",
+      "descRu": "+10% ко всем потокам на 100 тактов.",
+      "effects": {
+        "all_prod_burst": 0.1,
+        "all_prod_burst_ticks": 100
+      }
+    }
+  },
+  {
+    "id": "harmony",
+    "ru": "Гармония",
+    "descRu": "Счастье, порядок, фракции и стабильность.",
+    "color": "#B78CE8",
+    "nodes": [
+      {
+        "id": "har_1",
+        "treeId": "harmony",
+        "index": 0,
+        "ru": "Быт и досуг",
+        "descRu": "+5 счастья во всех колониях.",
+        "cost": 400,
+        "requires": [],
+        "effects": {
+          "happiness": 5
+        }
+      },
+      {
+        "id": "har_2",
+        "treeId": "harmony",
+        "index": 1,
+        "ru": "Общественная полиция",
+        "descRu": "−10% преступности.",
+        "cost": 600,
+        "requires": [
+          "har_1"
+        ],
+        "effects": {
+          "crime": -0.1
+        }
+      },
+      {
+        "id": "har_3",
+        "treeId": "harmony",
+        "index": 2,
+        "ru": "Семейные программы",
+        "descRu": "+10% роста населения.",
+        "cost": 900,
+        "requires": [
+          "har_2"
+        ],
+        "effects": {
+          "pop_growth": 0.1
+        }
+      },
+      {
+        "id": "har_4",
+        "treeId": "harmony",
+        "index": 3,
+        "ru": "Совет фракций",
+        "descRu": "+1 слот фракции.",
+        "cost": 1350,
+        "requires": [
+          "har_3"
+        ],
+        "effects": {
+          "faction_slots": 1
+        }
+      },
+      {
+        "id": "har_5",
+        "treeId": "harmony",
+        "index": 4,
+        "ru": "Право на порядок",
+        "descRu": "+15 стабильности.",
+        "cost": 2025,
+        "requires": [
+          "har_4"
+        ],
+        "effects": {
+          "stability": 15
+        }
+      }
+    ],
+    "finisher": {
+      "id": "har_finisher",
+      "ru": "Единство",
+      "descRu": "Восстания невозможны 200 тактов.",
+      "effects": {
+        "no_revolt_ticks": 200
+      }
+    }
+  },
+  {
+    "id": "supremacy",
+    "ru": "Превосходство",
+    "descRu": "Флотское мастерство и щиты.",
+    "color": "#F08A24",
+    "nodes": [
+      {
+        "id": "sup_1",
+        "treeId": "supremacy",
+        "index": 0,
+        "ru": "Патрульные соединения",
+        "descRu": "+1 флотского лимита за каждые 10 систем.",
+        "cost": 400,
+        "requires": [],
+        "effects": {
+          "fleet_cap_per_10_systems": 1
+        }
+      },
+      {
+        "id": "sup_2",
+        "treeId": "supremacy",
+        "index": 1,
+        "ru": "Щитовые матрицы",
+        "descRu": "+10% максимума щитов.",
+        "cost": 600,
+        "requires": [
+          "sup_1"
+        ],
+        "effects": {
+          "shield_max": 0.1
+        }
+      },
+      {
+        "id": "sup_3",
+        "treeId": "supremacy",
+        "index": 2,
+        "ru": "Манёвренные доктрины",
+        "descRu": "+10% скорости флотов.",
+        "cost": 900,
+        "requires": [
+          "sup_2"
+        ],
+        "effects": {
+          "fleet_speed_pct": 0.1
+        }
+      },
+      {
+        "id": "sup_4",
+        "treeId": "supremacy",
+        "index": 3,
+        "ru": "Дополнительные жёсткие точки",
+        "descRu": "+1 слот оружия флагману.",
+        "cost": 1350,
+        "requires": [
+          "sup_3"
+        ],
+        "effects": {
+          "weapon_slots": 1
+        }
+      },
+      {
+        "id": "sup_5",
+        "treeId": "supremacy",
+        "index": 4,
+        "ru": "Единый кулак",
+        "descRu": "+15% флитпауэра.",
+        "cost": 2025,
+        "requires": [
+          "sup_4"
+        ],
+        "effects": {
+          "fleet_power_pct": 0.15
+        }
+      }
+    ],
+    "finisher": {
+      "id": "sup_finisher",
+      "ru": "Несокрушимость",
+      "descRu": "Флагман не теряется один раз за войну.",
+      "effects": {
+        "flagship_autoescape": 1
+      }
+    }
+  },
+  {
+    "id": "enlightenment",
+    "ru": "Просвещение",
+    "descRu": "Единство, перки и образованные элиты.",
+    "color": "#8FA3BF",
+    "nodes": [
+      {
+        "id": "enl_1",
+        "treeId": "enlightenment",
+        "index": 0,
+        "ru": "Культурный канон",
+        "descRu": "+10% единства.",
+        "cost": 400,
+        "requires": [],
+        "effects": {
+          "unity_prod": 0.1
+        }
+      },
+      {
+        "id": "enl_2",
+        "treeId": "enlightenment",
+        "index": 1,
+        "ru": "Университеты",
+        "descRu": "+1 очко каждой школе науки в такт.",
+        "cost": 600,
+        "requires": [
+          "enl_1"
+        ],
+        "effects": {
+          "science_flat_per_school": 1
+        }
+      },
+      {
+        "id": "enl_3",
+        "treeId": "enlightenment",
+        "index": 2,
+        "ru": "Разумные эдикты",
+        "descRu": "−20% стоимость эдиктов.",
+        "cost": 900,
+        "requires": [
+          "enl_2"
+        ],
+        "effects": {
+          "edict_cost": -0.2
+        }
+      },
+      {
+        "id": "enl_4",
+        "treeId": "enlightenment",
+        "index": 3,
+        "ru": "Свободный разум",
+        "descRu": "+1 слот перка.",
+        "cost": 1350,
+        "requires": [
+          "enl_3"
+        ],
+        "effects": {
+          "perk_slots": 1
+        }
+      },
+      {
+        "id": "enl_5",
+        "treeId": "enlightenment",
+        "index": 4,
+        "ru": "Эпоха разума",
+        "descRu": "+15% науки.",
+        "cost": 2025,
+        "requires": [
+          "enl_4"
+        ],
+        "effects": {
+          "science_prod": 0.15
+        }
+      }
+    ],
+    "finisher": {
+      "id": "enl_finisher",
+      "ru": "Вознесение",
+      "descRu": "−25% стоимость перков вознесения.",
+      "effects": {
+        "perk_cost": -0.25
+      }
+    }
+  }
+]

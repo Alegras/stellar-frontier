@@ -1,0 +1,65 @@
+[
+  {
+    "id": "federation",
+    "ru": "Федерация",
+    "descRu": "Галактика как союз: общий совет, общий флот, общая ответственность. Награда — доверие и скорость науки за счёт свободы действий.",
+    "missions": [
+      "br_fed_01",
+      "br_fed_02",
+      "br_fed_03",
+      "br_fed_04",
+      "br_fed_05",
+      "br_fed_06",
+      "br_fed_07",
+      "br_fed_08"
+    ],
+    "ending": "ending_release",
+    "effects": {
+      "diplo_opinion": 25,
+      "science_prod": 0.05,
+      "fleet_cap_pct": -0.05
+    }
+  },
+  {
+    "id": "sovereignty",
+    "ru": "Суверенитет",
+    "descRu": "Одна империя, один закон. Награда — флот и самостоятельность, цена — союзники и доверие совета.",
+    "missions": [
+      "br_sov_01",
+      "br_sov_02",
+      "br_sov_03",
+      "br_sov_04",
+      "br_sov_05",
+      "br_sov_06",
+      "br_sov_07",
+      "br_sov_08"
+    ],
+    "ending": "ending_control",
+    "effects": {
+      "fleet_cap_pct": 0.1,
+      "weapon_damage": 0.05,
+      "diplo_opinion": -15
+    }
+  },
+  {
+    "id": "syndicate",
+    "ru": "Синдикат",
+    "descRu": "Свободные порты и контракты вместо присяг. Награда — деньги и гибкость, цена — репутация и налоги.",
+    "missions": [
+      "br_syn_01",
+      "br_syn_02",
+      "br_syn_03",
+      "br_syn_04",
+      "br_syn_05",
+      "br_syn_06",
+      "br_syn_07",
+      "br_syn_08"
+    ],
+    "ending": "ending_syndicate",
+    "effects": {
+      "credits_prod": 0.2,
+      "trade_margin": 0.15,
+      "diplo_opinion": -10
+    }
+  }
+]

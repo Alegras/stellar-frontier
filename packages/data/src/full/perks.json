@@ -1,0 +1,141 @@
+[
+  {
+    "id": "space_engineering",
+    "ru": "Космическая инженерия",
+    "descRu": "Открывает строительство мегаструктур (тир 3).",
+    "cost": 2000,
+    "requires": [],
+    "effects": {
+      "megastructure_unlock": 1
+    },
+    "unlocks": [
+      "megastructure:sentinel_array"
+    ]
+  },
+  {
+    "id": "ring_world",
+    "ru": "Мир-кольцо",
+    "descRu": "Позволяет строить кольцевые миры (тир 4).",
+    "cost": 3000,
+    "requires": [
+      "space_engineering"
+    ],
+    "effects": {
+      "ring_world_unlock": 1
+    },
+    "unlocks": [
+      "megastructure:ring_habitat"
+    ]
+  },
+  {
+    "id": "genetic_ascension",
+    "ru": "Генетическое вознесение",
+    "descRu": "+1 слот черты расы, +15% роста населения.",
+    "cost": 3500,
+    "requires": [],
+    "effects": {
+      "trait_slots": 1,
+      "pop_growth": 0.15
+    }
+  },
+  {
+    "id": "synthetic_ascension",
+    "ru": "Синтетическое вознесение",
+    "descRu": "Роботы не требуют содержания, +10% производства.",
+    "cost": 3500,
+    "requires": [],
+    "effects": {
+      "robot_upkeep_pct": -1,
+      "production_pct": 0.1
+    }
+  },
+  {
+    "id": "psionic_ascension",
+    "ru": "Псионическое вознесение",
+    "descRu": "+20% единства, открывает пси-технологии.",
+    "cost": 4000,
+    "requires": [],
+    "effects": {
+      "unity_prod": 0.2,
+      "psi_unlock": 1
+    }
+  },
+  {
+    "id": "diplomatic_grace",
+    "ru": "Галантная дипломатия",
+    "descRu": "+25 мнения, −25% стоимость договоров.",
+    "cost": 2500,
+    "requires": [],
+    "effects": {
+      "diplo_opinion": 25,
+      "treaty_cost": -0.25
+    }
+  },
+  {
+    "id": "imperial_army",
+    "ru": "Имперская армия",
+    "descRu": "+20% армии, −15% стоимость десанта.",
+    "cost": 2500,
+    "requires": [],
+    "effects": {
+      "army_pct": 0.2,
+      "invasion_pct": -0.15
+    }
+  },
+  {
+    "id": "technocracy",
+    "ru": "Технократия",
+    "descRu": "+1 альтернатива в науке.",
+    "cost": 3000,
+    "requires": [],
+    "effects": {
+      "extra_tech_choice": 1
+    }
+  },
+  {
+    "id": "divine_mandate",
+    "ru": "Божественный мандат",
+    "descRu": "+20 легитимности (для теократии).",
+    "cost": 3000,
+    "requires": [],
+    "effects": {
+      "legitimacy": 20
+    }
+  },
+  {
+    "id": "trade_empire",
+    "ru": "Торговая империя",
+    "descRu": "+25% торговли (нужно ≥3 маршрута).",
+    "cost": 3000,
+    "requires": [],
+    "effects": {
+      "trade_margin": 0.25
+    }
+  },
+  {
+    "id": "master_builder",
+    "ru": "Мастер-строитель",
+    "descRu": "−25% стоимость мегаструктур.",
+    "cost": 4500,
+    "requires": [
+      "space_engineering"
+    ],
+    "effects": {
+      "megastructure_cost": -0.25
+    }
+  },
+  {
+    "id": "ascension",
+    "ru": "Вознесение",
+    "descRu": "Условие победы «Технологическое вознесение» (все 3 возвышения).",
+    "cost": 8000,
+    "requires": [
+      "genetic_ascension",
+      "synthetic_ascension",
+      "psionic_ascension"
+    ],
+    "effects": {
+      "ascension_victory": 1
+    }
+  }
+]

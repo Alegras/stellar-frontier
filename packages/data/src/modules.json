@@ -1,0 +1,296 @@
+[
+  {
+    "id": "shield_gen_mk1",
+    "ru": "Генератор щита Mk1",
+    "slot": "utility",
+    "mass": 6,
+    "power": 8,
+    "costAlloys": 4,
+    "shieldAdd": 90,
+    "shieldRegen": 2,
+    "tech": "phys_shields_1"
+  },
+  {
+    "id": "shield_gen_mk2",
+    "ru": "Генератор щита Mk2",
+    "slot": "utility",
+    "mass": 7,
+    "power": 9,
+    "costAlloys": 5,
+    "shieldAdd": 180,
+    "shieldRegen": 4.5,
+    "tech": "phys_shields_2"
+  },
+  {
+    "id": "shield_gen_mk3",
+    "ru": "Генератор щита Mk3",
+    "slot": "utility",
+    "mass": 9,
+    "power": 12,
+    "costAlloys": 8,
+    "shieldAdd": 300,
+    "shieldRegen": 7,
+    "effects": {
+      "resist_energy": 0.15
+    },
+    "tech": "phys_shields_4"
+  },
+  {
+    "id": "armor_plating_mk1",
+    "ru": "Броневые плиты Mk1",
+    "slot": "utility",
+    "mass": 10,
+    "power": 0,
+    "costAlloys": 3,
+    "armorAdd": 80,
+    "tech": "eng_armor_1"
+  },
+  {
+    "id": "armor_plating_mk2",
+    "ru": "Броневые плиты Mk2",
+    "slot": "utility",
+    "mass": 12,
+    "power": 0,
+    "costAlloys": 5,
+    "armorAdd": 180,
+    "tech": "eng_armor_2"
+  },
+  {
+    "id": "armor_plating_mk3",
+    "ru": "Броневые плиты Mk3",
+    "slot": "utility",
+    "mass": 15,
+    "power": 0,
+    "costAlloys": 9,
+    "armorAdd": 300,
+    "tech": "eng_armor_3"
+  },
+  {
+    "id": "heat_sink_mk1",
+    "ru": "Сброс тепла Mk1",
+    "slot": "utility",
+    "mass": 2,
+    "power": 0,
+    "costAlloys": 2,
+    "heatDissipation": 10,
+    "tech": null
+  },
+  {
+    "id": "heat_sink_mk2",
+    "ru": "Сброс тепла Mk2",
+    "slot": "utility",
+    "mass": 3,
+    "power": 0,
+    "costAlloys": 4,
+    "heatDissipation": 18,
+    "tech": "eng_thrusters_1"
+  },
+  {
+    "id": "pd_turret_mk1",
+    "ru": "ПВО-турель",
+    "slot": "utility",
+    "mass": 4,
+    "power": 3,
+    "costAlloys": 4,
+    "effects": {
+      "point_defense": 1
+    },
+    "tech": "phys_pd_1"
+  },
+  {
+    "id": "shield_bank_mk1",
+    "ru": "Щит-банк Mk1 (SCB)",
+    "slot": "utility",
+    "mass": 3,
+    "power": 4,
+    "costAlloys": 4,
+    "effects": {
+      "shield_bank": 250
+    },
+    "tech": "phys_shields_1"
+  },
+  {
+    "id": "shield_bank_mk2",
+    "ru": "Щит-банк Mk2 (SCB)",
+    "slot": "utility",
+    "mass": 4,
+    "power": 6,
+    "costAlloys": 7,
+    "effects": {
+      "shield_bank": 500
+    },
+    "tech": "phys_shields_2"
+  },
+  {
+    "id": "sensor_mk1",
+    "ru": "Сенсорный модуль Mk1",
+    "slot": "utility",
+    "mass": 2,
+    "power": 2,
+    "costAlloys": 3,
+    "sensor": 1,
+    "tech": "phys_scanners_1"
+  },
+  {
+    "id": "sensor_mk2",
+    "ru": "Сенсорный модуль Mk2",
+    "slot": "utility",
+    "mass": 3,
+    "power": 3,
+    "costAlloys": 6,
+    "sensor": 2,
+    "tech": "phys_sensors_2"
+  },
+  {
+    "id": "fuel_tank_mk1",
+    "ru": "Топливный бак Mk1",
+    "slot": "internal",
+    "mass": 4,
+    "power": 0,
+    "costAlloys": 2,
+    "effects": {
+      "fuel": 40
+    },
+    "tech": null
+  },
+  {
+    "id": "fuel_tank_mk2",
+    "ru": "Топливный бак Mk2",
+    "slot": "internal",
+    "mass": 6,
+    "power": 0,
+    "costAlloys": 4,
+    "effects": {
+      "fuel": 80
+    },
+    "tech": "eng_logistics_2"
+  },
+  {
+    "id": "cargo_pod_mk1",
+    "ru": "Грузовой отсек Mk1",
+    "slot": "internal",
+    "mass": 5,
+    "power": 0,
+    "costAlloys": 2,
+    "cargo": 50,
+    "tech": null
+  },
+  {
+    "id": "cargo_pod_mk2",
+    "ru": "Грузовой отсек Mk2",
+    "slot": "internal",
+    "mass": 7,
+    "power": 0,
+    "costAlloys": 4,
+    "cargo": 120,
+    "tech": "eng_logistics_2"
+  },
+  {
+    "id": "reactor_mk1",
+    "ru": "Реактор Mk1",
+    "slot": "internal",
+    "mass": 6,
+    "power": 32,
+    "costAlloys": 3,
+    "tech": null
+  },
+  {
+    "id": "reactor_mk2",
+    "ru": "Реактор Mk2",
+    "slot": "internal",
+    "mass": 8,
+    "power": 64,
+    "costAlloys": 6,
+    "tech": "phys_reactor_1"
+  },
+  {
+    "id": "reactor_mk3",
+    "ru": "Реактор Mk3",
+    "slot": "internal",
+    "mass": 10,
+    "power": 120,
+    "costAlloys": 10,
+    "tech": "phys_reactor_2"
+  },
+  {
+    "id": "reactor_mk4",
+    "ru": "Реактор Mk4",
+    "slot": "internal",
+    "mass": 12,
+    "power": 220,
+    "costAlloys": 18,
+    "tech": "phys_singularity_1"
+  },
+  {
+    "id": "thruster_mk1",
+    "ru": "Двигатели Mk1",
+    "slot": "internal",
+    "mass": 5,
+    "power": 0,
+    "costAlloys": 2,
+    "effects": {
+      "thrust": 1
+    },
+    "tech": null
+  },
+  {
+    "id": "thruster_mk2",
+    "ru": "Двигатели Mk2",
+    "slot": "internal",
+    "mass": 6,
+    "power": 0,
+    "costAlloys": 3,
+    "effects": {
+      "thrust": 1.3
+    },
+    "tech": "eng_thrusters_1"
+  },
+  {
+    "id": "thruster_mk3",
+    "ru": "Двигатели Mk3",
+    "slot": "internal",
+    "mass": 7,
+    "power": 0,
+    "costAlloys": 5,
+    "effects": {
+      "thrust": 1.6
+    },
+    "tech": "eng_thrusters_2"
+  },
+  {
+    "id": "fsd_mk1",
+    "ru": "FSD Mk1",
+    "slot": "internal",
+    "mass": 5,
+    "power": 0,
+    "costAlloys": 3,
+    "effects": {
+      "fsd_range": 10
+    },
+    "tech": null
+  },
+  {
+    "id": "fsd_mk2",
+    "ru": "FSD Mk2",
+    "slot": "internal",
+    "mass": 6,
+    "power": 0,
+    "costAlloys": 5,
+    "effects": {
+      "fsd_range": 12
+    },
+    "tech": "eng_fsd_1"
+  },
+  {
+    "id": "fsd_mk3",
+    "ru": "FSD Mk3",
+    "slot": "internal",
+    "mass": 7,
+    "power": 0,
+    "costAlloys": 8,
+    "effects": {
+      "fsd_range": 15
+    },
+    "tech": "eng_fsd_2"
+  }
+]

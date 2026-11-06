@@ -1,0 +1,10 @@
+{
+ "games": 1000,
+ "ticks": 7200,
+ "seed": 5000,
+ "parts": 20,
+ "failed": 0,
+ "mergeExit": 0,
+ "elapsedSec": 5462,
+ "at": "2026-11-04T15:26:37.414Z"
+}

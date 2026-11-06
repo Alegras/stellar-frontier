@@ -1,0 +1,368 @@
+[
+  {
+    "id": "dlg_q1_briefing",
+    "version": 1,
+    "nodes": [
+      {
+        "id": "n01",
+        "type": "line",
+        "speaker": "svet",
+        "emotion": "neutral",
+        "textKey": "dlg.q1.n01",
+        "next": "n02"
+      },
+      {
+        "id": "n02",
+        "type": "line",
+        "speaker": "teira_os",
+        "emotion": "neutral",
+        "textKey": "dlg.q1.n02",
+        "next": "n03"
+      },
+      {
+        "id": "n03",
+        "type": "choice",
+        "speaker": "teira_os",
+        "emotion": "cold",
+        "textKey": "dlg.q1.c1",
+        "options": [
+          {
+            "id": "going_now",
+            "textKey": "dlg.q1.c1.a",
+            "next": "n04",
+            "effects": [
+              {
+                "flag": "going_now"
+              }
+            ]
+          },
+          {
+            "id": "diagnose_first",
+            "textKey": "dlg.q1.c1.b",
+            "next": "n05",
+            "effects": [
+              {
+                "flag": "diagnose_first"
+              },
+              {
+                "timeSkip": 3
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "n04",
+        "type": "line",
+        "speaker": "kira7",
+        "emotion": "afraid",
+        "textKey": "dlg.q1.n04",
+        "next": "n06"
+      },
+      {
+        "id": "n05",
+        "type": "line",
+        "speaker": "svet",
+        "emotion": "cold",
+        "textKey": "dlg.q1.n05",
+        "next": "n06"
+      },
+      {
+        "id": "n06",
+        "type": "choice",
+        "speaker": "svet",
+        "emotion": "neutral",
+        "textKey": "dlg.q1.c2",
+        "options": [
+          {
+            "id": "leader_first",
+            "textKey": "dlg.q1.c2.a",
+            "next": "n07",
+            "effects": [
+              {
+                "flag": "leader_first"
+              },
+              {
+                "rep": {
+                  "survivors": 5
+                }
+              }
+            ]
+          },
+          {
+            "id": "escort_first",
+            "textKey": "dlg.q1.c2.b",
+            "next": "n07",
+            "effects": [
+              {
+                "flag": "escort_first"
+              }
+            ]
+          },
+          {
+            "id": "no_shots",
+            "textKey": "dlg.q1.c2.c",
+            "next": "n07",
+            "effects": [
+              {
+                "flag": "no_shots"
+              },
+              {
+                "rep": {
+                  "survivors": 5
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "n07",
+        "type": "line",
+        "speaker": "svet",
+        "emotion": "neutral",
+        "textKey": "dlg.q1.n07",
+        "next": "n08",
+        "comic": "q_pro_01_first_light_01"
+      },
+      {
+        "id": "n08",
+        "type": "line",
+        "speaker": "kira7",
+        "emotion": "sad",
+        "textKey": "dlg.q1.n08",
+        "next": "n09"
+      },
+      {
+        "id": "n09",
+        "type": "check",
+        "check": {
+          "stat": "rank_pilot",
+          "dc": 25,
+          "onSuccess": "n10",
+          "onFail": "n11"
+        }
+      },
+      {
+        "id": "n10",
+        "type": "line",
+        "speaker": "teira_os",
+        "emotion": "warm",
+        "textKey": "dlg.q1.n10",
+        "next": "n12"
+      },
+      {
+        "id": "n11",
+        "type": "line",
+        "speaker": "teira_os",
+        "emotion": "cold",
+        "textKey": "dlg.q1.n11",
+        "next": "n12"
+      },
+      {
+        "id": "n12",
+        "type": "choice",
+        "speaker": "teira_os",
+        "emotion": "neutral",
+        "textKey": "dlg.q1.c3",
+        "options": [
+          {
+            "id": "honest_report",
+            "textKey": "dlg.q1.c3.a",
+            "next": "n13",
+            "effects": [
+              {
+                "flag": "honest_report"
+              },
+              {
+                "rep": {
+                  "own_empire": 5
+                }
+              }
+            ]
+          },
+          {
+            "id": "hide_core",
+            "textKey": "dlg.q1.c3.b",
+            "next": "n13",
+            "effects": [
+              {
+                "flag": "hide_core"
+              }
+            ]
+          },
+          {
+            "id": "teira_only",
+            "textKey": "dlg.q1.c3.c",
+            "next": "n13",
+            "effects": [
+              {
+                "flag": "teira_only"
+              },
+              {
+                "rep": {
+                  "npc_teyra_os": 10
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "n13",
+        "type": "effect",
+        "effects": [
+          {
+            "chronicleKey": "dlg.q1.n13"
+          }
+        ],
+        "next": "n14"
+      },
+      {
+        "id": "n14",
+        "type": "end",
+        "effects": [
+          {
+            "openQuest": "q_pro_02_quiet_dock"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "dlg_q1_station",
+    "version": 1,
+    "nodes": [
+      {
+        "id": "k1",
+        "type": "line",
+        "speaker": "kira7",
+        "emotion": "sad",
+        "textKey": "dlg.q1st.k1",
+        "next": "k2"
+      },
+      {
+        "id": "k2",
+        "type": "choice",
+        "speaker": "kira7",
+        "emotion": "sad",
+        "textKey": "dlg.q1st.k2",
+        "options": [
+          {
+            "id": "repair",
+            "textKey": "dlg.q1st.k2.a",
+            "next": "k3",
+            "effects": [
+              {
+                "credits": -1200
+              },
+              {
+                "rep": {
+                  "survivors": 15
+                }
+              },
+              {
+                "flag": "kira_debt"
+              }
+            ]
+          },
+          {
+            "id": "fee",
+            "textKey": "dlg.q1st.k2.b",
+            "next": "k4",
+            "effects": [
+              {
+                "credits": 800
+              },
+              {
+                "flag": "kira_paid"
+              }
+            ]
+          },
+          {
+            "id": "salvage",
+            "textKey": "dlg.q1st.k2.c",
+            "next": "k5",
+            "effects": [
+              {
+                "credits": 2400
+              },
+              {
+                "rep": {
+                  "survivors": -20
+                }
+              },
+              {
+                "flag": "kira_hostile"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "k3",
+        "type": "line",
+        "speaker": "kira7",
+        "emotion": "warm",
+        "textKey": "dlg.q1st.k3",
+        "next": "k6"
+      },
+      {
+        "id": "k4",
+        "type": "line",
+        "speaker": "kira7",
+        "emotion": "neutral",
+        "textKey": "dlg.q1st.k4",
+        "next": "k6"
+      },
+      {
+        "id": "k5",
+        "type": "line",
+        "speaker": "kira7",
+        "emotion": "angry",
+        "textKey": "dlg.q1st.k5",
+        "next": "k6"
+      },
+      {
+        "id": "k6",
+        "type": "end"
+      }
+    ]
+  },
+  {
+    "id": "dlg_q1_svet",
+    "version": 1,
+    "nodes": [
+      {
+        "id": "v1",
+        "type": "line",
+        "speaker": "svet",
+        "emotion": "neutral",
+        "textKey": "dlg.q1sv.v1",
+        "next": "v2"
+      },
+      {
+        "id": "v2",
+        "type": "line",
+        "speaker": "svet",
+        "emotion": "cold",
+        "textKey": "dlg.q1sv.v2",
+        "next": "v3"
+      },
+      {
+        "id": "v3",
+        "type": "effect",
+        "effects": [
+          {
+            "chronicleKey": "dlg.q1sv.v3"
+          }
+        ],
+        "next": "v4"
+      },
+      {
+        "id": "v4",
+        "type": "end"
+      }
+    ]
+  }
+]

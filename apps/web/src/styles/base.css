@@ -1,0 +1,20 @@
+:root {
+  --c-space: #05070E;
+  --c-space-far: #101A2E;
+  --c-nebula-1: #1B2A4A;
+  --c-nebula-2: #233A5C;
+  --c-metal-1: #8C99A8;
+  --c-metal-2: #5C6878;
+  --c-metal-shadow: #38414F;
+  --c-gold: #F5C542;
+  --c-gold-dark: #B8862A;
+  --c-shield: #4FC3F7;
+  --c-shield-dark: #2A7CA8;
+  --c-ok: #6BE675;
+  --c-enemy: #FF5A5A;
+  --c-enemy-dark: #A33030;
+  --c-warn: #F08A24;
+  --c-text: #E8EEF7;
+  --c-text-2: #8FA3BF;
+  --c-white: #FFFFFF;
+}

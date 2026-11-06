@@ -1,0 +1,79 @@
+[
+  {
+    "chainId": "arch_builder_ship",
+    "titleRu": "Корабль Строителей",
+    "steps": 5,
+    "descRu": "Гигантский остов в поясе астероидов: пять слоёв брони скрывают чертёж модуля 4-го тира. Дроны охраны не спят.",
+    "reward": {
+      "credits": 180000,
+      "alloys": 220,
+      "science": 900,
+      "unlock": "module:shield_gen_mk3"
+    },
+    "artifact": true
+  },
+  {
+    "chainId": "arch_buried_city",
+    "titleRu": "Город под корой",
+    "steps": 3,
+    "descRu": "Планета покрыта льдом, под ним — город с работающими огнями. Исследование даёт черту расы, но бьёт по стабильности.",
+    "reward": {
+      "credits": 120000,
+      "alloys": 80,
+      "science": 700,
+      "unlock": "building:unity_center"
+    },
+    "artifact": false
+  },
+  {
+    "chainId": "arch_road_song",
+    "titleRu": "Песнь Дорог",
+    "steps": 4,
+    "descRu": "Навигационная симфония Дорог записана в мёртвых станциях. Завершение даёт +1 прыжок FSD навсегда и спавнит мародёров.",
+    "reward": {
+      "credits": 150000,
+      "alloys": 120,
+      "science": 1000,
+      "unlock": "module:fsd_mk3"
+    },
+    "artifact": true
+  },
+  {
+    "chainId": "arch_gate_key",
+    "titleRu": "Ключ от Врат",
+    "steps": 3,
+    "descRu": "Три сегмента ключа в разных системах открывают телепорт между вратами. Две империи тоже ищут ключ.",
+    "reward": {
+      "credits": 200000,
+      "alloys": 150,
+      "science": 800,
+      "unlock": "megastructure:gate"
+    },
+    "artifact": true
+  },
+  {
+    "chainId": "arch_admiral_grave",
+    "titleRu": "Могила Адмирала",
+    "steps": 2,
+    "descRu": "Погребальный корабль неизвестного адмирала: короткая цепочка, но награда — два уровня адмирала.",
+    "reward": {
+      "credits": 90000,
+      "alloys": 60,
+      "science": 400
+    },
+    "artifact": false
+  },
+  {
+    "chainId": "arch_silent_star",
+    "titleRu": "Немая звезда",
+    "steps": 4,
+    "descRu": "Свет звезды не совпадает с массой: внутри — архив, снаружи — страх. Награда — уникальный модуль и артефакт «Шёпота».",
+    "reward": {
+      "credits": 240000,
+      "alloys": 180,
+      "science": 1200,
+      "unlock": "module:reactor_mk4"
+    },
+    "artifact": true
+  }
+]

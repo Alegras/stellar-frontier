@@ -1,0 +1,134 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NEXT_TELEMETRY_DISABLED: "1"
+  CI: "true"
+
+jobs:
+  quality:
+    name: install · typecheck · lint · test+coverage · build · data
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Typecheck
+        run: pnpm typecheck
+      - name: Lint (0 errors gate)
+        run: pnpm lint
+      - name: Unit tests + coverage (thresholds 80/80/70/80)
+        run: pnpm test:coverage
+      - name: Build web
+        run: pnpm build
+      - name: Validate base content (zod)
+        run: pnpm data:validate
+      - name: Validate full-game content (M6–M12)
+        run: pnpm exec tsx tools/validate-full-data.mjs
+      - name: Upload coverage
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage
+          path: coverage
+          retention-days: 7
+
+  storage:
+    name: file-store · persist · token (без БД)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm store-test
+      - run: pnpm persist-test
+      - run: pnpm exec tsx tools/token-test.mjs
+      - run: pnpm exec tsx tools/mp-test.mjs
+      - run: pnpm exec tsx tools/parity-test.mjs --ticks 500
+
+  pg-redis:
+    name: PostgreSQL + Redis integration
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: sf
+          POSTGRES_PASSWORD: sf
+          POSTGRES_DB: stellar_frontier
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U sf -d stellar_frontier"
+          --health-interval 5s --health-timeout 3s --health-retries 10
+      redis:
+        image: redis:7-alpine
+        ports: ["6379:6379"]
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 5s --health-timeout 3s --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: PG/Redis integration test
+        env:
+          SF_PG_URL: postgres://sf:sf@127.0.0.1:5432/stellar_frontier
+          SF_REDIS_URL: redis://127.0.0.1:6379
+        run: pnpm exec tsx tools/pg-redis-test.mjs
+
+  e2e:
+    name: Playwright e2e (smoke + accessibility)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Install Chrome for Playwright (channel: chrome)
+        run: pnpm exec playwright install --with-deps chrome
+      - name: e2e smoke + accessibility (prod preview)
+        run: |
+          pnpm build
+          pnpm --filter @sf/web exec vite preview --host 127.0.0.1 --port 5174 --strictPort &
+          npx --yes wait-on http://127.0.0.1:5174
+          SF_BASE_URL=http://127.0.0.1:5174 pnpm exec playwright test -c apps/web/playwright.config.ts e2e/smoke.spec.ts e2e/accessibility.spec.ts
+      - name: Upload e2e artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-artifacts
+          path: |
+            test-results
+            docs/shots/axe-*.json
+          retention-days: 7

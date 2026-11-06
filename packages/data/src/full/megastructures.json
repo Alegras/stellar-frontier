@@ -1,0 +1,99 @@
+[
+  {
+    "id": "sentinel_array",
+    "ru": "Сеть Сентри",
+    "descRu": "Сенсорная сеть: +2 прыжка обнаружения и +10% науки.",
+    "costAlloys": 1500,
+    "buildTicks": 60,
+    "requiredTech": "x_eng_sentinel_array",
+    "requiredPerk": "space_engineering",
+    "effects": {
+      "sensor_range": 2,
+      "science_prod": 0.1
+    },
+    "maxPerEmpire": 1
+  },
+  {
+    "id": "gate",
+    "ru": "Врата",
+    "descRu": "Мгновенный переход между вратами своей империи.",
+    "costAlloys": 1200,
+    "buildTicks": 40,
+    "requiredTech": "x_eng_gate",
+    "requiredPerk": "space_engineering",
+    "effects": {
+      "gate_network": 1
+    },
+    "maxPerEmpire": 2
+  },
+  {
+    "id": "star_forge",
+    "ru": "Звёздная кузня",
+    "descRu": "+25% производства сплавов в системе.",
+    "costAlloys": 4000,
+    "buildTicks": 120,
+    "requiredTech": "x_eng_star_forge",
+    "requiredPerk": "master_builder",
+    "effects": {
+      "alloys_prod": 0.25
+    },
+    "maxPerEmpire": 1
+  },
+  {
+    "id": "ring_habitat",
+    "ru": "Мир-кольцо",
+    "descRu": "+50 жилья, +10 рабочих мест, +60 к лимиту попов.",
+    "costAlloys": 2500,
+    "costMinerals": 500,
+    "buildTicks": 90,
+    "requiredTech": "x_eng_ring_habitat",
+    "requiredPerk": "ring_world",
+    "effects": {
+      "housing": 50,
+      "jobs": 10,
+      "pop_cap": 60
+    },
+    "maxPerEmpire": 1
+  },
+  {
+    "id": "dyson_sphere",
+    "ru": "Сфера Дайсона",
+    "descRu": "+300 энергии в такт.",
+    "costAlloys": 8000,
+    "buildTicks": 200,
+    "requiredTech": "x_eng_dyson",
+    "requiredPerk": "space_engineering",
+    "effects": {
+      "energy_flat": 300
+    },
+    "maxPerEmpire": 1
+  },
+  {
+    "id": "science_nexus",
+    "ru": "Научный Нексус",
+    "descRu": "+15% ко всем школам науки, +1 альтернатива в науке.",
+    "costAlloys": 3000,
+    "buildTicks": 100,
+    "requiredTech": "x_eng_nexus",
+    "requiredPerk": "technocracy",
+    "effects": {
+      "science_prod": 0.15,
+      "extra_tech_choice": 1
+    },
+    "maxPerEmpire": 1
+  },
+  {
+    "id": "beacon",
+    "ru": "Маяк",
+    "descRu": "+20% флотского лимита, +1 слот доктрины.",
+    "costAlloys": 2000,
+    "buildTicks": 80,
+    "requiredTech": "x_eng_beacon",
+    "requiredPerk": "space_engineering",
+    "effects": {
+      "fleet_cap_pct": 0.2,
+      "doctrine_slots": 1
+    },
+    "maxPerEmpire": 1
+  }
+]

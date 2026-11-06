@@ -1,0 +1,113 @@
+{
+  "version": 1,
+  "nodes": [
+    {
+      "id": "q_pro_01_first_light",
+      "group": "arc1",
+      "type": "main",
+      "x": 0,
+      "y": 0
+    },
+    {
+      "id": "q_pro_02_quiet_dock",
+      "group": "arc1",
+      "type": "main",
+      "x": 240,
+      "y": -48
+    },
+    {
+      "id": "q_pro_03_salt_ash",
+      "group": "arc1",
+      "type": "side",
+      "x": 240,
+      "y": 48
+    },
+    {
+      "id": "q_pro_04_courier",
+      "group": "arc1",
+      "type": "main",
+      "x": 480,
+      "y": -48
+    },
+    {
+      "id": "q_pro_05_inspection",
+      "group": "arc2",
+      "type": "faction",
+      "x": 480,
+      "y": 48
+    },
+    {
+      "id": "q_pro_06_echo_core",
+      "group": "arc2",
+      "type": "main",
+      "x": 720,
+      "y": -48
+    },
+    {
+      "id": "q_pro_07_first_frontier",
+      "group": "arc2",
+      "type": "main",
+      "x": 960,
+      "y": 0
+    },
+    {
+      "id": "q_side_rumor_01",
+      "group": "side",
+      "type": "side",
+      "x": 480,
+      "y": 144
+    }
+  ],
+  "edges": [
+    {
+      "from": "q_pro_01_first_light",
+      "to": "q_pro_02_quiet_dock",
+      "kind": "required"
+    },
+    {
+      "from": "q_pro_01_first_light",
+      "to": "q_pro_03_salt_ash",
+      "kind": "optional"
+    },
+    {
+      "from": "q_pro_01_first_light",
+      "to": "q_side_rumor_01",
+      "kind": "hidden"
+    },
+    {
+      "from": "q_pro_02_quiet_dock",
+      "to": "q_pro_04_courier",
+      "kind": "required"
+    },
+    {
+      "from": "q_pro_02_quiet_dock",
+      "to": "q_pro_05_inspection",
+      "kind": "branch"
+    },
+    {
+      "from": "q_pro_03_salt_ash",
+      "to": "q_pro_04_courier",
+      "kind": "optional"
+    },
+    {
+      "from": "q_pro_04_courier",
+      "to": "q_pro_06_echo_core",
+      "kind": "required"
+    },
+    {
+      "from": "q_pro_05_inspection",
+      "to": "q_pro_07_first_frontier",
+      "kind": "required"
+    },
+    {
+      "from": "q_pro_06_echo_core",
+      "to": "q_pro_07_first_frontier",
+      "kind": "required"
+    },
+    {
+      "from": "q_pro_06_echo_core",
+      "to": "q_side_rumor_01",
+      "kind": "opens"
+    }
+  ]
+}

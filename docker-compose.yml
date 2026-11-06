@@ -1,0 +1,41 @@
+# Stellar Frontier · M11/M12: PostgreSQL (комнаты/снапшоты/сезон) + Redis (presence/кэш).
+# Запуск: docker compose up -d
+# Затем: DATABASE_URL=postgres://sf:sf@127.0.0.1:5432/stellar_frontier REDIS_URL=redis://127.0.0.1:6379 \
+#        node <runtime>/pnpm.mjs api
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: sf-postgres
+    environment:
+      POSTGRES_USER: sf
+      POSTGRES_PASSWORD: sf
+      POSTGRES_DB: stellar_frontier
+    ports:
+      - "5432:5432"
+    volumes:
+      - sf_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sf -d stellar_frontier"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    container_name: sf-redis
+    command: ["redis-server", "--appendonly", "yes", "--maxmemory", "256mb", "--maxmemory-policy", "allkeys-lru"]
+    ports:
+      - "6379:6379"
+    volumes:
+      - sf_redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
+
+volumes:
+  sf_pgdata:
+  sf_redisdata:

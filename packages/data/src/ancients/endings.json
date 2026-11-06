@@ -1,0 +1,36 @@
+[
+  {
+    "id": "ending_seal",
+    "ru": "Запечатать",
+    "descRu": "Выключить Маяк и погасить Врата: галактика не узнает, что была на волоске. Усиливает «Запечатать Разлом» и выживание в кризисе, но Предел закрыт навсегда.",
+    "choice": "seal",
+    "campaignEnding": "ending_seal",
+    "effects": {
+      "system_defense": 0.25,
+      "choir_attention": -0.25
+    }
+  },
+  {
+    "id": "ending_use",
+    "ru": "Использовать",
+    "descRu": "Забрать Маяк в свой флот и стать эталоном: A5, сила резонанса и вечное внимание Хора. Усиливает «Контролировать Разлом» и технологическое вознесение.",
+    "choice": "use",
+    "campaignEnding": "ending_control",
+    "effects": {
+      "choir_attention": 40,
+      "ascension_progress": 0.2,
+      "ansari_power": 0.25
+    }
+  },
+  {
+    "id": "ending_give",
+    "ru": "Отдать",
+    "descRu": "Отдать Маяк галактике как общий камертон: Хор теряет ориентир, Предел открывается всем. Усиливает «Освободить Разлом» и победу федерации, но монополия на наследие утрачена.",
+    "choice": "give",
+    "campaignEnding": "ending_release",
+    "effects": {
+      "choir_attention": -0.25,
+      "federation_share": 0.1
+    }
+  }
+]

@@ -1,0 +1,113 @@
+[
+  {
+    "id": "residential",
+    "ru": "Жилой район",
+    "descRu": "Жильё для 5 попов. Апкип 0,5 E.",
+    "cost": {
+      "minerals": 60
+    },
+    "buildTicks": 5,
+    "upkeepEnergy": 0.5,
+    "housing": 5,
+    "jobs": [],
+    "icon": "H"
+  },
+  {
+    "id": "energy_district",
+    "ru": "Энергорайон",
+    "descRu": "2 рабочих места техников: 10 энергии/такт. 60 M, 0,25 E.",
+    "cost": {
+      "minerals": 60
+    },
+    "buildTicks": 6,
+    "upkeepEnergy": 0.25,
+    "housing": 2,
+    "jobs": [
+      "technician",
+      "technician"
+    ],
+    "icon": "E"
+  },
+  {
+    "id": "mining_district",
+    "ru": "Горный район",
+    "descRu": "2 рабочих места шахтёров: 9 минералов/такт. 60 M, 0,25 E.",
+    "cost": {
+      "minerals": 60
+    },
+    "buildTicks": 6,
+    "upkeepEnergy": 0.25,
+    "housing": 2,
+    "jobs": [
+      "miner",
+      "miner"
+    ],
+    "icon": "M"
+  },
+  {
+    "id": "agriculture_district",
+    "ru": "Агрорайон",
+    "descRu": "2 рабочих места фермеров: 12 пищи/такт. 60 M, 0,25 E.",
+    "cost": {
+      "minerals": 60
+    },
+    "buildTicks": 6,
+    "upkeepEnergy": 0.25,
+    "housing": 2,
+    "jobs": [
+      "farmer",
+      "farmer"
+    ],
+    "icon": "F"
+  },
+  {
+    "id": "industrial_district",
+    "ru": "Промышленный район",
+    "descRu": "2 места: металлург / ремесленник. 90 M + 10 A, 0,25 E.",
+    "cost": {
+      "minerals": 90,
+      "alloys": 10
+    },
+    "buildTicks": 8,
+    "upkeepEnergy": 0.25,
+    "housing": 2,
+    "jobs": [
+      "metallurgist",
+      "artisan"
+    ],
+    "icon": "I"
+  },
+  {
+    "id": "academic_district",
+    "ru": "Академический район",
+    "descRu": "2 места исследователей (тир 2, требует лабораторию). 100 M + 20 ТП, 0,5 E.",
+    "cost": {
+      "minerals": 100,
+      "goods": 20
+    },
+    "buildTicks": 10,
+    "upkeepEnergy": 0.5,
+    "housing": 2,
+    "jobs": [
+      "researcher",
+      "researcher"
+    ],
+    "icon": "N"
+  },
+  {
+    "id": "commercial_district",
+    "ru": "Торговый район",
+    "descRu": "2 места торговцев (тир 2, требует биржу). 100 M, 0,4 E.",
+    "cost": {
+      "minerals": 100
+    },
+    "buildTicks": 8,
+    "upkeepEnergy": 0.4,
+    "housing": 2,
+    "jobs": [
+      "trader",
+      "trader"
+    ],
+    "icon": "$"
+  }
+]

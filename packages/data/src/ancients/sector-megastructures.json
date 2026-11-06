@@ -1,0 +1,67 @@
+[
+  {
+    "id": "sector_gate_ring",
+    "ru": "Врата Ансаров",
+    "descRu": "Кольцо в 4 км: вход и выход Предела, «дешёвый» путь и +10 стабильности своим. Без них выход — только варпом.",
+    "kind": "gate_ring",
+    "region": "gates",
+    "costAlloys": 2500,
+    "costRelics": 2,
+    "costCores": 1,
+    "buildTicks": 60,
+    "requiredTech": "a4_gate_network",
+    "requiredMission": 10,
+    "effects": {
+      "stability": 10,
+      "gate_pairs": 1
+    },
+    "maxPerEmpire": 1,
+    "unlocks": [
+      "structure:gate_pair"
+    ]
+  },
+  {
+    "id": "sector_star_core",
+    "ru": "Ядро звезды",
+    "descRu": "Двигатель в 900 км, вытягивающий тёмную материю из звезды: +2 ТМ и +350 энергии/такт. Активация слышна Хору (−20 стабильности).",
+    "kind": "star_core",
+    "region": "ansari_gardens",
+    "costAlloys": 6000,
+    "costRelics": 4,
+    "costCores": 2,
+    "buildTicks": 180,
+    "requiredTech": "a4_star_core",
+    "requiredMission": 11,
+    "effects": {
+      "energy_flat": 350,
+      "dark_matter_flat": 2,
+      "choir_attention": 20,
+      "stability": -20
+    },
+    "maxPerEmpire": 1,
+    "unlocks": [
+      "megastructure:star_core"
+    ]
+  },
+  {
+    "id": "sector_archive",
+    "ru": "Архив Вечности",
+    "descRu": "Двенадцатикилометровый архив: ветвь A0–A5, резонанс и карта гнёзд. Открывается репутацией Ансаров ≥ 30; попытка взлома — 3 000 FP Стражей.",
+    "kind": "archive",
+    "region": "ruins",
+    "costAlloys": 1800,
+    "costRelics": 3,
+    "costCores": 1,
+    "buildTicks": 90,
+    "requiredTech": "a4_foresight",
+    "requiredMission": 0,
+    "effects": {
+      "science_flat_per_school": 1,
+      "relic_yield": 0.1
+    },
+    "maxPerEmpire": 1,
+    "unlocks": [
+      "flag:eternal_archive"
+    ]
+  }
+]

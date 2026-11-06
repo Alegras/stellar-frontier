@@ -1,0 +1,138 @@
+[
+  {
+    "id": "res_aggression_ban",
+    "type": "aggression_ban",
+    "ru": "Запрет агрессии",
+    "descRu": "−50% военного счёта агрессору в текущих войнах.",
+    "influenceCost": 20,
+    "vetoable": true,
+    "effects": [
+      {
+        "target": "aggressor_war_score",
+        "value": -0.5
+      }
+    ],
+    "durationTicks": 300
+  },
+  {
+    "id": "res_free_trade",
+    "type": "free_trade",
+    "ru": "Свободная торговля",
+    "descRu": "+10% маржи всем, −20% пошлин.",
+    "influenceCost": 15,
+    "vetoable": false,
+    "effects": [
+      {
+        "target": "trade_margin",
+        "value": 0.1
+      },
+      {
+        "target": "tariff",
+        "value": -0.2
+      }
+    ],
+    "durationTicks": 400
+  },
+  {
+    "id": "res_common_market",
+    "type": "common_market",
+    "ru": "Общий рынок",
+    "descRu": "Единая цена на товары в радиусе 5 прыжков от столицы.",
+    "influenceCost": 30,
+    "vetoable": true,
+    "effects": [
+      {
+        "target": "market_price_unify",
+        "value": 1
+      }
+    ],
+    "durationTicks": 400
+  },
+  {
+    "id": "res_sanctions",
+    "type": "sanctions",
+    "ru": "Санкции против империи",
+    "descRu": "−20% дохода цели, −10% её науки.",
+    "influenceCost": 40,
+    "vetoable": true,
+    "effects": [
+      {
+        "target": "target_income_mult",
+        "value": 0.8
+      },
+      {
+        "target": "target_science_mult",
+        "value": 0.9
+      }
+    ],
+    "durationTicks": 300
+  },
+  {
+    "id": "res_fleet_limit",
+    "type": "fleet_limit",
+    "ru": "Ограничение флота",
+    "descRu": "Лимит флота 60% для всех на 200 тактов.",
+    "influenceCost": 50,
+    "vetoable": true,
+    "effects": [
+      {
+        "target": "fleet_cap_pct",
+        "value": -0.4
+      }
+    ],
+    "durationTicks": 200
+  },
+  {
+    "id": "res_science_exchange",
+    "type": "science_exchange",
+    "ru": "Научный обмен",
+    "descRu": "+10% науки всем, −10% стоимость технологий T≤2.",
+    "influenceCost": 25,
+    "vetoable": false,
+    "effects": [
+      {
+        "target": "science_prod",
+        "value": 0.1
+      },
+      {
+        "target": "tech_cost_low_tier",
+        "value": -0.1
+      }
+    ],
+    "durationTicks": 400
+  },
+  {
+    "id": "res_forced_peace",
+    "type": "forced_peace",
+    "ru": "Принудительный мир",
+    "descRu": "Активные войны прекращаются через 50 тактов.",
+    "influenceCost": 60,
+    "vetoable": true,
+    "effects": [
+      {
+        "target": "forced_peace_ticks",
+        "value": 50
+      }
+    ],
+    "durationTicks": 50
+  },
+  {
+    "id": "res_crisis_declaration",
+    "type": "crisis_declaration",
+    "ru": "Объявление кризиса",
+    "descRu": "Все империи в войне с кризисом, +20% FP против кризиса.",
+    "influenceCost": 40,
+    "vetoable": false,
+    "effects": [
+      {
+        "target": "crisis_coalition",
+        "value": 1
+      },
+      {
+        "target": "fp_vs_crisis",
+        "value": 0.2
+      }
+    ],
+    "durationTicks": 400
+  }
+]

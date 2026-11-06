@@ -1,0 +1,15 @@
+node_modules/
+dist/
+.vite/
+test-results/
+playwright-report/
+*.tsbuildinfo
+.DS_Store
+.data/
+coverage/
+tools/profiles/
+tools/gh-*
+.env
+docs/shots/gh-*
+*.cpuprofile
+*.log

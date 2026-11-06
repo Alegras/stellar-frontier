@@ -1,0 +1,92 @@
+[
+  {
+    "id": "materialist",
+    "ru": "Материализм",
+    "descRu": "+10% науки, −10% стоимость роботов; −20% единства от святынь.",
+    "axis": "mind_faith",
+    "effects": {
+      "science_prod": 0.1,
+      "robot_cost": -0.1,
+      "shrine_unity": -0.2
+    }
+  },
+  {
+    "id": "spiritualist",
+    "ru": "Спиритуализм",
+    "descRu": "+15% единства, +5 стабильности; −10% науки.",
+    "axis": "mind_faith",
+    "effects": {
+      "unity_prod": 0.15,
+      "stability": 5,
+      "science_prod": -0.1
+    }
+  },
+  {
+    "id": "individualist",
+    "ru": "Индивидуализм",
+    "descRu": "+15% товаров, +5% счастья, +1 контракт; −10% флотского лимита.",
+    "axis": "self_collective",
+    "effects": {
+      "goods_prod": 0.15,
+      "happiness": 5,
+      "contract_slots": 1,
+      "fleet_cap_pct": -0.1
+    }
+  },
+  {
+    "id": "collectivist",
+    "ru": "Коллективизм",
+    "descRu": "+10% производство районов, −10% стоимость миграции; −10% счастья элит.",
+    "axis": "self_collective",
+    "effects": {
+      "district_prod": 0.1,
+      "migration_cost": -0.1,
+      "elite_happiness": -10
+    }
+  },
+  {
+    "id": "expansionist",
+    "ru": "Экспансионизм",
+    "descRu": "−20% стоимость аутпоста, +15% скорость колонизации; −10% стабильности в старых колониях.",
+    "axis": "expansion_isolation",
+    "effects": {
+      "outpost_cost": -0.2,
+      "colony_speed": 0.15,
+      "stability": -10
+    }
+  },
+  {
+    "id": "isolationist",
+    "ru": "Изоляционизм",
+    "descRu": "+20% защита своих систем, +10% единства; −25% дипломатического веса.",
+    "axis": "expansion_isolation",
+    "effects": {
+      "system_defense": 0.2,
+      "unity_prod": 0.1,
+      "diplo_weight": -0.25
+    }
+  },
+  {
+    "id": "militarist",
+    "ru": "Милитаризм",
+    "descRu": "+10% урона флота, −10% апкип; −15% мнение пацифистов.",
+    "axis": "war_peace",
+    "effects": {
+      "weapon_damage": 0.1,
+      "fleet_upkeep_pct": -0.1,
+      "opinion_pacifists": -15
+    }
+  },
+  {
+    "id": "pacifist",
+    "ru": "Пацифизм",
+    "descRu": "+15% единства, +10% товаров, +10 мнения; −10% флотского лимита.",
+    "axis": "war_peace",
+    "effects": {
+      "unity_prod": 0.15,
+      "goods_prod": 0.1,
+      "diplo_opinion": 10,
+      "fleet_cap_pct": -0.1
+    }
+  }
+]

@@ -1,0 +1,455 @@
+[
+  {
+    "id": "q_pro_01_first_light",
+    "type": "main",
+    "line": "prologue",
+    "act": 0,
+    "titleKey": "quest.q1.title",
+    "summaryKey": "quest.q1.summary",
+    "source": {
+      "channel": "story_message",
+      "npc": "kira7",
+      "autoStartTick": 0
+    },
+    "steps": [
+      {
+        "id": "s1",
+        "type": "dialogue",
+        "target": "dlg_q1_briefing",
+        "titleKey": "quest.q1.s1"
+      },
+      {
+        "id": "s2",
+        "type": "reach_system",
+        "target": "sys_debris_belt_home",
+        "titleKey": "quest.q1.s2"
+      },
+      {
+        "id": "s3",
+        "type": "kill",
+        "target": "pirate_corvette",
+        "count": 2,
+        "titleKey": "quest.q1.s3"
+      },
+      {
+        "id": "s4",
+        "type": "choice",
+        "target": "q1_c2_target",
+        "titleKey": "quest.q1.s4"
+      },
+      {
+        "id": "s5",
+        "type": "dock",
+        "target": "station_light_1",
+        "titleKey": "quest.q1.s5"
+      },
+      {
+        "id": "s6",
+        "type": "report",
+        "target": "kira7",
+        "titleKey": "quest.q1.s6"
+      },
+      {
+        "id": "s7",
+        "type": "turn_in",
+        "target": "kira7",
+        "titleKey": "quest.q1.s7"
+      }
+    ],
+    "rewards": {
+      "credits": 15000,
+      "alloys": 6,
+      "rep": {
+        "survivors": 10
+      },
+      "flags": [
+        "q1_done"
+      ],
+      "items": [
+        "module:shield_bank_mk1"
+      ]
+    },
+    "failPolicy": "soft",
+    "checkpoint": true,
+    "nextHint": "q_pro_02_quiet_dock"
+  },
+  {
+    "id": "q_pro_02_quiet_dock",
+    "type": "main",
+    "line": "prologue",
+    "act": 0,
+    "titleKey": "quest.q2.title",
+    "summaryKey": "quest.q2.summary",
+    "source": {
+      "channel": "story_message",
+      "npc": "kira7",
+      "requiresQuest": "q_pro_01_first_light"
+    },
+    "steps": [
+      {
+        "id": "s1",
+        "type": "dock",
+        "target": "station_light_1",
+        "titleKey": "quest.q2.s1"
+      },
+      {
+        "id": "s2",
+        "type": "choice",
+        "target": "q2_c1_dock",
+        "titleKey": "quest.q2.s2"
+      },
+      {
+        "id": "s3",
+        "type": "choice",
+        "target": "q2_c2_meds",
+        "titleKey": "quest.q2.s3"
+      },
+      {
+        "id": "s4",
+        "type": "report",
+        "target": "kira7",
+        "titleKey": "quest.q2.s4"
+      },
+      {
+        "id": "s5",
+        "type": "turn_in",
+        "target": "kira7",
+        "titleKey": "quest.q2.s5"
+      }
+    ],
+    "rewards": {
+      "credits": 6500,
+      "rep": {
+        "survivors": 15
+      },
+      "flags": [
+        "kira_trust"
+      ],
+      "items": [
+        "module:cargo_scanner"
+      ]
+    },
+    "failPolicy": "soft",
+    "checkpoint": true,
+    "nextHint": "q_pro_04_courier"
+  },
+  {
+    "id": "q_pro_03_salt_ash",
+    "type": "side",
+    "line": "side",
+    "act": 0,
+    "titleKey": "quest.q3.title",
+    "summaryKey": "quest.q3.summary",
+    "source": {
+      "channel": "rumor",
+      "npc": "kira7",
+      "requiresQuest": "q_pro_02_quiet_dock",
+      "rumorLieChance": 0.2
+    },
+    "steps": [
+      {
+        "id": "s1",
+        "type": "reach_system",
+        "target": "poi_belt_ring7",
+        "titleKey": "quest.q3.s1"
+      },
+      {
+        "id": "s2",
+        "type": "choice",
+        "target": "q3_c1_relics",
+        "titleKey": "quest.q3.s2"
+      },
+      {
+        "id": "s3",
+        "type": "choice",
+        "target": "q3_c2_ash",
+        "titleKey": "quest.q3.s3"
+      },
+      {
+        "id": "s4",
+        "type": "turn_in",
+        "target": "ort",
+        "titleKey": "quest.q3.s4"
+      }
+    ],
+    "rewards": {
+      "credits": 18000,
+      "rep": {
+        "consortium": 15
+      },
+      "flags": [
+        "q3_done"
+      ],
+      "items": [
+        "module:salvage_arm"
+      ]
+    },
+    "failPolicy": "soft",
+    "checkpoint": false
+  },
+  {
+    "id": "q_pro_04_courier",
+    "type": "delivery",
+    "line": "side",
+    "act": 0,
+    "titleKey": "quest.q4.title",
+    "summaryKey": "quest.q4.summary",
+    "source": {
+      "channel": "story_message",
+      "npc": "maev",
+      "requiresQuest": "q_pro_03_salt_ash"
+    },
+    "steps": [
+      {
+        "id": "s1",
+        "type": "reach_system",
+        "target": "sys_courier_route_1",
+        "titleKey": "quest.q4.s1"
+      },
+      {
+        "id": "s2",
+        "type": "reach_system",
+        "target": "sys_courier_route_2",
+        "titleKey": "quest.q4.s2"
+      },
+      {
+        "id": "s3",
+        "type": "choice",
+        "target": "q4_c2_patrol",
+        "titleKey": "quest.q4.s3"
+      },
+      {
+        "id": "s4",
+        "type": "turn_in",
+        "target": "maev",
+        "titleKey": "quest.q4.s4"
+      }
+    ],
+    "rewards": {
+      "credits": 12000,
+      "rep": {
+        "slipwings": 10
+      },
+      "flags": [
+        "maev_debt"
+      ]
+    },
+    "failPolicy": "soft",
+    "checkpoint": false
+  },
+  {
+    "id": "q_pro_05_inspection",
+    "type": "faction",
+    "line": "side",
+    "act": 0,
+    "titleKey": "quest.q5.title",
+    "summaryKey": "quest.q5.summary",
+    "source": {
+      "channel": "board",
+      "stationId": "station_light_1",
+      "npc": "reyn",
+      "requiresQuest": "q_pro_04_courier"
+    },
+    "steps": [
+      {
+        "id": "s1",
+        "type": "dock",
+        "target": "station_light_1",
+        "titleKey": "quest.q5.s1"
+      },
+      {
+        "id": "s2",
+        "type": "choice",
+        "target": "q5_c1_strategy",
+        "titleKey": "quest.q5.s2"
+      },
+      {
+        "id": "s3",
+        "type": "choice",
+        "target": "q5_c2_maev",
+        "titleKey": "quest.q5.s3"
+      },
+      {
+        "id": "s4",
+        "type": "report",
+        "target": "reyn",
+        "titleKey": "quest.q5.s4"
+      },
+      {
+        "id": "s5",
+        "type": "turn_in",
+        "target": "reyn",
+        "titleKey": "quest.q5.s5"
+      }
+    ],
+    "rewards": {
+      "credits": 9000,
+      "rep": {
+        "consortium": 10
+      },
+      "flags": [
+        "license_granted"
+      ]
+    },
+    "failPolicy": "soft",
+    "checkpoint": false
+  },
+  {
+    "id": "q_pro_06_echo_core",
+    "type": "investigation",
+    "line": "main",
+    "act": 0,
+    "titleKey": "quest.q6.title",
+    "summaryKey": "quest.q6.summary",
+    "source": {
+      "channel": "signal",
+      "systemId": "sys_dead_system",
+      "npc": "teira_os",
+      "autoStartTick": 0
+    },
+    "steps": [
+      {
+        "id": "s1",
+        "type": "reach_system",
+        "target": "sys_dead_system",
+        "titleKey": "quest.q6.s1"
+      },
+      {
+        "id": "s2",
+        "type": "choice",
+        "target": "q6_c1_tell",
+        "titleKey": "quest.q6.s2"
+      },
+      {
+        "id": "s3",
+        "type": "choice",
+        "target": "q6_c2_shard",
+        "titleKey": "quest.q6.s3"
+      },
+      {
+        "id": "s4",
+        "type": "turn_in",
+        "target": "teira_os",
+        "titleKey": "quest.q6.s4"
+      }
+    ],
+    "rewards": {
+      "credits": 25000,
+      "flags": [
+        "hook_core_sings"
+      ],
+      "items": [
+        "module:resonance_probe"
+      ]
+    },
+    "failPolicy": "soft",
+    "checkpoint": false,
+    "nextHint": "q_pro_07_first_frontier"
+  },
+  {
+    "id": "q_pro_07_first_frontier",
+    "type": "main",
+    "line": "main",
+    "act": 0,
+    "titleKey": "quest.q7.title",
+    "summaryKey": "quest.q7.summary",
+    "source": {
+      "channel": "story_message",
+      "npc": "teira_os",
+      "autoStartTick": 300,
+      "requiresQuest": "q_pro_02_quiet_dock"
+    },
+    "steps": [
+      {
+        "id": "s1",
+        "type": "reach_system",
+        "target": "sys_outpost",
+        "titleKey": "quest.q7.s1"
+      },
+      {
+        "id": "s2",
+        "type": "choice",
+        "target": "q7_c1_plan",
+        "titleKey": "quest.q7.s2"
+      },
+      {
+        "id": "s3",
+        "type": "kill",
+        "target": "fleet_skar",
+        "count": 1,
+        "titleKey": "quest.q7.s3"
+      },
+      {
+        "id": "s4",
+        "type": "choice",
+        "target": "q7_c2_skar",
+        "titleKey": "quest.q7.s4"
+      },
+      {
+        "id": "s5",
+        "type": "turn_in",
+        "target": "teira_os",
+        "titleKey": "quest.q7.s5"
+      }
+    ],
+    "rewards": {
+      "credits": 40000,
+      "rep": {
+        "own_empire": 20
+      },
+      "flags": [
+        "act1_ready"
+      ],
+      "items": [
+        "system:frontier_outpost"
+      ]
+    },
+    "failPolicy": "soft",
+    "checkpoint": true
+  },
+  {
+    "id": "q_side_rumor_01",
+    "type": "side",
+    "line": "side",
+    "act": 0,
+    "titleKey": "quest.qside.title",
+    "summaryKey": "quest.qside.summary",
+    "source": {
+      "channel": "rumor",
+      "npc": "pack",
+      "requiresQuest": "q_pro_03_salt_ash",
+      "rumorLieChance": 0.4
+    },
+    "steps": [
+      {
+        "id": "s1",
+        "type": "reach_system",
+        "target": "poi_pack_cache",
+        "titleKey": "quest.qside.s1"
+      },
+      {
+        "id": "s2",
+        "type": "choice",
+        "target": "qside_c1_deal",
+        "titleKey": "quest.qside.s2"
+      },
+      {
+        "id": "s3",
+        "type": "turn_in",
+        "target": "pack",
+        "titleKey": "quest.qside.s3"
+      }
+    ],
+    "rewards": {
+      "credits": 3000,
+      "rep": {
+        "pack": 5
+      },
+      "flags": [
+        "q_side_done"
+      ]
+    },
+    "failPolicy": "none",
+    "checkpoint": false
+  }
+]

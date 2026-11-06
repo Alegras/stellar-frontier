@@ -1,0 +1,2321 @@
+[
+  {
+    "id": "main_00_awakening",
+    "act": 0,
+    "titleRu": "Пробуждение",
+    "briefingRu": "Флагман отвечает на сигнал, которого не должно быть. Проверьте источник и вернитесь с записью.",
+    "giver": "legacy",
+    "branchRequired": null,
+    "secret": false,
+    "objectives": [
+      {
+        "id": "reach",
+        "type": "reach_system",
+        "targetKind": "capital"
+      },
+      {
+        "id": "scan",
+        "type": "scan",
+        "count": 1,
+        "timeLimitTicks": 120
+      },
+      {
+        "id": "return",
+        "type": "dock"
+      }
+    ],
+    "rewards": {
+      "credits": 30000,
+      "alloys": 50,
+      "influence": 4,
+      "science": {
+        "physics": 40,
+        "society": 20,
+        "engineering": 40
+      }
+    },
+    "prerequisites": [],
+    "weight": 100
+  },
+  {
+    "id": "main_00_first_contact",
+    "act": 0,
+    "titleRu": "Первый контакт",
+    "briefingRu": "У границы замечен чужой флот. Не стреляйте первыми: сначала выясните, кто это.",
+    "giver": "legacy",
+    "branchRequired": null,
+    "secret": false,
+    "objectives": [
+      {
+        "id": "reach",
+        "type": "reach_system",
+        "targetKind": "border"
+      },
+      {
+        "id": "talk",
+        "type": "talk",
+        "count": 1
+      },
+      {
+        "id": "report",
+        "type": "dock"
+      }
+    ],
+    "rewards": {
+      "credits": 35000,
+      "alloys": 60,
+      "influence": 5,
+      "science": {
+        "physics": 30,
+        "society": 40,
+        "engineering": 30
+      }
+    },
+    "prerequisites": [
+      "main_00_awakening"
+    ],
+    "weight": 100
+  },
+  {
+    "id": "main_00_pirates",
+    "act": 0,
+    "titleRu": "Пираты у ворот",
+    "briefingRu": "Торговый караван просит защиты. Отбейте рейд и сохраните груз — это ваша первая репутация.",
+    "giver": "station",
+    "branchRequired": null,
+    "secret": false,
+    "objectives": [
+      {
+        "id": "reach",
+        "type": "reach_system",
+        "targetKind": "convoy"
+      },
+      {
+        "id": "kill",
+        "type": "destroy_fleet",
+        "count": 2
+      },
+      {
+        "id": "dock",
+        "type": "dock"
+      }
+    ],
+    "rewards": {
+      "credits": 40000,
+      "alloys": 80,
+      "influence": 3,
+      "reputation": 5,
+      "science": {
+        "physics": 20,
+        "society": 20,
+        "engineering": 60
+      }
+    },
+    "prerequisites": [
+      "main_00_awakening"
+    ],
+    "weight": 100
+  },
+  {
+    "id": "main_00_relic",
+    "act": 0,
+    "titleRu": "Обломок наследия",
+    "briefingRu": "В поясе найден фрагмент доспеха Строителей. Заберите его до того, как это сделают другие.",
+    "giver": "legacy",
+    "branchRequired": null,
+    "secret": true,
+    "objectives": [
+      {
+        "id": "reach",
+        "type": "reach_system",
+        "targetKind": "asteroid"
+      },
+      {
+        "id": "scan",
+        "type": "scan",
+        "count": 3
+      },
+      {
+        "id": "collect",
+        "type": "collect_artifact",
+        "count": 1
+      }
+    ],
+    "rewards": {
+      "credits": 45000,
+      "alloys": 70,
+      "influence": 4,
+      "science": {
+        "physics": 60,
+        "society": 20,
+        "engineering": 40
+      },
+      "flag": "legacy_fragment_1"
+    },
+    "prerequisites": [
+      "main_00_awakening"
+    ],
+    "weight": 100
+  },
+  {
+    "id": "main_01_colony",
+    "act": 1,
+    "titleRu": "Первый камень",
+    "briefingRu": "Хватит жить на одном мире. Найдите пригодную планету и оснуйте колонию.",
+    "giver": "legacy",
+    "branchRequired": null,
+    "secret": false,
+    "objectives": [
+      {
+        "id": "reach",
+        "type": "reach_system",
+        "targetKind": "habitable"
+      },
+      {
+        "id": "colonize",
+        "type": "construct",
+        "count": 1,
+        "timeLimitTicks": 200
+      },
+      {
+        "id": "defend",
+        "type": "defend_system",
+        "count": 1
+      }
+    ],
+    "rewards": {
+      "credits": 70000,
+      "alloys": 120,
+      "influence": 6,
+      "science": {
+        "physics": 60,
+        "society": 80,
+        "engineering": 60
+      }
+    },
+    "prerequisites": [
+      "main_00_relic"
+    ],
+    "weight": 100
+  },
+  {
+    "id": "main_01_hegemon",
+    "act": 1,
+    "titleRu": "Тень гегемона",
+    "briefingRu": "Сосед-гегемон требует дань за проход по Дорогам. Покажите, что цена ошибки выше цены пошлины.",
+    "giver": "legacy",
+    "branchRequired": null,
+    "secret": false,
+    "objectives": [
+      {
+        "id": "reach",
+        "type": "reach_system",
+        "targetKind": "enemy_border"
+      },
+      {
+        "id": "talk",
+        "type": "talk",
+        "count": 1
+      },
+      {
+        "id": "demonstrate",
+        "type": "destroy_fleet",
+        "count": 3
+      }
+    ],
+    "rewards": {
+      "credits": 85000,
+      "alloys": 150,
+      "influence": 7,
+      "science": {
+        "physics": 100,
+        "society": 80,
+        "engineering": 100
+      }
+    },
+    "prerequisites": [
+      "main_01_colony"
+    ],
+    "weight": 100
+  },
+  {
+    "id": "main_01_rift_rumor",
+    "act": 1,
+    "titleRu": "Слухи о Разломе",
+    "briefingRu": "Три независимых источника говорят об одной и той же двери. Проверьте, где они сходятся.",
+    "giver": "rift_watch",
+    "branchRequired": null,
+    "secret": false,
+    "objectives": [
+      {
+        "id": "reach",
+        "type": "reach_system",
+        "targetKind": "frontier"
+      },
+      {
+        "id": "scan",
+        "type": "scan",
+        "count": 4
+      },
+      {
+        "id": "return",
+        "type": "dock"
+      }
+    ],
+    "rewards": {
+      "credits": 80000,
+      "alloys": 110,
+      "influence": 6,
+      "science": {
+        "physics": 120,
+        "society": 60,
+        "engineering": 80
+      },
+      "flag": "rift_rumor"
+    },
+    "prerequisites": [
+      "main_01_colony"
+    ],
+    "weight": 100
+  },
+  {
+    "id": "main_01_diplomat",
+    "act": 1,
+    "titleRu": "Слово вместо залпа",
+    "briefingRu": "Войну можно не начинать: договоритесь о нейтралитете хотя бы с одним соседом.",
+    "giver": "station",
+    "branchRequired": null,
+    "secret": false,
+    "objectives": [
+      {
+        "id": "reach",
+        "type": "reach_system",
+        "targetKind": "neutral_capital"
+      },
+      {
+        "id": "talk",
+        "type": "talk",
+        "count": 2
+      },
+      {
+        "id": "sign",
+        "type": "talk",
+        "count": 1
+      }
+    ],
+    "rewards": {
+      "credits": 75000,
+      "alloys": 100,
+      "influence": 8,
+      "science": {
+        "physics": 40,
+        "society": 140,
+        "engineering": 40
+      }
+    },
+    "prerequisites": [
+      "main_01_colony"
+    ],
+    "weight": 100
+  },
+  {
+    "id": "main_02_council",
+    "act": 2,
+    "titleRu": "Голос в совете",
+    "briefingRu": "Галактический совет собирается впервые за век. Ваш голос должен звучать — или вас посчитают обстоятельством.",
+    "giver": "council",
+    "branchRequired": null,
+    "secret": false,
+    "objectives": [
+      {
+        "id": "reach",
+        "type": "reach_system",
+        "targetKind": "council"
+      },
+      {
+        "id": "vote",
+        "type": "talk",
+        "count": 3
+      },
+      {
+        "id": "report",
+        "type": "dock"
+      }
+    ],
+    "rewards": {
+      "credits": 140000,
+      "alloys": 220,
+      "influence": 12,
+      "science": {
+        "physics": 120,
+        "society": 200,
+        "engineering": 80
+      }
+    },
+    "prerequisites": [
+      "main_01_diplomat"
+    ],
+    "weight": 100
+  },
+  {
+    "id": "main_02_schism",
+    "act": 2,
+    "titleRu": "Раскол",
+    "briefingRu": "Два союза требуют вашего участия. Отказ — тоже ответ, и его запомнят.",
+    "giver": "legacy",
+    "branchRequired": null,
+    "secret": false,
+    "objectives": [
+      {
+        "id": "reach",
+        "type": "reach_system",
+        "targetKind": "contested"
+      },
+      {
+        "id": "choose",
+        "type": "talk",
+        "count": 1
+      },
+      {
+        "id": "defend",
+        "type": "defend_system",
+        "count": 1
+      }
+    ],
+    "rewards": {
+      "credits": 150000,
+      "alloys": 240,
+      "influence": 10,
+      "science": {
+        "physics": 100,
+        "society": 180,
+        "engineering": 120
+      }
+    },
+    "prerequisites": [
+      "main_02_council"
+    ],
+    "weight": 100
+  },
+  {
+    "id": "main_02_spy",
+    "act": 2,
+    "titleRu": "Тихий гость",
+    "briefingRu": "В вашем штабе был чужой. Найдите канал утечки, не разрушив собственные службы.",
+    "giver": "legacy",
+    "branchRequired": null,
+    "secret": false,
+    "objectives": [
+      {
+        "id": "investigate",
+        "type": "scan",
+        "count": 3
+      },
+      {
+        "id": "catch",
+        "type": "talk",
+        "count": 1
+      },
+      {
+        "id": "cleanup",
+        "type": "dock"
+      }
+    ],
+    "rewards": {
+      "credits": 130000,
+      "alloys": 200,
+      "influence": 9,
+      "science": {
+        "physics": 80,
+        "society": 160,
+        "engineering": 160
+      }
+    },
+    "prerequisites": [
+      "main_02_council"
+    ],
+    "weight": 100
+  },
+  {
+    "id": "main_02_first_crisis",
+    "act": 2,
+    "titleRu": "Первая трещина",
+    "briefingRu": "Кризис приходит не с флотом, а с молчанием сразу в шести системах. Разберитесь, пока не поздно.",
+    "giver": "rift_watch",
+    "branchRequired": null,
+    "secret": false,
+    "objectives": [
+      {
+        "id": "reach",
+        "type": "reach_system",
+        "targetKind": "silent"
+      },
+      {
+        "id": "survive",
+        "type": "survive_ticks",
+        "count": 60
+      },
+      {
+        "id": "destroy",
+        "type": "destroy_fleet",
+        "count": 4
+      }
+    ],
+    "rewards": {
+      "credits": 180000,
+      "alloys": 300,
+      "influence": 11,
+      "science": {
+        "physics": 180,
+        "society": 120,
+        "engineering": 200
+      }
+    },
+    "prerequisites": [
+      "main_02_schism"
+    ],
+    "weight": 100
+  },
+  {
+    "id": "main_03_truth",
+    "act": 3,
+    "titleRu": "Правда о Строителях",
+    "briefingRu": "Артефакт говорит: они не ушли — они закрылись изнутри. Верните запись в совет и решите, кто её увидит.",
+    "giver": "legacy",
+    "branchRequired": null,
+    "secret": true,
+    "objectives": [
+      {
+        "id": "reach",
+        "type": "reach_system",
+        "targetKind": "archive"
+      },
+      {
+        "id": "scan",
+        "type": "scan",
+        "count": 5
+      },
+      {
+        "id": "return",
+        "type": "dock"
+      }
+    ],
+    "rewards": {
+      "credits": 240000,
+      "alloys": 380,
+      "influence": 14,
+      "science": {
+        "physics": 220,
+        "society": 200,
+        "engineering": 180
+      },
+      "flag": "legacy_truth"
+    },
+    "prerequisites": [
+      "main_02_first_crisis"
+    ],
+    "weight": 100
+  },
+  {
+    "id": "main_03_invasion",
+    "act": 3,
+    "titleRu": "Вторжение",
+    "briefingRu": "Вторая волна приходит не по Дорогам, а мимо них. Держите систему, пока эвакуируются колонии.",
+    "giver": "rift_watch",
+    "branchRequired": null,
+    "secret": false,
+    "objectives": [
+      {
+        "id": "reach",
+        "type": "reach_system",
+        "targetKind": "invasion"
+      },
+      {
+        "id": "survive",
+        "type": "survive_ticks",
+        "count": 90
+      },
+      {
+        "id": "destroy",
+        "type": "destroy_fleet",
+        "count": 6
+      }
+    ],
+    "rewards": {
+      "credits": 280000,
+      "alloys": 450,
+      "influence": 13,
+      "science": {
+        "physics": 200,
+        "society": 150,
+        "engineering": 250
+      }
+    },
+    "prerequisites": [
+      "main_03_truth"
+    ],
+    "weight": 100
+  },
+  {
+    "id": "main_03_megastructure",
+    "act": 3,
+    "titleRu": "Камень на орбите",
+    "briefingRu": "Мегаструктура Строителей отвечает только на правильный сигнал. Постройте узел и удержите его.",
+    "giver": "legacy",
+    "branchRequired": null,
+    "secret": false,
+    "objectives": [
+      {
+        "id": "reach",
+        "type": "reach_system",
+        "targetKind": "ruin"
+      },
+      {
+        "id": "construct",
+        "type": "construct",
+        "count": 1,
+        "timeLimitTicks": 300
+      },
+      {
+        "id": "defend",
+        "type": "defend_system",
+        "count": 2
+      }
+    ],
+    "rewards": {
+      "credits": 300000,
+      "alloys": 500,
+      "influence": 12,
+      "science": {
+        "physics": 250,
+        "society": 180,
+        "engineering": 300
+      },
+      "unlock": "megastructure:sentinel_array"
+    },
+    "prerequisites": [
+      "main_03_truth"
+    ],
+    "weight": 100
+  },
+  {
+    "id": "main_03_split",
+    "act": 3,
+    "titleRu": "Раскол галактики",
+    "briefingRu": "Две империи рвут совет. Выберите сторону или создайте третью — но молчание уже не работает.",
+    "giver": "council",
+    "branchRequired": null,
+    "secret": false,
+    "objectives": [
+      {
+        "id": "reach",
+        "type": "reach_system",
+        "targetKind": "council"
+      },
+      {
+        "id": "choose",
+        "type": "talk",
+        "count": 1
+      },
+      {
+        "id": "report",
+        "type": "dock"
+      }
+    ],
+    "rewards": {
+      "credits": 260000,
+      "alloys": 420,
+      "influence": 15,
+      "science": {
+        "physics": 180,
+        "society": 220,
+        "engineering": 160
+      }
+    },
+    "prerequisites": [
+      "main_03_invasion"
+    ],
+    "weight": 100
+  },
+  {
+    "id": "main_04_legacy_use",
+    "act": 4,
+    "titleRu": "Цена наследия",
+    "briefingRu": "Технология Строителей работает. Осталось решить, кто получит доступ — вы или галактика.",
+    "giver": "legacy",
+    "branchRequired": null,
+    "secret": false,
+    "objectives": [
+      {
+        "id": "reach",
+        "type": "reach_system",
+        "targetKind": "archive"
+      },
+      {
+        "id": "test",
+        "type": "scan",
+        "count": 4
+      },
+      {
+        "id": "report",
+        "type": "dock"
+      }
+    ],
+    "rewards": {
+      "credits": 400000,
+      "alloys": 650,
+      "influence": 16,
+      "science": {
+        "physics": 400,
+        "society": 300,
+        "engineering": 350
+      }
+    },
+    "prerequisites": [
+      "main_03_split"
+    ],
+    "weight": 100
+  },
+  {
+    "id": "main_04_factions",
+    "act": 4,
+    "titleRu": "Дом, разделённый внутри",
+    "briefingRu": "Фракции требуют ответа на один вопрос: кому принадлежит будущее империи. Ответьте публично.",
+    "giver": "legacy",
+    "branchRequired": null,
+    "secret": false,
+    "objectives": [
+      {
+        "id": "reach",
+        "type": "reach_system",
+        "targetKind": "capital"
+      },
+      {
+        "id": "talk",
+        "type": "talk",
+        "count": 3
+      },
+      {
+        "id": "choose",
+        "type": "talk",
+        "count": 1
+      }
+    ],
+    "rewards": {
+      "credits": 380000,
+      "alloys": 600,
+      "influence": 18,
+      "science": {
+        "physics": 300,
+        "society": 450,
+        "engineering": 300
+      }
+    },
+    "prerequisites": [
+      "main_04_legacy_use"
+    ],
+    "weight": 100
+  },
+  {
+    "id": "main_04_betrayal",
+    "act": 4,
+    "titleRu": "Тот, кто подписывал",
+    "briefingRu": "Союзник, которому вы доверяли, продал ваш маршрут. Найдите его и решите, что важнее: правда или мир.",
+    "giver": "legacy",
+    "branchRequired": null,
+    "secret": true,
+    "objectives": [
+      {
+        "id": "reach",
+        "type": "reach_system",
+        "targetKind": "enemy"
+      },
+      {
+        "id": "investigate",
+        "type": "scan",
+        "count": 3
+      },
+      {
+        "id": "confront",
+        "type": "talk",
+        "count": 1
+      }
+    ],
+    "rewards": {
+      "credits": 420000,
+      "alloys": 700,
+      "influence": 17,
+      "science": {
+        "physics": 350,
+        "society": 400,
+        "engineering": 350
+      }
+    },
+    "prerequisites": [
+      "main_04_factions"
+    ],
+    "weight": 100
+  },
+  {
+    "id": "main_04_titan",
+    "act": 4,
+    "titleRu": "Венец инженера",
+    "briefingRu": "Титан нельзя скрыть: его видно с любой границы. Покажите его там, где нужно.",
+    "giver": "legacy",
+    "branchRequired": null,
+    "secret": false,
+    "objectives": [
+      {
+        "id": "reach",
+        "type": "reach_system",
+        "targetKind": "border"
+      },
+      {
+        "id": "construct",
+        "type": "construct",
+        "count": 1,
+        "timeLimitTicks": 360
+      },
+      {
+        "id": "demonstrate",
+        "type": "talk",
+        "count": 1
+      }
+    ],
+    "rewards": {
+      "credits": 480000,
+      "alloys": 900,
+      "influence": 16,
+      "science": {
+        "physics": 420,
+        "society": 300,
+        "engineering": 450
+      },
+      "unlock": "hull:hull_titan"
+    },
+    "prerequisites": [
+      "main_04_legacy_use"
+    ],
+    "weight": 100
+  },
+  {
+    "id": "main_05_race",
+    "act": 5,
+    "titleRu": "Гонка за финалом",
+    "briefingRu": "Все достигли горизонта одновременно. Ускоряйтесь: через двести тактов чужое условие победы станет вашим поражением.",
+    "giver": "legacy",
+    "branchRequired": null,
+    "secret": false,
+    "objectives": [
+      {
+        "id": "reach",
+        "type": "reach_system",
+        "targetKind": "victory"
+      },
+      {
+        "id": "push",
+        "type": "construct",
+        "count": 1
+      },
+      {
+        "id": "defend",
+        "type": "defend_system",
+        "count": 2
+      }
+    ],
+    "rewards": {
+      "credits": 600000,
+      "alloys": 1100,
+      "influence": 20,
+      "science": {
+        "physics": 600,
+        "society": 500,
+        "engineering": 600
+      }
+    },
+    "prerequisites": [
+      "main_04_titan"
+    ],
+    "weight": 100
+  },
+  {
+    "id": "main_05_final_choice",
+    "act": 5,
+    "titleRu": "Последняя дверь",
+    "briefingRu": "Пять ключей в ваших руках. Запереть, удержать или отдать — третьего пути не будет.",
+    "giver": "legacy",
+    "branchRequired": null,
+    "secret": false,
+    "objectives": [
+      {
+        "id": "reach",
+        "type": "reach_system",
+        "targetKind": "rift"
+      },
+      {
+        "id": "choose",
+        "type": "talk",
+        "count": 1
+      },
+      {
+        "id": "survive",
+        "type": "survive_ticks",
+        "count": 120
+      }
+    ],
+    "rewards": {
+      "credits": 700000,
+      "alloys": 1200,
+      "influence": 24,
+      "science": {
+        "physics": 800,
+        "society": 700,
+        "engineering": 800
+      },
+      "flag": "final_choice"
+    },
+    "prerequisites": [
+      "main_05_race"
+    ],
+    "ending": "ending_seal",
+    "weight": 100
+  },
+  {
+    "id": "main_05_last_battle",
+    "act": 5,
+    "titleRu": "Последний залп",
+    "briefingRu": "Флот галактики собирается в одной точке пространства. Это не ваша война целиком — но ваш приказ решает её исход.",
+    "giver": "legacy",
+    "branchRequired": null,
+    "secret": false,
+    "objectives": [
+      {
+        "id": "reach",
+        "type": "reach_system",
+        "targetKind": "final_battle"
+      },
+      {
+        "id": "destroy",
+        "type": "destroy_fleet",
+        "count": 10
+      },
+      {
+        "id": "survive",
+        "type": "survive_ticks",
+        "count": 90
+      }
+    ],
+    "rewards": {
+      "credits": 750000,
+      "alloys": 1400,
+      "influence": 25,
+      "science": {
+        "physics": 900,
+        "society": 600,
+        "engineering": 900
+      }
+    },
+    "prerequisites": [
+      "main_05_final_choice"
+    ],
+    "weight": 100
+  },
+  {
+    "id": "main_05_legacy_end",
+    "act": 5,
+    "titleRu": "Что останется",
+    "briefingRu": "Империя входит в финал не только флотом, но и тем, что о ней скажут. Завершите линию наследия на своих условиях.",
+    "giver": "legacy",
+    "branchRequired": null,
+    "secret": false,
+    "objectives": [
+      {
+        "id": "reach",
+        "type": "reach_system",
+        "targetKind": "capital"
+      },
+      {
+        "id": "report",
+        "type": "dock"
+      },
+      {
+        "id": "choose",
+        "type": "talk",
+        "count": 1
+      }
+    ],
+    "rewards": {
+      "credits": 680000,
+      "alloys": 1300,
+      "influence": 22,
+      "science": {
+        "physics": 700,
+        "society": 800,
+        "engineering": 700
+      },
+      "flag": "legacy_complete"
+    },
+    "prerequisites": [
+      "main_05_final_choice"
+    ],
+    "weight": 100
+  },
+  {
+    "id": "rift_00_ping",
+    "act": 0,
+    "titleRu": "Эхо из ниоткуда",
+    "briefingRu": "Сенсоры принимают сигнал, у которого нет источника в известной части галактики. Запишите его полностью.",
+    "giver": "rift_watch",
+    "branchRequired": null,
+    "secret": false,
+    "objectives": [
+      {
+        "id": "reach",
+        "type": "reach_system",
+        "targetKind": "frontier"
+      },
+      {
+        "id": "scan",
+        "type": "scan",
+        "count": 2
+      },
+      {
+        "id": "return",
+        "type": "dock"
+      }
+    ],
+    "rewards": {
+      "credits": 28000,
+      "alloys": 40,
+      "influence": 3,
+      "science": {
+        "physics": 80,
+        "society": 10,
+        "engineering": 20
+      }
+    },
+    "weight": 90
+  },
+  {
+    "id": "rift_00_door",
+    "act": 0,
+    "titleRu": "Дверь в первый раз",
+    "briefingRu": "Сигнал указывает на пустую систему. Там есть что-то, что не отражает свет.",
+    "giver": "rift_watch",
+    "branchRequired": null,
+    "secret": false,
+    "objectives": [
+      {
+        "id": "reach",
+        "type": "reach_system",
+        "targetKind": "silent"
+      },
+      {
+        "id": "scan",
+        "type": "scan",
+        "count": 1
+      },
+      {
+        "id": "survive",
+        "type": "survive_ticks",
+        "count": 30
+      }
+    ],
+    "rewards": {
+      "credits": 32000,
+      "alloys": 50,
+      "influence": 4,
+      "science": {
+        "physics": 100,
+        "society": 20,
+        "engineering": 20
+      }
+    },
+    "weight": 90
+  },
+  {
+    "id": "rift_01_signal",
+    "act": 1,
+    "titleRu": "Слушатели",
+    "briefingRu": "Кто-то слушает Разлом и записывает. Найдите их раньше, чем это сделает Гегемония.",
+    "giver": "rift_watch",
+    "branchRequired": null,
+    "secret": false,
+    "objectives": [
+      {
+        "id": "reach",
+        "type": "reach_system",
+        "targetKind": "research"
+      },
+      {
+        "id": "talk",
+        "type": "talk",
+        "count": 1
+      },
+      {
+        "id": "scan",
+        "type": "scan",
+        "count": 3
+      }
+    ],
+    "rewards": {
+      "credits": 65000,
+      "alloys": 100,
+      "influence": 5,
+      "science": {
+        "physics": 120,
+        "society": 60,
+        "engineering": 60
+      }
+    },
+    "weight": 90
+  },
+  {
+    "id": "rift_01_salvage",
+    "act": 1,
+    "titleRu": "Обломки за дверью",
+    "briefingRu": "Первый корабль, прошедший границу, вернулся не целиком. Заберите то, что осталось.",
+    "giver": "rift_watch",
+    "branchRequired": null,
+    "secret": false,
+    "objectives": [
+      {
+        "id": "reach",
+        "type": "reach_system",
+        "targetKind": "derelict"
+      },
+      {
+        "id": "collect",
+        "type": "collect_artifact",
+        "count": 1
+      },
+      {
+        "id": "return",
+        "type": "dock"
+      }
+    ],
+    "rewards": {
+      "credits": 70000,
+      "alloys": 120,
+      "influence": 5,
+      "science": {
+        "physics": 100,
+        "society": 40,
+        "engineering": 100
+      }
+    },
+    "weight": 90
+  },
+  {
+    "id": "rift_02_listener",
+    "act": 2,
+    "titleRu": "Тот, кто слышит",
+    "briefingRu": "Слушатель утверждает, что слышит ответ. Проверьте его — или проверьте себя.",
+    "giver": "rift_watch",
+    "branchRequired": null,
+    "secret": false,
+    "objectives": [
+      {
+        "id": "reach",
+        "type": "reach_system",
+        "targetKind": "anomaly"
+      },
+      {
+        "id": "talk",
+        "type": "talk",
+        "count": 2
+      },
+      {
+        "id": "survive",
+        "type": "survive_ticks",
+        "count": 45
+      }
+    ],
+    "rewards": {
+      "credits": 120000,
+      "alloys": 180,
+      "influence": 7,
+      "science": {
+        "physics": 180,
+        "society": 120,
+        "engineering": 80
+      }
+    },
+    "weight": 85
+  },
+  {
+    "id": "rift_02_ambush",
+    "act": 2,
+    "titleRu": "Засада у границы",
+    "briefingRu": "Пираты узнали о Разломе раньше вас. Отбейте атаку и не дайте им унести координаты.",
+    "giver": "rift_watch",
+    "branchRequired": null,
+    "secret": false,
+    "objectives": [
+      {
+        "id": "reach",
+        "type": "reach_system",
+        "targetKind": "frontier"
+      },
+      {
+        "id": "kill",
+        "type": "destroy_fleet",
+        "count": 4
+      },
+      {
+        "id": "dock",
+        "type": "dock"
+      }
+    ],
+    "rewards": {
+      "credits": 130000,
+      "alloys": 200,
+      "influence": 6,
+      "science": {
+        "physics": 120,
+        "society": 60,
+        "engineering": 160
+      }
+    },
+    "weight": 85
+  },
+  {
+    "id": "rift_03_breach",
+    "act": 3,
+    "titleRu": "Прорыв",
+    "briefingRu": "Граница Разлома расширяется в вашей системе. Задержите её, пока эвакуируются колонии.",
+    "giver": "rift_watch",
+    "branchRequired": null,
+    "secret": false,
+    "objectives": [
+      {
+        "id": "reach",
+        "type": "reach_system",
+        "targetKind": "threatened"
+      },
+      {
+        "id": "survive",
+        "type": "survive_ticks",
+        "count": 80
+      },
+      {
+        "id": "destroy",
+        "type": "destroy_fleet",
+        "count": 5
+      }
+    ],
+    "rewards": {
+      "credits": 220000,
+      "alloys": 320,
+      "influence": 10,
+      "science": {
+        "physics": 250,
+        "society": 150,
+        "engineering": 220
+      }
+    },
+    "weight": 85
+  },
+  {
+    "id": "rift_03_keys",
+    "act": 3,
+    "titleRu": "Ключи",
+    "briefingRu": "Артефакты складываются в ключи. Соберите три из них, пока их не собрал кто-то другой.",
+    "giver": "rift_watch",
+    "branchRequired": null,
+    "secret": true,
+    "objectives": [
+      {
+        "id": "reach",
+        "type": "reach_system",
+        "targetKind": "ruin"
+      },
+      {
+        "id": "collect",
+        "type": "collect_artifact",
+        "count": 3
+      },
+      {
+        "id": "return",
+        "type": "dock"
+      }
+    ],
+    "rewards": {
+      "credits": 250000,
+      "alloys": 380,
+      "influence": 11,
+      "science": {
+        "physics": 280,
+        "society": 180,
+        "engineering": 240
+      },
+      "flag": "rift_keys_1"
+    },
+    "weight": 80
+  },
+  {
+    "id": "rift_04_tide",
+    "act": 4,
+    "titleRu": "Прилив",
+    "briefingRu": "Серый Прилив дошёл до обитаемых миров. Каждая система — это время, которого нет.",
+    "giver": "rift_watch",
+    "branchRequired": null,
+    "secret": false,
+    "objectives": [
+      {
+        "id": "reach",
+        "type": "reach_system",
+        "targetKind": "tide"
+      },
+      {
+        "id": "destroy",
+        "type": "destroy_fleet",
+        "count": 6
+      },
+      {
+        "id": "survive",
+        "type": "survive_ticks",
+        "count": 100
+      }
+    ],
+    "rewards": {
+      "credits": 380000,
+      "alloys": 600,
+      "influence": 14,
+      "science": {
+        "physics": 380,
+        "society": 220,
+        "engineering": 380
+      }
+    },
+    "weight": 80
+  },
+  {
+    "id": "rift_04_core",
+    "act": 4,
+    "titleRu": "Ядро Прилива",
+    "briefingRu": "У Прилива есть центр. Дойдите до него и уничтожьте — или научитесь с ним жить.",
+    "giver": "rift_watch",
+    "branchRequired": null,
+    "secret": false,
+    "objectives": [
+      {
+        "id": "reach",
+        "type": "reach_system",
+        "targetKind": "tide_core"
+      },
+      {
+        "id": "destroy",
+        "type": "destroy_fleet",
+        "count": 8
+      },
+      {
+        "id": "return",
+        "type": "dock"
+      }
+    ],
+    "rewards": {
+      "credits": 420000,
+      "alloys": 700,
+      "influence": 15,
+      "science": {
+        "physics": 420,
+        "society": 260,
+        "engineering": 420
+      },
+      "unlock": "module:reactor_mk4"
+    },
+    "weight": 80
+  },
+  {
+    "id": "rift_05_wave",
+    "act": 5,
+    "titleRu": "Третья волна",
+    "briefingRu": "Пожиратели входят одновременно через три точки. Распределите флот так, чтобы не потерять одну из них.",
+    "giver": "rift_watch",
+    "branchRequired": null,
+    "secret": false,
+    "objectives": [
+      {
+        "id": "reach",
+        "type": "reach_system",
+        "targetKind": "invasion"
+      },
+      {
+        "id": "survive",
+        "type": "survive_ticks",
+        "count": 120
+      },
+      {
+        "id": "destroy",
+        "type": "destroy_fleet",
+        "count": 10
+      }
+    ],
+    "rewards": {
+      "credits": 600000,
+      "alloys": 1000,
+      "influence": 20,
+      "science": {
+        "physics": 600,
+        "society": 350,
+        "engineering": 600
+      }
+    },
+    "weight": 80
+  },
+  {
+    "id": "rift_05_seal",
+    "act": 5,
+    "titleRu": "Печать",
+    "briefingRu": "Есть шанс закрыть Разлом изнутри. Он требует пяти ключей, одного корабля и готовности не вернуться.",
+    "giver": "rift_watch",
+    "branchRequired": null,
+    "secret": false,
+    "objectives": [
+      {
+        "id": "reach",
+        "type": "reach_system",
+        "targetKind": "rift"
+      },
+      {
+        "id": "survive",
+        "type": "survive_ticks",
+        "count": 120
+      },
+      {
+        "id": "seal",
+        "type": "seal_rift",
+        "count": 1
+      }
+    ],
+    "rewards": {
+      "credits": 650000,
+      "alloys": 1100,
+      "influence": 22,
+      "science": {
+        "physics": 700,
+        "society": 400,
+        "engineering": 650
+      },
+      "flag": "rift_sealed"
+    },
+    "weight": 80
+  },
+  {
+    "id": "br_fed_01",
+    "act": 0,
+    "titleRu": "Общий стол",
+    "briefingRu": "Совет малых миров приглашает вас на первый общий стол. Придите с предложением, а не с требованием.",
+    "giver": "federation",
+    "branchRequired": "federation",
+    "secret": false,
+    "objectives": [
+      {
+        "id": "reach",
+        "type": "reach_system",
+        "targetKind": "neutral_capital"
+      },
+      {
+        "id": "talk",
+        "type": "talk",
+        "count": 2
+      }
+    ],
+    "rewards": {
+      "credits": 22000,
+      "alloys": 40,
+      "influence": 6,
+      "science": {
+        "society": 60,
+        "physics": 10,
+        "engineering": 10
+      }
+    },
+    "branch": "federation",
+    "weight": 80
+  },
+  {
+    "id": "br_fed_02",
+    "act": 1,
+    "titleRu": "Устав союза",
+    "briefingRu": "Федерация нуждается в уставе. Ваша редакция определит, кто платит за общий флот.",
+    "giver": "federation",
+    "branchRequired": "federation",
+    "secret": false,
+    "objectives": [
+      {
+        "id": "reach",
+        "type": "reach_system",
+        "targetKind": "council"
+      },
+      {
+        "id": "talk",
+        "type": "talk",
+        "count": 3
+      },
+      {
+        "id": "sign",
+        "type": "talk",
+        "count": 1
+      }
+    ],
+    "rewards": {
+      "credits": 55000,
+      "alloys": 90,
+      "influence": 8,
+      "science": {
+        "society": 120,
+        "physics": 20,
+        "engineering": 20
+      }
+    },
+    "branch": "federation",
+    "weight": 80
+  },
+  {
+    "id": "br_fed_03",
+    "act": 2,
+    "titleRu": "Общий флот",
+    "briefingRu": "Первый совместный флот собирается под чужим флагом. Покажите, что он умеет защищать.",
+    "giver": "federation",
+    "branchRequired": "federation",
+    "secret": false,
+    "objectives": [
+      {
+        "id": "reach",
+        "type": "reach_system",
+        "targetKind": "border"
+      },
+      {
+        "id": "defend",
+        "type": "defend_system",
+        "count": 1
+      },
+      {
+        "id": "kill",
+        "type": "destroy_fleet",
+        "count": 3
+      }
+    ],
+    "rewards": {
+      "credits": 110000,
+      "alloys": 180,
+      "influence": 9,
+      "science": {
+        "society": 180,
+        "physics": 60,
+        "engineering": 90
+      }
+    },
+    "branch": "federation",
+    "weight": 80
+  },
+  {
+    "id": "br_fed_04",
+    "act": 2,
+    "titleRu": "Голос малых",
+    "briefingRu": "Малые миры боятся раствориться в союзе. Дайте им голос, который слышно.",
+    "giver": "federation",
+    "branchRequired": "federation",
+    "secret": false,
+    "objectives": [
+      {
+        "id": "reach",
+        "type": "reach_system",
+        "targetKind": "council"
+      },
+      {
+        "id": "talk",
+        "type": "talk",
+        "count": 2
+      },
+      {
+        "id": "report",
+        "type": "dock"
+      }
+    ],
+    "rewards": {
+      "credits": 115000,
+      "alloys": 190,
+      "influence": 10,
+      "science": {
+        "society": 200,
+        "physics": 70,
+        "engineering": 80
+      }
+    },
+    "branch": "federation",
+    "weight": 80
+  },
+  {
+    "id": "br_fed_05",
+    "act": 3,
+    "titleRu": "Кризис доверия",
+    "briefingRu": "Федерация раскалывается из-за Разлома. Удержите её, показывая не силу, а процедуру.",
+    "giver": "federation",
+    "branchRequired": "federation",
+    "secret": false,
+    "objectives": [
+      {
+        "id": "reach",
+        "type": "reach_system",
+        "targetKind": "captured"
+      },
+      {
+        "id": "talk",
+        "type": "talk",
+        "count": 3
+      },
+      {
+        "id": "survive",
+        "type": "survive_ticks",
+        "count": 60
+      }
+    ],
+    "rewards": {
+      "credits": 200000,
+      "alloys": 300,
+      "influence": 12,
+      "science": {
+        "society": 300,
+        "physics": 120,
+        "engineering": 140
+      }
+    },
+    "branch": "federation",
+    "weight": 80
+  },
+  {
+    "id": "br_fed_06",
+    "act": 4,
+    "titleRu": "Председательство",
+    "briefingRu": "Ваша очередь председательствовать. Один сезон — и галактика увидит, как вы понимаете союз.",
+    "giver": "federation",
+    "branchRequired": "federation",
+    "secret": false,
+    "objectives": [
+      {
+        "id": "reach",
+        "type": "reach_system",
+        "targetKind": "council"
+      },
+      {
+        "id": "vote",
+        "type": "talk",
+        "count": 2
+      },
+      {
+        "id": "report",
+        "type": "dock"
+      }
+    ],
+    "rewards": {
+      "credits": 360000,
+      "alloys": 550,
+      "influence": 16,
+      "science": {
+        "society": 400,
+        "physics": 200,
+        "engineering": 220
+      }
+    },
+    "branch": "federation",
+    "weight": 80
+  },
+  {
+    "id": "br_fed_07",
+    "act": 4,
+    "titleRu": "Раскол Союза",
+    "briefingRu": "Двое из союза требуют выхода. Их уход ослабит вас, но удержание силой разрушит саму идею.",
+    "giver": "federation",
+    "branchRequired": "federation",
+    "secret": false,
+    "objectives": [
+      {
+        "id": "reach",
+        "type": "reach_system",
+        "targetKind": "council"
+      },
+      {
+        "id": "choose",
+        "type": "talk",
+        "count": 1
+      },
+      {
+        "id": "talk",
+        "type": "talk",
+        "count": 1
+      }
+    ],
+    "rewards": {
+      "credits": 380000,
+      "alloys": 580,
+      "influence": 15,
+      "science": {
+        "society": 420,
+        "physics": 200,
+        "engineering": 220
+      }
+    },
+    "branch": "federation",
+    "weight": 80
+  },
+  {
+    "id": "br_fed_08",
+    "act": 5,
+    "titleRu": "Пакт о Разломе",
+    "briefingRu": "Федерация должна решить, кому достанется технология Разлома. Это ваш последний главный голос.",
+    "giver": "federation",
+    "branchRequired": "federation",
+    "secret": false,
+    "objectives": [
+      {
+        "id": "reach",
+        "type": "reach_system",
+        "targetKind": "council"
+      },
+      {
+        "id": "talk",
+        "type": "talk",
+        "count": 3
+      },
+      {
+        "id": "report",
+        "type": "dock"
+      }
+    ],
+    "rewards": {
+      "credits": 520000,
+      "alloys": 850,
+      "influence": 22,
+      "science": {
+        "society": 600,
+        "physics": 400,
+        "engineering": 400
+      },
+      "flag": "branch_federation_complete"
+    },
+    "branch": "federation",
+    "ending": "ending_release",
+    "weight": 80
+  },
+  {
+    "id": "br_sov_01",
+    "act": 0,
+    "titleRu": "Один закон",
+    "briefingRu": "Соседи предлагают союз. Ответьте так, чтобы запомнили не отказ, а принцип.",
+    "giver": "sovereignty",
+    "branchRequired": "sovereignty",
+    "secret": false,
+    "objectives": [
+      {
+        "id": "reach",
+        "type": "reach_system",
+        "targetKind": "border"
+      },
+      {
+        "id": "talk",
+        "type": "talk",
+        "count": 1
+      },
+      {
+        "id": "demonstrate",
+        "type": "demonstrate",
+        "count": 1
+      }
+    ],
+    "rewards": {
+      "credits": 23000,
+      "alloys": 45,
+      "influence": 5,
+      "science": {
+        "society": 50,
+        "physics": 20,
+        "engineering": 20
+      }
+    },
+    "branch": "sovereignty",
+    "weight": 80
+  },
+  {
+    "id": "br_sov_02",
+    "act": 1,
+    "titleRu": "Свой флот",
+    "briefingRu": "Общий флот под чужим флагом — не ваш флот. Постройте собственный ударный кулак.",
+    "giver": "sovereignty",
+    "branchRequired": "sovereignty",
+    "secret": false,
+    "objectives": [
+      {
+        "id": "reach",
+        "type": "reach_system",
+        "targetKind": "shipyard"
+      },
+      {
+        "id": "construct",
+        "type": "construct",
+        "count": 1
+      },
+      {
+        "id": "kill",
+        "type": "destroy_fleet",
+        "count": 2
+      }
+    ],
+    "rewards": {
+      "credits": 58000,
+      "alloys": 110,
+      "influence": 6,
+      "science": {
+        "society": 80,
+        "physics": 40,
+        "engineering": 60
+      }
+    },
+    "branch": "sovereignty",
+    "weight": 80
+  },
+  {
+    "id": "br_sov_03",
+    "act": 1,
+    "titleRu": "Отказ",
+    "briefingRu": "Империя требует вассалитета. Откажитесь так, чтобы у неё не осталось поводов напасть.",
+    "giver": "sovereignty",
+    "branchRequired": "sovereignty",
+    "secret": false,
+    "objectives": [
+      {
+        "id": "reach",
+        "type": "reach_system",
+        "targetKind": "enemy_capital"
+      },
+      {
+        "id": "talk",
+        "type": "talk",
+        "count": 2
+      },
+      {
+        "id": "defend",
+        "type": "defend_system",
+        "count": 1
+      }
+    ],
+    "rewards": {
+      "credits": 62000,
+      "alloys": 120,
+      "influence": 7,
+      "science": {
+        "society": 100,
+        "physics": 50,
+        "engineering": 80
+      }
+    },
+    "branch": "sovereignty",
+    "weight": 80
+  },
+  {
+    "id": "br_sov_04",
+    "act": 2,
+    "titleRu": "Санкции",
+    "briefingRu": "Галактический совет вводит санкции за самостоятельность. Найдите канал, который не закроют.",
+    "giver": "sovereignty",
+    "branchRequired": "sovereignty",
+    "secret": false,
+    "objectives": [
+      {
+        "id": "reach",
+        "type": "reach_system",
+        "targetKind": "border"
+      },
+      {
+        "id": "talk",
+        "type": "talk",
+        "count": 2
+      },
+      {
+        "id": "collect",
+        "type": "collect_artifact",
+        "count": 1
+      }
+    ],
+    "rewards": {
+      "credits": 125000,
+      "alloys": 200,
+      "influence": 8,
+      "science": {
+        "society": 160,
+        "physics": 80,
+        "engineering": 140
+      }
+    },
+    "branch": "sovereignty",
+    "weight": 80
+  },
+  {
+    "id": "br_sov_05",
+    "act": 3,
+    "titleRu": "Своя мегаструктура",
+    "briefingRu": "Наследие Строителей не будет общим. Постройте то, что принадлежит только вам.",
+    "giver": "sovereignty",
+    "branchRequired": "sovereignty",
+    "secret": false,
+    "objectives": [
+      {
+        "id": "reach",
+        "type": "reach_system",
+        "targetKind": "ruin"
+      },
+      {
+        "id": "construct",
+        "type": "construct",
+        "count": 1,
+        "timeLimitTicks": 300
+      },
+      {
+        "id": "defend",
+        "type": "defend_system",
+        "count": 1
+      }
+    ],
+    "rewards": {
+      "credits": 210000,
+      "alloys": 340,
+      "influence": 12,
+      "science": {
+        "society": 260,
+        "physics": 180,
+        "engineering": 260
+      }
+    },
+    "branch": "sovereignty",
+    "weight": 80
+  },
+  {
+    "id": "br_sov_06",
+    "act": 3,
+    "titleRu": "Доктрина",
+    "briefingRu": "Флот требует единого устава. Ваша доктрина станет ответом всем, кто сомневался.",
+    "giver": "sovereignty",
+    "branchRequired": "sovereignty",
+    "secret": false,
+    "objectives": [
+      {
+        "id": "reach",
+        "type": "reach_system",
+        "targetKind": "fleet"
+      },
+      {
+        "id": "talk",
+        "type": "talk",
+        "count": 1
+      },
+      {
+        "id": "kill",
+        "type": "destroy_fleet",
+        "count": 5
+      }
+    ],
+    "rewards": {
+      "credits": 230000,
+      "alloys": 360,
+      "influence": 13,
+      "science": {
+        "society": 250,
+        "physics": 200,
+        "engineering": 300
+      }
+    },
+    "branch": "sovereignty",
+    "weight": 80
+  },
+  {
+    "id": "br_sov_07",
+    "act": 4,
+    "titleRu": "Кулак",
+    "briefingRu": "Титан на орбите говорит громче любого договора. Постройте его и покажите там, где поймут.",
+    "giver": "sovereignty",
+    "branchRequired": "sovereignty",
+    "secret": false,
+    "objectives": [
+      {
+        "id": "reach",
+        "type": "reach_system",
+        "targetKind": "border"
+      },
+      {
+        "id": "construct",
+        "type": "construct",
+        "count": 1,
+        "timeLimitTicks": 360
+      },
+      {
+        "id": "demonstrate",
+        "type": "talk",
+        "count": 1
+      }
+    ],
+    "rewards": {
+      "credits": 400000,
+      "alloys": 680,
+      "influence": 15,
+      "science": {
+        "society": 380,
+        "physics": 320,
+        "engineering": 480
+      }
+    },
+    "branch": "sovereignty",
+    "weight": 80
+  },
+  {
+    "id": "br_sov_08",
+    "act": 5,
+    "titleRu": "Единственный закон",
+    "briefingRu": "Галактика спорит. У вас есть позиция, флот и право на последнее слово — если решитесь.",
+    "giver": "sovereignty",
+    "branchRequired": "sovereignty",
+    "secret": false,
+    "objectives": [
+      {
+        "id": "reach",
+        "type": "reach_system",
+        "targetKind": "final_battle"
+      },
+      {
+        "id": "destroy",
+        "type": "destroy_fleet",
+        "count": 8
+      },
+      {
+        "id": "survive",
+        "type": "survive_ticks",
+        "count": 90
+      }
+    ],
+    "rewards": {
+      "credits": 560000,
+      "alloys": 900,
+      "influence": 21,
+      "science": {
+        "society": 520,
+        "physics": 480,
+        "engineering": 560
+      },
+      "flag": "branch_sovereignty_complete"
+    },
+    "branch": "sovereignty",
+    "ending": "ending_control",
+    "weight": 80
+  },
+  {
+    "id": "br_syn_01",
+    "act": 1,
+    "titleRu": "Свободный порт",
+    "briefingRu": "Синдикат открывает порт в вашей системе. Взнос — не деньги, а обязательство.",
+    "giver": "syndicate",
+    "branchRequired": "syndicate",
+    "secret": false,
+    "objectives": [
+      {
+        "id": "reach",
+        "type": "reach_system",
+        "targetKind": "station"
+      },
+      {
+        "id": "talk",
+        "type": "talk",
+        "count": 1
+      },
+      {
+        "id": "deliver",
+        "type": "deliver",
+        "count": 1
+      }
+    ],
+    "rewards": {
+      "credits": 60000,
+      "alloys": 70,
+      "influence": 4,
+      "science": {
+        "society": 60,
+        "physics": 20,
+        "engineering": 40
+      }
+    },
+    "branch": "syndicate",
+    "weight": 80
+  },
+  {
+    "id": "br_syn_02",
+    "act": 1,
+    "titleRu": "Караван без отметки",
+    "briefingRu": "Груз, которого нет в документах, должен доехать. Оплата — по факту тишины.",
+    "giver": "syndicate",
+    "branchRequired": "syndicate",
+    "secret": false,
+    "objectives": [
+      {
+        "id": "reach",
+        "type": "reach_system",
+        "targetKind": "trade"
+      },
+      {
+        "id": "deliver",
+        "type": "deliver",
+        "count": 1
+      },
+      {
+        "id": "escape",
+        "type": "escape",
+        "count": 1
+      }
+    ],
+    "rewards": {
+      "credits": 68000,
+      "alloys": 90,
+      "influence": 3,
+      "science": {
+        "society": 80,
+        "physics": 30,
+        "engineering": 40
+      }
+    },
+    "branch": "syndicate",
+    "weight": 80
+  },
+  {
+    "id": "br_syn_03",
+    "act": 2,
+    "titleRu": "Тендер без правил",
+    "briefingRu": "Три корпорации делят контракт. У Синдиката нет правил, но есть цена, которую все понимают.",
+    "giver": "syndicate",
+    "branchRequired": "syndicate",
+    "secret": false,
+    "objectives": [
+      {
+        "id": "reach",
+        "type": "reach_system",
+        "targetKind": "trade_hub"
+      },
+      {
+        "id": "talk",
+        "type": "talk",
+        "count": 3
+      },
+      {
+        "id": "choose",
+        "type": "talk",
+        "count": 1
+      }
+    ],
+    "rewards": {
+      "credits": 120000,
+      "alloys": 160,
+      "influence": 6,
+      "science": {
+        "society": 160,
+        "physics": 60,
+        "engineering": 100
+      }
+    },
+    "branch": "syndicate",
+    "weight": 80
+  },
+  {
+    "id": "br_syn_04",
+    "act": 2,
+    "titleRu": "Таможня",
+    "briefingRu": "Маршрут перекрыт. Найдите того, кто не станет задавать вопросов о вашем трюме.",
+    "giver": "syndicate",
+    "branchRequired": "syndicate",
+    "secret": false,
+    "objectives": [
+      {
+        "id": "reach",
+        "type": "reach_system",
+        "targetKind": "customs"
+      },
+      {
+        "id": "talk",
+        "type": "talk",
+        "count": 1
+      },
+      {
+        "id": "deliver",
+        "type": "deliver",
+        "count": 1
+      },
+      {
+        "id": "escape",
+        "type": "escape",
+        "count": 1
+      }
+    ],
+    "rewards": {
+      "credits": 140000,
+      "alloys": 180,
+      "influence": 6,
+      "science": {
+        "society": 180,
+        "physics": 80,
+        "engineering": 120
+      }
+    },
+    "branch": "syndicate",
+    "weight": 80
+  },
+  {
+    "id": "br_syn_05",
+    "act": 3,
+    "titleRu": "Чёрный рынок",
+    "briefingRu": "Кризис поднял цены. Синдикат предлагает монополию — с последствиями для репутации.",
+    "giver": "syndicate",
+    "branchRequired": "syndicate",
+    "secret": false,
+    "objectives": [
+      {
+        "id": "reach",
+        "type": "reach_system",
+        "targetKind": "black_market"
+      },
+      {
+        "id": "scan",
+        "type": "scan",
+        "count": 2
+      },
+      {
+        "id": "deliver",
+        "type": "deliver",
+        "count": 2
+      }
+    ],
+    "rewards": {
+      "credits": 220000,
+      "alloys": 300,
+      "influence": 8,
+      "science": {
+        "society": 260,
+        "physics": 140,
+        "engineering": 200
+      }
+    },
+    "branch": "syndicate",
+    "weight": 80
+  },
+  {
+    "id": "br_syn_06",
+    "act": 3,
+    "titleRu": "Долг",
+    "briefingRu": "Синдикат не прощает долгов, но всегда предлагает сделку. Выкупите долг землёй или кровью.",
+    "giver": "syndicate",
+    "branchRequired": "syndicate",
+    "secret": false,
+    "objectives": [
+      {
+        "id": "reach",
+        "type": "reach_system",
+        "targetKind": "fleet"
+      },
+      {
+        "id": "kill",
+        "type": "destroy_fleet",
+        "count": 4
+      },
+      {
+        "id": "return",
+        "type": "dock"
+      }
+    ],
+    "rewards": {
+      "credits": 250000,
+      "alloys": 340,
+      "influence": 9,
+      "science": {
+        "society": 280,
+        "physics": 160,
+        "engineering": 240
+      }
+    },
+    "branch": "syndicate",
+    "weight": 80
+  },
+  {
+    "id": "br_syn_07",
+    "act": 4,
+    "titleRu": "Экономическая осада",
+    "briefingRu": "Соперник воюет ценой, а не флотом. Обрушьте его маршрут — и не потеряйте свой.",
+    "giver": "syndicate",
+    "branchRequired": "syndicate",
+    "secret": false,
+    "objectives": [
+      {
+        "id": "reach",
+        "type": "reach_system",
+        "targetKind": "trade"
+      },
+      {
+        "id": "deliver",
+        "type": "deliver",
+        "count": 3
+      },
+      {
+        "id": "profit",
+        "type": "profit",
+        "count": 500000
+      }
+    ],
+    "rewards": {
+      "credits": 420000,
+      "alloys": 520,
+      "influence": 12,
+      "science": {
+        "society": 380,
+        "physics": 260,
+        "engineering": 320
+      }
+    },
+    "branch": "syndicate",
+    "weight": 80
+  },
+  {
+    "id": "br_syn_08",
+    "act": 5,
+    "titleRu": "Условия галактики",
+    "briefingRu": "Синдикат предлагает вам стать его лицом. Это уже не деньги, а власть — и цена публичности.",
+    "giver": "syndicate",
+    "branchRequired": "syndicate",
+    "secret": false,
+    "objectives": [
+      {
+        "id": "reach",
+        "type": "reach_system",
+        "targetKind": "trade_hub"
+      },
+      {
+        "id": "talk",
+        "type": "talk",
+        "count": 3
+      },
+      {
+        "id": "choose",
+        "type": "talk",
+        "count": 1
+      }
+    ],
+    "rewards": {
+      "credits": 600000,
+      "alloys": 900,
+      "influence": 20,
+      "science": {
+        "society": 520,
+        "physics": 380,
+        "engineering": 420
+      },
+      "flag": "branch_syndicate_complete"
+    },
+    "branch": "syndicate",
+    "ending": "ending_syndicate",
+    "weight": 80
+  }
+]

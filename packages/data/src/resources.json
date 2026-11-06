@@ -1,0 +1,82 @@
+[
+  {
+    "id": "energy",
+    "ru": "Энергия",
+    "en": "Energy",
+    "icon": "E",
+    "color": "#F5C542",
+    "stock": true,
+    "wholesale": 1,
+    "retail": 100
+  },
+  {
+    "id": "minerals",
+    "ru": "Минералы",
+    "en": "Minerals",
+    "icon": "M",
+    "color": "#8C99A8",
+    "stock": true,
+    "wholesale": 1.4,
+    "retail": 140
+  },
+  {
+    "id": "food",
+    "ru": "Пища",
+    "en": "Food",
+    "icon": "F",
+    "color": "#6BE675",
+    "stock": true,
+    "wholesale": 0.9,
+    "retail": 90
+  },
+  {
+    "id": "alloys",
+    "ru": "Сплавы",
+    "en": "Alloys",
+    "icon": "A",
+    "color": "#4FC3F7",
+    "stock": true,
+    "wholesale": 4,
+    "retail": 400
+  },
+  {
+    "id": "goods",
+    "ru": "Товары потребления",
+    "en": "Consumer Goods",
+    "icon": "G",
+    "color": "#B8862A",
+    "stock": true,
+    "wholesale": 1.8,
+    "retail": 180
+  },
+  {
+    "id": "unity",
+    "ru": "Единство",
+    "en": "Unity",
+    "icon": "U",
+    "color": "#B78CE8",
+    "stock": true,
+    "wholesale": 2.2,
+    "retail": 220
+  },
+  {
+    "id": "influence",
+    "ru": "Влияние",
+    "en": "Influence",
+    "icon": "I",
+    "color": "#F08A24",
+    "stock": true,
+    "wholesale": 5,
+    "retail": 500
+  },
+  {
+    "id": "credits",
+    "ru": "Кредиты",
+    "en": "Credits",
+    "icon": "C",
+    "color": "#F5C542",
+    "stock": true,
+    "wholesale": 1,
+    "retail": 1
+  }
+]

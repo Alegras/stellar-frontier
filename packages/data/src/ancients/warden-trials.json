@@ -1,0 +1,80 @@
+[
+  {
+    "id": "trial_silence",
+    "ru": "Молчание",
+    "descRu": "Не стрелять 60 секунд под провокацией: Стражи проверяют, умеете ли вы не отвечать на шум.",
+    "checksRu": "60 с без выстрела при провокации",
+    "failTicks": 10,
+    "rewardRelics": 1,
+    "rewardCores": 0,
+    "rewardStability": 0,
+    "rewardScience": 0,
+    "rewardCodex": null,
+    "battleFp": 0
+  },
+  {
+    "id": "trial_accuracy",
+    "ru": "Точность",
+    "descRu": "Попасть в пять маркеров без единого промаха. Промах — отказ, повтор через 10 тактов.",
+    "checksRu": "5 попаданий подряд без промаха",
+    "failTicks": 10,
+    "rewardRelics": 0,
+    "rewardCores": 0,
+    "rewardStability": 3,
+    "rewardScience": 0,
+    "rewardCodex": null,
+    "battleFp": 0
+  },
+  {
+    "id": "trial_speed",
+    "ru": "Скорость",
+    "descRu": "Пройти коридор за 40 секунд: проверка не оружия, а навигации.",
+    "checksRu": "коридор 40 с",
+    "failTicks": 10,
+    "rewardRelics": 0,
+    "rewardCores": 0,
+    "rewardStability": 0,
+    "rewardScience": 0,
+    "rewardCodex": "cx_val_an",
+    "battleFp": 0
+  },
+  {
+    "id": "trial_memory",
+    "ru": "Память",
+    "descRu": "Повторить последовательность огней: Стражи проверяют, слышите ли вы ритм, а не только слова.",
+    "checksRu": "последовательность огней",
+    "failTicks": 10,
+    "rewardRelics": 0,
+    "rewardCores": 0,
+    "rewardStability": 0,
+    "rewardScience": 25,
+    "rewardCodex": null,
+    "battleFp": 0
+  },
+  {
+    "id": "trial_humility",
+    "ru": "Смирение",
+    "descRu": "Оставить трюм с реликвией: цена входа — отказ от добычи.",
+    "checksRu": "оставить груз реликвий",
+    "failTicks": 10,
+    "rewardRelics": 2,
+    "rewardCores": 0,
+    "rewardStability": 0,
+    "rewardScience": 0,
+    "rewardCodex": null,
+    "battleFp": 0
+  },
+  {
+    "id": "trial_loyalty",
+    "ru": "Верность",
+    "descRu": "Защитить копию Стража от Хора: урон копии — бой 2 000 FP.",
+    "checksRu": "защита копии Стража",
+    "failTicks": 10,
+    "rewardRelics": 0,
+    "rewardCores": 1,
+    "rewardStability": 0,
+    "rewardScience": 0,
+    "rewardCodex": null,
+    "battleFp": 2000
+  }
+]

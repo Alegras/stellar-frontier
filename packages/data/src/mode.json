@@ -1,0 +1,37 @@
+{
+  "modeId": "campaign",
+  "rulesetVersion": "1.0.0",
+  "displayRu": "Кампания",
+  "galaxy": {
+    "systems": 240,
+    "shape": "spiral",
+    "aiEmpires": 7,
+    "chokepointBias": 0.5
+  },
+  "time": {
+    "speeds": [
+      0,
+      1,
+      2,
+      3,
+      5
+    ],
+    "tacticalPause": true,
+    "tickSecondsAt1x": 1
+  },
+  "victory": [
+    "domination",
+    "federation",
+    "ascension",
+    "economy",
+    "crisis",
+    "score"
+  ],
+  "difficulty": "normal",
+  "player": {
+    "startPlanets": 3,
+    "startPops": 24,
+    "startAlloys": 60,
+    "startCredits": 120000
+  }
+}

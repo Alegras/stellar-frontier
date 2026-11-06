@@ -1,0 +1,442 @@
+[
+  {
+    "id": "poi_anc_01",
+    "kind": "tomb",
+    "ru": "Гробница адмирала",
+    "descRu": "Усыпальница ансарского адмирала: две ступени командного опыта и реликвия в саркофаге, охраняемом ритуалом Стражей.",
+    "rewardRelics": 2,
+    "rewardCores": 0,
+    "threat": 60,
+    "codex": null
+  },
+  {
+    "id": "poi_anc_02",
+    "kind": "wreck",
+    "ru": "Разбитый дредноут",
+    "descRu": "Остов дредноута с уцелевшим чертежом A2 и сорока сплавами в трюме; дроны охраны ещё активны (200 FP).",
+    "rewardRelics": 0,
+    "rewardCores": 0,
+    "threat": 40,
+    "codex": "cx_shell"
+  },
+  {
+    "id": "poi_anc_3",
+    "kind": "archive",
+    "ru": "Архивный узел",
+    "descRu": "Три записи кодекса и реликвия; вход защищён ловушкой с шансом 15%.",
+    "rewardRelics": 1,
+    "rewardCores": 0,
+    "threat": 15,
+    "codex": null
+  },
+  {
+    "id": "poi_anc_04",
+    "kind": "repair",
+    "ru": "Обрушенная верфь",
+    "descRu": "Автоматический ремонт 60% корпуса бесплатно; обвал возможен с шансом 10%.",
+    "rewardRelics": 0,
+    "rewardCores": 0,
+    "threat": 10,
+    "codex": null
+  },
+  {
+    "id": "poi_anc_05",
+    "kind": "wonder",
+    "ru": "Мастерская скульптора",
+    "descRu": "Инструменты Ансаров, оставленные в рабочем состоянии: три реликвии без охраны.",
+    "rewardRelics": 3,
+    "rewardCores": 0,
+    "threat": 0,
+    "codex": null
+  },
+  {
+    "id": "poi_anc_06",
+    "kind": "trap",
+    "ru": "Зал суда",
+    "descRu": "Испытание Стражей: проверка отклика, а не морали. Провал — отказ и повтор через 20 тактов.",
+    "rewardRelics": 0,
+    "rewardCores": 0,
+    "threat": 65,
+    "codex": "cx_wardens"
+  },
+  {
+    "id": "poi_anc_07",
+    "kind": "wonder",
+    "ru": "Статуя Стража",
+    "descRu": "Копия Стража даёт +3 стабильности; провокация вызывает ответ 2 000 FP.",
+    "rewardRelics": 0,
+    "rewardCores": 0,
+    "threat": 80,
+    "codex": null
+  },
+  {
+    "id": "poi_anc_08",
+    "kind": "anomaly",
+    "ru": "Пустотный колодец",
+    "descRu": "Гравитационная аномалия: тёмная материя +3, 15% шанс аварии.",
+    "rewardRelics": 0,
+    "rewardCores": 0,
+    "threat": 20,
+    "codex": null
+  },
+  {
+    "id": "poi_anc_09",
+    "kind": "wreck",
+    "ru": "Чёрный ящик",
+    "descRu": "Бортовой самописец с лором и +25 науки; угроз нет.",
+    "rewardRelics": 0,
+    "rewardCores": 0,
+    "threat": 0,
+    "codex": null
+  },
+  {
+    "id": "poi_anc_10",
+    "kind": "cache",
+    "ru": "Реликтовый конвейер",
+    "descRu": "Партия из пяти реликвий в автоматическом конвейере, охраняемом двумя Стражами.",
+    "rewardRelics": 5,
+    "rewardCores": 0,
+    "threat": 60,
+    "codex": "cx_relic"
+  },
+  {
+    "id": "poi_anc_11",
+    "kind": "ruin",
+    "ru": "Мёртвый ИИ-собор",
+    "descRu": "Остов синтетического собора с технологией A3; попытка входа — бой 1 200 FP.",
+    "rewardRelics": 0,
+    "rewardCores": 0,
+    "threat": 75,
+    "codex": "cx_warp_core"
+  },
+  {
+    "id": "poi_anc_12",
+    "kind": "archive",
+    "ru": "Карта Дорог",
+    "descRu": "Карта Дорог Ансаров: +1 прыжок FSD навсегда.",
+    "rewardRelics": 0,
+    "rewardCores": 0,
+    "threat": 0,
+    "codex": null
+  },
+  {
+    "id": "poi_anc_13",
+    "kind": "derelict",
+    "ru": "Дрейфующий ковчег",
+    "descRu": "Оставленный малый ковчег: 30 пищи и 100 мест для колонистов.",
+    "rewardRelics": 0,
+    "rewardCores": 0,
+    "threat": 0,
+    "codex": null
+  },
+  {
+    "id": "poi_anc_14",
+    "kind": "wreck",
+    "ru": "Поле обломков",
+    "descRu": "Обломки торгового конвоя: 40–120 кредитов и сплавы, рядом пираты (30%).",
+    "rewardRelics": 0,
+    "rewardCores": 0,
+    "threat": 30,
+    "codex": null
+  },
+  {
+    "id": "poi_anc_15",
+    "kind": "cache",
+    "ru": "Немой маяк",
+    "descRu": "Малый маяк даёт одно ядро Ансаров (однократно), но повышает зов.",
+    "rewardRelics": 1,
+    "rewardCores": 1,
+    "threat": 10,
+    "codex": "cx_core"
+  },
+  {
+    "id": "poi_anc_16",
+    "kind": "cache",
+    "ru": "Покинутая станция-склад",
+    "descRu": "Склад с товарами по 60 кредитов за единицу; возможна ловушка.",
+    "rewardRelics": 0,
+    "rewardCores": 0,
+    "threat": 15,
+    "codex": null
+  },
+  {
+    "id": "poi_anc_17",
+    "kind": "wreck",
+    "ru": "Могильник флота",
+    "descRu": "Шаблон корабля в остове флота; охраняют 5–9 Стражей.",
+    "rewardRelics": 0,
+    "rewardCores": 0,
+    "threat": 70,
+    "codex": null
+  },
+  {
+    "id": "poi_anc_18",
+    "kind": "cache",
+    "ru": "Ледяной капсульный сад",
+    "descRu": "Биоматериал и две реликвии в капсулах; холод и 10% авария.",
+    "rewardRelics": 2,
+    "rewardCores": 0,
+    "threat": 10,
+    "codex": null
+  },
+  {
+    "id": "poi_anc_19",
+    "kind": "cache",
+    "ru": "Брошенный рудник",
+    "descRu": "Добыча 30 минералов/такт, работает постоянно; угроз нет.",
+    "rewardRelics": 0,
+    "rewardCores": 0,
+    "threat": 0,
+    "codex": null
+  },
+  {
+    "id": "poi_anc_20",
+    "kind": "anomaly",
+    "ru": "«Тихий» сигнал",
+    "descRu": "Источник тихого сигнала: запускает событие Реликтового Предела, повышает зов.",
+    "rewardRelics": 0,
+    "rewardCores": 0,
+    "threat": 20,
+    "codex": null
+  },
+  {
+    "id": "poi_anc_21",
+    "kind": "nest",
+    "ru": "Гнездо-узел",
+    "descRu": "Узел гнезда Хора: тёмная материя +6, при уничтожении — минус одно гнездо.",
+    "rewardRelics": 0,
+    "rewardCores": 0,
+    "threat": 85,
+    "codex": "cx_choir_1"
+  },
+  {
+    "id": "poi_anc_22",
+    "kind": "anomaly",
+    "ru": "Поглощённая звезда",
+    "descRu": "Звезда, выпитая Хором: +40% физики при скане, радиация.",
+    "rewardRelics": 0,
+    "rewardCores": 0,
+    "threat": 30,
+    "codex": null
+  },
+  {
+    "id": "poi_anc_23",
+    "kind": "life",
+    "ru": "Живая биомасса",
+    "descRu": "Три единицы живого материала; 40% шанс волны Хора.",
+    "rewardRelics": 0,
+    "rewardCores": 0,
+    "threat": 40,
+    "codex": null
+  },
+  {
+    "id": "poi_anc_24",
+    "kind": "nest",
+    "ru": "«Пасть»",
+    "descRu": "Открытая пасть резонанса: четыре реликвии, охрана 1 500 FP.",
+    "rewardRelics": 4,
+    "rewardCores": 0,
+    "threat": 80,
+    "codex": "cx_echo"
+  },
+  {
+    "id": "poi_anc_25",
+    "kind": "nest",
+    "ru": "Гнездо-инкубатор",
+    "descRu": "Инкубатор будущих волн: −2 к следующим волнам, охрана 1 200 FP.",
+    "rewardRelics": 0,
+    "rewardCores": 0,
+    "threat": 75,
+    "codex": null
+  },
+  {
+    "id": "poi_anc_26",
+    "kind": "nest",
+    "ru": "Кормящаяся особь",
+    "descRu": "Особь Хора, тянущая звезду: тёмная материя +2, бой обязателен.",
+    "rewardRelics": 0,
+    "rewardCores": 0,
+    "threat": 60,
+    "codex": null
+  },
+  {
+    "id": "poi_anc_27",
+    "kind": "cache",
+    "ru": "Хор-маяк",
+    "descRu": "Карта всех гнёзд сектора; повышает зов на 3.",
+    "rewardRelics": 0,
+    "rewardCores": 0,
+    "threat": 20,
+    "codex": null
+  },
+  {
+    "id": "poi_anc_28",
+    "kind": "wreck",
+    "ru": "Мёртвая волна",
+    "descRu": "Остатки волны Хора: два ядра Ансаров (однократно); ловушка 25%.",
+    "rewardRelics": 0,
+    "rewardCores": 2,
+    "threat": 25,
+    "codex": "cx_core"
+  },
+  {
+    "id": "poi_anc_29",
+    "kind": "nest",
+    "ru": "Ядро-пожиратель",
+    "descRu": "Ядро, поедающее звёзды: одно ядро Ансаров, охрана 2 500 FP.",
+    "rewardRelics": 0,
+    "rewardCores": 1,
+    "threat": 90,
+    "codex": "cx_choir_shard"
+  },
+  {
+    "id": "poi_anc_30",
+    "kind": "garden",
+    "ru": "Живой сад",
+    "descRu": "Сад с живым металлом: +5 единиц; восстанавливается за 40 тактов.",
+    "rewardRelics": 0,
+    "rewardCores": 0,
+    "threat": 0,
+    "codex": null
+  },
+  {
+    "id": "poi_anc_31",
+    "kind": "life",
+    "ru": "Семенной банк",
+    "descRu": "«Семя Сада»; при вывозе — карантин, при посадке — живой металл.",
+    "rewardRelics": 0,
+    "rewardCores": 0,
+    "threat": 10,
+    "codex": null
+  },
+  {
+    "id": "poi_anc_32",
+    "kind": "wonder",
+    "ru": "Храм роста",
+    "descRu": "Испытание Стражей даёт +1 черту расы; провал — отказ.",
+    "rewardRelics": 0,
+    "rewardCores": 0,
+    "threat": 65,
+    "codex": "cx_truth_a_1"
+  },
+  {
+    "id": "poi_anc_33",
+    "kind": "garden",
+    "ru": "Коралловый город",
+    "descRu": "Три реликвии и готовая база для форпоста; угроз нет.",
+    "rewardRelics": 3,
+    "rewardCores": 0,
+    "threat": 0,
+    "codex": null
+  },
+  {
+    "id": "poi_anc_34",
+    "kind": "life",
+    "ru": "Спящий садовник",
+    "descRu": "Спящий механизм: −75% к зову навсегда; пробуждение — 800 FP.",
+    "rewardRelics": 0,
+    "rewardCores": 0,
+    "threat": 60,
+    "codex": null
+  },
+  {
+    "id": "poi_anc_35",
+    "kind": "garden",
+    "ru": "«Поющая» поляна",
+    "descRu": "Поляна кристаллов: +25 очков Общества; угроз нет.",
+    "rewardRelics": 0,
+    "rewardCores": 0,
+    "threat": 0,
+    "codex": null
+  },
+  {
+    "id": "poi_anc_36",
+    "kind": "life",
+    "ru": "Симбиотический риф",
+    "descRu": "Живой модуль A4 в симбиотическом рифе; охрана 600 FP.",
+    "rewardRelics": 0,
+    "rewardCores": 0,
+    "threat": 55,
+    "codex": "cx_choir_shard"
+  },
+  {
+    "id": "poi_anc_37",
+    "kind": "life",
+    "ru": "Источник жизни",
+    "descRu": "+1 очко в каждую школу науки; восстанавливается за 60 тактов.",
+    "rewardRelics": 0,
+    "rewardCores": 0,
+    "threat": 0,
+    "codex": null
+  },
+  {
+    "id": "poi_anc_38",
+    "kind": "gate",
+    "ru": "Врата-кольцо",
+    "descRu": "Мегаструктура Врат: вход и выход сектора, +10 стабильности своим.",
+    "rewardRelics": 0,
+    "rewardCores": 0,
+    "threat": 0,
+    "codex": "cx_val_an"
+  },
+  {
+    "id": "poi_anc_39",
+    "kind": "gate",
+    "ru": "Станция-привратник",
+    "descRu": "Ремонт, сейф и найм в одном узле; всегда доступна своим.",
+    "rewardRelics": 0,
+    "rewardCores": 0,
+    "threat": 0,
+    "codex": null
+  },
+  {
+    "id": "poi_anc_40",
+    "kind": "trade",
+    "ru": "Фактория Ансаров",
+    "descRu": "Обмен реликвий; всегда доступна тем, у кого репутация Ансаров ≥ 30.",
+    "rewardRelics": 0,
+    "rewardCores": 0,
+    "threat": 0,
+    "codex": "cx_harm_key"
+  },
+  {
+    "id": "poi_anc_41",
+    "kind": "repair",
+    "ru": "Док ремонта",
+    "descRu": "Полный ремонт за 12 тактов; всегда доступен своим.",
+    "rewardRelics": 0,
+    "rewardCores": 0,
+    "threat": 0,
+    "codex": null
+  },
+  {
+    "id": "poi_anc_42",
+    "kind": "gate",
+    "ru": "Диспетчерская Врат",
+    "descRu": "Карта Хор-Разлома; вход охраняют Стражи.",
+    "rewardRelics": 0,
+    "rewardCores": 0,
+    "threat": 65,
+    "codex": "cx_val_an"
+  },
+  {
+    "id": "poi_anc_43",
+    "kind": "wreck",
+    "ru": "Ринг-обломки",
+    "descRu": "Обломки кольца: четыре реликвии и 60 сплавов; угроз нет.",
+    "rewardRelics": 4,
+    "rewardCores": 0,
+    "threat": 0,
+    "codex": "cx_harm_key"
+  },
+  {
+    "id": "poi_anc_44",
+    "kind": "gate",
+    "ru": "«Печать» Врат",
+    "descRu": "Квестовый предмет и печать Врат; охрана 2 000 FP.",
+    "rewardRelics": 0,
+    "rewardCores": 0,
+    "threat": 85,
+    "codex": "cx_val_an"
+  }
+]

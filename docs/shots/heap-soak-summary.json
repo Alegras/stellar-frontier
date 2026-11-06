@@ -1,0 +1,12 @@
+{
+  "samples": 66,
+  "observedHours": 0.54,
+  "minHeapMb": 46.7,
+  "maxHeapMb": 52.4,
+  "avgHeapMb": 48.5,
+  "slopeMbPerHour": -0.34,
+  "projectedHeap3hMb": 47.6,
+  "targetHeapMb": 150,
+  "projectedOk": true,
+  "note": "частичный прогон 0.54 ч + линейная экстраполяция"
+}

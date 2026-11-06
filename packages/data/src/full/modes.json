@@ -1,0 +1,94 @@
+[
+  {
+    "modeId": "campaign",
+    "displayRu": "Кампания",
+    "descRu": "Одиночная сюжетная партия: 240 систем, 7 ИИ, свободная пауза, 6 условий победы.",
+    "playersMax": 1,
+    "humans": 1,
+    "tickSeconds": 1,
+    "pausePolicy": "free",
+    "tacticalLockTicks": 0,
+    "aiEmpires": 7,
+    "galaxySystems": 240,
+    "victory": [
+      "domination",
+      "federation",
+      "ascension",
+      "economy",
+      "crisis",
+      "score"
+    ],
+    "saves": "local",
+    "ranking": false
+  },
+  {
+    "modeId": "coop",
+    "displayRu": "Кооператив 2–4",
+    "descRu": "Совместная PvE-галактика: такт идёт, тактический лок 90 тактов, пауза голосованием.",
+    "playersMax": 4,
+    "humans": 4,
+    "tickSeconds": 1,
+    "pausePolicy": "vote",
+    "tacticalLockTicks": 90,
+    "aiEmpires": 6,
+    "galaxySystems": 240,
+    "victory": [
+      "crisis",
+      "shared"
+    ],
+    "saves": "server",
+    "ranking": false
+  },
+  {
+    "modeId": "mmo",
+    "displayRu": "Персистентный мир",
+    "descRu": "Сезонный шард на 400 систем: тик 15 минут, пауз нет, PvP по зонам, сезонный рейтинг.",
+    "playersMax": 100,
+    "humans": 300,
+    "tickSeconds": 900,
+    "pausePolicy": "none",
+    "tacticalLockTicks": 90,
+    "aiEmpires": 12,
+    "galaxySystems": 400,
+    "victory": [
+      "season",
+      "council"
+    ],
+    "saves": "server",
+    "ranking": true
+  },
+  {
+    "modeId": "sandbox",
+    "displayRu": "Песочница",
+    "descRu": "Свободный мир без победы: настраиваемые правила, пауза без ограничений.",
+    "playersMax": 1,
+    "humans": 1,
+    "tickSeconds": 1,
+    "pausePolicy": "free",
+    "tacticalLockTicks": 0,
+    "aiEmpires": 7,
+    "galaxySystems": 300,
+    "victory": [
+      "none"
+    ],
+    "saves": "local",
+    "ranking": false
+  },
+  {
+    "modeId": "trial",
+    "displayRu": "Испытание",
+    "descRu": "Сценарий с фиксированными условиями: пауза запрещена, результат на сервере.",
+    "playersMax": 1,
+    "humans": 1,
+    "tickSeconds": 1,
+    "pausePolicy": "none",
+    "tacticalLockTicks": 0,
+    "aiEmpires": 3,
+    "galaxySystems": 120,
+    "victory": [
+      "scenario"
+    ],
+    "saves": "server",
+    "ranking": true
+  }
+]

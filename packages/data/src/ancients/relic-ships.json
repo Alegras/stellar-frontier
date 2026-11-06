@@ -1,0 +1,68 @@
+[
+  {
+    "id": "ship_relic_cruiser",
+    "ru": "Реликтовый крейсер «Свидетель»",
+    "descRu": "Крейсер из цепочки «Корабль Ансаров»: резонансный щит уводит часть термоурона в тепло. Не продаётся.",
+    "classId": "cruiser",
+    "hullId": "hull_cruiser",
+    "fleetPower": 77,
+    "modules": [
+      "shield_gen_mk3",
+      "armor_plating_mk3",
+      "reactor_mk4",
+      "thruster_mk3"
+    ],
+    "costAlloys": 260,
+    "costRelics": 3,
+    "costCores": 0,
+    "buildTicks": 30,
+    "requiredTech": "a4_relic_shipyard",
+    "requiredChain": "arch_ansari_ship",
+    "maxPerEmpire": 1,
+    "specialRu": "«Резонансный щит»: 20% термоурона уходит в тепло, а не в щит."
+  },
+  {
+    "id": "ship_relic_battleship",
+    "ru": "Реликтовый линкор «Наследие»",
+    "descRu": "Линкор союза с Отступниками (репутация ≥ 40) или финала «Использовать»: орудие игнорирует половину резистов. Не продаётся.",
+    "classId": "battleship",
+    "hullId": "hull_battleship",
+    "fleetPower": 182,
+    "modules": [
+      "shield_gen_mk3",
+      "armor_plating_mk3",
+      "reactor_mk4",
+      "thruster_mk3"
+    ],
+    "costAlloys": 600,
+    "costRelics": 6,
+    "costCores": 1,
+    "buildTicks": 45,
+    "requiredTech": "a4_relic_shipyard",
+    "requiredChain": null,
+    "maxPerEmpire": 1,
+    "specialRu": "«Реликтовое орудие»: игнорирует 50% резистов."
+  },
+  {
+    "id": "ship_drone_mother",
+    "ru": "Дрон-матка «Хор»",
+    "descRu": "Носитель, захваченный у Ядра-пожирателя: выпускает шесть дронов и приглушает зов. Не продаётся.",
+    "classId": "carrier",
+    "hullId": "hull_carrier",
+    "fleetPower": 160,
+    "modules": [
+      "shield_gen_mk3",
+      "pd_turret_mk1",
+      "reactor_mk4",
+      "thruster_mk3"
+    ],
+    "costAlloys": 550,
+    "costRelics": 4,
+    "costCores": 1,
+    "buildTicks": 30,
+    "requiredTech": "a3_drone_swarm_3",
+    "requiredChain": "arch_singing_garden",
+    "maxPerEmpire": 1,
+    "specialRu": "Выпускает 6 дронов; −10% к «зову»."
+  }
+]

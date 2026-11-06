@@ -1,0 +1,89 @@
+[
+ {
+  "id": "fleet_recon",
+  "ru": "Разведка флота",
+  "descRu": "Показать флоты цели на 20 тактов.",
+  "influenceCost": 5,
+  "baseChance": 0.75,
+  "effects": [
+   {
+    "target": "reveal_fleets_ticks",
+    "value": 20
+   }
+  ]
+ },
+ {
+  "id": "steal_tech",
+  "ru": "Кража технологии",
+  "descRu": "Получить одну технологию цели до T3.",
+  "influenceCost": 15,
+  "baseChance": 0.35,
+  "requiresTech": "soc_education_2",
+  "effects": [
+   {
+    "target": "steal_tech_max_tier",
+    "value": 3
+   }
+  ]
+ },
+ {
+  "id": "sabotage",
+  "ru": "Диверсия",
+  "descRu": "−20% производства выбранной колонии на 20 тактов.",
+  "influenceCost": 10,
+  "baseChance": 0.4,
+  "effects": [
+   {
+    "target": "target_prod_penalty",
+    "value": -0.2
+   },
+   {
+    "target": "penalty_ticks",
+    "value": 20
+   }
+  ]
+ },
+ {
+  "id": "incite",
+  "ru": "Подстрекательство",
+  "descRu": "−15 стабильности и +10 беспорядков в колонии цели.",
+  "influenceCost": 20,
+  "baseChance": 0.3,
+  "effects": [
+   {
+    "target": "target_stability",
+    "value": -15
+   },
+   {
+    "target": "target_unrest",
+    "value": 10
+   }
+  ]
+ },
+ {
+  "id": "steal_map",
+  "ru": "Кража карты",
+  "descRu": "Раскрыть туман войны в 5 системах вокруг столицы цели.",
+  "influenceCost": 8,
+  "baseChance": 0.7,
+  "effects": [
+   {
+    "target": "reveal_systems",
+    "value": 5
+   }
+  ]
+ },
+ {
+  "id": "assassinate",
+  "ru": "Убийство адмирала",
+  "descRu": "Уничтожить адмирала цели; при провале — повод к войне.",
+  "influenceCost": 25,
+  "baseChance": 0.2,
+  "effects": [
+   {
+    "target": "kill_admiral",
+    "value": 1
+   }
+  ]
+ }
+]

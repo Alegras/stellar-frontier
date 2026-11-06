@@ -1,0 +1,49 @@
+{
+  "startResources": {
+    "energy": 150,
+    "minerals": 120,
+    "food": 80,
+    "alloys": 60,
+    "goods": 40,
+    "unity": 0,
+    "influence": 30,
+    "credits": 120000
+  },
+  "startIncome": {
+    "energy": 18,
+    "minerals": 12,
+    "food": 14,
+    "alloys": 6,
+    "goods": 4,
+    "unity": 3,
+    "influence": 2
+  },
+  "colonyCost": {
+    "minerals": 120,
+    "goods": 40,
+    "influence": 20
+  },
+  "outpostCost": {
+    "minerals": 60,
+    "influence": 30
+  },
+  "fleetUpkeepPerFpEnergy": 0.25,
+  "fleetUpkeepPerFpAlloys": 0.1,
+  "baseFleetCap": 7,
+  "popsFleetCap": 0.6,
+  "systemsFleetCap": 1,
+  "popFoodUpkeep": 0.5,
+  "popGoodsUpkeep": {
+    "worker": 0.2,
+    "specialist": 0.4,
+    "ruler": 0.6
+  },
+  "growthBase": 0.05,
+  "stabilityBase": 60,
+  "sciencePerResearcher": 2,
+  "interestRatePct": 3.5,
+  "marketSpreadPct": 4,
+  "marketCommissionPct": 2,
+  "fleetSpeedTicksPerJump": 1,
+  "maxTicks": 7200
+}

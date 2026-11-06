@@ -1,0 +1,30 @@
+{
+  "modeId": "sandbox",
+  "rulesetVersion": "1.0.0",
+  "displayRu": "Песочница",
+  "galaxy": {
+    "systems": 300,
+    "shape": "random",
+    "aiEmpires": 7,
+    "chokepointBias": 0.5
+  },
+  "time": {
+    "speeds": [
+      0,
+      1,
+      2,
+      3,
+      5
+    ],
+    "tacticalPause": true,
+    "tickSecondsAt1x": 1
+  },
+  "victory": [],
+  "difficulty": "normal",
+  "player": {
+    "startPlanets": 3,
+    "startPops": 24,
+    "startAlloys": 100,
+    "startCredits": 200000
+  }
+}

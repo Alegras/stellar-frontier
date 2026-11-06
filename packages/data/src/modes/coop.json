@@ -1,0 +1,36 @@
+{
+  "modeId": "coop",
+  "rulesetVersion": "1.0.0",
+  "displayRu": "Кооператив 2–4",
+  "galaxy": {
+    "systems": 240,
+    "shape": "spiral",
+    "aiEmpires": 7,
+    "chokepointBias": 0.5
+  },
+  "time": {
+    "speeds": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "tacticalPause": false,
+    "tickSecondsAt1x": 1
+  },
+  "victory": [
+    "domination",
+    "federation",
+    "ascension",
+    "economy",
+    "crisis",
+    "score"
+  ],
+  "difficulty": "normal",
+  "player": {
+    "startPlanets": 3,
+    "startPops": 24,
+    "startAlloys": 60,
+    "startCredits": 120000
+  }
+}

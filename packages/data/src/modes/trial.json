@@ -1,0 +1,32 @@
+{
+  "modeId": "trial",
+  "rulesetVersion": "1.0.0",
+  "displayRu": "Испытание",
+  "galaxy": {
+    "systems": 120,
+    "shape": "ring",
+    "aiEmpires": 5,
+    "chokepointBias": 0.7
+  },
+  "time": {
+    "speeds": [
+      0,
+      1,
+      2,
+      3,
+      5
+    ],
+    "tacticalPause": true,
+    "tickSecondsAt1x": 1
+  },
+  "victory": [
+    "score"
+  ],
+  "difficulty": "veteran",
+  "player": {
+    "startPlanets": 2,
+    "startPops": 18,
+    "startAlloys": 60,
+    "startCredits": 80000
+  }
+}

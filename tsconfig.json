@@ -1,0 +1,14 @@
+{
+  "extends": "./tsconfig.base.json",
+  "include": [
+    "apps/web/src",
+    "apps/api/src",
+    "packages/protocol/src",
+    "apps/web/e2e",
+    "packages/sim/src",
+    "packages/sim/test",
+    "packages/data/src",
+    "vitest.config.ts",
+    "apps/web/playwright.config.ts"
+  ]
+}

@@ -1,0 +1,66 @@
+[
+ {
+  "id": "ending_seal",
+  "ru": "Запечатать Разлом",
+  "descRu": "Пять ключей Строителей сходятся в один: Разлом закрыт, но цена — навсегда утраченный путь. Тон: жертва и надежда.",
+  "condition": "artifacts>=5, crisis_defeated",
+  "branch": null,
+  "secret": false
+ },
+ {
+  "id": "ending_control",
+  "ru": "Контролировать Разлом",
+  "descRu": "Империя удерживает Разлом под своим контролем: сила есть, но каждый сосед теперь знает, кто её получил.",
+  "condition": "branch==sovereignty, artifacts>=3",
+  "branch": "sovereignty",
+  "secret": false
+ },
+ {
+  "id": "ending_release",
+  "ru": "Освободить Разлом",
+  "descRu": "Технология передана галактике: риск огромен, но монополия Строителей разрушена навсегда.",
+  "condition": "branch==federation, federation>=1",
+  "branch": "federation",
+  "secret": false
+ },
+ {
+  "id": "ending_syndicate",
+  "ru": "Синдикат",
+  "descRu": "Синдикат у власти: галактика становится большой сделкой, и вы — её условия.",
+  "condition": "branch==syndicate, economy_hegemony",
+  "branch": "syndicate",
+  "secret": false
+ },
+ {
+  "id": "ending_ascension",
+  "ru": "Вознесение",
+  "descRu": "Перк «Вознесение» и T5-мегаструктура завершены: империя покидает привычный масштаб, оставляя после себя свет.",
+  "condition": "perk==ascension, megastructure==science_nexus",
+  "branch": null,
+  "secret": false
+ },
+ {
+  "id": "ending_whisper",
+  "ru": "Шёпот",
+  "descRu": "Шесть артефактов складываются в фразу: Разлом — не оружие, а дверь, и её открыли изнутри. Истина меняет всё.",
+  "condition": "artifacts_whisper>=6",
+  "branch": null,
+  "secret": true
+ },
+ {
+  "id": "ending_exile",
+  "ru": "Изгнание",
+  "descRu": "Планеты потеряны, флагман уводит остатки флота в пустоту. Это не конец: через 200 тактов можно вернуться и отыграться.",
+  "condition": "colonies<=0, fleets>=1",
+  "branch": null,
+  "secret": false
+ },
+ {
+  "id": "ending_ironman",
+  "ru": "Железный человек: конец линии",
+  "descRu": "Смерть флагмана без капсулы в режиме «Железный человек». Одна попытка, одна история, финальная точка.",
+  "condition": "flag:ironman_death",
+  "branch": null,
+  "secret": false
+ }
+]

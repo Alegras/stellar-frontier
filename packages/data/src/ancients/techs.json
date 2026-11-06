@@ -1,0 +1,544 @@
+[
+  {
+    "id": "a0_relic_reading",
+    "tier": 0,
+    "ru": "Чтение реликвий",
+    "descRu": "+10% реликвий с площадок; открывает ветку «Наследие» и сканирование реликтовых площадок.",
+    "costRelics": 0,
+    "costCores": 0,
+    "requires": [],
+    "effects": {
+      "relic_yield": 0.1
+    },
+    "unlocks": [
+      "flag:relic_branch"
+    ],
+    "gateMission": 1
+  },
+  {
+    "id": "a0_ansari_script",
+    "tier": 0,
+    "ru": "Письмо молчащих",
+    "descRu": "+5% науки; −15% времени расшифровки; открывает технологии A1.",
+    "costRelics": 1,
+    "costCores": 0,
+    "requires": [
+      "a0_relic_reading"
+    ],
+    "effects": {
+      "science_prod": 0.05
+    },
+    "unlocks": [
+      "A1"
+    ],
+    "gateMission": 1
+  },
+  {
+    "id": "a0_core_socket",
+    "tier": 0,
+    "ru": "Гнездо ядра",
+    "descRu": "1 гнездо ядра на флагмане; снятие ядра без потерь; открывает установку ядер и реактор A2.",
+    "costRelics": 1,
+    "costCores": 0,
+    "requires": [
+      "a0_ansari_script"
+    ],
+    "effects": {
+      "core_capacity": 1
+    },
+    "unlocks": [
+      "flag:core_socket"
+    ],
+    "gateMission": 2
+  },
+  {
+    "id": "a1_harmonic_shield",
+    "tier": 1,
+    "ru": "Гармонический щит I",
+    "descRu": "Модуль: +120 щита, +8% сопротивления всем типам, 10% урона переводит в тепло.",
+    "costRelics": 1,
+    "costCores": 0,
+    "requires": [
+      "a0_core_socket"
+    ],
+    "effects": {
+      "shield": 0.08
+    },
+    "unlocks": [
+      "module:harmonic_shield_1"
+    ],
+    "gateMission": 2
+  },
+  {
+    "id": "a1_relic_lance",
+    "tier": 1,
+    "ru": "Реликтовая пушка I",
+    "descRu": "Оружие M: 70 урона, ROF 2.0, 20% урона проходит сквозь щит.",
+    "costRelics": 2,
+    "costCores": 0,
+    "requires": [
+      "a0_core_socket"
+    ],
+    "effects": {
+      "weapon_damage": 0.05
+    },
+    "unlocks": [
+      "weapon:relic_lance_m1"
+    ],
+    "gateMission": 2
+  },
+  {
+    "id": "a1_drone_swarm",
+    "tier": 1,
+    "ru": "Рой дронов I",
+    "descRu": "Ангар: 4 дрона × 8 DPS, 90 секунд, 1 заряд за бой.",
+    "costRelics": 2,
+    "costCores": 0,
+    "requires": [
+      "a0_core_socket"
+    ],
+    "effects": {},
+    "unlocks": [
+      "module:drone_bay_1"
+    ],
+    "gateMission": 2
+  },
+  {
+    "id": "a1_phase_cloak",
+    "tier": 1,
+    "ru": "Фазовый плащ I",
+    "descRu": "12 секунд: −60% сигнатуры, +25% уклонения; снимается выстрелом.",
+    "costRelics": 2,
+    "costCores": 0,
+    "requires": [
+      "a0_core_socket"
+    ],
+    "effects": {
+      "stealth_signature": -0.6
+    },
+    "unlocks": [
+      "module:phase_cloak_1"
+    ],
+    "gateMission": 2
+  },
+  {
+    "id": "a1_warp_theory",
+    "tier": 1,
+    "ru": "Теория варпа",
+    "descRu": "+5 св. лет радиуса варпа, −10 секунд зарядки; предпосылка варп-двигателя.",
+    "costRelics": 1,
+    "costCores": 0,
+    "requires": [
+      "a0_ansari_script"
+    ],
+    "effects": {
+      "warp_range_ly": 5,
+      "warp_charge_pct": -0.1
+    },
+    "unlocks": [
+      "flag:warp_theory"
+    ],
+    "gateMission": 2
+  },
+  {
+    "id": "a1_resonance_sensor",
+    "tier": 1,
+    "ru": "Резонансный сенсор",
+    "descRu": "+40% дальности сенсоров; 20% шанс обнаружить фазовый плащ.",
+    "costRelics": 1,
+    "costCores": 0,
+    "requires": [
+      "a0_ansari_script"
+    ],
+    "effects": {
+      "sensor_range": 2,
+      "sensor_stealth_detect": 0.2
+    },
+    "unlocks": [
+      "module:resonance_sensor_1"
+    ],
+    "gateMission": 2
+  },
+  {
+    "id": "a2_harmonic_shield",
+    "tier": 2,
+    "ru": "Гармонический щит II",
+    "descRu": "+220 щита, +12% сопротивления, 12% урона переводит в тепло.",
+    "costRelics": 2,
+    "costCores": 0,
+    "requires": [
+      "a1_harmonic_shield"
+    ],
+    "effects": {
+      "shield": 0.12
+    },
+    "unlocks": [
+      "module:harmonic_shield_2"
+    ],
+    "gateMission": 4
+  },
+  {
+    "id": "a2_relic_lance",
+    "tier": 2,
+    "ru": "Реликтовая пушка II",
+    "descRu": "Оружие L: 130 урона, ROF 1.4, 25% сквозь щит, ×1.1 по подсистемам.",
+    "costRelics": 2,
+    "costCores": 0,
+    "requires": [
+      "a1_relic_lance"
+    ],
+    "effects": {
+      "weapon_damage": 0.08
+    },
+    "unlocks": [
+      "weapon:relic_lance_l2"
+    ],
+    "gateMission": 4
+  },
+  {
+    "id": "a2_drone_swarm",
+    "tier": 2,
+    "ru": "Рой дронов II",
+    "descRu": "6 дронов × 10 DPS; ПВО-режим перехватывает ракеты.",
+    "costRelics": 2,
+    "costCores": 0,
+    "requires": [
+      "a1_drone_swarm"
+    ],
+    "effects": {},
+    "unlocks": [
+      "module:drone_bay_2"
+    ],
+    "gateMission": 4
+  },
+  {
+    "id": "a2_phase_cloak",
+    "tier": 2,
+    "ru": "Фазовый плащ II",
+    "descRu": "20 секунд, −75% сигнатуры; первый выстрел не снимает плащ.",
+    "costRelics": 2,
+    "costCores": 0,
+    "requires": [
+      "a1_phase_cloak"
+    ],
+    "effects": {
+      "stealth_signature": -0.75
+    },
+    "unlocks": [
+      "module:phase_cloak_2"
+    ],
+    "gateMission": 4
+  },
+  {
+    "id": "a2_ansari_reactor",
+    "tier": 2,
+    "ru": "Реактор Ансаров",
+    "descRu": "+25% мощности реактора, +1 гнездо ядра.",
+    "costRelics": 2,
+    "costCores": 0,
+    "requires": [
+      "a0_core_socket"
+    ],
+    "effects": {
+      "reactor_power": 0.25,
+      "core_capacity": 1
+    },
+    "unlocks": [
+      "module:ansari_reactor"
+    ],
+    "gateMission": 4
+  },
+  {
+    "id": "a2_relic_plating",
+    "tier": 2,
+    "ru": "Реликтовая броня",
+    "descRu": "+10% корпуса и брони; самовосстановление 1%/такт вне боя.",
+    "costRelics": 1,
+    "costCores": 0,
+    "requires": [
+      "a0_core_socket"
+    ],
+    "effects": {
+      "armor": 0.1,
+      "hull_regen": 0.01
+    },
+    "unlocks": [
+      "module:relic_plating"
+    ],
+    "gateMission": 4
+  },
+  {
+    "id": "a2_astrogation_choir",
+    "tier": 2,
+    "ru": "Хор навигаторов",
+    "descRu": "+8% точности варпа, −10 секунд зарядки.",
+    "costRelics": 2,
+    "costCores": 0,
+    "requires": [
+      "a1_warp_theory"
+    ],
+    "effects": {
+      "warp_accuracy": 0.08,
+      "warp_charge_pct": -0.1
+    },
+    "unlocks": [
+      "flag:astrogation"
+    ],
+    "gateMission": 4
+  },
+  {
+    "id": "a3_warp_drive",
+    "tier": 3,
+    "ru": "Варп-двигатель Наследия",
+    "descRu": "Открывает модуль варпа (60 св. лет, кулдаун 5 тактов) и доступ к Реликтовому Пределу.",
+    "costRelics": 3,
+    "costCores": 1,
+    "requires": [
+      "a1_warp_theory",
+      "a2_astrogation_choir"
+    ],
+    "effects": {
+      "warp_range_ly": 60
+    },
+    "unlocks": [
+      "module:warp_drive_legacy",
+      "warp"
+    ],
+    "gateMission": 7
+  },
+  {
+    "id": "a3_resonance_beacon",
+    "tier": 3,
+    "ru": "Резонансный маяк",
+    "descRu": "Структура (макс. 3): сенсоры 15 св. лет, +5% точности варпа рядом, +внимание Хора.",
+    "costRelics": 2,
+    "costCores": 0,
+    "requires": [
+      "a2_harmonic_shield"
+    ],
+    "effects": {
+      "sensor_range": 2
+    },
+    "unlocks": [
+      "structure:resonance_beacon"
+    ],
+    "gateMission": 6
+  },
+  {
+    "id": "a3_harmonic_shield_3",
+    "tier": 3,
+    "ru": "Гармонический щит III",
+    "descRu": "+360 щита, +15% сопротивления, 15% урона переводит в тепло.",
+    "costRelics": 3,
+    "costCores": 0,
+    "requires": [
+      "a2_harmonic_shield"
+    ],
+    "effects": {
+      "shield": 0.15
+    },
+    "unlocks": [
+      "module:harmonic_shield_3"
+    ],
+    "gateMission": 6
+  },
+  {
+    "id": "a3_relic_lance_3",
+    "tier": 3,
+    "ru": "Реликтовая пушка III",
+    "descRu": "L: 200 урона, ROF 1.2, 35% сквозь щит.",
+    "costRelics": 3,
+    "costCores": 0,
+    "requires": [
+      "a2_relic_lance"
+    ],
+    "effects": {
+      "weapon_damage": 0.1
+    },
+    "unlocks": [
+      "weapon:relic_lance_l3"
+    ],
+    "gateMission": 6
+  },
+  {
+    "id": "a3_drone_swarm_3",
+    "tier": 3,
+    "ru": "Рой дронов III",
+    "descRu": "8 дронов × 12 DPS; ремонт-режим: +2% корпуса/с вне боя.",
+    "costRelics": 3,
+    "costCores": 0,
+    "requires": [
+      "a2_drone_swarm"
+    ],
+    "effects": {},
+    "unlocks": [
+      "module:drone_bay_3"
+    ],
+    "gateMission": 6
+  },
+  {
+    "id": "a3_phase_cloak_3",
+    "tier": 3,
+    "ru": "Фазовый плащ III",
+    "descRu": "30 секунд, −85% сигнатуры; разрыв лока при активации.",
+    "costRelics": 3,
+    "costCores": 0,
+    "requires": [
+      "a2_phase_cloak"
+    ],
+    "effects": {
+      "stealth_signature": -0.85
+    },
+    "unlocks": [
+      "module:phase_cloak_3"
+    ],
+    "gateMission": 6
+  },
+  {
+    "id": "a3_core_capacitor",
+    "tier": 3,
+    "ru": "Ядровый накопитель",
+    "descRu": "+2 заряда ядра; −20% цены восполнения.",
+    "costRelics": 2,
+    "costCores": 0,
+    "requires": [
+      "a2_ansari_reactor"
+    ],
+    "effects": {
+      "core_capacity": 2,
+      "core_recharge_cost": -0.2
+    },
+    "unlocks": [
+      "flag:core_capacitor"
+    ],
+    "gateMission": 6
+  },
+  {
+    "id": "a3_gate_calibration",
+    "tier": 3,
+    "ru": "Калибровка врат",
+    "descRu": "Открывает строительство врат; −50% времени постройки.",
+    "costRelics": 2,
+    "costCores": 0,
+    "requires": [
+      "a3_resonance_beacon"
+    ],
+    "effects": {
+      "build_speed": 0.1
+    },
+    "unlocks": [
+      "flag:gate_calibration"
+    ],
+    "gateMission": 8
+  },
+  {
+    "id": "a4_gate_network",
+    "tier": 4,
+    "ru": "Сеть врат",
+    "descRu": "До 3 пар врат, мгновенный переход между ними.",
+    "costRelics": 3,
+    "costCores": 1,
+    "requires": [
+      "a3_gate_calibration"
+    ],
+    "effects": {
+      "gate_pairs": 3
+    },
+    "unlocks": [
+      "gates",
+      "structure:gate_pair"
+    ],
+    "gateMission": 8
+  },
+  {
+    "id": "a4_star_core",
+    "tier": 4,
+    "ru": "Ядро звезды",
+    "descRu": "Мегаструктура: +350 энергии/такт, +10% науки, риск вспышек.",
+    "costRelics": 3,
+    "costCores": 2,
+    "requires": [
+      "a3_core_capacitor"
+    ],
+    "effects": {},
+    "unlocks": [
+      "megastructure:star_core"
+    ],
+    "gateMission": 9
+  },
+  {
+    "id": "a4_foresight",
+    "tier": 4,
+    "ru": "Предвидение",
+    "descRu": "Видеть приказы врага на 3 такта вперёд; предупреждение о кризисе за 100 тактов.",
+    "costRelics": 4,
+    "costCores": 1,
+    "requires": [
+      "a3_resonance_beacon"
+    ],
+    "effects": {
+      "foresight_ticks": 3
+    },
+    "unlocks": [
+      "flag:foresight"
+    ],
+    "gateMission": 8
+  },
+  {
+    "id": "a4_relic_shipyard",
+    "tier": 4,
+    "ru": "Реликтовый верстат",
+    "descRu": "Постройка реликтовых крейсеров и линкора.",
+    "costRelics": 4,
+    "costCores": 0,
+    "requires": [
+      "a3_gate_calibration"
+    ],
+    "effects": {},
+    "unlocks": [
+      "flag:relic_shipyard",
+      "ship:relic_cruiser",
+      "ship:relic_battleship"
+    ],
+    "gateMission": 8
+  },
+  {
+    "id": "a5_resonance",
+    "tier": 5,
+    "ru": "Резонанс",
+    "descRu": "«Волна резонанса»: +25% эффектов ветки на 30 тактов, 1 раз в 100 тактов; флаг концовки «Наследие».",
+    "costRelics": 1,
+    "costCores": 2,
+    "requires": [
+      "a4_relic_shipyard",
+      "a4_foresight"
+    ],
+    "effects": {
+      "ansari_power": 0.25
+    },
+    "unlocks": [
+      "resonance_wave",
+      "ending"
+    ],
+    "gateMission": 12
+  },
+  {
+    "id": "a5_ansari_ascension",
+    "tier": 5,
+    "ru": "Апофеоз Ансаров",
+    "descRu": "+20% прогресса «Вознесения»; +20% урона по Хору; финальный флаг альтернативной концовки.",
+    "costRelics": 0,
+    "costCores": 3,
+    "requires": [
+      "a5_resonance"
+    ],
+    "effects": {
+      "ascension_progress": 0.2,
+      "chorus_damage": 0.2
+    },
+    "unlocks": [
+      "ascension_legacy"
+    ],
+    "gateMission": 12
+  }
+]

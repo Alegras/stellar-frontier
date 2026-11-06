@@ -1,0 +1,40 @@
+{
+  "name": "stellar-frontier",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "pnpm --filter @sf/web dev",
+    "build": "pnpm --filter @sf/web build",
+    "preview": "pnpm --filter @sf/web preview",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:sim": "vitest run packages/sim/test",
+    "e2e": "playwright test -c apps/web/playwright.config.ts",
+    "data:validate": "tsx packages/data/src/validate.ts",
+    "api": "tsx apps/api/src/server.ts",
+    "mp-test": "tsx tools/mp-test.mjs",
+    "store-test": "tsx tools/store-test.mjs",
+    "persist-test": "tsx tools/persist-test.mjs",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "test:coverage": "vitest run --coverage"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.14.0",
+    "@eslint/js": "^10.0.1",
+    "@playwright/test": "^1.49.1",
+    "@types/node": "^22.10.2",
+    "@vitest/coverage-v8": "^3.2.7",
+    "eslint": "^10.14.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "tsx": "^4.19.2",
+    "typescript": "^5.9.2",
+    "typescript-eslint": "^8.72.1",
+    "vitest": "^3.2.4"
+  }
+}

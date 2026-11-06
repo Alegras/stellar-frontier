@@ -1,0 +1,110 @@
+[
+  {
+    "id": "engineering_corps",
+    "ru": "Инженерный корпус",
+    "descRu": "−15% стоимость содержания зданий, −10% стоимость ремонта.",
+    "effects": {
+      "building_upkeep_pct": -0.15,
+      "repair_cost": -0.1
+    }
+  },
+  {
+    "id": "trade_chamber",
+    "ru": "Торговая палата",
+    "descRu": "+1 торговый маршрут бесплатно, +10% маржи.",
+    "effects": {
+      "route_slots": 1,
+      "trade_margin": 0.1
+    }
+  },
+  {
+    "id": "war_academy",
+    "ru": "Военная академия",
+    "descRu": "+15% опыта адмиралов, +5% урона.",
+    "effects": {
+      "admiral_exp": 0.15,
+      "weapon_damage": 0.05
+    }
+  },
+  {
+    "id": "frontier_colonists",
+    "ru": "Фронтир-колонисты",
+    "descRu": "−25% стоимость колонизации, +1 жильё на колонии.",
+    "effects": {
+      "colony_cost": -0.25,
+      "housing": 1
+    }
+  },
+  {
+    "id": "order_bureau",
+    "ru": "Бюро порядка",
+    "descRu": "−20% преступности, +5 стабильности.",
+    "effects": {
+      "crime": -0.2,
+      "stability": 5
+    }
+  },
+  {
+    "id": "open_science",
+    "ru": "Открытая наука",
+    "descRu": "+1 очко в каждую школу в такт, +10% скорость обмена технологиями.",
+    "effects": {
+      "science_flat_per_school": 1,
+      "tech_trade_speed": 0.1
+    }
+  },
+  {
+    "id": "palace_intrigue",
+    "ru": "Дворцовые интриги",
+    "descRu": "+2 влияния в такт, −10% стоимость эдиктов.",
+    "effects": {
+      "influence_flat": 2,
+      "edict_cost": -0.1
+    }
+  },
+  {
+    "id": "pilot_cult",
+    "ru": "Культ пилота",
+    "descRu": "+20% опыта пилота, +1 модуль флагмана.",
+    "effects": {
+      "pilot_exp": 0.2,
+      "flagship_modules": 1
+    }
+  },
+  {
+    "id": "industrial_syndicate",
+    "ru": "Промышленный синдикат",
+    "descRu": "+10% сплавов, −5% товаров.",
+    "effects": {
+      "alloys_prod": 0.1,
+      "goods_prod": -0.05
+    }
+  },
+  {
+    "id": "psionic_archive",
+    "ru": "Псайонический архив",
+    "descRu": "+15% единства, +1 редкий ресурс в такт.",
+    "effects": {
+      "unity_prod": 0.15,
+      "rare_flat": 1
+    }
+  },
+  {
+    "id": "mercenary_fleet",
+    "ru": "Наёмный флот",
+    "descRu": "−20% апкип, +10% стоимость найма.",
+    "effects": {
+      "fleet_upkeep_pct": -0.2,
+      "hire_cost": 0.1
+    }
+  },
+  {
+    "id": "xeno_diplomacy",
+    "ru": "Ксено-дипломатия",
+    "descRu": "+25 мнения со всеми, −20% стоимость договоров.",
+    "effects": {
+      "diplo_opinion": 25,
+      "treaty_cost": -0.2
+    }
+  }
+]

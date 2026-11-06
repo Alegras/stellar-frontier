@@ -1,0 +1,513 @@
+[
+  {
+    "id": "capital",
+    "ru": "Дворец (столица)",
+    "descRu": "Столица: наместник + администратор, +2 стабильности, +1 очко в каждую школу науки.",
+    "cost": {},
+    "buildTicks": 0,
+    "upkeepEnergy": 1.5,
+    "jobs": [
+      "governor",
+      "administrator"
+    ],
+    "stability": 5,
+    "science": {
+      "physics": 1,
+      "society": 1,
+      "engineering": 1
+    },
+    "effects": {
+      "capital": 1
+    },
+    "requiredTech": null,
+    "icon": "C",
+    "maxPerColony": 1
+  },
+  {
+    "id": "laboratory",
+    "ru": "Лаборатория",
+    "descRu": "2 исследователя, +5% науки.",
+    "cost": {
+      "minerals": 90
+    },
+    "buildTicks": 10,
+    "upkeepEnergy": 1,
+    "jobs": [
+      "researcher",
+      "researcher"
+    ],
+    "science": {
+      "physics": 0.5
+    },
+    "effects": {
+      "science": 0.05
+    },
+    "requiredTech": null,
+    "icon": "L"
+  },
+  {
+    "id": "goods_factory",
+    "ru": "Фабрика ТП",
+    "descRu": "2 ремесленника: 4 минерала → 10 ТП.",
+    "cost": {
+      "minerals": 100
+    },
+    "buildTicks": 10,
+    "upkeepEnergy": 1.2,
+    "jobs": [
+      "artisan",
+      "artisan"
+    ],
+    "requiredTech": null,
+    "icon": "G"
+  },
+  {
+    "id": "unity_center",
+    "ru": "Центр единства",
+    "descRu": "1 администратор единства, −5% стоимости традиций.",
+    "cost": {
+      "minerals": 80
+    },
+    "buildTicks": 8,
+    "upkeepEnergy": 0.8,
+    "jobs": [
+      "administrator"
+    ],
+    "effects": {
+      "tradition_cost": -0.05
+    },
+    "requiredTech": "soc_administration_1",
+    "icon": "U"
+  },
+  {
+    "id": "barracks",
+    "ru": "Казарма",
+    "descRu": "2 солдата + наёмник: +4 флотского лимита, 5 FP обороны, −10% преступности.",
+    "cost": {
+      "minerals": 70
+    },
+    "buildTicks": 6,
+    "upkeepEnergy": 0.5,
+    "jobs": [
+      "soldier",
+      "soldier",
+      "mercenary"
+    ],
+    "effects": {
+      "fleet_cap": 4,
+      "crime": -0.1
+    },
+    "requiredTech": null,
+    "icon": "B"
+  },
+  {
+    "id": "hospital",
+    "ru": "Госпиталь",
+    "descRu": "+15% роста населения, −10% потерь от голода, +5 счастья.",
+    "cost": {
+      "minerals": 80
+    },
+    "buildTicks": 8,
+    "upkeepEnergy": 0.8,
+    "jobs": [],
+    "stability": 3,
+    "effects": {
+      "pop_growth": 0.15,
+      "famine_loss": -0.1
+    },
+    "requiredTech": "soc_biology_1",
+    "icon": "+"
+  },
+  {
+    "id": "police_station",
+    "ru": "Полицейский участок",
+    "descRu": "−25% преступности, +2 стабильности.",
+    "cost": {
+      "minerals": 70
+    },
+    "buildTicks": 6,
+    "upkeepEnergy": 0.6,
+    "jobs": [],
+    "stability": 2,
+    "effects": {
+      "crime": -0.25
+    },
+    "requiredTech": "soc_governance_1",
+    "icon": "P"
+  },
+  {
+    "id": "temple",
+    "ru": "Голографический театр",
+    "descRu": "1 священник: +10 счастья, +2 стабильности.",
+    "cost": {
+      "minerals": 120
+    },
+    "buildTicks": 8,
+    "upkeepEnergy": 1.2,
+    "jobs": [
+      "priest"
+    ],
+    "stability": 2,
+    "effects": {
+      "happiness": 10
+    },
+    "requiredTech": null,
+    "icon": "T"
+  },
+  {
+    "id": "academy",
+    "ru": "Академия",
+    "descRu": "+10% науки; исследователь, ксенолог, пилот-ас.",
+    "cost": {
+      "minerals": 140
+    },
+    "buildTicks": 10,
+    "upkeepEnergy": 1.4,
+    "jobs": [
+      "researcher",
+      "xenologist",
+      "ace_pilot"
+    ],
+    "science": {
+      "physics": 1,
+      "society": 1
+    },
+    "effects": {
+      "science": 0.1
+    },
+    "requiredTech": "soc_education_1",
+    "icon": "A"
+  },
+  {
+    "id": "sensor",
+    "ru": "Сенсорная станция",
+    "descRu": "+1 прыжок дальности сенсоров в системе.",
+    "cost": {
+      "minerals": 90
+    },
+    "buildTicks": 5,
+    "upkeepEnergy": 2,
+    "jobs": [],
+    "effects": {
+      "sensor_range": 1
+    },
+    "requiredTech": "phys_scanners_1",
+    "icon": "O"
+  },
+  {
+    "id": "warehouse",
+    "ru": "Складской комплекс",
+    "descRu": "+25% ко всем лимитам хранения на планете.",
+    "cost": {
+      "minerals": 90
+    },
+    "buildTicks": 6,
+    "upkeepEnergy": 0.4,
+    "jobs": [],
+    "effects": {
+      "storage": 0.25
+    },
+    "requiredTech": "eng_tools_1",
+    "icon": "W"
+  },
+  {
+    "id": "market",
+    "ru": "Биржа",
+    "descRu": "1 торговец, +15% торговли, доступ к фьючерсам.",
+    "cost": {
+      "minerals": 180
+    },
+    "buildTicks": 10,
+    "upkeepEnergy": 1.6,
+    "jobs": [
+      "trader"
+    ],
+    "effects": {
+      "trade": 0.15,
+      "credits_prod": 1
+    },
+    "requiredTech": "soc_commerce_1",
+    "icon": "$"
+  },
+  {
+    "id": "trade_hub",
+    "ru": "Торговый терминал",
+    "descRu": "1 грузчик-логист + 1 торговец: +40 к пропускной способности маршрутов, +1 слот маршрута.",
+    "cost": {
+      "minerals": 160
+    },
+    "buildTicks": 8,
+    "upkeepEnergy": 1.8,
+    "jobs": [
+      "logistician",
+      "trader"
+    ],
+    "effects": {
+      "route_capacity": 40,
+      "trade_routes": 1
+    },
+    "requiredTech": "soc_commerce_1",
+    "icon": "H"
+  },
+  {
+    "id": "customs",
+    "ru": "Таможня",
+    "descRu": "+3% дохода пошлин, −20% контрабанды в системе.",
+    "cost": {
+      "minerals": 150
+    },
+    "buildTicks": 8,
+    "upkeepEnergy": 1,
+    "jobs": [],
+    "effects": {
+      "tariff": 0.03,
+      "smuggling": -0.2
+    },
+    "requiredTech": "soc_governance_1",
+    "icon": "K"
+  },
+  {
+    "id": "bank",
+    "ru": "Банк",
+    "descRu": "+2 кредита/такт, займы под 3% вместо 6%.",
+    "cost": {
+      "minerals": 200
+    },
+    "buildTicks": 10,
+    "upkeepEnergy": 1.5,
+    "jobs": [],
+    "effects": {
+      "credits_prod": 2,
+      "loan_rate": -0.03
+    },
+    "requiredTech": "soc_commerce_2",
+    "icon": "№"
+  },
+  {
+    "id": "embassy",
+    "ru": "Посольство",
+    "descRu": "+10% дипломатического веса, +0,5 влияния/такт.",
+    "cost": {
+      "minerals": 120,
+      "goods": 40
+    },
+    "buildTicks": 8,
+    "upkeepEnergy": 1,
+    "jobs": [],
+    "effects": {
+      "diplomacy": 0.1,
+      "influence_prod": 0.5
+    },
+    "requiredTech": "soc_xenology_1",
+    "icon": "E"
+  },
+  {
+    "id": "hydroponics",
+    "ru": "Гидропонный комплекс",
+    "descRu": "2 гидротехника: 9 пищи без плодородия.",
+    "cost": {
+      "minerals": 110
+    },
+    "buildTicks": 8,
+    "upkeepEnergy": 1.4,
+    "jobs": [
+      "hydro_tech",
+      "hydro_tech"
+    ],
+    "requiredTech": "soc_biology_1",
+    "icon": "V"
+  },
+  {
+    "id": "foundry",
+    "ru": "Литейный комплекс",
+    "descRu": "2 металлурга, +10% сплавов.",
+    "cost": {
+      "minerals": 160,
+      "alloys": 20
+    },
+    "buildTicks": 9,
+    "upkeepEnergy": 1.2,
+    "jobs": [
+      "metallurgist",
+      "metallurgist"
+    ],
+    "effects": {
+      "alloys_prod": 0.1
+    },
+    "requiredTech": "eng_metallurgy_1",
+    "icon": "F"
+  },
+  {
+    "id": "recycling_complex",
+    "ru": "Комплекс переработки",
+    "descRu": "2 переработчика, +1,5% к минеральному доходу.",
+    "cost": {
+      "minerals": 140
+    },
+    "buildTicks": 8,
+    "upkeepEnergy": 1.2,
+    "jobs": [
+      "recycler",
+      "recycler"
+    ],
+    "effects": {
+      "minerals_prod": 0.015
+    },
+    "requiredTech": "eng_metallurgy_2",
+    "icon": "R"
+  },
+  {
+    "id": "armory",
+    "ru": "Оружейный цех",
+    "descRu": "4 ед. боеприпасов/такт из 1 сплава + 0,5 минерала.",
+    "cost": {
+      "minerals": 130,
+      "alloys": 40
+    },
+    "buildTicks": 10,
+    "upkeepEnergy": 1.8,
+    "jobs": [],
+    "effects": {
+      "ordnance_prod": 4
+    },
+    "requiredTech": "eng_metallurgy_2",
+    "icon": "M"
+  },
+  {
+    "id": "fuel_synth",
+    "ru": "Топливный синтезатор",
+    "descRu": "4 ед. топлива/такт из 6 энергии.",
+    "cost": {
+      "minerals": 120,
+      "alloys": 20
+    },
+    "buildTicks": 8,
+    "upkeepEnergy": 1.6,
+    "jobs": [],
+    "effects": {
+      "fuel_prod": 4
+    },
+    "requiredTech": "eng_logistics_1",
+    "icon": "Q"
+  },
+  {
+    "id": "shipyard",
+    "ru": "Верфь",
+    "descRu": "1 инженер-ремонтник; строит до фрегата, −10% стоимости ремонта.",
+    "cost": {
+      "minerals": 150,
+      "alloys": 40
+    },
+    "buildTicks": 10,
+    "upkeepEnergy": 2,
+    "jobs": [
+      "engineer"
+    ],
+    "effects": {
+      "shipyard_small": 1,
+      "repair": -0.1
+    },
+    "requiredTech": null,
+    "icon": "Y",
+    "maxPerColony": 1
+  },
+  {
+    "id": "large_shipyard",
+    "ru": "Большая верфь",
+    "descRu": "2 инженера; строит до линкора, +1 очередь, −20% стоимости ремонта.",
+    "cost": {
+      "minerals": 400,
+      "alloys": 200
+    },
+    "buildTicks": 16,
+    "upkeepEnergy": 6,
+    "jobs": [
+      "engineer",
+      "engineer"
+    ],
+    "effects": {
+      "shipyard_large": 1,
+      "repair": -0.2,
+      "build_queues": 1
+    },
+    "requiredTech": "eng_shipyard_1",
+    "icon": "Z",
+    "maxPerColony": 1
+  },
+  {
+    "id": "robot_plant",
+    "ru": "Синтетический центр",
+    "descRu": "3 робота-рабочих: рабочая сила без роста попов.",
+    "cost": {
+      "minerals": 240,
+      "goods": 80
+    },
+    "buildTicks": 16,
+    "upkeepEnergy": 3,
+    "jobs": [
+      "robot_worker",
+      "robot_worker",
+      "robot_worker"
+    ],
+    "effects": {
+      "robot_jobs": 3
+    },
+    "requiredTech": "phys_robotics_1",
+    "icon": "R"
+  },
+  {
+    "id": "food_synthesizer",
+    "ru": "Синтезатор пищи",
+    "descRu": "3 синтезатора: 6 минералов + 3 энергии → 18 пищи.",
+    "cost": {
+      "minerals": 300,
+      "goods": 100
+    },
+    "buildTicks": 16,
+    "upkeepEnergy": 4,
+    "jobs": [
+      "food_synthesist",
+      "food_synthesist",
+      "food_synthesist"
+    ],
+    "requiredTech": "soc_synthetic_food_1",
+    "icon": "S"
+  },
+  {
+    "id": "hq",
+    "ru": "Штаб флота",
+    "descRu": "+5 FP флотского лимита.",
+    "cost": {
+      "minerals": 180,
+      "alloys": 40
+    },
+    "buildTicks": 12,
+    "upkeepEnergy": 4,
+    "jobs": [],
+    "effects": {
+      "fleet_cap": 5
+    },
+    "requiredTech": "eng_logistics_1",
+    "icon": "Ш",
+    "maxPerColony": 1
+  },
+  {
+    "id": "shield_gen",
+    "ru": "Планетарный щит",
+    "descRu": "120 FP обороны, −50% урона бомбардировки.",
+    "cost": {
+      "minerals": 200,
+      "alloys": 50
+    },
+    "buildTicks": 14,
+    "upkeepEnergy": 2,
+    "jobs": [],
+    "effects": {
+      "planet_defense": 120,
+      "bombardment_resist": 0.5
+    },
+    "requiredTech": "phys_shields_3",
+    "icon": "D",
+    "maxPerColony": 1
+  }
+]

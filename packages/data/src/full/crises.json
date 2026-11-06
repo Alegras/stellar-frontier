@@ -1,0 +1,92 @@
+[
+  {
+    "id": "void_reavers",
+    "kind": "void_reavers",
+    "ru": "Мародёры Пустоты",
+    "descRu": "Рейдеры, грабящие торговые пути: три логова, каждое нужно уничтожить.",
+    "startTick": 2200,
+    "scalingFp": 80,
+    "fleets": 14,
+    "fleetFp": 100,
+    "nodes": 3,
+    "durationTicks": 300,
+    "rewards": {
+      "alloys": 500,
+      "credits": 120000,
+      "science": 400,
+      "unlock": "module:pd_turret_mk1"
+    }
+  },
+  {
+    "id": "synthetic_revolt",
+    "kind": "synthetic_revolt",
+    "ru": "Пробуждение Соборов",
+    "descRu": "Синтетический бунт: роботы захватывают планеты, требуют договора или подавления.",
+    "startTick": 2600,
+    "scalingFp": 0.5,
+    "fleets": 8,
+    "fleetFp": 60,
+    "nodes": 3,
+    "durationTicks": 400,
+    "rewards": {
+      "alloys": 300,
+      "credits": 80000,
+      "science": 600,
+      "unlock": "module:shield_gen_mk2"
+    }
+  },
+  {
+    "id": "grey_tide",
+    "kind": "grey_tide",
+    "ru": "Серый Прилив",
+    "descRu": "Медленно расширяющаяся область, поглощающая звёзды: пять узлов и Ядро.",
+    "startTick": 4600,
+    "scalingFp": 400,
+    "fleets": 15,
+    "fleetFp": 400,
+    "nodes": 5,
+    "durationTicks": 800,
+    "rewards": {
+      "alloys": 1500,
+      "credits": 250000,
+      "science": 1200,
+      "unlock": "module:reactor_mk4"
+    }
+  },
+  {
+    "id": "devourers",
+    "kind": "devourers",
+    "ru": "Пожиратели Пустоты",
+    "descRu": "Три волны вторжения через три точки карты; уничтожают планеты и растут от потерь.",
+    "startTick": 5200,
+    "scalingFp": 1500,
+    "fleets": 12,
+    "fleetFp": 4000,
+    "nodes": 3,
+    "durationTicks": 900,
+    "rewards": {
+      "alloys": 2500,
+      "credits": 400000,
+      "science": 2000,
+      "unlock": "hull:hull_colossus"
+    }
+  },
+  {
+    "id": "ancient_awakening",
+    "kind": "ancient_awakening",
+    "ru": "Пробуждение Древних",
+    "descRu": "Спящий флот Строителей просыпается у «мёртвой» звезды; можно заплатить или драться.",
+    "startTick": 3600,
+    "scalingFp": 1200,
+    "fleets": 1,
+    "fleetFp": 1200,
+    "nodes": 1,
+    "durationTicks": 120,
+    "rewards": {
+      "alloys": 800,
+      "credits": 150000,
+      "science": 900,
+      "unlock": "module:reactor_mk4"
+    }
+  }
+]

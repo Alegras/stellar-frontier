@@ -1,0 +1,56 @@
+[
+  {
+    "id": "teira_os",
+    "nameKey": "char.teira.name",
+    "portrait": "teira_os",
+    "portraits": {
+      "neutral": "portraits/teira_os/neutral.png",
+      "warm": "portraits/teira_os/warm.png",
+      "cold": "portraits/teira_os/cold.png",
+      "angry": "portraits/teira_os/angry.png",
+      "afraid": "portraits/teira_os/afraid.png",
+      "sad": "portraits/teira_os/sad.png"
+    },
+    "emotions": [
+      "neutral",
+      "warm",
+      "cold",
+      "angry",
+      "afraid",
+      "sad"
+    ],
+    "race": "valant",
+    "role": "mentor",
+    "relation": {
+      "base": 20,
+      "grudgeAllowed": false
+    }
+  },
+  {
+    "id": "kira7",
+    "nameKey": "char.kira7.name",
+    "portrait": "kira7",
+    "portraits": {
+      "neutral": "portraits/kira7/neutral.png",
+      "warm": "portraits/kira7/warm.png",
+      "cold": "portraits/kira7/cold.png",
+      "angry": "portraits/kira7/angry.png",
+      "afraid": "portraits/kira7/afraid.png",
+      "sad": "portraits/kira7/sad.png"
+    },
+    "emotions": [
+      "neutral",
+      "warm",
+      "cold",
+      "angry",
+      "afraid",
+      "sad"
+    ],
+    "race": "survivors",
+    "role": "dispatcher",
+    "relation": {
+      "base": 10,
+      "grudgeAllowed": true
+    }
+  }
+]

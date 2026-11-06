@@ -1,0 +1,50 @@
+[
+  {
+    "id": "card_q1",
+    "questId": "q_pro_01_first_light",
+    "art": "q_pro_01_first_light",
+    "accent": "#F5C542"
+  },
+  {
+    "id": "card_q2",
+    "questId": "q_pro_02_quiet_dock",
+    "art": "q_pro_02_quiet_dock",
+    "accent": "#4FC3F7"
+  },
+  {
+    "id": "card_q3",
+    "questId": "q_pro_03_salt_ash",
+    "art": "placeholder",
+    "accent": "#F08A24"
+  },
+  {
+    "id": "card_q4",
+    "questId": "q_pro_04_courier",
+    "art": "placeholder",
+    "accent": "#F5C542"
+  },
+  {
+    "id": "card_q5",
+    "questId": "q_pro_05_inspection",
+    "art": "placeholder",
+    "accent": "#B78CE8"
+  },
+  {
+    "id": "card_q6",
+    "questId": "q_pro_06_echo_core",
+    "art": "placeholder",
+    "accent": "#4FC3F7"
+  },
+  {
+    "id": "card_q7",
+    "questId": "q_pro_07_first_frontier",
+    "art": "placeholder",
+    "accent": "#F5C542"
+  },
+  {
+    "id": "card_qside",
+    "questId": "q_side_rumor_01",
+    "art": "placeholder",
+    "accent": "#8FA3BF"
+  }
+]

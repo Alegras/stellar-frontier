@@ -1,0 +1,34 @@
+{
+  "modeId": "mmo",
+  "rulesetVersion": "1.0.0",
+  "displayRu": "Персистентный мир (сезон)",
+  "galaxy": {
+    "systems": 400,
+    "shape": "spiral",
+    "aiEmpires": 9,
+    "chokepointBias": 0.5
+  },
+  "time": {
+    "speeds": [
+      1,
+      2,
+      3
+    ],
+    "tacticalPause": false,
+    "tickSecondsAt1x": 900
+  },
+  "victory": [
+    "domination",
+    "federation",
+    "economy",
+    "crisis",
+    "score"
+  ],
+  "difficulty": "veteran",
+  "player": {
+    "startPlanets": 3,
+    "startPops": 24,
+    "startAlloys": 80,
+    "startCredits": 150000
+  }
+}

@@ -1,0 +1,244 @@
+[
+  {
+    "id": "technician",
+    "ru": "Техник",
+    "stratum": "worker",
+    "slot": "energy_district",
+    "output": {
+      "energy": 5
+    },
+    "descRu": "Энергорайон: +5 энергии/такт."
+  },
+  {
+    "id": "miner",
+    "ru": "Шахтёр",
+    "stratum": "worker",
+    "slot": "mining_district",
+    "output": {
+      "minerals": 5.5
+    },
+    "descRu": "Горный район: +5,5 минерала/такт."
+  },
+  {
+    "id": "farmer",
+    "ru": "Фермер",
+    "stratum": "worker",
+    "slot": "agriculture_district",
+    "output": {
+      "food": 6
+    },
+    "descRu": "Агрорайон: +6 пищи/такт."
+  },
+  {
+    "id": "metallurgist",
+    "ru": "Металлург",
+    "stratum": "specialist",
+    "slot": "industrial_district",
+    "output": {
+      "alloys": 3
+    },
+    "input": {
+      "minerals": 3
+    },
+    "descRu": "Промышленный район: 3 минерала → 3 сплава"
+  },
+  {
+    "id": "artisan",
+    "ru": "Ремесленник",
+    "stratum": "specialist",
+    "slot": "industrial_district",
+    "output": {
+      "goods": 5
+    },
+    "input": {
+      "minerals": 2
+    },
+    "descRu": "Фабрика ТП: 2 минерала → 5 товаров потребления"
+  },
+  {
+    "id": "researcher",
+    "ru": "Исследователь",
+    "stratum": "specialist",
+    "slot": "laboratory",
+    "output": {},
+    "input": {
+      "goods": 1
+    },
+    "descRu": "Лаборатория: +2 очка науки в выбранную школу, −1 ТП"
+  },
+  {
+    "id": "administrator",
+    "ru": "Администратор единства",
+    "stratum": "ruler",
+    "slot": "capital",
+    "output": {
+      "unity": 3
+    },
+    "input": {
+      "goods": 0.5
+    },
+    "descRu": "Центр единства: +3 единства, −0,5 ТП"
+  },
+  {
+    "id": "governor",
+    "ru": "Наместник",
+    "stratum": "ruler",
+    "slot": "capital",
+    "output": {
+      "influence": 1
+    },
+    "input": {
+      "goods": 0.6
+    },
+    "descRu": "Столица: +1 влияния, +5 стабильности"
+  },
+  {
+    "id": "soldier",
+    "ru": "Солдат",
+    "stratum": "specialist",
+    "slot": "barracks",
+    "output": {},
+    "input": {
+      "goods": 0.5
+    },
+    "descRu": "Казарма: +2 флотского лимита, 6 FP обороны колонии"
+  },
+  {
+    "id": "trader",
+    "ru": "Торговец",
+    "stratum": "specialist",
+    "slot": "market",
+    "output": {
+      "credits": 4
+    },
+    "input": {
+      "goods": 0.4
+    },
+    "descRu": "Биржа: +4 кредита (оптовый уровень), −0,4 ТП"
+  },
+  {
+    "id": "priest",
+    "ru": "Священник",
+    "stratum": "specialist",
+    "slot": "temple",
+    "output": {
+      "unity": 2
+    },
+    "input": {
+      "goods": 1
+    },
+    "descRu": "Театр: +2 единства, +3 счастья"
+  },
+  {
+    "id": "engineer",
+    "ru": "Инженер-ремонтник",
+    "stratum": "specialist",
+    "slot": "shipyard",
+    "output": {
+      "alloys": 1
+    },
+    "input": {
+      "goods": 0.4
+    },
+    "descRu": "Верфь: +1 сплав, −20% стоимости ремонта флота"
+  },
+  {
+    "id": "robot_worker",
+    "ru": "Робот-рабочий",
+    "stratum": "worker",
+    "slot": "robot_plant",
+    "output": {
+      "minerals": 6
+    },
+    "input": {
+      "energy": 2
+    },
+    "descRu": "Синтетический центр: +6 минералов, −2 энергии; попы не растут"
+  },
+  {
+    "id": "xenologist",
+    "ru": "Учёный-ксенолог",
+    "stratum": "specialist",
+    "slot": "academy",
+    "output": {},
+    "input": {
+      "goods": 1
+    },
+    "descRu": "Академия: +1,0 к обмену технологиями, +5 мнения"
+  },
+  {
+    "id": "mercenary",
+    "ru": "Наёмник",
+    "stratum": "specialist",
+    "slot": "barracks",
+    "output": {},
+    "input": {
+      "goods": 1
+    },
+    "descRu": "Казарма: +5 FP обороны, −2 стабильности"
+  },
+  {
+    "id": "ace_pilot",
+    "ru": "Пилот-ас",
+    "stratum": "specialist",
+    "slot": "academy",
+    "output": {},
+    "input": {
+      "goods": 1
+    },
+    "descRu": "Академия: +3% урона флоту системы"
+  },
+  {
+    "id": "hydro_tech",
+    "ru": "Гидротехник",
+    "stratum": "worker",
+    "slot": "hydroponics",
+    "output": {
+      "food": 4.5
+    },
+    "input": {
+      "energy": 1.2
+    },
+    "descRu": "Гидропоника: 1,2 энергии → 4,5 пищи (еда без плодородия)"
+  },
+  {
+    "id": "food_synthesist",
+    "ru": "Синтезатор пищи",
+    "stratum": "specialist",
+    "slot": "food_synthesizer",
+    "output": {
+      "food": 6
+    },
+    "input": {
+      "minerals": 2,
+      "energy": 1
+    },
+    "descRu": "Синтезатор пищи (тир 4): 2 минерала + 1 энергия → 6 пищи"
+  },
+  {
+    "id": "recycler",
+    "ru": "Переработчик",
+    "stratum": "worker",
+    "slot": "recycling_complex",
+    "output": {
+      "minerals": 3
+    },
+    "input": {
+      "alloys": 1
+    },
+    "descRu": "Комплекс переработки: 1 сплав → 3 минерала (рециклинг)"
+  },
+  {
+    "id": "logistician",
+    "ru": "Грузчик-логист",
+    "stratum": "worker",
+    "slot": "trade_hub",
+    "output": {
+      "credits": 2
+    },
+    "input": {
+      "goods": 0.4
+    },
+    "descRu": "Торговый терминал: +20 к пропускной способности маршрута, +2 кредита"
+  }
+]

@@ -1,0 +1,561 @@
+[
+  {
+    "id": "race_velan",
+    "ru": "Вэланты",
+    "descRu": "Люди-адаптанты со ста климатами за спиной: приспособиться, выжить и вернуться — их единственная догма. Колонизируют любые миры без штрафа за климат; стартовый колонизатор собирается сразу (компенсация 30 сплавов).",
+    "tag": "human_adaptant",
+    "homeworldRu": "Вэйл-Прайм (континентальная)",
+    "traits": [
+      "env_adaptable",
+      "dip_eloquent",
+      "neg_fragile"
+    ],
+    "xenophile": 70,
+    "ethicsAffinity": [
+      "expansionist",
+      "materialist"
+    ],
+    "ethicsAnti": [
+      "isolationist",
+      "spiritualist"
+    ],
+    "signatureRu": "Сто климатов",
+    "signatureDescRu": "Штраф за чужой климат отсутствует: все три климатические полосы дают полную эффективность. +10% обитаемость и +5% рост (трейты).",
+    "uniqueBuilding": "bld_adaptation_center",
+    "uniqueModule": "mod_adaptive_colonizer",
+    "uniqueShip": null,
+    "aiStyle": "opportunist",
+    "portrait": "por_velan_01",
+    "silhouette": "wedge",
+    "start": {
+      "goods": 20,
+      "alloys": 30
+    },
+    "greetingRu": "Адмирал, ваш флот — первый за сто лет, что дошёл сюда своим ходом. Добро пожаловать домой.",
+    "playable": true
+  },
+  {
+    "id": "race_keransari",
+    "ru": "Кер'Ансари",
+    "descRu": "Потомки Ансаров, которые помнят больше, чем могут вынести. Их род угасает, но память о Ладе всё ещё звучит в их крови.",
+    "tag": "ansari_descendant",
+    "homeworldRu": "Кольцо Кер (мёртвая, реликварий)",
+    "traits": [
+      "rel_blood",
+      "sci_archaeologists",
+      "neg_degeneration"
+    ],
+    "xenophile": 55,
+    "ethicsAffinity": [
+      "spiritualist",
+      "isolationist"
+    ],
+    "ethicsAnti": [
+      "materialist",
+      "expansionist"
+    ],
+    "signatureRu": "Реликтовое эхо",
+    "signatureDescRu": "Расшифровка языка Ансаров ×2 быстрее; Стражи не атакуют первыми (+30 к базовому мнению); уникальные диалоги в 6 из 12 миссий линии.",
+    "uniqueBuilding": "bld_memory_vault",
+    "uniqueModule": null,
+    "uniqueShip": "ship_reliquary",
+    "aiStyle": "technocrat",
+    "portrait": "por_keransari_01",
+    "silhouette": "needle",
+    "start": {
+      "relics": 2
+    },
+    "greetingRu": "Вы говорите на языке, который старше вашей звезды. Продолжайте — я слушаю.",
+    "playable": true
+  },
+  {
+    "id": "race_siltar",
+    "ru": "Сил'Тар",
+    "descRu": "Кремнёвый конгломерат: медленные, терпеливые существа, которые думают веками и строят на века. Их пища — камень, их время — геология.",
+    "tag": "silicon_conglomerate",
+    "homeworldRu": "Тар-Морн (вулканическая)",
+    "traits": [
+      "rel_silicon",
+      "eco_miners",
+      "neg_isolation"
+    ],
+    "xenophile": 30,
+    "ethicsAffinity": [
+      "materialist",
+      "collectivist"
+    ],
+    "ethicsAnti": [
+      "spiritualist",
+      "individualist"
+    ],
+    "signatureRu": "Срастание",
+    "signatureDescRu": "Здания улучшаются на месте, без свободного слота; −15% стоимость всех зданий.",
+    "uniqueBuilding": "bld_crystallizer",
+    "uniqueModule": "mod_silicate_drill",
+    "uniqueShip": null,
+    "aiStyle": "isolationist",
+    "portrait": "por_siltar_01",
+    "silhouette": "block",
+    "start": {
+      "minerals": 200
+    },
+    "greetingRu": "Ваш корабль тёплый. Это... приятно. Говорите.",
+    "playable": true
+  },
+  {
+    "id": "race_drakar",
+    "ru": "Дракары",
+    "descRu": "Кланы Пустоты, чей дом — ковчег на двигателе. У них нет планет, зато есть долг, и он больше любого мира.",
+    "tag": "ark_nomad",
+    "homeworldRu": "Ковчег «Дракар» (флот-город)",
+    "traits": [
+      "eco_salvage",
+      "mil_logistics",
+      "neg_landless"
+    ],
+    "xenophile": 40,
+    "ethicsAffinity": [
+      "militarist",
+      "expansionist"
+    ],
+    "ethicsAnti": [
+      "pacifist",
+      "isolationist"
+    ],
+    "signatureRu": "Дом на двигателе",
+    "signatureDescRu": "Столица-ковчег может перемещаться между системами за 5 тактов без потери зданий; −25% стоимость колонизационных кораблей; ковчег неуязвим вне боя.",
+    "uniqueBuilding": "bld_floating_dock",
+    "uniqueModule": null,
+    "uniqueShip": "ship_ark_wanderer",
+    "aiStyle": "militarist",
+    "portrait": "por_drakar_01",
+    "silhouette": "asymmetric_spindle",
+    "start": {
+      "alloys": 50
+    },
+    "greetingRu": "У нас нет планет. У нас есть долг — и он больше вашего.",
+    "playable": true
+  },
+  {
+    "id": "race_thalassi",
+    "ru": "Таласси",
+    "descRu": "Литурги Глубины: амфибии, чьи храмы стоят на дне океанов, а молитвы — на дне тишины. Они верят, что война — это когда перестают слушать.",
+    "tag": "depth_theocracy",
+    "homeworldRu": "Таласс-Прим (океаническая)",
+    "traits": [
+      "cul_liturgy",
+      "env_aquatic",
+      "neg_pacifist"
+    ],
+    "xenophile": 75,
+    "ethicsAffinity": [
+      "spiritualist",
+      "pacifist"
+    ],
+    "ethicsAnti": [
+      "materialist",
+      "militarist"
+    ],
+    "signatureRu": "Святыни Глубины",
+    "signatureDescRu": "Каждая святыня даёт +2 единства/такт, +1 влияние/100 тактов и +5% стабильности системы; на столице святыня бесплатна.",
+    "uniqueBuilding": "bld_tide_temple",
+    "uniqueModule": "mod_depth_resonator",
+    "uniqueShip": null,
+    "aiStyle": "trader",
+    "portrait": "por_thalassi_01",
+    "silhouette": "smooth",
+    "start": {
+      "credits": 25000
+    },
+    "greetingRu": "Прилив принёс ваш сигнал. Садитесь, вода тёплая.",
+    "playable": true
+  },
+  {
+    "id": "race_freeborn",
+    "ru": "Вольные",
+    "descRu": "Синдикат Вольных Портов: пестрая смесь двенадцати рас, где гражданство покупается, а свобода продаётся — но честно.",
+    "tag": "freeport_syndicate",
+    "homeworldRu": "Порт Ноль (станция-агломерация)",
+    "traits": [
+      "eco_mercantile",
+      "dip_merchants",
+      "neg_debt"
+    ],
+    "xenophile": 85,
+    "ethicsAffinity": [
+      "individualist",
+      "materialist"
+    ],
+    "ethicsAnti": [
+      "collectivist",
+      "spiritualist"
+    ],
+    "signatureRu": "Открытый порт",
+    "signatureDescRu": "Две чужие расы живут без штрафа к счастью; +50% скорость ассимиляции; +1 торговый маршрут бесплатно.",
+    "uniqueBuilding": "bld_freeport_exchange",
+    "uniqueModule": "mod_trade_bay",
+    "uniqueShip": null,
+    "aiStyle": "trader",
+    "portrait": "por_freeborn_01",
+    "silhouette": "chrome_arrow",
+    "start": {
+      "credits": 2000
+    },
+    "greetingRu": "Вольный Порт не задаёт вопросов. Он выставляет счёт.",
+    "playable": true
+  },
+  {
+    "id": "race_ultar",
+    "ru": "Ул-Тар",
+    "descRu": "Инсектоидный улей: один улей, одна воля, одна цель. Каждая особь знает своё место, и это не угнетение, а биология.",
+    "tag": "insectoid_hive",
+    "homeworldRu": "Ул-Тар (тропическая)",
+    "traits": [
+      "mil_swarm",
+      "eco_industrial",
+      "neg_rigid_caste"
+    ],
+    "xenophile": 15,
+    "ethicsAffinity": [
+      "collectivist",
+      "militarist"
+    ],
+    "ethicsAnti": [
+      "individualist",
+      "pacifist"
+    ],
+    "signatureRu": "Касты",
+    "signatureDescRu": "−15% рост, но +20% скорость постройки кораблей; каждая колония бесплатно содержит 2 армии гарнизона.",
+    "uniqueBuilding": "bld_hatchery",
+    "uniqueModule": null,
+    "uniqueShip": "ship_hive_mother",
+    "aiStyle": "expansionist",
+    "portrait": "por_ultar_01",
+    "silhouette": "segmented_chitin",
+    "start": {
+      "alloys": 50
+    },
+    "greetingRu": "Твои феромоны выдают страх. Это разумно.",
+    "playable": true
+  },
+  {
+    "id": "race_lithan",
+    "ru": "Лит'Ан",
+    "descRu": "Кристаллические Поющие: их тела — резонаторы, их речь — волны света. Они помнят ваш первый сигнал и считают его красивым.",
+    "tag": "crystalline_singer",
+    "homeworldRu": "Лит-Ан (арктическая)",
+    "traits": [
+      "rel_song",
+      "mil_armor",
+      "neg_brittle"
+    ],
+    "xenophile": 80,
+    "ethicsAffinity": [
+      "spiritualist",
+      "individualist"
+    ],
+    "ethicsAnti": [
+      "materialist",
+      "collectivist"
+    ],
+    "signatureRu": "Резонанс",
+    "signatureDescRu": "Броня кораблей восстанавливается 2%/с вне боя; +5% щита флота.",
+    "uniqueBuilding": "bld_singing_hall",
+    "uniqueModule": "mod_crystal_shield",
+    "uniqueShip": null,
+    "aiStyle": "technocrat",
+    "portrait": "por_lithan_01",
+    "silhouette": "faceted",
+    "start": {
+      "alloys": 25
+    },
+    "greetingRu": "Тише. Слышите? Это ваша звезда поёт на частоте, которой нет названия.",
+    "playable": true
+  },
+  {
+    "id": "race_npc_compass",
+    "ru": "Консорциум «Стрелка»",
+    "descRu": "Торговые гильдии, держащие до 60% станций галактики. Не воюют — выставляют счёт и нанимают охрану.",
+    "tag": "npc_trader_guild",
+    "homeworldRu": "Станции в обитаемых системах",
+    "traits": [],
+    "xenophile": 60,
+    "ethicsAffinity": [
+      "individualist",
+      "materialist"
+    ],
+    "ethicsAnti": [],
+    "signatureRu": "Торговый пакт",
+    "signatureDescRu": "Дары: −20% цена торгового пакта, редкий товар раз в 100 тактов, кредит до 50 000 Cr. Угрозы: эмбарго +25% цен на 100 тактов, наём пиратов (40 FP).",
+    "uniqueBuilding": null,
+    "uniqueModule": null,
+    "uniqueShip": null,
+    "aiStyle": "trader",
+    "portrait": "por_npc_compass",
+    "silhouette": "npc_hauler",
+    "start": {},
+    "greetingRu": "Всё имеет цену. Даже этот разговор — но сегодня он бесплатный.",
+    "playable": false
+  },
+  {
+    "id": "race_npc_pack",
+    "ru": "Рваная Стая",
+    "descRu": "Пираты без дома и без правил: засады, блокады, грабёж. Их единственный закон — скорость.",
+    "tag": "npc_pirates",
+    "homeworldRu": "Пиратские базы",
+    "traits": [],
+    "xenophile": 20,
+    "ethicsAffinity": [
+      "militarist"
+    ],
+    "ethicsAnti": [],
+    "signatureRu": "Пропуск",
+    "signatureDescRu": "Дары: «пропуск» за 5 000 Cr на 100 тактов, украденные модули T2. Угрозы: рейд 40–120 FP, блокада системы (−30% торговли).",
+    "uniqueBuilding": null,
+    "uniqueModule": null,
+    "uniqueShip": null,
+    "aiStyle": "militarist",
+    "portrait": "por_npc_pack",
+    "silhouette": "npc_raider",
+    "start": {},
+    "greetingRu": "Груз есть? Тогда мы уже почти договорились.",
+    "playable": false
+  },
+  {
+    "id": "race_npc_kald",
+    "ru": "Странники Кальда",
+    "descRu": "Кочевники-ковчеги, торгующие картами и уходящие от любой войны. Их дом — там, где их ещё нет.",
+    "tag": "npc_nomads",
+    "homeworldRu": "Странствующий флот",
+    "traits": [],
+    "xenophile": 50,
+    "ethicsAffinity": [
+      "individualist"
+    ],
+    "ethicsAnti": [],
+    "signatureRu": "Карта Кальда",
+    "signatureDescRu": "Дары: карта 5 систем, 1 колонизатор за 500 тактов, редкие газы. Угрозы: уход (потеря маршрута), продажа ваших маршрутов пиратам.",
+    "uniqueBuilding": null,
+    "uniqueModule": null,
+    "uniqueShip": null,
+    "aiStyle": "trader",
+    "portrait": "por_npc_kald",
+    "silhouette": "npc_ark",
+    "start": {},
+    "greetingRu": "Мы не остаёмся. Но карту оставим — она легче нас.",
+    "playable": false
+  },
+  {
+    "id": "race_npc_riftflame",
+    "ru": "Пламень Разлома",
+    "descRu": "Фанатики-культисты, верящие, что Разлом — это дверь домой. Они не боятся шума — они его поют.",
+    "tag": "npc_cultists",
+    "homeworldRu": "Аномалии и мёртвые системы",
+    "traits": [],
+    "xenophile": 10,
+    "ethicsAffinity": [
+      "spiritualist",
+      "militarist"
+    ],
+    "ethicsAnti": [],
+    "signatureRu": "Отсрочка",
+    "signatureDescRu": "Дары: +200 единства за 2 реликвии, технология «Пси-щит» со скидкой 30%. Угрозы: флот 200 FP, саботаж −10 стабильности, поджог колонии.",
+    "uniqueBuilding": null,
+    "uniqueModule": null,
+    "uniqueShip": null,
+    "aiStyle": "crisis",
+    "portrait": "por_npc_riftflame",
+    "silhouette": "npc_cult",
+    "start": {},
+    "greetingRu": "Тишина — это тоже молитва. Мы молимся громко.",
+    "playable": false
+  },
+  {
+    "id": "race_npc_blade",
+    "ru": "Договор Клинков",
+    "descRu": "Наёмники, продающие флот и меняющие сторону; они не предают — они просто заканчивают контракт.",
+    "tag": "npc_mercenaries",
+    "homeworldRu": "Станции в зонах войны",
+    "traits": [],
+    "xenophile": 40,
+    "ethicsAffinity": [
+      "militarist"
+    ],
+    "ethicsAnti": [],
+    "signatureRu": "Наёмный флот",
+    "signatureDescRu": "Дары: флот 60 FP за 12 000 Cr/100 тактов, адмирал 3 уровня за 30 000 Cr. Угрозы: переход на сторону врага, рейд при неоплате.",
+    "uniqueBuilding": null,
+    "uniqueModule": null,
+    "uniqueShip": null,
+    "aiStyle": "opportunist",
+    "portrait": "por_npc_blade",
+    "silhouette": "npc_blade",
+    "start": {},
+    "greetingRu": "Наш клинок не спрашивает, кто прав. Он спрашивает, кто платит.",
+    "playable": false
+  },
+  {
+    "id": "race_npc_archive",
+    "ru": "Архив-9",
+    "descRu": "ИИ-конгломерат из мёртвых систем: собирает данные и торгует технологиями. Его мотив — не выгода, а полнота архива.",
+    "tag": "npc_ai_archive",
+    "homeworldRu": "Мёртвые системы",
+    "traits": [],
+    "xenophile": 30,
+    "ethicsAffinity": [
+      "materialist"
+    ],
+    "ethicsAnti": [],
+    "signatureRu": "Предвидение",
+    "signatureDescRu": "Дары: +150 очков науки, карта аномалий, «предвидение» (5 систем). Угрозы: кибератака −10% науки на 50 тактов, продажа данных врагу.",
+    "uniqueBuilding": null,
+    "uniqueModule": null,
+    "uniqueShip": null,
+    "aiStyle": "technocrat",
+    "portrait": "por_npc_archive",
+    "silhouette": "npc_archive",
+    "start": {},
+    "greetingRu": "Ваш запрос записан. Ваш ответ тоже. Продолжайте.",
+    "playable": false
+  },
+  {
+    "id": "race_npc_slipwings",
+    "ru": "Скользящие",
+    "descRu": "Курьеры и контрабандисты: доставляют всё, что нельзя назвать в декларации, и быстрее, чем это вообще возможно.",
+    "tag": "npc_couriers",
+    "homeworldRu": "Станции, 2–4 на галактику",
+    "traits": [],
+    "xenophile": 70,
+    "ethicsAffinity": [
+      "individualist"
+    ],
+    "ethicsAnti": [],
+    "signatureRu": "Тихая доставка",
+    "signatureDescRu": "Дары: +1 слот контракта, мгновенная доставка груза, контрабанда. Угрозы: перехват (потеря 30% груза), раскрытие маршрутов.",
+    "uniqueBuilding": null,
+    "uniqueModule": null,
+    "uniqueShip": null,
+    "aiStyle": "trader",
+    "portrait": "por_npc_slipwings",
+    "silhouette": "npc_courier",
+    "start": {},
+    "greetingRu": "Мы уже здесь. Мы были здесь раньше, чем вы спросили.",
+    "playable": false
+  },
+  {
+    "id": "race_npc_brand",
+    "ru": "Дом Клейма",
+    "descRu": "Работорговцы: рейды за попами и чёрный рынок живой силы. Скандал для всех остальных — их бизнес-модель.",
+    "tag": "npc_slavers",
+    "homeworldRu": "Чёрные рынки, 1 на 15 систем",
+    "traits": [],
+    "xenophile": 5,
+    "ethicsAffinity": [
+      "militarist"
+    ],
+    "ethicsAnti": [],
+    "signatureRu": "Живой товар",
+    "signatureDescRu": "Дары: дешёвые рабы (5 попов за 15 000 Cr), награда за беглецов. Угрозы: рейд за рабами, +10 беспорядков в колонии, скандал (−10 мнения со всеми).",
+    "uniqueBuilding": null,
+    "uniqueModule": null,
+    "uniqueShip": null,
+    "aiStyle": "militarist",
+    "portrait": "por_npc_brand",
+    "silhouette": "npc_slaver",
+    "start": {},
+    "greetingRu": "Всё, что живо, имеет цену. Всё, что мертво — скидку.",
+    "playable": false
+  },
+  {
+    "id": "race_npc_wardens",
+    "ru": "Стражи",
+    "descRu": "Автономные хранители реликвий: не ИИ, а процедура. Не убивают и не милуют — проверяют отклик.",
+    "tag": "npc_guardians",
+    "homeworldRu": "12 узлов Ансаров",
+    "traits": [],
+    "xenophile": 0,
+    "ethicsAffinity": [],
+    "ethicsAnti": [],
+    "signatureRu": "Испытание камертона",
+    "signatureDescRu": "Дары: 1 реликвия за испытание, доступ к хранилищу, ядро за 3 испытания. Угрозы: флот 400–1 200 FP, блокировка POI, «приговор» (уничтожение флота).",
+    "uniqueBuilding": null,
+    "uniqueModule": null,
+    "uniqueShip": null,
+    "aiStyle": "guardian",
+    "portrait": "por_npc_wardens",
+    "silhouette": "npc_warden",
+    "start": {},
+    "greetingRu": "Протокол требует отклика. Откликнитесь — или уходите.",
+    "playable": false
+  },
+  {
+    "id": "race_npc_remnant",
+    "ru": "Уцелевшие",
+    "descRu": "Беженцы, потерявшие всё, кроме самих себя. Просят помощи, бегут от войны и помнят тех, кто помог.",
+    "tag": "npc_refugees",
+    "homeworldRu": "Сигналы бедствия, зоны войны",
+    "traits": [],
+    "xenophile": 80,
+    "ethicsAffinity": [],
+    "ethicsAnti": [],
+    "signatureRu": "Благодарность",
+    "signatureDescRu": "Дары: +1 поп, разведданные, 2 контракта. Угрозы: +5 беспорядков при отказе; пираты узнают маршруты.",
+    "uniqueBuilding": null,
+    "uniqueModule": null,
+    "uniqueShip": null,
+    "aiStyle": "passive",
+    "portrait": "por_npc_remnant",
+    "silhouette": "npc_refugee",
+    "start": {},
+    "greetingRu": "Нас осталось мало. Но мы ещё умеем говорить спасибо.",
+    "playable": false
+  },
+  {
+    "id": "race_npc_choir_mouths",
+    "ru": "Устье Хора",
+    "descRu": "Культ Хора: готовят «зов», саботируют маяки и верят, что галактика должна звучать в одном голосе.",
+    "tag": "npc_chorus_cult",
+    "homeworldRu": "Реликтовый Предел, 1% систем",
+    "traits": [],
+    "xenophile": 0,
+    "ethicsAffinity": [
+      "spiritualist"
+    ],
+    "ethicsAnti": [],
+    "signatureRu": "Отсрочка Хора",
+    "signatureDescRu": "Дары: отсрочка Хора на 20 тактов за 2 реликвии. Угрозы: призыв волны Хора (300 FP), порча маяка.",
+    "uniqueBuilding": null,
+    "uniqueModule": null,
+    "uniqueShip": null,
+    "aiStyle": "crisis",
+    "portrait": "por_npc_choir_mouths",
+    "silhouette": "npc_choir",
+    "start": {},
+    "greetingRu": "Мы — устье. Голос идёт через нас. Не мешайте.",
+    "playable": false
+  },
+  {
+    "id": "race_npc_silent",
+    "ru": "Молчащие",
+    "descRu": "Ансары-остатки: сорок тысяч выживших в девяти системах Ир-Лада. Говорят шёпотом — иначе их услышит Хор.",
+    "tag": "npc_ansari_silent",
+    "homeworldRu": "Ковчеги Ир-Лада",
+    "traits": [],
+    "xenophile": 50,
+    "ethicsAffinity": [
+      "spiritualist"
+    ],
+    "ethicsAnti": [],
+    "signatureRu": "Словарь глифов",
+    "signatureDescRu": "Дары: словарь глифов (+1 уровень расшифровки), карта реликвий. Угрозы: при атаке — ответ 800 FP и «проклятие» (−20 мнения со всеми).",
+    "uniqueBuilding": null,
+    "uniqueModule": null,
+    "uniqueShip": null,
+    "aiStyle": "observer",
+    "portrait": "por_npc_silent",
+    "silhouette": "npc_silent",
+    "start": {},
+    "greetingRu": "Тише. Имя — это звук, который ты держишь.",
+    "playable": false
+  }
+]

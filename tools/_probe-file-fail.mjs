@@ -1,0 +1,11 @@
+import { chromium } from "@playwright/test";
+import { pathToFileURL } from "node:url";
+const browser = await chromium.launch({ channel: "chrome" });
+const page = await browser.newPage({ viewport: { width: 1600, height: 900 } });
+const failed = [];
+page.on("requestfailed", (r) => failed.push(r.url() + " :: " + (r.failure()?.errorText ?? "")));
+page.on("response", (r) => { if (r.status() >= 400) failed.push("HTTP " + r.status() + " " + r.url()); });
+await page.goto(pathToFileURL("N:/AI/stellar-frontier/StellarFrontier.html").href, { waitUntil: "domcontentloaded" });
+await page.waitForTimeout(2500);
+console.log("FAILED=" + JSON.stringify(failed.slice(0, 20)));
+await browser.close();

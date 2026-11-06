@@ -1,0 +1,267 @@
+{
+  "version": 1,
+  "dlc": "xiv_first_light",
+  "palette": "PALETTE_HEX (docs/10_art_direction.md §3) + service #3A2B5C/#6BE08A (13d §1.5)",
+  "emotions": [
+    "neutral",
+    "warm",
+    "cold",
+    "angry",
+    "afraid",
+    "sad"
+  ],
+  "characters": [
+    {
+      "id": "teira_os",
+      "nameRu": "Тейра Ос",
+      "portraitSize": 128,
+      "portraits": {
+        "neutral": "portraits/teira_os/neutral.png",
+        "warm": "portraits/teira_os/warm.png",
+        "cold": "portraits/teira_os/cold.png",
+        "angry": "portraits/teira_os/angry.png",
+        "afraid": "portraits/teira_os/afraid.png",
+        "sad": "portraits/teira_os/sad.png"
+      }
+    },
+    {
+      "id": "kira7",
+      "nameRu": "Кира-7",
+      "portraitSize": 128,
+      "portraits": {
+        "neutral": "portraits/kira7/neutral.png",
+        "warm": "portraits/kira7/warm.png",
+        "cold": "portraits/kira7/cold.png",
+        "angry": "portraits/kira7/angry.png",
+        "afraid": "portraits/kira7/afraid.png",
+        "sad": "portraits/kira7/sad.png"
+      }
+    }
+  ],
+  "cards": {
+    "q_pro_01_first_light": "cards/q_pro_01_first_light.png",
+    "q_pro_02_quiet_dock": "cards/q_pro_02_quiet_dock.png"
+  },
+  "cardPlaceholder": "cards/placeholder.png",
+  "backgrounds": {
+    "station_light_1": {
+      "path": "backgrounds/station_light_1.png",
+      "foreground": "backgrounds/station_light_1_fore.png",
+      "width": 640,
+      "height": 360
+    }
+  },
+  "comics": {
+    "q_pro_01_first_light": [
+      "comics/q_pro_01_first_light_01.png"
+    ]
+  },
+  "voices": {
+    "svet_wave": "voices/svet_wave.png"
+  },
+  "assets": [
+    {
+      "characterId": "teira_os",
+      "characterName": "Тейра Ос",
+      "emotion": "neutral",
+      "path": "portraits/teira_os/neutral.png",
+      "width": 128,
+      "height": 128,
+      "colors": 13,
+      "bytes": 2122
+    },
+    {
+      "characterId": "teira_os",
+      "characterName": "Тейра Ос",
+      "emotion": "warm",
+      "path": "portraits/teira_os/warm.png",
+      "width": 128,
+      "height": 128,
+      "colors": 13,
+      "bytes": 2144
+    },
+    {
+      "characterId": "teira_os",
+      "characterName": "Тейра Ос",
+      "emotion": "cold",
+      "path": "portraits/teira_os/cold.png",
+      "width": 128,
+      "height": 128,
+      "colors": 13,
+      "bytes": 2112
+    },
+    {
+      "characterId": "teira_os",
+      "characterName": "Тейра Ос",
+      "emotion": "angry",
+      "path": "portraits/teira_os/angry.png",
+      "width": 128,
+      "height": 128,
+      "colors": 14,
+      "bytes": 2173
+    },
+    {
+      "characterId": "teira_os",
+      "characterName": "Тейра Ос",
+      "emotion": "afraid",
+      "path": "portraits/teira_os/afraid.png",
+      "width": 128,
+      "height": 128,
+      "colors": 14,
+      "bytes": 2153
+    },
+    {
+      "characterId": "teira_os",
+      "characterName": "Тейра Ос",
+      "emotion": "sad",
+      "path": "portraits/teira_os/sad.png",
+      "width": 128,
+      "height": 128,
+      "colors": 14,
+      "bytes": 2157
+    },
+    {
+      "characterId": "kira7",
+      "characterName": "Кира-7",
+      "emotion": "neutral",
+      "path": "portraits/kira7/neutral.png",
+      "width": 128,
+      "height": 128,
+      "colors": 14,
+      "bytes": 2129
+    },
+    {
+      "characterId": "kira7",
+      "characterName": "Кира-7",
+      "emotion": "warm",
+      "path": "portraits/kira7/warm.png",
+      "width": 128,
+      "height": 128,
+      "colors": 14,
+      "bytes": 2147
+    },
+    {
+      "characterId": "kira7",
+      "characterName": "Кира-7",
+      "emotion": "cold",
+      "path": "portraits/kira7/cold.png",
+      "width": 128,
+      "height": 128,
+      "colors": 13,
+      "bytes": 2121
+    },
+    {
+      "characterId": "kira7",
+      "characterName": "Кира-7",
+      "emotion": "angry",
+      "path": "portraits/kira7/angry.png",
+      "width": 128,
+      "height": 128,
+      "colors": 14,
+      "bytes": 2176
+    },
+    {
+      "characterId": "kira7",
+      "characterName": "Кира-7",
+      "emotion": "afraid",
+      "path": "portraits/kira7/afraid.png",
+      "width": 128,
+      "height": 128,
+      "colors": 14,
+      "bytes": 2152
+    },
+    {
+      "characterId": "kira7",
+      "characterName": "Кира-7",
+      "emotion": "sad",
+      "path": "portraits/kira7/sad.png",
+      "width": 128,
+      "height": 128,
+      "colors": 13,
+      "bytes": 2155
+    },
+    {
+      "questId": "q_pro_01_first_light",
+      "kind": "main",
+      "path": "cards/q_pro_01_first_light.png",
+      "width": 320,
+      "height": 180,
+      "colors": 19,
+      "bytes": 1962
+    },
+    {
+      "questId": "q_pro_02_quiet_dock",
+      "kind": "side",
+      "path": "cards/q_pro_02_quiet_dock.png",
+      "width": 320,
+      "height": 180,
+      "colors": 17,
+      "bytes": 1801
+    },
+    {
+      "questId": null,
+      "kind": "placeholder",
+      "path": "cards/placeholder.png",
+      "width": 320,
+      "height": 180,
+      "colors": 7,
+      "bytes": 1637
+    },
+    {
+      "id": "station_light_1",
+      "path": "backgrounds/station_light_1.png",
+      "width": 640,
+      "height": 360,
+      "colors": 16,
+      "bytes": 6572
+    },
+    {
+      "id": "station_light_1_fore",
+      "path": "backgrounds/station_light_1_fore.png",
+      "width": 640,
+      "height": 48,
+      "colors": 7,
+      "bytes": 1117
+    },
+    {
+      "questId": "q_pro_01_first_light",
+      "panel": 1,
+      "path": "comics/q_pro_01_first_light_01.png",
+      "width": 640,
+      "height": 240,
+      "colors": 19,
+      "bytes": 3932
+    },
+    {
+      "id": "svet_wave",
+      "path": "voices/svet_wave.png",
+      "width": 128,
+      "height": 128,
+      "colors": 8,
+      "bytes": 1372
+    }
+  ],
+  "totalBytes": 44134,
+  "totalKb": 43.1,
+  "sha256_16": {
+    "portraits/teira_os/neutral.png": "51226bd71974fd20",
+    "portraits/teira_os/warm.png": "f06f1d6e0103df22",
+    "portraits/teira_os/cold.png": "7af919f33baf6fc6",
+    "portraits/teira_os/angry.png": "94b4efdce885342f",
+    "portraits/teira_os/afraid.png": "816f68339a462129",
+    "portraits/teira_os/sad.png": "8b8d3e6e538920b4",
+    "portraits/kira7/neutral.png": "1800474e5ddfd25c",
+    "portraits/kira7/warm.png": "34e8b3029dd7a729",
+    "portraits/kira7/cold.png": "4c67736923b9c08d",
+    "portraits/kira7/angry.png": "04dfceb9d53a7e53",
+    "portraits/kira7/afraid.png": "e7b78c168bb56f2a",
+    "portraits/kira7/sad.png": "fc89dd08f7b58124",
+    "cards/q_pro_01_first_light.png": "db8f55454e2ec340",
+    "cards/q_pro_02_quiet_dock.png": "03b501fe6c7b67a2",
+    "cards/placeholder.png": "5c6202514c6f9172",
+    "backgrounds/station_light_1.png": "452e99e3e5ab40c4",
+    "backgrounds/station_light_1_fore.png": "a6d95d8fda133eee",
+    "comics/q_pro_01_first_light_01.png": "50c1f7d6d17d2937",
+    "voices/svet_wave.png": "a0f3c28a0da4a186"
+  }
+}

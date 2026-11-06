@@ -1,0 +1,80 @@
+[
+  {
+    "id": "arch_ansari_ship",
+    "ru": "Корабль Ансаров",
+    "descRu": "Пять слоёв брони оставленного крейсера скрывают чертёж реликтового корабля; дроны охраны (200 FP) не спят.",
+    "steps": 5,
+    "region": "ruins",
+    "rewardRelics": 2,
+    "rewardCores": 1,
+    "rewardTech": "a2_relic_lance",
+    "rewardFlag": "relic_cruiser_blueprint",
+    "threat": 45,
+    "gateMission": 6
+  },
+  {
+    "id": "arch_buried_city",
+    "ru": "Город под корой",
+    "descRu": "Под ледяной корой — город с огнями. Исследование даёт черту расы, но бьёт по стабильности колонии (−10).",
+    "steps": 3,
+    "region": "ansari_gardens",
+    "rewardRelics": 1,
+    "rewardCores": 0,
+    "rewardTech": null,
+    "rewardFlag": "trait_bonus",
+    "threat": 0,
+    "gateMission": 5
+  },
+  {
+    "id": "arch_road_song",
+    "ru": "Песнь Дорог",
+    "descRu": "Навигационная симфония в мёртвых станциях: +1 прыжок FSD навсегда, но на финальном шаге приходят Отступники.",
+    "steps": 4,
+    "region": "ruins",
+    "rewardRelics": 1,
+    "rewardCores": 0,
+    "rewardTech": null,
+    "rewardFlag": "fsd_plus1",
+    "threat": 30,
+    "gateMission": 4
+  },
+  {
+    "id": "arch_gate_key",
+    "ru": "Ключ от Врат",
+    "descRu": "Три сегмента ключа в разных системах: открывает Врата, если они сломаны. Отступники ищут тот же ключ и объявляют войну.",
+    "steps": 3,
+    "region": "gates",
+    "rewardRelics": 2,
+    "rewardCores": 1,
+    "rewardTech": null,
+    "rewardFlag": "gate_key",
+    "threat": 55,
+    "gateMission": 10
+  },
+  {
+    "id": "arch_admiral_grave",
+    "ru": "Могила Адмирала",
+    "descRu": "Погребальный корабль без имени: короткая цепочка, награда — два уровня адмирала.",
+    "steps": 2,
+    "region": "ruins",
+    "rewardRelics": 1,
+    "rewardCores": 0,
+    "rewardTech": null,
+    "rewardFlag": "admiral_levels_2",
+    "threat": 0,
+    "gateMission": 0
+  },
+  {
+    "id": "arch_singing_garden",
+    "ru": "Сад, который помнит",
+    "descRu": "Шесть шагов по живому саду: «Семя Сада» и A4-модуль. На последнем шаге просыпаются два Стража.",
+    "steps": 6,
+    "region": "ansari_gardens",
+    "rewardRelics": 1,
+    "rewardCores": 0,
+    "rewardTech": "a4_relic_shipyard",
+    "rewardFlag": "garden_seed",
+    "threat": 50,
+    "gateMission": 11
+  }
+]

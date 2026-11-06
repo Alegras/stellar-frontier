@@ -1,0 +1,33 @@
+import { chromium } from "@playwright/test";
+const browser = await chromium.launch({ channel: "chrome", args: [] });
+const page = await browser.newPage({ viewport: { width: 1600, height: 900 } });
+const errs = [];
+page.on("pageerror", e => errs.push(e.message));
+await page.goto("http://127.0.0.1:4174/", { waitUntil: "domcontentloaded" });
+await page.waitForTimeout(1800);
+await page.locator('[data-testid="btn-mode-campaign"]').first().click();
+await page.waitForTimeout(1800);
+await page.evaluate(() => window.__SF_GAME__.setSpeed(5));
+await page.waitForTimeout(1500);
+await page.evaluate(() => {
+  const g = window.__SF_GAME__;
+  const fg = g.world.fg;
+  fg.narrative.pending.push({ id: "probe_evt", chainId: "probe", step: 1, titleRu: "Тест", textRu: "Тестовое событие", choices: [{ id: "a", labelRu: "Принять", effects: [] }], tick: g.world.tick, expiresTick: g.world.tick + 200 });
+  g.toast("inject");
+});
+await page.waitForTimeout(700);
+const s1 = await page.evaluate(() => { const g = window.__SF_GAME__; const st = g.getState(); return { tick: st.tick, paused: st.paused, speed: st.speed, pending: g.world.fg.narrative.pending.length, modal: !!document.querySelector('[data-testid="narrative-event"]'), pauseLabel: !!document.querySelector('[data-testid="event-time-paused"]') }; });
+await page.waitForTimeout(2000);
+const s2 = await page.evaluate(() => { const g = window.__SF_GAME__; const st = g.getState(); return { tick: st.tick, paused: st.paused, pending: g.world.fg.narrative.pending.length }; });
+await page.locator('[data-testid^="btn-choice-"]').first().click();
+await page.waitForTimeout(2500);
+const s3 = await page.evaluate(() => { const g = window.__SF_GAME__; const st = g.getState(); return { tick: st.tick, paused: st.paused, pending: g.world.fg.narrative.pending.length, modal: !!document.querySelector('[data-testid="narrative-event"]') }; });
+// второе событие + «Отложить»
+await page.evaluate(() => { const g = window.__SF_GAME__; g.world.fg.narrative.pending.push({ id: "probe_evt2", chainId: "probe2", step: 1, titleRu: "Тест2", textRu: "Ещё событие", choices: [{ id: "a", labelRu: "Принять", effects: [] }], tick: g.world.tick, expiresTick: g.world.tick + 200 }); g.toast("inject2"); });
+await page.waitForTimeout(700);
+const s4 = await page.evaluate(() => { const g = window.__SF_GAME__; const st = g.getState(); return { paused: st.paused, pending: g.world.fg.narrative.pending.length, modal: !!document.querySelector('[data-testid="narrative-event"]') }; });
+await page.locator('[data-testid="btn-later-event"]').click();
+await page.waitForTimeout(1500);
+const s5 = await page.evaluate(() => { const g = window.__SF_GAME__; const st = g.getState(); return { tick: st.tick, paused: st.paused, pending: g.world.fg.narrative.pending.length, modal: !!document.querySelector('[data-testid="narrative-event"]') }; });
+console.log(JSON.stringify({ s1, s2, s3, s4, s5, errors: errs }, null, 1));
+await browser.close();

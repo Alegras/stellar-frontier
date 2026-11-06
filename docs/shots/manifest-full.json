@@ -1,0 +1,69 @@
+{
+  "generatedAt": "2026-11-04T20:10:22.150Z",
+  "baseURL": "http://127.0.0.1:5173",
+  "viewport": "1600x900",
+  "shots": [
+    {
+      "file": "08-traditions.png",
+      "status": "captured",
+      "note": "панель империи: traditions",
+      "at": "2026-11-04T20:09:25.829Z"
+    },
+    {
+      "file": "09-diplomacy.png",
+      "status": "captured",
+      "note": "панель империи: diplomacy",
+      "at": "2026-11-04T20:09:26.880Z"
+    },
+    {
+      "file": "10-campaign.png",
+      "status": "captured",
+      "note": "панель империи: campaign",
+      "at": "2026-11-04T20:09:27.923Z"
+    },
+    {
+      "file": "11-market.png",
+      "status": "captured",
+      "note": "панель полной игры: market",
+      "at": "2026-11-04T20:09:31.008Z"
+    },
+    {
+      "file": "12-contracts.png",
+      "status": "captured",
+      "note": "панель полной игры: contracts",
+      "at": "2026-11-04T20:09:32.202Z"
+    },
+    {
+      "file": "13-victory.png",
+      "status": "captured",
+      "note": "панель полной игры: victory",
+      "at": "2026-11-04T20:09:33.400Z"
+    },
+    {
+      "file": "14-anomalies.png",
+      "status": "captured",
+      "note": "панель полной игры: anomalies",
+      "at": "2026-11-04T20:09:34.603Z"
+    },
+    {
+      "file": "14-anomalies.png",
+      "status": "skipped",
+      "note": "TimeoutError: locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-testid=\"btn-close-panel-anomalies\"]')\u001b[22m\n\u001b[2m    - locator",
+      "at": "2026-11-04T20:10:04.609Z"
+    },
+    {
+      "file": "15-megastructures.png",
+      "status": "skipped",
+      "note": "TimeoutError: locator.click: Timeout 8000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-testid=\"btn-open-more\"]')\u001b[22m\n\u001b[2m    - locator resolved to ",
+      "at": "2026-11-04T20:10:20.961Z"
+    },
+    {
+      "file": "16-coop-lobby.png",
+      "status": "captured",
+      "note": "панель полной игры: coop",
+      "at": "2026-11-04T20:10:21.817Z"
+    }
+  ],
+  "consoleErrors": [],
+  "pageErrors": []
+}

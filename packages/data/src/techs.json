@@ -1,0 +1,1360 @@
+[
+  {
+    "id": "phys_lasers_1",
+    "school": "physics",
+    "tier": 0,
+    "ru": "Лазеры I",
+    "descRu": "Открывает лазеры малого и среднего размера.",
+    "cost": 66,
+    "effects": [
+      {
+        "kind": "unlock",
+        "target": "weapon:laser_s_mk1"
+      },
+      {
+        "kind": "unlock",
+        "target": "weapon:laser_m_mk1"
+      }
+    ],
+    "weight": 100
+  },
+  {
+    "id": "phys_shields_1",
+    "school": "physics",
+    "tier": 0,
+    "ru": "Щиты I",
+    "descRu": "Открывает генератор щита Mk1 и щит-банк.",
+    "cost": 66,
+    "effects": [
+      {
+        "kind": "unlock",
+        "target": "module:shield_gen_mk1"
+      },
+      {
+        "kind": "unlock",
+        "target": "module:shield_bank_mk1"
+      }
+    ],
+    "weight": 100
+  },
+  {
+    "id": "phys_scanners_1",
+    "school": "physics",
+    "tier": 0,
+    "ru": "Сканеры I",
+    "descRu": "Открывает сенсорный модуль и сенсорную станцию.",
+    "cost": 66,
+    "effects": [
+      {
+        "kind": "unlock",
+        "target": "module:sensor_mk1"
+      },
+      {
+        "kind": "unlock",
+        "target": "building:sensor"
+      },
+      {
+        "kind": "modifier",
+        "target": "sensor_range",
+        "value": 1
+      }
+    ],
+    "weight": 100
+  },
+  {
+    "id": "phys_lasers_2",
+    "school": "physics",
+    "tier": 1,
+    "ru": "Лазеры II",
+    "descRu": "+10% урона энергетического оружия.",
+    "cost": 139,
+    "effects": [
+      {
+        "kind": "modifier",
+        "target": "energy_dmg",
+        "value": 0.1
+      }
+    ],
+    "weight": 85,
+    "requires": [
+      "phys_lasers_1"
+    ]
+  },
+  {
+    "id": "phys_reactor_1",
+    "school": "physics",
+    "tier": 1,
+    "ru": "Реакторы I",
+    "descRu": "+15% выходной мощности реактора; открывает реактор Mk2.",
+    "cost": 139,
+    "effects": [
+      {
+        "kind": "modifier",
+        "target": "power",
+        "value": 0.15
+      },
+      {
+        "kind": "modifier",
+        "target": "energy_prod",
+        "value": 0.05
+      },
+      {
+        "kind": "unlock",
+        "target": "module:reactor_mk2"
+      }
+    ],
+    "weight": 80
+  },
+  {
+    "id": "phys_pd_1",
+    "school": "physics",
+    "tier": 1,
+    "ru": "Точечная оборона I",
+    "descRu": "Открывает ПВО-турель и одноимённый утилитарный модуль.",
+    "cost": 139,
+    "effects": [
+      {
+        "kind": "unlock",
+        "target": "weapon:pd_turret_s_mk1"
+      },
+      {
+        "kind": "unlock",
+        "target": "module:pd_turret_mk1"
+      }
+    ],
+    "weight": 80,
+    "requires": [
+      "phys_scanners_1"
+    ]
+  },
+  {
+    "id": "phys_shields_2",
+    "school": "physics",
+    "tier": 2,
+    "ru": "Щиты II",
+    "descRu": "+20% максимума щитов флота; открывает щит Mk2 и щит-банк Mk2.",
+    "cost": 292,
+    "effects": [
+      {
+        "kind": "modifier",
+        "target": "shield_max",
+        "value": 0.2
+      },
+      {
+        "kind": "unlock",
+        "target": "module:shield_gen_mk2"
+      },
+      {
+        "kind": "unlock",
+        "target": "module:shield_bank_mk2"
+      }
+    ],
+    "weight": 70,
+    "requires": [
+      "phys_shields_1"
+    ]
+  },
+  {
+    "id": "phys_ion_1",
+    "school": "physics",
+    "tier": 2,
+    "ru": "Ионное оружие",
+    "descRu": "Открывает ион-пушку: ×2 урон подсистемам.",
+    "cost": 292,
+    "effects": [
+      {
+        "kind": "unlock",
+        "target": "weapon:ion_m_mk1"
+      }
+    ],
+    "weight": 70,
+    "requires": [
+      "phys_lasers_2"
+    ]
+  },
+  {
+    "id": "phys_lasers_3",
+    "school": "physics",
+    "tier": 2,
+    "ru": "Лазеры III",
+    "descRu": "Открывает тяжёлый лазер L.",
+    "cost": 292,
+    "effects": [
+      {
+        "kind": "unlock",
+        "target": "weapon:laser_l_mk1"
+      }
+    ],
+    "weight": 65,
+    "requires": [
+      "phys_lasers_2"
+    ]
+  },
+  {
+    "id": "phys_robotics_1",
+    "school": "physics",
+    "tier": 2,
+    "ru": "Робототехника",
+    "descRu": "Открывает синтетический центр (роботы-рабочие).",
+    "cost": 292,
+    "effects": [
+      {
+        "kind": "unlock",
+        "target": "building:robot_plant"
+      },
+      {
+        "kind": "modifier",
+        "target": "minerals_prod",
+        "value": 0.1
+      }
+    ],
+    "weight": 60
+  },
+  {
+    "id": "phys_sensors_2",
+    "school": "physics",
+    "tier": 2,
+    "ru": "Сенсоры II",
+    "descRu": "Открывает сенсорный модуль Mk2.",
+    "cost": 292,
+    "effects": [
+      {
+        "kind": "unlock",
+        "target": "module:sensor_mk2"
+      },
+      {
+        "kind": "modifier",
+        "target": "sensor_range",
+        "value": 1
+      }
+    ],
+    "weight": 65,
+    "requires": [
+      "phys_scanners_1"
+    ]
+  },
+  {
+    "id": "phys_shields_3",
+    "school": "physics",
+    "tier": 3,
+    "ru": "Щиты III",
+    "descRu": "Открывает планетарный щит, +10% регена щитов.",
+    "cost": 612,
+    "effects": [
+      {
+        "kind": "unlock",
+        "target": "building:shield_gen"
+      },
+      {
+        "kind": "modifier",
+        "target": "shield_regen",
+        "value": 0.1
+      }
+    ],
+    "weight": 55,
+    "requires": [
+      "phys_shields_2"
+    ]
+  },
+  {
+    "id": "phys_reactor_2",
+    "school": "physics",
+    "tier": 3,
+    "ru": "Реакторы II",
+    "descRu": "+15% мощности; открывает реактор Mk3.",
+    "cost": 612,
+    "effects": [
+      {
+        "kind": "modifier",
+        "target": "power",
+        "value": 0.15
+      },
+      {
+        "kind": "modifier",
+        "target": "energy_prod",
+        "value": 0.1
+      },
+      {
+        "kind": "unlock",
+        "target": "module:reactor_mk3"
+      }
+    ],
+    "weight": 55,
+    "requires": [
+      "phys_reactor_1"
+    ]
+  },
+  {
+    "id": "phys_plasma_1",
+    "school": "physics",
+    "tier": 3,
+    "ru": "Плазма I",
+    "descRu": "Открывает плазменную пушку M (термо-урон).",
+    "cost": 612,
+    "effects": [
+      {
+        "kind": "unlock",
+        "target": "weapon:plasma_m_mk1"
+      }
+    ],
+    "weight": 55,
+    "requires": [
+      "phys_lasers_2"
+    ]
+  },
+  {
+    "id": "phys_shields_4",
+    "school": "physics",
+    "tier": 4,
+    "ru": "Щиты IV",
+    "descRu": "+30% щитов; открывает генератор щита Mk3.",
+    "cost": 1476,
+    "effects": [
+      {
+        "kind": "modifier",
+        "target": "shield_max",
+        "value": 0.3
+      },
+      {
+        "kind": "unlock",
+        "target": "module:shield_gen_mk3"
+      }
+    ],
+    "weight": 40,
+    "requires": [
+      "phys_shields_3"
+    ]
+  },
+  {
+    "id": "phys_lasers_4",
+    "school": "physics",
+    "tier": 4,
+    "ru": "Лазеры IV",
+    "descRu": "+20% урона энергии; открывает лазер S Mk2.",
+    "cost": 1476,
+    "effects": [
+      {
+        "kind": "modifier",
+        "target": "energy_dmg",
+        "value": 0.2
+      },
+      {
+        "kind": "unlock",
+        "target": "weapon:laser_s_mk2"
+      }
+    ],
+    "weight": 40,
+    "requires": [
+      "phys_lasers_3"
+    ]
+  },
+  {
+    "id": "phys_plasma_2",
+    "school": "physics",
+    "tier": 4,
+    "ru": "Плазма II",
+    "descRu": "Открывает термо-луч L.",
+    "cost": 1476,
+    "effects": [
+      {
+        "kind": "unlock",
+        "target": "weapon:thermal_l_mk1"
+      }
+    ],
+    "weight": 38,
+    "requires": [
+      "phys_plasma_1"
+    ]
+  },
+  {
+    "id": "phys_singularity_1",
+    "school": "physics",
+    "tier": 5,
+    "ru": "Сингулярный реактор",
+    "descRu": "+30% мощности; открывает реактор Mk4 (тир 5).",
+    "cost": 3640,
+    "effects": [
+      {
+        "kind": "modifier",
+        "target": "power",
+        "value": 0.3
+      },
+      {
+        "kind": "unlock",
+        "target": "module:reactor_mk4"
+      },
+      {
+        "kind": "flag",
+        "target": "singular_reactor"
+      }
+    ],
+    "weight": 18,
+    "requires": [
+      "phys_shields_4",
+      "phys_sensors_2"
+    ]
+  },
+  {
+    "id": "soc_biology_1",
+    "school": "society",
+    "tier": 0,
+    "ru": "Биология",
+    "descRu": "Открывает гидропонику и госпиталь.",
+    "cost": 57,
+    "effects": [
+      {
+        "kind": "unlock",
+        "target": "building:hydroponics"
+      },
+      {
+        "kind": "unlock",
+        "target": "building:hospital"
+      }
+    ],
+    "weight": 100
+  },
+  {
+    "id": "soc_politics_1",
+    "school": "society",
+    "tier": 0,
+    "ru": "Политика",
+    "descRu": "+10% единства.",
+    "cost": 57,
+    "effects": [
+      {
+        "kind": "modifier",
+        "target": "unity_prod",
+        "value": 0.1
+      }
+    ],
+    "weight": 100
+  },
+  {
+    "id": "soc_administration_1",
+    "school": "society",
+    "tier": 0,
+    "ru": "Администрация",
+    "descRu": "Открывает центр единства; −5% стоимости традиций.",
+    "cost": 57,
+    "effects": [
+      {
+        "kind": "unlock",
+        "target": "building:unity_center"
+      },
+      {
+        "kind": "modifier",
+        "target": "tradition_cost",
+        "value": -0.05
+      }
+    ],
+    "weight": 100
+  },
+  {
+    "id": "soc_education_1",
+    "school": "society",
+    "tier": 1,
+    "ru": "Образование",
+    "descRu": "Открывает академию.",
+    "cost": 120,
+    "effects": [
+      {
+        "kind": "unlock",
+        "target": "building:academy"
+      }
+    ],
+    "weight": 90
+  },
+  {
+    "id": "soc_commerce_1",
+    "school": "society",
+    "tier": 1,
+    "ru": "Коммерция",
+    "descRu": "Открывает биржу и торговый терминал; +10% кредитов.",
+    "cost": 120,
+    "effects": [
+      {
+        "kind": "unlock",
+        "target": "building:market"
+      },
+      {
+        "kind": "unlock",
+        "target": "building:trade_hub"
+      },
+      {
+        "kind": "modifier",
+        "target": "credits_prod",
+        "value": 0.1
+      }
+    ],
+    "weight": 90
+  },
+  {
+    "id": "soc_expansion_1",
+    "school": "society",
+    "tier": 1,
+    "ru": "Экспансия",
+    "descRu": "−20% стоимость аутпостов, −10% стоимость колоний.",
+    "cost": 120,
+    "effects": [
+      {
+        "kind": "modifier",
+        "target": "outpost_cost",
+        "value": -0.2
+      },
+      {
+        "kind": "modifier",
+        "target": "colony_cost",
+        "value": -0.1
+      }
+    ],
+    "weight": 85
+  },
+  {
+    "id": "soc_colonization_1",
+    "school": "society",
+    "tier": 1,
+    "ru": "Колонизация",
+    "descRu": "−25% стоимость колоний; колонисты прибывают с +2 попами.",
+    "cost": 120,
+    "effects": [
+      {
+        "kind": "modifier",
+        "target": "colony_cost",
+        "value": -0.25
+      },
+      {
+        "kind": "flag",
+        "target": "colonization_efficiency"
+      }
+    ],
+    "weight": 85,
+    "requires": [
+      "soc_expansion_1"
+    ]
+  },
+  {
+    "id": "soc_genetics_1",
+    "school": "society",
+    "tier": 2,
+    "ru": "Генетика",
+    "descRu": "+15% роста населения.",
+    "cost": 252,
+    "effects": [
+      {
+        "kind": "modifier",
+        "target": "pop_growth",
+        "value": 0.15
+      }
+    ],
+    "weight": 70,
+    "requires": [
+      "soc_biology_1"
+    ]
+  },
+  {
+    "id": "soc_xenology_1",
+    "school": "society",
+    "tier": 2,
+    "ru": "Ксенология",
+    "descRu": "Открывает посольство; +10% дипломатического веса.",
+    "cost": 252,
+    "effects": [
+      {
+        "kind": "unlock",
+        "target": "building:embassy"
+      },
+      {
+        "kind": "modifier",
+        "target": "diplomacy",
+        "value": 0.1
+      }
+    ],
+    "weight": 65
+  },
+  {
+    "id": "soc_commerce_2",
+    "school": "society",
+    "tier": 2,
+    "ru": "Коммерция II",
+    "descRu": "Открывает банк; +15% кредитов.",
+    "cost": 252,
+    "effects": [
+      {
+        "kind": "unlock",
+        "target": "building:bank"
+      },
+      {
+        "kind": "modifier",
+        "target": "credits_prod",
+        "value": 0.15
+      }
+    ],
+    "weight": 65,
+    "requires": [
+      "soc_commerce_1"
+    ]
+  },
+  {
+    "id": "soc_education_2",
+    "school": "society",
+    "tier": 2,
+    "ru": "Образование II",
+    "descRu": "+10% очков науки.",
+    "cost": 252,
+    "effects": [
+      {
+        "kind": "modifier",
+        "target": "physics_prod",
+        "value": 0.1
+      },
+      {
+        "kind": "modifier",
+        "target": "society_prod",
+        "value": 0.1
+      },
+      {
+        "kind": "modifier",
+        "target": "engineering_prod",
+        "value": 0.1
+      }
+    ],
+    "weight": 70,
+    "requires": [
+      "soc_education_1"
+    ]
+  },
+  {
+    "id": "soc_traditions_1",
+    "school": "society",
+    "tier": 3,
+    "ru": "Традиции",
+    "descRu": "+20% единства: цена традиций окупается быстрее.",
+    "cost": 528,
+    "effects": [
+      {
+        "kind": "modifier",
+        "target": "unity_prod",
+        "value": 0.2
+      }
+    ],
+    "weight": 50,
+    "requires": [
+      "soc_politics_1"
+    ]
+  },
+  {
+    "id": "soc_governance_1",
+    "school": "society",
+    "tier": 3,
+    "ru": "Управление",
+    "descRu": "Открывает таможню и полицейский участок; +5 стабильности.",
+    "cost": 528,
+    "effects": [
+      {
+        "kind": "unlock",
+        "target": "building:customs"
+      },
+      {
+        "kind": "unlock",
+        "target": "building:police_station"
+      },
+      {
+        "kind": "modifier",
+        "target": "stability",
+        "value": 5
+      }
+    ],
+    "weight": 50,
+    "requires": [
+      "soc_politics_1"
+    ]
+  },
+  {
+    "id": "soc_psionics_1",
+    "school": "society",
+    "tier": 4,
+    "ru": "Псионика",
+    "descRu": "+25% единства; открывает пси-ветку.",
+    "cost": 1275,
+    "effects": [
+      {
+        "kind": "modifier",
+        "target": "unity_prod",
+        "value": 0.25
+      },
+      {
+        "kind": "flag",
+        "target": "psionics"
+      }
+    ],
+    "weight": 35,
+    "requires": [
+      "soc_traditions_1"
+    ]
+  },
+  {
+    "id": "soc_synthetic_food_1",
+    "school": "society",
+    "tier": 4,
+    "ru": "Синтетическая пища",
+    "descRu": "Открывает синтезатор пищи; +10% производства пищи.",
+    "cost": 1275,
+    "effects": [
+      {
+        "kind": "unlock",
+        "target": "building:food_synthesizer"
+      },
+      {
+        "kind": "modifier",
+        "target": "food_prod",
+        "value": 0.1
+      }
+    ],
+    "weight": 35,
+    "requires": [
+      "soc_genetics_1"
+    ]
+  },
+  {
+    "id": "soc_ascension_1",
+    "school": "society",
+    "tier": 5,
+    "ru": "Вознесение",
+    "descRu": "+10% ко всем потокам; флаг победы «Технологическое вознесение».",
+    "cost": 3143,
+    "effects": [
+      {
+        "kind": "modifier",
+        "target": "energy_prod",
+        "value": 0.1
+      },
+      {
+        "kind": "modifier",
+        "target": "minerals_prod",
+        "value": 0.1
+      },
+      {
+        "kind": "modifier",
+        "target": "food_prod",
+        "value": 0.1
+      },
+      {
+        "kind": "modifier",
+        "target": "alloys_prod",
+        "value": 0.1
+      },
+      {
+        "kind": "modifier",
+        "target": "goods_prod",
+        "value": 0.1
+      },
+      {
+        "kind": "modifier",
+        "target": "unity_prod",
+        "value": 0.1
+      },
+      {
+        "kind": "modifier",
+        "target": "influence_prod",
+        "value": 0.1
+      },
+      {
+        "kind": "modifier",
+        "target": "credits_prod",
+        "value": 0.1
+      },
+      {
+        "kind": "flag",
+        "target": "ascension"
+      }
+    ],
+    "weight": 15,
+    "requires": [
+      "soc_psionics_1",
+      "soc_synthetic_food_1"
+    ]
+  },
+  {
+    "id": "soc_council_1",
+    "school": "society",
+    "tier": 5,
+    "ru": "Галактический совет",
+    "descRu": "+50% влияния; флаг резолюций совета.",
+    "cost": 3143,
+    "effects": [
+      {
+        "kind": "modifier",
+        "target": "influence_prod",
+        "value": 0.5
+      },
+      {
+        "kind": "flag",
+        "target": "galactic_council"
+      }
+    ],
+    "weight": 15,
+    "requires": [
+      "soc_governance_1"
+    ]
+  },
+  {
+    "id": "eng_metallurgy_1",
+    "school": "engineering",
+    "tier": 0,
+    "ru": "Металлургия",
+    "descRu": "Открывает литейный комплекс; +10% сплавов.",
+    "cost": 60,
+    "effects": [
+      {
+        "kind": "unlock",
+        "target": "building:foundry"
+      },
+      {
+        "kind": "modifier",
+        "target": "alloys_prod",
+        "value": 0.1
+      }
+    ],
+    "weight": 100
+  },
+  {
+    "id": "eng_hull_1",
+    "school": "engineering",
+    "tier": 0,
+    "ru": "Корпуса I",
+    "descRu": "Открывает корпус фрегата.",
+    "cost": 60,
+    "effects": [
+      {
+        "kind": "unlock",
+        "target": "hull:hull_frigate"
+      }
+    ],
+    "weight": 100
+  },
+  {
+    "id": "eng_kinetics_1",
+    "school": "engineering",
+    "tier": 0,
+    "ru": "Кинетика I",
+    "descRu": "Открывает кинетику S и M.",
+    "cost": 60,
+    "effects": [
+      {
+        "kind": "unlock",
+        "target": "weapon:kinetic_s_mk1"
+      },
+      {
+        "kind": "unlock",
+        "target": "weapon:kinetic_m_mk1"
+      }
+    ],
+    "weight": 100
+  },
+  {
+    "id": "eng_tools_1",
+    "school": "engineering",
+    "tier": 0,
+    "ru": "Инструменты",
+    "descRu": "Открывает складской комплекс; +10% скорости стройки.",
+    "cost": 60,
+    "effects": [
+      {
+        "kind": "unlock",
+        "target": "building:warehouse"
+      },
+      {
+        "kind": "modifier",
+        "target": "build_speed",
+        "value": 0.1
+      },
+      {
+        "kind": "modifier",
+        "target": "minerals_prod",
+        "value": 0.05
+      }
+    ],
+    "weight": 100
+  },
+  {
+    "id": "eng_hull_2",
+    "school": "engineering",
+    "tier": 1,
+    "ru": "Корпуса II",
+    "descRu": "Открывает корпус эсминца.",
+    "cost": 126,
+    "effects": [
+      {
+        "kind": "unlock",
+        "target": "hull:hull_destroyer"
+      }
+    ],
+    "weight": 85,
+    "requires": [
+      "eng_hull_1"
+    ]
+  },
+  {
+    "id": "eng_kinetics_2",
+    "school": "engineering",
+    "tier": 1,
+    "ru": "Кинетика II",
+    "descRu": "+10% кинетического урона.",
+    "cost": 126,
+    "effects": [
+      {
+        "kind": "modifier",
+        "target": "kinetic_dmg",
+        "value": 0.1
+      }
+    ],
+    "weight": 80,
+    "requires": [
+      "eng_kinetics_1"
+    ]
+  },
+  {
+    "id": "eng_logistics_1",
+    "school": "engineering",
+    "tier": 1,
+    "ru": "Логистика",
+    "descRu": "Открывает штаб флота, топливный синтезатор и десантный корпус; +5 FP лимита.",
+    "cost": 126,
+    "effects": [
+      {
+        "kind": "unlock",
+        "target": "building:hq"
+      },
+      {
+        "kind": "unlock",
+        "target": "building:fuel_synth"
+      },
+      {
+        "kind": "unlock",
+        "target": "hull:hull_troopship"
+      },
+      {
+        "kind": "modifier",
+        "target": "fleet_cap",
+        "value": 5
+      }
+    ],
+    "weight": 85
+  },
+  {
+    "id": "eng_armor_1",
+    "school": "engineering",
+    "tier": 1,
+    "ru": "Броня I",
+    "descRu": "+15% брони флота; открывает броневые плиты Mk1.",
+    "cost": 126,
+    "effects": [
+      {
+        "kind": "modifier",
+        "target": "armor_max",
+        "value": 0.15
+      },
+      {
+        "kind": "unlock",
+        "target": "module:armor_plating_mk1"
+      }
+    ],
+    "weight": 85
+  },
+  {
+    "id": "eng_thrusters_1",
+    "school": "engineering",
+    "tier": 1,
+    "ru": "Двигатели I",
+    "descRu": "Открывает двигатели Mk2 и сброс тепла Mk2.",
+    "cost": 126,
+    "effects": [
+      {
+        "kind": "unlock",
+        "target": "module:thruster_mk2"
+      },
+      {
+        "kind": "unlock",
+        "target": "module:heat_sink_mk2"
+      }
+    ],
+    "weight": 85,
+    "requires": [
+      "eng_tools_1"
+    ]
+  },
+  {
+    "id": "eng_shipyard_1",
+    "school": "engineering",
+    "tier": 1,
+    "ru": "Верфи",
+    "descRu": "Открывает большую верфь (до линкора).",
+    "cost": 126,
+    "effects": [
+      {
+        "kind": "unlock",
+        "target": "building:large_shipyard"
+      }
+    ],
+    "weight": 80,
+    "requires": [
+      "eng_metallurgy_1"
+    ]
+  },
+  {
+    "id": "eng_hull_3",
+    "school": "engineering",
+    "tier": 2,
+    "ru": "Корпуса III",
+    "descRu": "Открывает корпус крейсера.",
+    "cost": 265,
+    "effects": [
+      {
+        "kind": "unlock",
+        "target": "hull:hull_cruiser"
+      }
+    ],
+    "weight": 65,
+    "requires": [
+      "eng_hull_2"
+    ]
+  },
+  {
+    "id": "eng_armor_2",
+    "school": "engineering",
+    "tier": 2,
+    "ru": "Броня II",
+    "descRu": "+30% брони флота; открывает броневые плиты Mk2.",
+    "cost": 265,
+    "effects": [
+      {
+        "kind": "modifier",
+        "target": "armor_max",
+        "value": 0.3
+      },
+      {
+        "kind": "unlock",
+        "target": "module:armor_plating_mk2"
+      }
+    ],
+    "weight": 60,
+    "requires": [
+      "eng_armor_1"
+    ]
+  },
+  {
+    "id": "eng_missiles_1",
+    "school": "engineering",
+    "tier": 2,
+    "ru": "Ракеты",
+    "descRu": "Открывает ракеты M.",
+    "cost": 265,
+    "effects": [
+      {
+        "kind": "unlock",
+        "target": "weapon:missile_m_mk1"
+      }
+    ],
+    "weight": 65
+  },
+  {
+    "id": "eng_fsd_1",
+    "school": "engineering",
+    "tier": 2,
+    "ru": "FSD II",
+    "descRu": "+2 св. года дальности прыжка; открывает FSD Mk2.",
+    "cost": 265,
+    "effects": [
+      {
+        "kind": "modifier",
+        "target": "fsd_range",
+        "value": 2
+      },
+      {
+        "kind": "unlock",
+        "target": "module:fsd_mk2"
+      }
+    ],
+    "weight": 70
+  },
+  {
+    "id": "eng_kinetics_3",
+    "school": "engineering",
+    "tier": 2,
+    "ru": "Кинетика III",
+    "descRu": "Открывает тяжёлую кинетику L и рельсотрон.",
+    "cost": 265,
+    "effects": [
+      {
+        "kind": "unlock",
+        "target": "weapon:kinetic_l_mk1"
+      },
+      {
+        "kind": "unlock",
+        "target": "weapon:railgun_l_mk1"
+      }
+    ],
+    "weight": 65,
+    "requires": [
+      "eng_kinetics_2"
+    ]
+  },
+  {
+    "id": "eng_logistics_2",
+    "school": "engineering",
+    "tier": 2,
+    "ru": "Логистика II",
+    "descRu": "Открывает грузовые отсеки Mk2 и топливные баки Mk2; +1 торговый маршрут.",
+    "cost": 265,
+    "effects": [
+      {
+        "kind": "unlock",
+        "target": "module:cargo_pod_mk2"
+      },
+      {
+        "kind": "unlock",
+        "target": "module:fuel_tank_mk2"
+      },
+      {
+        "kind": "modifier",
+        "target": "trade_routes",
+        "value": 1
+      },
+      {
+        "kind": "unlock",
+        "target": "hull:hull_trader_large"
+      }
+    ],
+    "weight": 60,
+    "requires": [
+      "eng_logistics_1"
+    ]
+  },
+  {
+    "id": "eng_metallurgy_2",
+    "school": "engineering",
+    "tier": 2,
+    "ru": "Металлургия II",
+    "descRu": "Открывает оружейный цех и комплекс переработки; +10% сплавов.",
+    "cost": 265,
+    "effects": [
+      {
+        "kind": "unlock",
+        "target": "building:armory"
+      },
+      {
+        "kind": "unlock",
+        "target": "building:recycling_complex"
+      },
+      {
+        "kind": "modifier",
+        "target": "alloys_prod",
+        "value": 0.1
+      },
+      {
+        "kind": "modifier",
+        "target": "goods_prod",
+        "value": 0.1
+      }
+    ],
+    "weight": 65,
+    "requires": [
+      "eng_metallurgy_1"
+    ]
+  },
+  {
+    "id": "eng_armor_3",
+    "school": "engineering",
+    "tier": 3,
+    "ru": "Броня III",
+    "descRu": "+35% брони; открывает плиты Mk3.",
+    "cost": 556,
+    "effects": [
+      {
+        "kind": "modifier",
+        "target": "armor_max",
+        "value": 0.35
+      },
+      {
+        "kind": "unlock",
+        "target": "module:armor_plating_mk3"
+      }
+    ],
+    "weight": 45,
+    "requires": [
+      "eng_armor_2"
+    ]
+  },
+  {
+    "id": "eng_missiles_2",
+    "school": "engineering",
+    "tier": 3,
+    "ru": "Торпеды",
+    "descRu": "Открывает торпеды L.",
+    "cost": 556,
+    "effects": [
+      {
+        "kind": "unlock",
+        "target": "weapon:torpedo_l_mk1"
+      }
+    ],
+    "weight": 45,
+    "requires": [
+      "eng_missiles_1"
+    ]
+  },
+  {
+    "id": "eng_fsd_2",
+    "school": "engineering",
+    "tier": 3,
+    "ru": "FSD III",
+    "descRu": "+2 св. года дальности; открывает FSD Mk3.",
+    "cost": 556,
+    "effects": [
+      {
+        "kind": "modifier",
+        "target": "fsd_range",
+        "value": 2
+      },
+      {
+        "kind": "unlock",
+        "target": "module:fsd_mk3"
+      }
+    ],
+    "weight": 45,
+    "requires": [
+      "eng_fsd_1"
+    ]
+  },
+  {
+    "id": "eng_hull_4",
+    "school": "engineering",
+    "tier": 4,
+    "ru": "Корпуса IV",
+    "descRu": "Открывает корпус линкора.",
+    "cost": 1342,
+    "effects": [
+      {
+        "kind": "unlock",
+        "target": "hull:hull_battleship"
+      }
+    ],
+    "weight": 30,
+    "requires": [
+      "eng_hull_3"
+    ]
+  },
+  {
+    "id": "eng_thrusters_2",
+    "school": "engineering",
+    "tier": 4,
+    "ru": "Двигатели II",
+    "descRu": "Открывает двигатели Mk3.",
+    "cost": 1342,
+    "effects": [
+      {
+        "kind": "unlock",
+        "target": "module:thruster_mk3"
+      }
+    ],
+    "weight": 30,
+    "requires": [
+      "eng_thrusters_1"
+    ]
+  },
+  {
+    "id": "eng_kinetics_4",
+    "school": "engineering",
+    "tier": 4,
+    "ru": "Кинетика IV",
+    "descRu": "+20% кинетического урона; открывает кинетику S Mk2.",
+    "cost": 1342,
+    "effects": [
+      {
+        "kind": "modifier",
+        "target": "kinetic_dmg",
+        "value": 0.2
+      },
+      {
+        "kind": "unlock",
+        "target": "weapon:kinetic_s_mk2"
+      }
+    ],
+    "weight": 30,
+    "requires": [
+      "eng_kinetics_3"
+    ]
+  },
+  {
+    "id": "eng_carrier_1",
+    "school": "engineering",
+    "tier": 4,
+    "ru": "Носители",
+    "descRu": "Открывает корпус носителя (ангар на 6 звеньев).",
+    "cost": 1342,
+    "effects": [
+      {
+        "kind": "unlock",
+        "target": "hull:hull_carrier"
+      }
+    ],
+    "weight": 28,
+    "requires": [
+      "eng_hull_4"
+    ]
+  },
+  {
+    "id": "eng_megastructure_1",
+    "school": "engineering",
+    "tier": 5,
+    "ru": "Мегаинженерия",
+    "descRu": "Открывает мегаструктуры (тир 5).",
+    "cost": 3309,
+    "effects": [
+      {
+        "kind": "flag",
+        "target": "megastructures"
+      }
+    ],
+    "weight": 15,
+    "requires": [
+      "eng_hull_4"
+    ]
+  },
+  {
+    "id": "eng_hull_5",
+    "school": "engineering",
+    "tier": 5,
+    "ru": "Корпуса V",
+    "descRu": "Открывает корпус титана.",
+    "cost": 3309,
+    "effects": [
+      {
+        "kind": "unlock",
+        "target": "hull:hull_titan"
+      }
+    ],
+    "weight": 15,
+    "requires": [
+      "eng_hull_4"
+    ]
+  },
+  {
+    "id": "eng_colossus_1",
+    "school": "engineering",
+    "tier": 5,
+    "ru": "Колоссы",
+    "descRu": "Открывает корпус колосса (планетарное оружие).",
+    "cost": 3309,
+    "effects": [
+      {
+        "kind": "unlock",
+        "target": "hull:hull_colossus"
+      }
+    ],
+    "weight": 12,
+    "requires": [
+      "eng_megastructure_1"
+    ]
+  }
+]

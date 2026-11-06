@@ -1,0 +1,472 @@
+[
+  {
+    "id": "eco_mercantile",
+    "ru": "Торговая жилка",
+    "descRu": "+10% маржа торговых маршрутов; +1 торговый маршрут бесплатно.",
+    "effects": {
+      "trade_margin": 0.1,
+      "trade_routes_flat": 1
+    },
+    "positive": true,
+    "cost": 2
+  },
+  {
+    "id": "eco_industrial",
+    "ru": "Промышленный уклад",
+    "descRu": "+10% производства сплавов.",
+    "effects": {
+      "alloys_prod": 0.1
+    },
+    "positive": true,
+    "cost": 2
+  },
+  {
+    "id": "eco_miners",
+    "ru": "Недрознатцы",
+    "descRu": "+15% добычи минералов.",
+    "effects": {
+      "minerals_prod": 0.15
+    },
+    "positive": true,
+    "cost": 2
+  },
+  {
+    "id": "eco_agrarian",
+    "ru": "Хлебодары",
+    "descRu": "+15% производства пищи.",
+    "effects": {
+      "food_prod": 0.15
+    },
+    "positive": true,
+    "cost": 2
+  },
+  {
+    "id": "eco_thrifty",
+    "ru": "Бережливые",
+    "descRu": "−10% апкип флота и содержания зданий.",
+    "effects": {
+      "fleet_upkeep": -0.1,
+      "building_upkeep_pct": -0.1
+    },
+    "positive": true,
+    "cost": 2
+  },
+  {
+    "id": "eco_artisans",
+    "ru": "Ремесленники",
+    "descRu": "+5% производства товаров; +1 ТП/такт на столице.",
+    "effects": {
+      "goods_prod": 0.05,
+      "goods_flat": 1
+    },
+    "positive": true,
+    "cost": 1
+  },
+  {
+    "id": "eco_salvage",
+    "ru": "Мусорщики",
+    "descRu": "+20% ресурсов с обломков; +10% скорость ремонта.",
+    "effects": {
+      "salvage_yield": 0.2,
+      "repair_speed": 0.1
+    },
+    "positive": true,
+    "cost": 3
+  },
+  {
+    "id": "eco_packrat",
+    "ru": "Складской запас",
+    "descRu": "+200 к лимиту складов; −5% потери при разграблении.",
+    "effects": {
+      "stockpile_flat": 200,
+      "piracy_loss": -0.05
+    },
+    "positive": true,
+    "cost": 1
+  },
+  {
+    "id": "neg_debt",
+    "ru": "Долговая кабала",
+    "descRu": "+15% потребления товаров.",
+    "effects": {
+      "goods_upkeep_pct": 0.15
+    },
+    "positive": false,
+    "cost": -1
+  },
+  {
+    "id": "mil_hunters",
+    "ru": "Прирождённые охотники",
+    "descRu": "+8% урона флота.",
+    "effects": {
+      "weapon_damage": 0.08
+    },
+    "positive": true,
+    "cost": 3
+  },
+  {
+    "id": "mil_armor",
+    "ru": "Панцирный корпус",
+    "descRu": "+15% брони кораблей.",
+    "effects": {
+      "armor": 0.15
+    },
+    "positive": true,
+    "cost": 2
+  },
+  {
+    "id": "mil_swarm",
+    "ru": "Роевая тактика",
+    "descRu": "+10% FP кораблей класса не выше эсминца.",
+    "effects": {
+      "small_ship_fp": 0.1
+    },
+    "positive": true,
+    "cost": 2
+  },
+  {
+    "id": "mil_boarders",
+    "ru": "Абордажники",
+    "descRu": "+25% эффективность абордажа; +1 армия на колонию.",
+    "effects": {
+      "boarding": 0.25,
+      "armies_flat": 1
+    },
+    "positive": true,
+    "cost": 1
+  },
+  {
+    "id": "mil_logistics",
+    "ru": "Флотские логисты",
+    "descRu": "−20% расход топлива; +5% флотского лимита.",
+    "effects": {
+      "fuel_use_pct": -0.2,
+      "fleet_cap_pct": 0.05
+    },
+    "positive": true,
+    "cost": 2
+  },
+  {
+    "id": "mil_militia",
+    "ru": "Народное ополчение",
+    "descRu": "+30% силы гарнизона; +5 стабильности во время войны.",
+    "effects": {
+      "garrison_power": 0.3,
+      "war_stability": 5
+    },
+    "positive": true,
+    "cost": 1
+  },
+  {
+    "id": "neg_fragile",
+    "ru": "Хрупкий корпус",
+    "descRu": "−10% HP корпуса кораблей.",
+    "effects": {
+      "hull_hp_pct": -0.1
+    },
+    "positive": false,
+    "cost": -2
+  },
+  {
+    "id": "neg_pacifist",
+    "ru": "Кроткие",
+    "descRu": "−15% урона флота.",
+    "effects": {
+      "weapon_damage": -0.15
+    },
+    "positive": false,
+    "cost": -2
+  },
+  {
+    "id": "sci_analysts",
+    "ru": "Аналитики",
+    "descRu": "+10% очков Физики.",
+    "effects": {
+      "physics_prod": 0.1
+    },
+    "positive": true,
+    "cost": 2
+  },
+  {
+    "id": "sci_biologists",
+    "ru": "Живые системы",
+    "descRu": "+10% очков Общества; +5% пищи.",
+    "effects": {
+      "society_prod": 0.1,
+      "food_prod": 0.05
+    },
+    "positive": true,
+    "cost": 2
+  },
+  {
+    "id": "sci_engineers",
+    "ru": "Инженерная школа",
+    "descRu": "+10% очков Инженерии.",
+    "effects": {
+      "engineering_prod": 0.1
+    },
+    "positive": true,
+    "cost": 2
+  },
+  {
+    "id": "sci_archaeologists",
+    "ru": "Реликтоведы",
+    "descRu": "+25% реликвий из POI; +1 ядро с каждой мегаструктуры (однократно).",
+    "effects": {
+      "relic_yield": 0.25,
+      "core_bonus": 1
+    },
+    "positive": true,
+    "cost": 2
+  },
+  {
+    "id": "sci_curious",
+    "ru": "Любопытство",
+    "descRu": "+1 альтернатива в пуле технологий T≤2; +15% скорость исследования аномалий.",
+    "effects": {
+      "extra_tech_choice": 1,
+      "anomaly_speed": 0.15
+    },
+    "positive": true,
+    "cost": 2
+  },
+  {
+    "id": "neg_rigid_caste",
+    "ru": "Жёсткая каста",
+    "descRu": "−5% всех школ науки; −3% единства.",
+    "effects": {
+      "science_prod": -0.05,
+      "unity_prod": -0.03
+    },
+    "positive": false,
+    "cost": -1
+  },
+  {
+    "id": "neg_degeneration",
+    "ru": "Вырождение",
+    "descRu": "−20% роста населения.",
+    "effects": {
+      "pop_growth": -0.2
+    },
+    "positive": false,
+    "cost": -2
+  },
+  {
+    "id": "dip_eloquent",
+    "ru": "Красноречие",
+    "descRu": "+15 мнения со всеми империями.",
+    "effects": {
+      "diplo_opinion": 15
+    },
+    "positive": true,
+    "cost": 2
+  },
+  {
+    "id": "dip_honor",
+    "ru": "Кодекс чести",
+    "descRu": "+10 мнения с милитаристами, −10 с пацифистами; −10% стоимость пакта о ненападении.",
+    "effects": {
+      "opinion_militarist": 10,
+      "opinion_pacifist": -10,
+      "nap_cost": -0.1
+    },
+    "positive": true,
+    "cost": 1
+  },
+  {
+    "id": "dip_merchants",
+    "ru": "Торговые связи",
+    "descRu": "−15% стоимость торговых пактов; +5% маржа.",
+    "effects": {
+      "treaty_cost": -0.15,
+      "trade_margin": 0.05
+    },
+    "positive": true,
+    "cost": 2
+  },
+  {
+    "id": "dip_empathy",
+    "ru": "Эмпатия",
+    "descRu": "+20% скорость ассимиляции; +5 счастья ксено-попов.",
+    "effects": {
+      "assimilation": 0.2,
+      "xenophile_happiness": 5
+    },
+    "positive": true,
+    "cost": 2
+  },
+  {
+    "id": "neg_isolation",
+    "ru": "Замкнутость",
+    "descRu": "−20 мнения со всеми.",
+    "effects": {
+      "diplo_opinion": -20
+    },
+    "positive": false,
+    "cost": -2
+  },
+  {
+    "id": "neg_distrust",
+    "ru": "Недоверие",
+    "descRu": "+25% стоимость всех договоров.",
+    "effects": {
+      "treaty_cost": 0.25
+    },
+    "positive": false,
+    "cost": -1
+  },
+  {
+    "id": "env_adaptable",
+    "ru": "Универсальная адаптация",
+    "descRu": "+10% обитаемость всех типов планет; +5% рост.",
+    "effects": {
+      "habitability": 0.1,
+      "pop_growth": 0.05
+    },
+    "positive": true,
+    "cost": 3
+  },
+  {
+    "id": "env_aquatic",
+    "ru": "Амфибии",
+    "descRu": "+25% обитаемость океанических планет; −15% на остальных.",
+    "effects": {
+      "habitability_ocean": 0.25,
+      "habitability_other": -0.15
+    },
+    "positive": true,
+    "cost": 2
+  },
+  {
+    "id": "env_cold",
+    "ru": "Хладостойкость",
+    "descRu": "+20% обитаемость тундры и арктики; −10% на тропических.",
+    "effects": {
+      "habitability_cold": 0.2,
+      "habitability_arctic": 0.2,
+      "habitability_tropic": -0.1
+    },
+    "positive": true,
+    "cost": 1
+  },
+  {
+    "id": "env_hot",
+    "ru": "Жаростойкость",
+    "descRu": "+20% обитаемость пустынь и вулканических планет; −10% на арктических.",
+    "effects": {
+      "habitability_desert": 0.2,
+      "habitability_volcanic": 0.2,
+      "habitability_arctic": -0.1
+    },
+    "positive": true,
+    "cost": 1
+  },
+  {
+    "id": "env_void",
+    "ru": "Пустотники",
+    "descRu": "+15% производство на орбитальных станциях; −10% на планетах.",
+    "effects": {
+      "orbital_prod": 0.15,
+      "planet_prod": -0.1
+    },
+    "positive": true,
+    "cost": 1
+  },
+  {
+    "id": "env_rad",
+    "ru": "Радиостойкость",
+    "descRu": "+20% производство в системах нейтронных звёзд и пульсаров; −10% щита.",
+    "effects": {
+      "neutron_prod": 0.2,
+      "shield": -0.1
+    },
+    "positive": true,
+    "cost": 1
+  },
+  {
+    "id": "neg_landless",
+    "ru": "Безземелье",
+    "descRu": "−20% производства пищи.",
+    "effects": {
+      "food_prod": -0.2
+    },
+    "positive": false,
+    "cost": -2
+  },
+  {
+    "id": "neg_brittle",
+    "ru": "Хрупкие кристаллы",
+    "descRu": "−15% HP корпуса.",
+    "effects": {
+      "hull_hp_pct": -0.15
+    },
+    "positive": false,
+    "cost": -2
+  },
+  {
+    "id": "rel_blood",
+    "ru": "Древняя кровь",
+    "descRu": "+2 реликвии на старте; +10% эффект реликтовых технологий.",
+    "effects": {
+      "start_relics": 2,
+      "relic_tech_effect": 0.1
+    },
+    "positive": true,
+    "cost": 3
+  },
+  {
+    "id": "rel_silicon",
+    "ru": "Кремниевая жизнь",
+    "descRu": "Пища заменена минералами (2 минерала = 1 пища); −20% роста.",
+    "effects": {
+      "food_from_minerals": 1,
+      "pop_growth": -0.2
+    },
+    "positive": true,
+    "cost": 3
+  },
+  {
+    "id": "rel_song",
+    "ru": "Песнь кристалла",
+    "descRu": "+2 единства/такт; +5% щита флота.",
+    "effects": {
+      "unity_flat": 2,
+      "shield": 0.05
+    },
+    "positive": true,
+    "cost": 3
+  },
+  {
+    "id": "rel_hive",
+    "ru": "Кастовый улей",
+    "descRu": "+10% производства; −10% науки.",
+    "effects": {
+      "all_prod": 0.1,
+      "science_prod": -0.1
+    },
+    "positive": true,
+    "cost": 2
+  },
+  {
+    "id": "cul_liturgy",
+    "ru": "Литургия",
+    "descRu": "+20% единства; +5 стабильности.",
+    "effects": {
+      "unity_prod": 0.2,
+      "stability": 5
+    },
+    "positive": true,
+    "cost": 3
+  },
+  {
+    "id": "rel_gestalt",
+    "ru": "Единый разум",
+    "descRu": "Нет счастья и фракций; −15% дипломатического веса.",
+    "effects": {
+      "no_happiness": 1,
+      "diplo_weight": -0.15
+    },
+    "positive": true,
+    "cost": 2
+  }
+]

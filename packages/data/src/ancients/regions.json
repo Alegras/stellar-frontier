@@ -1,0 +1,80 @@
+[
+  {
+    "id": "ruins",
+    "ru": "Руины",
+    "color": "#8C99A8",
+    "systemCount": 12,
+    "poiKinds": [
+      "ruin",
+      "wreck",
+      "archive",
+      "tomb",
+      "trap",
+      "wonder",
+      "repair",
+      "anomaly"
+    ],
+    "hazard": "haz_poi_trap",
+    "descRu": "Белые карлики, красные гиганты и немые звёзды: обломки цивилизации, археология и мегаструктуры. Опасность средняя, награда высокая."
+  },
+  {
+    "id": "quiet_wastes",
+    "ru": "Тихие Пустоши",
+    "color": "#38414F",
+    "systemCount": 11,
+    "poiKinds": [
+      "derelict",
+      "cache",
+      "wreck",
+      "anomaly",
+      "trade",
+      "ruin"
+    ],
+    "hazard": null,
+    "descRu": "М-карлики и коричневые карлики: безопасный проход, ресурсы и тишина, к которой здесь относятся как к валюте."
+  },
+  {
+    "id": "choir_rift",
+    "ru": "Хор-Разлом",
+    "color": "#F08A24",
+    "systemCount": 9,
+    "poiKinds": [
+      "nest",
+      "anomaly",
+      "life",
+      "cache",
+      "wreck"
+    ],
+    "hazard": "haz_choir_wave",
+    "descRu": "Нейтронные звёзды, чёрные дыры и погасшие светила: гнёзда Хора, финальные испытания и самый высокий риск сектора."
+  },
+  {
+    "id": "ansari_gardens",
+    "ru": "Сады Ансаров",
+    "color": "#6BE675",
+    "systemCount": 8,
+    "poiKinds": [
+      "garden",
+      "life",
+      "wonder",
+      "archive"
+    ],
+    "hazard": "haz_sensor_degradation",
+    "descRu": "G/K-звёзды с обитаемыми орбитами: экзобиология, живой металл, Стражи и союзники, которые ещё помнят, что такое сад."
+  },
+  {
+    "id": "gates",
+    "ru": "Врата",
+    "color": "#4FC3F7",
+    "systemCount": 5,
+    "poiKinds": [
+      "gate",
+      "trade",
+      "repair",
+      "wreck",
+      "wonder"
+    ],
+    "hazard": null,
+    "descRu": "Пять систем вокруг Врат: вход и выход, торговля, ремонт и единственный безопасный узел связи с галактикой."
+  }
+]

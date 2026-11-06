@@ -1,0 +1,52 @@
+[
+  {
+    "id": "directorate",
+    "ru": "Директория",
+    "descRu": "+1 влияние/такт, выборы каждые 900 тактов; легитимность 60 + 0,2×единство.",
+    "effects": {
+      "influence_flat": 1,
+      "election_ticks": 900,
+      "legitimacy_base": 60
+    }
+  },
+  {
+    "id": "clan_council",
+    "ru": "Совет Кланов",
+    "descRu": "+10% производства, +1 флотский лимит за 10 систем; выборы каждые 1200 тактов.",
+    "effects": {
+      "production_pct": 0.1,
+      "fleet_cap_per_10_systems": 1,
+      "election_ticks": 1200
+    }
+  },
+  {
+    "id": "technocracy",
+    "ru": "Технократия",
+    "descRu": "+10% науки, +1 альтернатива в науке; выборов нет.",
+    "effects": {
+      "science_prod": 0.1,
+      "extra_tech_choice": 1,
+      "election_ticks": 0
+    }
+  },
+  {
+    "id": "theocracy",
+    "ru": "Теократия",
+    "descRu": "+20% единства, +2 стабильности; выборы каждые 1500 тактов.",
+    "effects": {
+      "unity_prod": 0.2,
+      "stability": 2,
+      "election_ticks": 1500
+    }
+  },
+  {
+    "id": "corporation",
+    "ru": "Корпорация",
+    "descRu": "+15% кредитов, торговые пакты дешевле на 50%; выборы каждые 1000 тактов.",
+    "effects": {
+      "credits_prod": 0.15,
+      "treaty_cost": -0.5,
+      "election_ticks": 1000
+    }
+  }
+]

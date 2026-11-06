@@ -1,0 +1,89 @@
+{
+ "run": {
+  "games": 1000,
+  "seeds": "5000-5999",
+  "strategies": 3,
+  "ticks": 7200,
+  "totalSimulatedGames": 3000,
+  "parts": 20,
+  "failedShards": 0,
+  "elapsedSec": 5462,
+  "deterministic": true,
+  "date": "2026-11-04"
+ },
+ "aggregates": {
+  "industrial": {
+   "wins": {
+    "economy": 553,
+    "federation": 254,
+    "score": 193
+   },
+   "leaderRatio": 1.5,
+   "leaderShare": 0.4,
+   "playerLeaderRate": 0.81,
+   "warsPer100y": 10,
+   "warsActive": 1.1,
+   "alliances": 6.5,
+   "federations": 1.67,
+   "crises": 4.37,
+   "megastructures": 4.71,
+   "traditions": 33.2,
+   "perks": 3.3,
+   "galaxyDefeatRate": 0,
+   "playerScore": 559,
+   "pops": 91
+  },
+  "science": {
+   "wins": {
+    "score": 444,
+    "federation": 283,
+    "economy": 273
+   },
+   "leaderRatio": 1.62,
+   "leaderShare": 0.36,
+   "playerLeaderRate": 0.91,
+   "warsPer100y": 7.6,
+   "warsActive": 0.6,
+   "alliances": 6.6,
+   "federations": 1.71,
+   "crises": 4.16,
+   "megastructures": 5.43,
+   "traditions": 34.3,
+   "perks": 5.9,
+   "galaxyDefeatRate": 0,
+   "playerScore": 629,
+   "pops": 103
+  },
+  "military": {
+   "wins": {
+    "economy": 553,
+    "federation": 254,
+    "score": 193
+   },
+   "leaderRatio": 1.5,
+   "leaderShare": 0.4,
+   "playerLeaderRate": 0.81,
+   "warsPer100y": 10,
+   "warsActive": 1.1,
+   "alliances": 6.5,
+   "federations": 1.67,
+   "crises": 4.37,
+   "megastructures": 4.71,
+   "traditions": 33.2,
+   "perks": 3.3,
+   "galaxyDefeatRate": 0,
+   "playerScore": 559,
+   "pops": 91
+  }
+ },
+ "verdicts": {
+  "leaderRatio": "PASS (1.50-1.62 <= 2.0)",
+  "leaderGdpShare": "PASS (36-40% <= 40%)",
+  "warsPer100y": "PASS (7.6-10.0 >= 3)",
+  "federations": "PASS (1.67-1.71)",
+  "crises": "PASS (4.16-4.37, all 5 kinds)",
+  "megastructures": "PASS (4.71-5.43 >= 0.1)",
+  "galaxyDefeat": "PASS (0%)",
+  "determinism": "PASS"
+ }
+}
