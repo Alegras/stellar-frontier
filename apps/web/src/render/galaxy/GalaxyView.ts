@@ -377,6 +377,7 @@ export class GalaxyView implements SceneView {
     this.camera.lookAt(this.center.x, this.center.y, 0);
     this.zoom = this.fitHalfHeight / this.halfHeight;
     this.game.mapZoom = this.zoom;
+    this.game.mapView = { centerX: this.center.x, centerY: this.center.y, halfWidth: halfW, halfHeight: this.halfHeight };
   }
 
   private screenToWorld(px: number, py: number): { x: number; y: number } {
@@ -600,6 +601,7 @@ export class GalaxyView implements SceneView {
     for (const c of this.cleanups) c();
     this.cleanups = [];
     if (this.game.mapProject) this.game.mapProject = null;
+    this.game.mapView = null;
     this.scene.traverse((obj) => {
       const mesh = obj as THREE.Mesh;
       if (mesh.geometry) mesh.geometry.dispose();

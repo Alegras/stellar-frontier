@@ -8,6 +8,21 @@ const W = 236;
 const H = 160;
 const PAD = 4;
 
+type MapBounds = { seed: number; minX: number; maxX: number; minY: number; maxY: number };
+function minimapBounds(game: Game, full: MapBounds, aspect: number): MapBounds {
+  const cam = game.mapView;
+  if (!cam || game.mapZoom <= 1.02) return full;
+  const fullW = full.maxX - full.minX || 1;
+  const fullH = full.maxY - full.minY || 1;
+  let vw = Math.max(1, cam.halfWidth * 2 * 1.25);
+  let vh = Math.max(1, cam.halfHeight * 2 * 1.25);
+  if (vw / vh > aspect) vh = vw / aspect; else vw = vh * aspect;
+  vw = Math.min(vw, fullW * 1.02); vh = Math.min(vh, fullH * 1.02);
+  const cx = fullW <= vw ? (full.minX + full.maxX) / 2 : Math.max(full.minX + vw / 2, Math.min(full.maxX - vw / 2, cam.centerX));
+  const cy = fullH <= vh ? (full.minY + full.maxY) / 2 : Math.max(full.minY + vh / 2, Math.min(full.maxY - vh / 2, cam.centerY));
+  return { seed: full.seed, minX: cx - vw / 2, maxX: cx + vw / 2, minY: cy - vh / 2, maxY: cy + vh / 2 };
+}
+
 /**
  * Политическая карта галактики: соседний с миникартой обзор владений.
  * Показывает известные системы цветом империи-владельца, границы между империями,
@@ -15,7 +30,8 @@ const PAD = 4;
  */
 export function PoliticalMap({ game, state }: { game: Game; state: GameState }) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const boundsRef = useRef<{ seed: number; minX: number; maxX: number; minY: number; maxY: number } | null>(null);
+  const boundsRef = useRef<MapBounds | null>(null);
+  const viewBoundsRef = useRef<MapBounds | null>(null);
   const [collapsed, setCollapsed] = useState(false);
   const [hover, setHover] = useState<string | null>(null);
   const world = worldOf(game);
@@ -62,8 +78,10 @@ export function PoliticalMap({ game, state }: { game: Game; state: GameState }) 
         }
         boundsRef.current = { seed: w.seed, minX, maxX, minY, maxY };
       }
-      const b = boundsRef.current;
-      if (!b) return;
+      const full = boundsRef.current;
+      if (!full) return;
+      const b = minimapBounds(game, full, W / H);
+      viewBoundsRef.current = b;
       const spanX = b.maxX - b.minX || 1;
       const spanY = b.maxY - b.minY || 1;
       const iw = W - PAD * 2;
@@ -116,29 +134,21 @@ export function PoliticalMap({ game, state }: { game: Game; state: GameState }) 
           ctx.strokeRect(x - 3.5, y - 3.5, 7, 7);
         }
       }
-      // 4) рамка текущего вида
-      const proj = game.mapProject;
-      if (proj) {
-        const corners = [proj(b.minX, b.minY), proj(b.maxX, b.minY), proj(b.minX, b.maxY), proj(b.maxX, b.maxY)]
-          .filter((p): p is { x: number; y: number } => p !== null);
-        if (corners.length === 4) {
-          const xs = corners.map((p) => p.x);
-          const ys = corners.map((p) => p.y);
-          const mnx = Math.min(...xs), mxx = Math.max(...xs), mny = Math.min(...ys), mxy = Math.max(...ys);
-          const winW = window.innerWidth, winH = window.innerHeight;
-          const fx0 = Math.max(0, Math.min(1, (0 - mnx) / (mxx - mnx || 1)));
-          const fx1 = Math.max(0, Math.min(1, (winW - mnx) / (mxx - mnx || 1)));
-          const fy0 = Math.max(0, Math.min(1, (0 - mny) / (mxy - mny || 1)));
-          const fy1 = Math.max(0, Math.min(1, (winH - mny) / (mxy - mny || 1)));
-          ctx.strokeStyle = "#4FC3F7";
-          ctx.lineWidth = 1;
-          ctx.strokeRect(
-            Math.round(PAD + fx0 * iw) + 0.5,
-            Math.round(PAD + fy0 * ih) + 0.5,
-            Math.max(2, Math.round((fx1 - fx0) * iw)),
-            Math.max(2, Math.round((fy1 - fy0) * ih)),
-          );
-        }
+      // 4) рамка текущего вида (синхронна зуму неба)
+      const cam = game.mapView;
+      if (cam) {
+        const fx0 = Math.max(0, Math.min(1, (cam.centerX - cam.halfWidth - b.minX) / spanX));
+        const fx1 = Math.max(0, Math.min(1, (cam.centerX + cam.halfWidth - b.minX) / spanX));
+        const fy0 = Math.max(0, Math.min(1, (cam.centerY - cam.halfHeight - b.minY) / spanY));
+        const fy1 = Math.max(0, Math.min(1, (cam.centerY + cam.halfHeight - b.minY) / spanY));
+        ctx.strokeStyle = "#4FC3F7";
+        ctx.lineWidth = 1;
+        ctx.strokeRect(
+          Math.round(PAD + fx0 * iw) + 0.5,
+          Math.round(PAD + fy0 * ih) + 0.5,
+          Math.max(2, Math.round((fx1 - fx0) * iw)),
+          Math.max(2, Math.round((fy1 - fy0) * ih)),
+        );
       }
       // 5) выбранная система
       if (state.selectedSystemId != null) {

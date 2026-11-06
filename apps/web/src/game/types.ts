@@ -161,6 +161,8 @@ export interface GameApi {
   /** проекция карты в экранные координаты, ставится GalaxyView */
   mapProject: ((x: number, y: number) => { x: number; y: number } | null) | null;
   mapZoom: number;
+  /** текущий видимый прямоугольник камеры карты (мир. координаты) */
+  mapView: { centerX: number; centerY: number; halfWidth: number; halfHeight: number } | null;
   setMapZoom(z: number): void;
   mapFocus: { systemId: number; nonce: number } | null;
   /** мутабельная телеметрия полёта (без ре-рендеров React) */

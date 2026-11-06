@@ -249,6 +249,7 @@ export class SystemView implements SceneView {
         this.flight.fullStop();
       },
       onHeatSink: () => this.useHeatSink(),
+      onScan: () => this.scanSystem(),
       onJump: () => this.onJumpKey(),
       onCycleNav: () => this.cycleNav(),
       onCycleTarget: () => this.cycleTarget(),
@@ -1129,6 +1130,19 @@ export class SystemView implements SceneView {
     }
     const target = list[this.targetIndex];
     if (target) this.game.toast(`Цель: ${target.name} · ${formatDist(this.flight.position.distanceTo(target.position))}`, "info");
+  }
+
+  /** F: скан текущей системы флотом игрока. */
+  private scanSystem(): void {
+    const world = this.game.world;
+    const fleet = world.fleets.find((f) => f.empireId === world.playerEmpireId && f.systemId === this.systemId);
+    if (!fleet) {
+      this.game.toast("Нет флота для сканирования в этой системе", "warn");
+      return;
+    }
+    if (this.game.sendCommand({ type: "scan_system", fleetId: fleet.id, systemId: this.systemId } as never)) {
+      this.game.toast("Сканирование системы запущено", "good");
+    }
   }
 
   private cycleNav(): void {

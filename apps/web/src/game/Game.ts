@@ -97,6 +97,7 @@ export class Game implements GameApi {
   warpSelectedTargetId: number | null = null;
   hudTick = 0;
   mapZoom = 1;
+  mapView: { centerX: number; centerY: number; halfWidth: number; halfHeight: number } | null = null;
   mapFocus: { systemId: number; nonce: number } | null = null;
   private focusNonce = 0;
 

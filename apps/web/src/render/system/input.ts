@@ -8,6 +8,7 @@ export interface InputHooks {
   onAssist(): void;
   onStop(): void;
   onHeatSink(): void;
+  onScan(): void;
   onJump(): void;
   onCycleNav(): void;
   onCycleTarget(): void;
@@ -131,6 +132,9 @@ export class InputController {
         break;
       case "KeyV":
         if (!repeat) this.hooks.onHeatSink();
+        break;
+      case "KeyF":
+        if (!repeat) this.hooks.onScan();
         break;
       case "KeyJ":
         if (!repeat) this.hooks.onJump();

@@ -77,7 +77,7 @@ export function FlightHUD({ game, state }: { game: Game; state: GameState }) {
         )}
         {dlcSignalsHere.length > 0 && (
           <div className="sf-warn-strip sf-dlc-signal" data-testid="flight-signal" style={{ marginTop: 4 }}>
-            ✦ {L("Сигнал квеста", "Quest signal")}: {dlcSignalsHere.length} · {L("подойдите/сканируйте", "approach/scan")}
+            ✦ {L("Сигнал квеста", "Quest signal")}: {dlcSignalsHere.length} · {L("подойдите и нажмите F — скан", "approach and press F to scan")}
           </div>
         )}
         {tel.mode === "combat" && (

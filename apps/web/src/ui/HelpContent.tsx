@@ -30,6 +30,7 @@ function groups(): { title: string; rows: [string, string][] }[] {
     rows: [
       ["W / S", L("тяга +/−", "throttle +/−")],
       ["A / D", L("рыскание", "yaw")],
+      ["F", L("сканировать систему", "scan system")],
       ["C", L("суперкруиз", "supercruise")],
       ["J", L("прыжок FSD", "FSD jump")],
       ["G", L("стыковка у станции", "dock at station")],

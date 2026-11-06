@@ -2,6 +2,8 @@
 
 ## [0.7.2] — 2026-11-08 · Полная история 0–V (task-51/52/54/55)
 
+- Полёт: **F — скан системы** с корабля (флот в текущей системе), подсказка в HUD/справке.
+- Миникарты «Галактика» и «Политическая карта» синхронизированы с зумом/панорамой основного неба: при приближении камера мини-карт показывает тот же участок.
 - Story: 12 кампанийных сцен (11 mission + epilogue): act0_relic, teira_arc, act1_hegemon, kira_arc, act2_council, act3_truth, act4_legacy, act4_betrayal, final_door, epilogue; + Древние 13b: ancient_archive/ancient_contact (requiresAncients); 103 outcome-узла; 5 мостиков (0→I…IV→V) в журнале; story-script v2 — 6 актов/18 сцен/16 развилок/40 вариантов/4 директивы/8 эпилогов.
 - Флаги/отношения: camp_relic_*, camp_voice_*, camp_hegemon_vassal/rejected, camp_teira_arc_*, camp_kira_arc_*, camp_ancient_* (17), kira_debt; отношения teira_os/kain/kira7/selen; unlock main_01_rift_rumor/main_03_truth/main_03_megastructure.
 - l10n ru/en 1584↔1584; legacy-сцены/фразы удалены (legacy-check 0), docs/legacy-removed-keys.md, docs/story-script.md.

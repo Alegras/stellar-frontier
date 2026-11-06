@@ -688,9 +688,26 @@ export function MapLabels({ game, state, onPick, onEnter }: MapLabelsProps) {
 }
 
 // ---------------------------------------------------------------- мини-карта
+type MapBounds = { seed: number; minX: number; maxX: number; minY: number; maxY: number };
+function minimapBounds(game: Game, full: MapBounds, aspect: number): MapBounds {
+  const cam = game.mapView;
+  if (!cam || game.mapZoom <= 1.02) return full;
+  const fullW = full.maxX - full.minX || 1;
+  const fullH = full.maxY - full.minY || 1;
+  let vw = Math.max(1, cam.halfWidth * 2 * 1.25);
+  let vh = Math.max(1, cam.halfHeight * 2 * 1.25);
+  if (vw / vh > aspect) vh = vw / aspect; else vw = vh * aspect;
+  vw = Math.min(vw, fullW * 1.02);
+  vh = Math.min(vh, fullH * 1.02);
+  const cx = fullW <= vw ? (full.minX + full.maxX) / 2 : Math.max(full.minX + vw / 2, Math.min(full.maxX - vw / 2, cam.centerX));
+  const cy = fullH <= vh ? (full.minY + full.maxY) / 2 : Math.max(full.minY + vh / 2, Math.min(full.maxY - vh / 2, cam.centerY));
+  return { seed: full.seed, minX: cx - vw / 2, maxX: cx + vw / 2, minY: cy - vh / 2, maxY: cy + vh / 2 };
+}
+
 export function Minimap({ game, state }: { game: Game; state: GameState }) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const boundsRef = useRef<{ seed: number; minX: number; maxX: number; minY: number; maxY: number } | null>(null);
+  const boundsRef = useRef<MapBounds | null>(null);
+  const viewBoundsRef = useRef<MapBounds | null>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -720,8 +737,10 @@ export function Minimap({ game, state }: { game: Game; state: GameState }) {
         }
         boundsRef.current = { seed: world.seed, minX, maxX, minY, maxY };
       }
-      const b = boundsRef.current;
-      if (!b) return;
+      const full = boundsRef.current;
+      if (!full) return;
+      const b = minimapBounds(game, full, 160 / 120);
+      viewBoundsRef.current = b;
       const spanX = b.maxX - b.minX || 1;
       const spanY = b.maxY - b.minY || 1;
       const pad = 3;
@@ -742,33 +761,21 @@ export function Minimap({ game, state }: { game: Game; state: GameState }) {
         const size = cap ? 3 : 2;
         ctx.fillRect(x - (size >> 1), y - (size >> 1), size, size);
       }
-      // рамка вьюпорта
-      const proj = game.mapProject;
-      if (proj) {
-        const corners = [
-          proj(b.minX, b.minY), proj(b.maxX, b.minY), proj(b.minX, b.maxY), proj(b.maxX, b.maxY),
-        ].filter((p): p is { x: number; y: number } => p !== null);
-        if (corners.length === 4) {
-          const xs = corners.map((p) => p.x);
-          const ys = corners.map((p) => p.y);
-          const sMinX = Math.min(...xs), sMaxX = Math.max(...xs);
-          const sMinY = Math.min(...ys), sMaxY = Math.max(...ys);
-          const W = window.innerWidth, H = window.innerHeight;
-          const sxSpan = sMaxX - sMinX || 1;
-          const sySpan = sMaxY - sMinY || 1;
-          const fx0 = Math.max(0, Math.min(1, (0 - sMinX) / sxSpan));
-          const fx1 = Math.max(0, Math.min(1, (W - sMinX) / sxSpan));
-          const fy0 = Math.max(0, Math.min(1, (0 - sMinY) / sySpan));
-          const fy1 = Math.max(0, Math.min(1, (H - sMinY) / sySpan));
-          ctx.strokeStyle = "#F5C542";
-          ctx.lineWidth = 1;
-          ctx.strokeRect(
-            rnd(pad + fx0 * w) + 0.5,
-            rnd(pad + fy0 * h) + 0.5,
-            Math.max(2, rnd((fx1 - fx0) * w)),
-            Math.max(2, rnd((fy1 - fy0) * h)),
-          );
-        }
+      // рамка текущего вида (синхронна зуму неба)
+      const cam = game.mapView;
+      if (cam) {
+        const fx0 = Math.max(0, Math.min(1, (cam.centerX - cam.halfWidth - b.minX) / spanX));
+        const fx1 = Math.max(0, Math.min(1, (cam.centerX + cam.halfWidth - b.minX) / spanX));
+        const fy0 = Math.max(0, Math.min(1, (cam.centerY - cam.halfHeight - b.minY) / spanY));
+        const fy1 = Math.max(0, Math.min(1, (cam.centerY + cam.halfHeight - b.minY) / spanY));
+        ctx.strokeStyle = "#F5C542";
+        ctx.lineWidth = 1;
+        ctx.strokeRect(
+          rnd(pad + fx0 * w) + 0.5,
+          rnd(pad + fy0 * h) + 0.5,
+          Math.max(2, rnd((fx1 - fx0) * w)),
+          Math.max(2, rnd((fy1 - fy0) * h)),
+        );
       }
       // выбранная система
       if (state.selectedSystemId != null) {
@@ -792,7 +799,7 @@ export function Minimap({ game, state }: { game: Game; state: GameState }) {
 
   const onClick = (e: React.MouseEvent<HTMLCanvasElement>) => {
     const world = game.hasWorld ? game.world : null;
-    const b = boundsRef.current;
+    const b = viewBoundsRef.current;
     if (!world || !b) return;
     const rect = e.currentTarget.getBoundingClientRect();
     const px = (e.clientX - rect.left) / rect.width;
