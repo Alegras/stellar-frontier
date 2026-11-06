@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stellar Frontier — играть</title>
+<style>
+  :root { color-scheme: dark; --bg:#070b16; --panel:#0e1628; --gold:#f5c542; --text:#e8eef7; --muted:#a8bad0; --line:#2a3a56; }
+  * { box-sizing: border-box; }
+  body { margin:0; min-height:100vh; background:radial-gradient(1200px 600px at 50% -10%, #172441 0%, var(--bg) 60%); color:var(--text); font-family:Consolas,"Lucida Console",ui-monospace,monospace; display:flex; align-items:center; justify-content:center; padding:24px; }
+  main { width:min(980px,100%); }
+  h1 { color:var(--gold); letter-spacing:.12em; font-size:clamp(30px,5vw,58px); margin:0 0 4px; }
+  .sub { color:var(--muted); letter-spacing:.08em; text-transform:uppercase; font-size:.85em; margin-bottom:28px; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:16px; }
+  .card { background:rgba(14,22,40,.92); border:1px solid var(--line); padding:20px; display:flex; flex-direction:column; gap:10px; }
+  .card h2 { color:var(--gold); font-size:1.15em; margin:0; }
+  .card p { color:var(--muted); font-size:.9em; line-height:1.5; margin:0; flex:1; }
+  a.btn { display:inline-block; text-decoration:none; color:#0b1020; background:var(--gold); padding:11px 16px; font-weight:700; letter-spacing:.04em; text-align:center; }
+  a.btn.alt { background:transparent; color:var(--gold); border:1px solid var(--gold); }
+  a { color:#9fd7ff; }
+  footer { color:var(--muted); font-size:.78em; margin-top:24px; line-height:1.6; }
+</style>
+</head>
+<body>
+<main>
+  <h1>STELLAR FRONTIER</h1>
+  <div class="sub">4X-стратегия × космосимулятор · v0.6.0 · Древние + DLC «Первый Свет»</div>
+  <div class="grid">
+    <section class="card">
+      <h2>Портативная версия</h2>
+      <p>Один HTML-файл. Запускается в Chrome/Edge без установки и интернета, сохранения — в браузере. Лучший вариант для флешки и подарка.</p>
+      <a class="btn" href="StellarFrontier.html">Играть портативно</a>
+      <a class="btn alt" href="gift/StellarFrontier-1.0-portable.zip" download>Скачать ZIP для флешки</a>
+    </section>
+    <section class="card">
+      <h2>Полная веб-версия</h2>
+      <p>Та же игра отдельной сборкой. Одиночная кампания работает сразу; кооп/MMO требуют запуска сервера и лобби (см. README).</p>
+      <a class="btn" href="web/">Играть полную версию</a>
+      <a class="btn alt" href="https://github.com/Alegras/stellar-frontier">Исходники на GitHub</a>
+    </section>
+  </div>
+  <footer>
+    Портативная и полная версии используют один контент и правила. Релиз с ассетами:
+    <a href="https://github.com/Alegras/stellar-frontier/releases/tag/v0.6.0">v0.6.0</a>.
+    Если страница не грузится — откройте <a href="StellarFrontier.html">StellarFrontier.html</a> напрямую.
+  </footer>
+</main>
+</body>
+</html>

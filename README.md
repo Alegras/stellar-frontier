@@ -6,6 +6,13 @@
 
 Один ruleset, один контент, один HUD, одна схема сейва: одиночная кампания запускает тот же серверный код локально (канон Части IX-b).
 
+## Играть онлайн
+
+- **Портативная версия (один HTML):** https://alegras.github.io/stellar-frontier/StellarFrontier.html
+- **Полная веб-версия:** https://alegras.github.io/stellar-frontier/web/
+- **GitHub:** https://github.com/Alegras/stellar-frontier · **релиз v0.6.0:** https://github.com/Alegras/stellar-frontier/releases/tag/v0.6.0
+- Локально: см. «Быстрый старт» ниже; для кооп/MMO нужен сервер (портативная версия — одиночная).
+
 ## Быстрый старт
 
 **Самый простой способ (Windows):** двойной клик по `start-game.cmd` в папке проекта — поднимется Vite и откроется браузер на `http://127.0.0.1:5173/`. Окно с сервером должно оставаться открытым; Ctrl+C — остановить. Альтернатива: правый клик по `start-game.ps1` → «Выполнить с помощью PowerShell».
