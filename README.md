@@ -272,4 +272,4 @@ docs/                    ADR, демо-сценарий, приёмка
 - **Арт**: 4 портрета ×6 эмоций (128×128) на локальной Qwen-Image 2.1 (ComfyUI), карточки, фон станции, комикс-панель; 31 PNG, 177 КБ (лимит 2 МБ).
 - **Флаг `dlc_quests`**: новые игры включены, старые сейвы — off/миграция; без флага прежнее поведение; save/load посреди диалога, награды один раз.
 
-**Гейты DLC:** typecheck 0; unit **312/312**; golden **c55c7ffe**; tools/dlc-validate **29/29**; tools/dlc-test **24/24**; e2e DLC **8/8** (dlc-quests 4 + dlc.spec 2 + dlc-responsive 1 + dlc-perf 1) + меню-рас 4/4; полный e2e 41/41 (последовательно; включает dlc-perf и menu-autoscale).
+**Гейты DLC:** typecheck 0; unit **312/312**; golden **c55c7ffe**; tools/dlc-validate **29/29**; tools/dlc-test **24/24**; e2e DLC **8/8** (dlc-quests 4 + dlc.spec 2 + dlc-responsive 1 + dlc-perf 1) + меню-рас 4/4; полный e2e 41/41 (последовательно; включает dlc-perf и menu-autoscale).<!-- pages deploy v0.6.1 -->
