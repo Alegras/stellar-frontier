@@ -245,7 +245,10 @@ test.describe("Диалоги · task-38", () => {
     await check("main_01_hegemon", "dlg_campaign_act1_hegemon", false, true);
     await check("main_01_colony", "dlg_campaign_teira_arc", false, true);
     await check("main_02_first_crisis", "dlg_campaign_kira_arc", false, true);
+    await check("main_01_rift_rumor", "dlg_campaign_ancient_archive", false, true);
     await check("main_02_council", "dlg_campaign_act2_council", true);
+    // порядок в CAMPAIGN_MISSION_DIALOGUES: сначала линия Древних, затем act3_truth
+    await check("main_03_truth", "dlg_campaign_ancient_contact", false, true);
     await check("main_03_truth", "dlg_campaign_act3_truth", false);
   });
 

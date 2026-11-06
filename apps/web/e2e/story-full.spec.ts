@@ -167,4 +167,23 @@ test.describe("История 0–V · task-53", () => {
     expect(flags.camp_teira_arc_truth, "camp_teira_arc_truth").toBe(1);
     await page.screenshot({ path: shot("story-teira-arc.png") });
   });
+
+  test("Древние 13b: requiresAncients-сцена archive + outcome/флаг", async ({ page }) => {
+    await startGame(page, 81);
+    await gameEval(page, (g) => { (g.world.fg as unknown as { ancients?: { enabled?: boolean } }).ancients!.enabled = true; });
+    await triggerMission(page, "main_01_rift_rumor");
+    expect(await gameEval(page, (g) => g.world.fg?.dlc?.dialogue?.sceneId ?? null)).toBe("dlg_campaign_ancient_archive");
+    const first = page.locator('[data-testid^="dialogue-choice-"]').first();
+    for (let i = 0; i < 30; i++) {
+      if (await first.isVisible().catch(() => false)) break;
+      const cont = page.locator('[data-testid="dialogue-continue"]');
+      if (await cont.isVisible().catch(() => false)) await cont.evaluate((el) => (el as HTMLElement).click());
+      await page.waitForTimeout(150);
+    }
+    await first.evaluate((el) => (el as HTMLElement).click());
+    await expectOutcome(page);
+    const flags = await gameEval(page, (g) => g.world.fg?.dlc?.flags ?? {});
+    expect(Object.keys(flags).some((k) => k.startsWith("camp_ancient_")), "camp_ancient_*").toBe(true);
+    await page.screenshot({ path: shot("story-ancient-archive.png") });
+  });
 });

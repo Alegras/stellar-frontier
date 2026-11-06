@@ -269,11 +269,11 @@ docs/                    ADR, демо-сценарий, приёмка
 
 ### Финальная история/карта/арт v0.7 (task-46/47/48)
 
-- Story: 10 кампанийных сцен (9 mission + эпилог; включая teira/kira arcs), 88 outcome-узлов, 5 мостиков 0→I…IV→V в журнале; 6 актов/18 сцен/16 развилок/40 вариантов; l10n ru/en 1530↔1530.
+- Story: 12 кампанийных сцен (11 mission + эпилог; teira/kira arcs + Древние 13b: archive/contact), 103 outcome-узла, 5 мостиков 0→I…IV→V; 6 актов/18 сцен/16 развилок/40 вариантов; l10n ru/en 1584↔1584.
 - Карта: политический слой AI-ИИ линий/столиц/статусов/фильтров, клик→панель; сектор Предела скрыт до revealSector и открывается после (слой+туман).
 - Комикс: DOM-пузыри поверх Qwen-арта (1280–2560), портрет/история без наложений.
 - Арт: 24 портрета (4×6) + фон/карточки/комикс, 31 ассет.
-- QA: story-verify 16/16, insight story-full 3/3, legacy-check 0 маркеров; e2e world-map/politics/world-politics/dlc-comic/dialogue-fixes зелёные; unit 338/338; e2e **64/64**; golden **8f52b0a6**; acceptance §27/§28; gift 2.97 МБ/verify 10/10, site синхронизирован.
+- QA: story-verify 17/17, гейтинг requiresAncients, story-full 4/4, legacy-check 0; unit 340/340; e2e **65/65**; golden **8f52b0a6**; acceptance §27/§28/§29; gift 2.99 МБ/verify 10/10, site синхронизирован.
 
 ## Портативная сборка (gift)
 

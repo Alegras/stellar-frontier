@@ -23,6 +23,7 @@ const REMOVED = [
 ];
 const POSITIVE = [
   "dlg_campaign_act0_relic", "dlg_campaign_act1_hegemon",
+  "dlg_campaign_ancient_archive", "dlg_campaign_ancient_contact", "dlg.camp.anc_a.", "dlg.camp.anc_c.",
   "dlg_campaign_act2_council", "dlg_campaign_act3_truth", "dlg_campaign_act4_legacy",
   "dlg_campaign_act4_betrayal", "dlg_campaign_final_door", "dlg_campaign_epilogue",
   "dlg.camp.act0_r.", "dlg.camp.act1_h.", "dlg.camp.act2_c.out.centralize",

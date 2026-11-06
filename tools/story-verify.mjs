@@ -64,14 +64,20 @@ try {
 
 // ---------------------------------------------------------------- акты 0/I: триггеры, флаги, отношения, unlock
 try {
-  const mapping = new Map((sim.CAMPAIGN_MISSION_DIALOGUES ?? []).map((x) => [x.missionId, x.scene]));
-  const mapOk = mapping.get("main_00_relic") === "dlg_campaign_act0_relic" && mapping.get("main_01_hegemon") === "dlg_campaign_act1_hegemon"
-    && mapping.get("main_01_colony") === "dlg_campaign_teira_arc" && mapping.get("main_02_first_crisis") === "dlg_campaign_kira_arc";
+  const entries = sim.CAMPAIGN_MISSION_DIALOGUES ?? [];
+  const pairs = new Set(entries.map((x) => x.missionId + "→" + x.scene));
+  const mapOk = pairs.has("main_00_relic→dlg_campaign_act0_relic") && pairs.has("main_01_hegemon→dlg_campaign_act1_hegemon")
+    && pairs.has("main_01_colony→dlg_campaign_teira_arc") && pairs.has("main_02_first_crisis→dlg_campaign_kira_arc")
+    && pairs.has("main_01_rift_rumor→dlg_campaign_ancient_archive") && pairs.has("main_03_truth→dlg_campaign_ancient_contact")
+    && entries.some((x) => x.scene === "dlg_campaign_ancient_archive" && x.requiresAncients === true)
+    && entries.some((x) => x.scene === "dlg_campaign_ancient_contact" && x.requiresAncients === true);
   const needs = {
     dlg_campaign_act0_relic: ["camp_relic_study", "camp_relic_sealed", "camp_relic_given", "camp_voice_silence", "camp_voice_answer", "camp_voice_mute"],
     dlg_campaign_act1_hegemon: ["camp_hegemon_vassal", "camp_hegemon_rejected"],
     dlg_campaign_teira_arc: ["camp_teira_arc_promise", "camp_teira_arc_truth", "camp_teira_arc_refuse", "camp_teira_arc_record_keep", "camp_teira_arc_record_archive", "camp_teira_arc_record_erase"],
     dlg_campaign_kira_arc: ["camp_kira_arc_filters_station", "camp_kira_arc_filters_fleet", "camp_kira_arc_compensation_civil", "camp_kira_arc_compensation_fleet", "camp_kira_arc_compensation_none"],
+    dlg_campaign_ancient_archive: ["camp_ancient_archive_open", "camp_ancient_archive_teira", "camp_ancient_archive_sealed", "camp_ancient_expedition_fleet", "camp_ancient_expedition_drones", "camp_ancient_expedition_refuse"],
+    dlg_campaign_ancient_contact: ["camp_ancient_contact_listen", "camp_ancient_contact_silence", "camp_ancient_contact_answer", "camp_ancient_contact_map", "camp_ancient_contact_core", "camp_ancient_contact_nothing", "camp_ancient_contact_reveal", "camp_ancient_contact_keep", "camp_ancient_contact_use"],
   };
   const foundFlags = new Set();
   const foundRel = new Set();
@@ -89,10 +95,16 @@ try {
     const missing = flags.filter((f) => !foundFlags.has(f));
     if (missing.length > 0) fail("акт-флаги " + scene, "missing=" + missing.join(","));
   }
+  const ancientHints = new Set();
+  for (const scene of ["dlg_campaign_ancient_archive", "dlg_campaign_ancient_contact"]) {
+    const d = (data.DLC_DIALOGUES ?? []).find((x) => x.id === scene);
+    for (const n of d?.nodes ?? []) for (const o of n.options ?? []) for (const e of o.effects ?? []) if (e.endingHint) ancientHints.add(e.endingHint);
+  }
+  const ancientUnlock = new Set([...foundUnlock].filter((id) => id.startsWith("main_03_")));
   const missionIds = new Set((data.CAMPAIGN_MISSIONS ?? []).map((m) => m.id));
   const badUnlock = [...foundUnlock].filter((id) => !missionIds.has(id));
-  if (mapOk && foundFlags.size >= 8 && foundFlags.has("kira_debt") && foundRel.size >= 2 && foundUnlock.size >= 1 && badUnlock.length === 0) pass("акты 0/I: триггеры, флаги, отношения, unlock", "flags=" + foundFlags.size + " relations=" + [...foundRel].join(",") + " unlocks=" + [...foundUnlock].join(","));
-  else fail("акты 0/I", JSON.stringify({ mapOk, flags: [...foundFlags], relations: [...foundRel], unlocks: [...foundUnlock], badUnlock }));
+  if (mapOk && foundFlags.size >= 24 && foundFlags.has("kira_debt") && foundRel.size >= 2 && foundUnlock.size >= 2 && ancientHints.has("ending_whisper") && ancientHints.has("ending_seal") && ancientUnlock.has("main_03_truth") && ancientUnlock.has("main_03_megastructure") && badUnlock.length === 0) pass("акты 0/I + Древние 13b: триггеры, флаги, отношения, unlock", "flags=" + foundFlags.size + " ancientHints=" + [...ancientHints].join(","));
+  else fail("акты 0/I/Древние", JSON.stringify({ mapOk, flags: foundFlags.size, relations: [...foundRel], unlocks: [...foundUnlock], ancientHints: [...ancientHints], ancientUnlock: [...ancientUnlock], badUnlock }));
 } catch (e) { fail("акты 0/I", String(e)); }
 
 // ---------------------------------------------------------------- endingHint/unlockMission
@@ -139,8 +151,8 @@ try {
   for (const d of camp) for (const n of d.nodes ?? []) if (n.outcome === true) outcomes.push({ scene: d.id, node: n.id, type: n.type, textKey: n.textKey });
   const badType = outcomes.filter((o) => o.type !== "line").length;
   const missingText = outcomes.filter((o) => !hasKey(o.textKey)).length;
-  if (outcomes.length === 88 && badType === 0 && missingText === 0) pass("outcome-узлы: " + outcomes.length + " (line, l10n)", "scenes=" + camp.length);
-  else fail("outcome-узлы", JSON.stringify({ count: outcomes.length, expected: 88, badType, missingText }));
+  if (outcomes.length === 103 && badType === 0 && missingText === 0) pass("outcome-узлы: " + outcomes.length + " (line, l10n)", "scenes=" + camp.length);
+  else fail("outcome-узлы", JSON.stringify({ count: outcomes.length, expected: 103, badType, missingText }));
   const script = JSON.parse(fs.readFileSync(path.join(ROOT, "packages/data/src/campaign/story-script.json"), "utf8"));
   const scenes = (script.acts ?? []).flatMap((a) => a.scenes ?? []);
   const forks = scenes.flatMap((sc) => sc.forks ?? []);
@@ -151,6 +163,26 @@ try {
   if (fs.existsSync(path.join(ROOT, "docs/story-script.md"))) pass("docs/story-script.md на месте"); else skip("docs/story-script.md", "нет");
 } catch (e) { fail("outcome/story-script", String(e)); }
 
+// ---------------------------------------------------------------- gating requiresAncients
+try {
+  const make = () => sim.createWorld(42, data.MODE, data.BALANCE);
+  const wOff = make();
+  sim.ensureFg(wOff);
+  if (!wOff.fg.ancients) wOff.fg.ancients = { enabled: false };
+  else wOff.fg.ancients.enabled = false;
+  wOff.fg.campaign.missions["main_01_rift_rumor"] = { status: "completed" };
+  if (sim.getDlcState(wOff).dialogue?.active) sim.applyCommand(wOff, { type: "dlc_dialogue_end" });
+  const off = sim.maybeStartCampaignStoryDialogue?.(wOff) ?? null;
+  const wOn = make();
+  sim.ensureFg(wOn);
+  wOn.fg.ancients.enabled = true;
+  wOn.fg.campaign.missions["main_01_rift_rumor"] = { status: "completed" };
+  if (sim.getDlcState(wOn).dialogue?.active) sim.applyCommand(wOn, { type: "dlc_dialogue_end" });
+  const on = sim.maybeStartCampaignStoryDialogue?.(wOn) ?? null;
+  if (off === null && on === "dlg_campaign_ancient_archive") pass("gating requiresAncients: без Древних сцена не стартует, с Древними — стартует");
+  else fail("gating requiresAncients", JSON.stringify({ off, on }));
+} catch (e) { fail("gating requiresAncients", String(e)); }
+
 // ---------------------------------------------------------------- триггер сцен без дублей
 try {
   const w = sim.createWorld(42, data.MODE, data.BALANCE);
@@ -159,6 +191,9 @@ try {
   const missionIds = (sim.CAMPAIGN_MISSION_DIALOGUES ?? []).map((x) => x.missionId);
   for (const id of missionIds) campaign.missions[id] = { status: "completed" };
   campaign.endings.length = 0;
+  // Древние включены: сцены архив/контакт требуют requiresAncients
+  if (!w.fg.ancients) w.fg.ancients = { enabled: true };
+  else w.fg.ancients.enabled = true;
   // закрываем стартовый story-диалог Q1, чтобы он не мешал актовым сценам
   if (sim.getDlcState(w).dialogue?.active) sim.applyCommand(w, { type: "dlc_dialogue_end" });
   const seen = new Set();
@@ -175,7 +210,7 @@ try {
   };
   // серии: каждая dlcPhase открывает следующую сцену
   const sceneIds = new Set([...(sim.CAMPAIGN_MISSION_DIALOGUES ?? []).map((x) => x.scene), sim.CAMPAIGN_EPILOGUE_SCENE]);
-  for (let round = 0; round < 12; round++) {
+  for (let round = 0; round < 21; round++) {
     if (round === 1) campaign.endings.push("ending_seal");
     sim.dlcPhase(w);
     if (!sim.getDlcState(w).dialogue?.active) break;
@@ -205,7 +240,7 @@ try {
     }
   }
   const ruCount = Object.keys(ru).length, enCount = Object.keys(en).length;
-  if (missing.length === 0 && ruCount === enCount && ruCount >= 1530) pass("story l10n ru/en: паритет " + ruCount + "↔" + enCount + ", все ключи сцен есть");
+  if (missing.length === 0 && ruCount === enCount && ruCount >= 1584) pass("story l10n ru/en: паритет " + ruCount + "↔" + enCount + ", все ключи сцен есть");
   else fail("story l10n", JSON.stringify({ missing: missing.slice(0, 10), ruCount, enCount }));
 } catch (e) { fail("story l10n", String(e)); }
 

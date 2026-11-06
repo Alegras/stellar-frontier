@@ -39,6 +39,7 @@
 - Outcome-узлы: `dlg.camp.<scene>.out.<option>` + `outcome: true` на узлах.
 - Арки: `dlg_campaign_teira_arc` (dlg.camp.teira_a.*), `dlg_campaign_kira_arc` (dlg.camp.kira_a.*) — новые сцены, не legacy.
 - Мостики актов: `campaign/bridges.json` / `CAMPAIGN_BRIDGES` (5 записей 0→I … IV→V).
+- Линия 13b: `dlg_campaign_ancient_archive` (dlg.camp.anc_a.*), `dlg_campaign_ancient_contact` (dlg.camp.anc_c.*) — новые сцены.
 - Новые диалоги: `dlg_campaign_act2_council`, `act3_truth`, `act4_legacy`, `act4_betrayal`, `final_door`, `epilogue`.
 - Новые l10n-неймспейсы: `dlg.camp.act2_c.*`, `dlg.camp.act3_t.*`, `dlg.camp.act4_l.*`, `dlg.camp.act4_b.*`, `dlg.camp.fin_d.*`, `dlg.camp.epi.*` (новые значения).
 - Примеры новых фраз: «Сорок два борта потеряно на рубеже…», «Данные с глубин Разлома расшифрованы…», «Флагман вошёл в область абсолютного резонанса…».

@@ -530,7 +530,7 @@ if (QX.quests && QX.dialogues && QX.characters && QX.cards && QX.tree && Array.i
   const dqQuestIds = new Set(QX.quests.map((q) => q.id));
   const QCOUNTS = {
     "quests.quests": [QX.quests.length, 8, "=="],
-    "quests.dialogues": [QX.dialogues.length, 13, ">="],
+    "quests.dialogues": [QX.dialogues.length, 15, ">="],
     "quests.characters": [QX.characters.length, 4, ">="],
     "quests.cards": [QX.cards.length, 8, "=="],
     "quests.tree.nodes": [QX.tree.nodes.length, 8, "=="],
@@ -676,7 +676,7 @@ if (QX.quests && QX.dialogues && QX.characters && QX.cards && QX.tree && Array.i
   }
   // кампанийные диалоги и расширенные эффекты
   const MAX_NODES = 32, MIN_NODES = 8;
-  const CAMPAIGN_DLGS = ["dlg_campaign_act0_relic","dlg_campaign_act1_hegemon","dlg_campaign_teira_arc","dlg_campaign_kira_arc","dlg_campaign_act2_council","dlg_campaign_act3_truth","dlg_campaign_act4_legacy","dlg_campaign_act4_betrayal","dlg_campaign_final_door","dlg_campaign_epilogue"];
+  const CAMPAIGN_DLGS = ["dlg_campaign_act0_relic","dlg_campaign_act1_hegemon","dlg_campaign_teira_arc","dlg_campaign_kira_arc","dlg_campaign_ancient_archive","dlg_campaign_ancient_contact","dlg_campaign_act2_council","dlg_campaign_act3_truth","dlg_campaign_act4_legacy","dlg_campaign_act4_betrayal","dlg_campaign_final_door","dlg_campaign_epilogue"];
   const effectFields = new Set(["flag","rep","openQuest","timeSkip","credits","chronicleKey","campaignFlag","relation","branch","ending","endingHint","unlockMission","effectLabelKey","items"]);
   const allEffectKeys = new Set();
   const checkEffects = (d, where, effects) => {
@@ -709,6 +709,24 @@ if (QX.quests && QX.dialogues && QX.characters && QX.cards && QX.tree && Array.i
       }
     }
   }
+  // линия Древних 13b: флаги/подсказки в двух сценах
+  const ancDlgIds = ["dlg_campaign_ancient_archive","dlg_campaign_ancient_contact"];
+  const ancFlags = new Set(), ancHints = new Set(), ancMissions = new Set();
+  for (const id of ancDlgIds) {
+    const dlg = QX.dialogues.find((d) => d.id === id);
+    if (!dlg) { fail("13b: нет сцены " + id); continue; }
+    for (const n of dlg.nodes) {
+      for (const e of [...(n.effects ?? []), ...(n.options ?? []).flatMap((o) => o.effects ?? [])]) {
+        if (e.campaignFlag && e.campaignFlag.startsWith("camp_ancient_")) ancFlags.add(e.campaignFlag);
+        if (e.endingHint) ancHints.add(e.endingHint);
+        if (e.unlockMission) ancMissions.add(e.unlockMission);
+      }
+    }
+  }
+  if (ancFlags.size < 8) fail("13b: camp_ancient_* флагов " + ancFlags.size + " (нужно ≥8)");
+  if (!ancHints.has("ending_whisper") || !ancHints.has("ending_seal")) fail("13b: нет endingHint whisper/seal");
+  ok("13b: ancient-диалогов " + ancDlgIds.length + ", флагов " + ancFlags.size + ", endingHint " + [...ancHints].join("/") + ", unlockMission " + [...ancMissions].join("/"));
+
   // outcome-узлы после выборов в кампанийных сценах
   let outcomeNodes = 0, choicesChecked = 0;
   for (const id of CAMPAIGN_DLGS) {

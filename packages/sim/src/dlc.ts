@@ -184,11 +184,28 @@ type ExtendedQuestDef = QuestDef & {
 type ExtendedDialogueDef = DialogueDef & { repeatable?: boolean };
 
 /** Акт/миссия → one-shot сюжетная сцена (task-46/47, story-bible §12.9). */
-export const CAMPAIGN_MISSION_DIALOGUES: Array<{ missionId: string; scene: string }> = [
+export interface CampaignMissionDialogueDef {
+  missionId: string;
+  scene: string;
+  /** альтернативные миссии, которые тоже открывают эту сцену (one-shot на сцену) */
+  fallbackMissionIds?: string[];
+  /** сцены линии Древних включаются только при включённой линии (fg.ancients.enabled) */
+  requiresAncients?: boolean;
+}
+
+export const CAMPAIGN_MISSION_DIALOGUES: CampaignMissionDialogueDef[] = [
   { missionId: "main_00_relic", scene: "dlg_campaign_act0_relic" },
   { missionId: "main_01_colony", scene: "dlg_campaign_teira_arc" },
   { missionId: "main_01_hegemon", scene: "dlg_campaign_act1_hegemon" },
   { missionId: "main_02_first_crisis", scene: "dlg_campaign_kira_arc" },
+  {
+    missionId: "main_01_rift_rumor", scene: "dlg_campaign_ancient_archive",
+    fallbackMissionIds: ["rift_00_door"], requiresAncients: true,
+  },
+  {
+    missionId: "main_03_truth", scene: "dlg_campaign_ancient_contact",
+    fallbackMissionIds: ["rift_01_signal"], requiresAncients: true,
+  },
   { missionId: "main_02_council", scene: "dlg_campaign_act2_council" },
   { missionId: "main_03_truth", scene: "dlg_campaign_act3_truth" },
   { missionId: "main_04_legacy_use", scene: "dlg_campaign_act4_legacy" },
@@ -1328,14 +1345,25 @@ function maybeStartCampaignMissionDialogue(world: World, d: DlcState): void {
   const campaign = world.fg?.campaign;
   if (!campaign) return;
   for (const entry of CAMPAIGN_MISSION_DIALOGUES) {
-    const flag = "campaign_scene:" + entry.missionId;
+    if (entry.requiresAncients && world.fg?.ancients?.enabled !== true) continue;
+    // Для сцен-арок/фолбэков ключ one-shot привязан к сцене, а не к миссии:
+    // иначе overlap missionId (main_03_truth) блокирует обычную актовую сцену.
+    const flag = "campaign_scene:" + (entry.requiresAncients || (entry.fallbackMissionIds?.length ?? 0) > 0
+      ? entry.scene
+      : entry.missionId);
     if (d.flags[flag]) continue;
-    const mission = (campaign.missions as Record<string, { status?: string } | undefined>)[entry.missionId];
-    if (mission?.status !== "completed") continue;
+    const missions = (campaign.missions as Record<string, { status?: string } | undefined>);
+    const candidates = [entry.missionId, ...(entry.fallbackMissionIds ?? [])];
+    if (!candidates.some((missionId) => missions[missionId]?.status === "completed")) continue;
     const dialogue = dlcDialogueById(entry.scene);
     if (!dialogue) continue;
-    if (d.seenScenes.includes(entry.scene)) { d.flags[flag] = 1; continue; }
+    if (d.seenScenes.includes(entry.scene)) {
+      d.flags[flag] = 1;
+      if (world.fg?.campaign) world.fg.campaign.flags[flag] = 1;
+      continue;
+    }
     d.flags[flag] = 1;
+    if (world.fg?.campaign) world.fg.campaign.flags[flag] = 1;
     startDlcDialogue(world, entry.scene, null, { context: "campaign" });
     return;
   }

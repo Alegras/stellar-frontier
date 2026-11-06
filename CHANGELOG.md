@@ -2,10 +2,10 @@
 
 ## [0.7.2] — 2026-11-08 · Полная история 0–V (task-51/52/54/55)
 
-- Story: 10 кампанийных сцен (9 mission + epilogue): act0_relic, teira_arc, act1_hegemon, kira_arc, act2_council, act3_truth, act4_legacy, act4_betrayal, final_door, epilogue; 88 outcome-узлов; 5 мостиков (0→I…IV→V) в журнале; story-script v2 — 6 актов/18 сцен/16 развилок/40 вариантов/4 директивы/8 эпилогов.
-- Флаги/отношения: camp_relic_*, camp_voice_*, camp_hegemon_vassal/rejected, camp_teira_arc_*, camp_kira_arc_*, kira_debt; отношения teira_os/kain/kira7/selen; unlock main_01_rift_rumor.
-- l10n ru/en 1530↔1530; legacy-сцены/фразы удалены (legacy-check 0), docs/legacy-removed-keys.md, docs/story-script.md.
-- QA: story-verify 16/16, story-full e2e 3/3, unit 338/338, golden 8f52b0a6, полный e2e 64/64, acceptance §27/§28; gift 2.97 МБ/zip 1.04 МБ/verify 10/10; site синхронизирован.
+- Story: 12 кампанийных сцен (11 mission + epilogue): act0_relic, teira_arc, act1_hegemon, kira_arc, act2_council, act3_truth, act4_legacy, act4_betrayal, final_door, epilogue; + Древние 13b: ancient_archive/ancient_contact (requiresAncients); 103 outcome-узла; 5 мостиков (0→I…IV→V) в журнале; story-script v2 — 6 актов/18 сцен/16 развилок/40 вариантов/4 директивы/8 эпилогов.
+- Флаги/отношения: camp_relic_*, camp_voice_*, camp_hegemon_vassal/rejected, camp_teira_arc_*, camp_kira_arc_*, camp_ancient_* (17), kira_debt; отношения teira_os/kain/kira7/selen; unlock main_01_rift_rumor/main_03_truth/main_03_megastructure.
+- l10n ru/en 1584↔1584; legacy-сцены/фразы удалены (legacy-check 0), docs/legacy-removed-keys.md, docs/story-script.md.
+- QA: story-verify 17/17 (12 сцен/103 outcome/13b gating), story-full 4/4, unit 340/340, golden 8f52b0a6, полный e2e 65/65, acceptance §27/§28/§29; gift 2.99 МБ/zip 1.04 МБ/verify 10/10; site синхронизирован.
 ## [0.7.1] — 2026-11-07 · Финальная история/карта/арт v0.7 (task-46/47/48)
 
 - Story: 6 Gemini-сцен (акты II–V: 5 mission-сцен + эпилог); legacy-сцены/триггеры и 239 l10n-ключей удалены; endingHint/unlockMission (20/13); 20 payoff-флагов (requiresFlag) в поздних сценах; l10n ru/en 1407↔1407.

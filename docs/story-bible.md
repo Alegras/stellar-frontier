@@ -377,17 +377,24 @@
 | dlg_campaign_epilogue | после первой концовки | 26 | 3 |
 | dlg_campaign_teira_arc | main_01_colony (арка Тейры) | 18 | 2 |
 | dlg_campaign_kira_arc | main_02_first_crisis (арка Киры-7) | 16 | 2 |
+| dlg_campaign_ancient_archive | main_01_rift_rumor (линия 13b) | 18 | 2 |
+| dlg_campaign_ancient_contact | main_03_truth (линия 13b) | 23 | 3 |
 
 ### 15.2. Outcome-узлы
 После каждого варианта в 8 кампанийных сценах стоит узел-исход (`type: line`, `outcome: true`):
 - текст исхода — из литературного markdown (`outcomeRu`), локаль ru/en;
 - payoff-варианты без markdown-исхода используют текст `effectLabelKey`;
 - узел ведёт в прежний `next` варианта, поэтому прежние развилки/варианты и все флаги (`endingHint`, `unlockMission`) сохранены;
-- валидатор проверяет: у каждого варианта в 8 кампанийных сценах `next` указывает на узел с `outcome: true` (сейчас 88/88: 77 в 8 основных сценах + 11 в двух арках).
+- валидатор проверяет: у каждого варианта в 8 кампанийных сценах `next` указывает на узел с `outcome: true` (сейчас 103/103: 77 в 8 основных сценах + 11 в арках + 15 в двух ancient-сценах).
 
 ### 15.3а. Арки персонажей и мостики актов
 - Арки: `dlg_campaign_teira_arc` (main_01_colony; обещание Тейре про голос брата — camp_teira_arc_promise|truth|refuse, запись голоса keep|archive|erase) и `dlg_campaign_kira_arc` (main_02_first_crisis; фильтры станции/флоту — camp_kira_arc_filters_station|fleet, компенсация civil|fleet|none; при выборе станции ставится kira_debt).
 - Мостики: `packages/data/src/campaign/bridges.json` + экспорт `CAMPAIGN_BRIDGES` — 5 записей 0→I, I→II, II→III, III→IV, IV→V (id bridge_X_Y, titleRu, chronoRu, bodyRu «Хроника сектора»). Sim выводит их в fg.journal при смене акта; отдельной вкладки нет.
+
+### 15.3б. Линия Древних 13b в диалогах
+- `dlg_campaign_ancient_archive` (main_01_rift_rumor): архив Ансаров и Завет; выборы открыть/отдать Тейре/запечатать (camp_ancient_archive_open|teira|sealed) и экспедиция флотом/дронами/отказ (camp_ancient_expedition_fleet|drones|refuse); endingHint whisper/seal; unlockMission main_03_truth.
+- `dlg_campaign_ancient_contact` (main_03_truth): Молчащие и проекция «Хор — иммунная система»; выборы слушать/молчать/ответить (camp_ancient_contact_listen|silence|answer), карта/ядро/ничего (camp_ancient_contact_map|core|nothing), рассказ/тайна/использование (camp_ancient_contact_reveal|keep|use); endingHint whisper/seal; unlockMission main_03_megastructure.
+- Всего 17 camp_ancient_* флагов, 15 outcome-узлов; связки с 13b: Древние/Ансары/Молчащие, без отдельных вкладок.
 
 ### 15.3. Новые флаги (акты 0–I)
 - `camp_relic_study` / `camp_relic_sealed` / `camp_relic_given` — судьба реликвии Ансаров;

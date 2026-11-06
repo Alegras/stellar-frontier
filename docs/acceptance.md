@@ -422,26 +422,21 @@ EN — опциональный переключатель (не требова�
 
 ---
 
-## 27. Полная история 0–V: акты, арки, исходы, мостики (task-53/54/55, 2026-11-07)
 
-Golden seed 42 = **8f52b0a6**; unit **338/338**; typecheck 0; полный e2e **64/64 PASS** (5.5 мин). Артефакты: tools/story-verify.mjs **16/16 PASS**, e2e story-full **3/3**, dialogue-fixes **5/5**, dlc-dialogues-bugs **7/7**, unit 338.
+---
+
+## 29. Линия Древних 13b: Архив Ансаров и Контакт с Молчащими (task-56/57/58, 2026-11-08)
+
+Golden seed 42 = **8f52b0a6**; typecheck 0; unit **340/340**; story-verify **17/17 PASS**; story-full e2e **4/4**; полный e2e **65/65 PASS** (5.5 мин). Gift: **2.99 МБ**, zip **1.04 МБ**, verify-portable **10/10**; site синхронизирован.
 
 | # | Требование | Статус | Доказательство |
 |---|---|---|---|
-| 1 | 10 кампанийных сцен (8 + teira_arc/kira_arc) | **PASS** | story-verify: CAMPAIGN_MISSION_DIALOGUES=9 + epilogue=1; dialogues.json 13 (3 Q1 + 10); legacy-сцены удалены |
-| 2 | 88 outcome-узлов в UI | **PASS** | data: 88 узлов outcome=true (line, l10n); e2e story-full: outcome-бейдж dialogue-outcome, стиль, текст после выбора; dialogue-fixes outcome |
-| 3 | Триггеры актов 0–V | **PASS** | main_00_relic→act0_relic, main_01_colony→teira_arc, main_01_hegemon→hegemon, main_02_first_crisis→kira_arc, main_02_council→act2_council, main_03_truth, main_04_legacy_use, main_04_betrayal, main_05_final_choice + epilogue; headless: 10 сцен по одной, flags campaign_scene:*=10, повтор → null |
-| 4 | Флаги/отношения/unlock | **PASS** | camp_relic_study/sealed/given, camp_voice_*, camp_hegemon_vassal/rejected, camp_teira_arc_*, camp_kira_arc_* + kira_debt; отношения teira_os/kain/kira7/selen; unlock main_01_rift_rumor; e2e акт0/I: флаги, отношения, unlock |
-| 5 | 5 мостиков 0→I…IV→V в журнале | **PASS** | CAMPAIGN_BRIDGES=5 (bridge_0_1…4_5); headless campaignPhase: 5 записей журнала, повтор без дублей |
-| 6 | story-script v2: 6 актов/18 сцен/16 развилок/40 вариантов/4 директивы/8 эпилогов | **PASS** | story-verify по story-script.json; docs/story-script.md |
-| 7 | Старые сцены/фразы отсутствуют | **PASS** | legacy-check: 78 файлов, legacyHits=0, positiveHits=114; site/gift/dist пересобраны |
-| 8 | Гейты | **PASS** | typecheck 0; unit 338/338; golden 8f52b0a6; e2e **64/64**; gift/site verify 10/10 |
+| 1 | 2 новые сцены Древних | **PASS** | dlg_campaign_ancient_archive (main_01_rift_rumor, 18 узлов/2 выбора) и dlg_campaign_ancient_contact (main_03_truth, 23/3); dialogues.json 15 (3 Q1 + 12 кампанийных) |
+| 2 | 103 outcome-узла | **PASS** | story-verify: 103 outcome=true (line, l10n); e2e outcome-бейдж на архиве/актах |
+| 3 | Gating requiresAncients | **PASS** | сцены не стартуют без Древних и стартуют с enabled=true; e2e story-full: архив при включённых Древних; порядок ancient_contact раньше act3_truth (scene-флаги) |
+| 4 | 17 camp_ancient_* флагов, отношения, claim/unlock | **PASS** | archive_open/teira/sealed, expedition_fleet/drones/refuse; contact_listen/silence/answer/map/core/nothing/reveal/keep/use; unlock main_03_truth/main_03_megastructure; endingHint whisper/seal; e2e флаг camp_ancient_* |
+| 5 | Старые сцены/фразы отсутствуют | **PASS** | legacy-check 78 файлов, legacyHits=0, positiveHits=142 (добавлены ancient ids/namespace) |
+| 6 | Триггеры 12 сцен без дублей | **PASS** | story-verify: 12 сцен по одной (11 mission + epilogue), campaign_scene:*=12, повтор → null |
+| 7 | Гейты релиза | **PASS** | typecheck 0; unit 340/340; golden 8f52b0a6; story-verify 17/17; e2e 65/65; gift/site verify 10/10 |
 
-**Скриншоты:** dialogue-campaign.png, dialogue-outcome.png, story-act0-outcome.png, story-act1-hegemon.png, story-teira-arc.png, politics-map-1280.png, politics-sector-map-1280.png, dlc-comic-dom-1280/2560.png.
-
-## 28. Финальный релиз v0.7.2: бандлы и портатив
-
-- **gift:** StellarFrontier.html **2.97 МБ**, zip **1.04 МБ**, verify-portable **10/10** (file://: меню, WebGL2, старт, canvas, DLC-диалог, журнал 4 вкладки, Древние 5 вкладок, 0 ошибок консоли).
-- **site/**: StellarFrontier.html, gift/*, web/* синхронизированы с финальным dist; legacy-маркеров нет.
-- **Гейты релиза:** typecheck 0; unit 338/338; golden 8f52b0a6; story-verify 16/16; politics-verify 21/0/1; dlc-validate 32/32; dlc-test 24/24; dialogue-bugs 14/14; e2e **64/64**.
-- **Флейк:** долгие live-спеки (warp-sector/combat-live) иногда падают только в общем прогоне (изоляция зелёная); финальный 64/64; в CI рекомендован retries=1 для двух спеков.
+**Скриншоты:** story-ancient-archive.png, story-act0-outcome.png, story-act1-hegemon.png, story-teira-arc.png, dialogue-outcome.png, dialogue-campaign.png.

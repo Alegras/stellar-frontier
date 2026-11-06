@@ -95,6 +95,32 @@ const CATALOG: DlcCatalog = {
         { id: "e", type: "end" as const },
       ],
     },
+    {
+      id: "dlg_campaign_ancient_archive", version: 1,
+      nodes: [
+        { id: "l1", type: "line" as const, textKey: "anc_archive.l1", next: "c1" },
+        { id: "c1", type: "choice" as const, options: [
+          { id: "study", textKey: "anc_archive.study", next: "e", effects: [
+            { campaignFlag: "camp_ancient_archive_study", endingHint: "ending_whisper", effectLabelKey: "anc_archive.fx.study" },
+          ] },
+          { id: "seal", textKey: "anc_archive.seal", next: "e", effects: [{ campaignFlag: "camp_ancient_archive_seal" }] },
+        ] },
+        { id: "e", type: "end" as const },
+      ],
+    },
+    {
+      id: "dlg_campaign_ancient_contact", version: 1,
+      nodes: [
+        { id: "l1", type: "line" as const, textKey: "anc_contact.l1", next: "c1" },
+        { id: "c1", type: "choice" as const, options: [
+          { id: "ally", textKey: "anc_contact.ally", next: "e", effects: [
+            { campaignFlag: "camp_ancient_contact_ally", relation: { teira_os: 10 }, effectLabelKey: "anc_contact.fx.ally" },
+          ] },
+          { id: "refuse", textKey: "anc_contact.refuse", next: "e", effects: [{ campaignFlag: "camp_ancient_contact_refuse" }] },
+        ] },
+        { id: "e", type: "end" as const },
+      ],
+    },
     ...[
       "dlg_campaign_teira_arc", "dlg_campaign_kira_arc",
       "dlg_campaign_act2_council", "dlg_campaign_act3_truth", "dlg_campaign_act4_legacy",
@@ -323,6 +349,62 @@ describe("task-52 · акты 0/I: новые сцены один раз, эфф
       && entry.effects.some((effect) => effect.labelKey === "act0.fx.study"))).toBe(true);
     expect(getDlcState(world).seenScenes).not.toContain("dlg_q1_briefing");
     expect(getDlcState(world).seenScenes.filter((scene) => scene === "dlg_campaign_act0_relic").length).toBe(1);
+  });
+});
+
+describe("task-57 · сцены Древних: гейт линии, fallback и one-shot", () => {
+  it("archive/contact триггерятся по main/rift, gated по fg.ancients.enabled", () => {
+    const world = makeWorld();
+    const fg = ensureFg(world);
+    const d = getDlcState(world);
+    d.storySent = true;
+    fg.campaign.missions["main_01_rift_rumor"] = {
+      id: "main_01_rift_rumor", act: 1, titleRu: "", briefingRu: "", giver: "", objectives: [],
+      rewards: {}, branchRequired: null, secret: false, status: "completed", acceptedTick: 0, flags: {},
+    } as any;
+    fg.campaign.missions["rift_01_signal"] = {
+      id: "rift_01_signal", act: 1, titleRu: "", briefingRu: "", giver: "", objectives: [],
+      rewards: {}, branchRequired: null, secret: false, status: "completed", acceptedTick: 0, flags: {},
+    } as any;
+    world.tick = 10;
+    // линия Древних выключена — сцены не стартуют
+    fg.ancients.enabled = false;
+    expect(maybeStartCampaignStoryDialogue(world)).toBeNull();
+    fg.ancients.enabled = true;
+    // archive + contact по одному разу, с эффектами
+    expect(maybeStartCampaignStoryDialogue(world)).toBe("dlg_campaign_ancient_archive");
+    finishDialogue(world, ["study"]);
+    expect(fg.campaign.flags.camp_ancient_archive_study).toBe(1);
+    expect(fg.campaign.flags["ending_hint:ending_whisper"]).toBe(1);
+    expect(maybeStartCampaignStoryDialogue(world)).toBe("dlg_campaign_ancient_contact");
+    finishDialogue(world, ["ally"]);
+    expect(fg.campaign.flags.camp_ancient_contact_ally).toBe(1);
+    expect(getDlcState(world).reputation.teira_os).toBe(10);
+    expect(maybeStartCampaignStoryDialogue(world)).toBeNull();
+    expect(getDlcState(world).seenScenes).toContain("dlg_campaign_ancient_archive");
+    expect(fg.campaign.flags["campaign_scene:dlg_campaign_ancient_archive"]).toBe(1);
+    expect(fg.campaign.flags["campaign_scene:dlg_campaign_ancient_contact"]).toBe(1);
+  });
+
+  it("fallback rift_00_door/rift_01_signal и save/load", () => {
+    const world = makeWorld();
+    const fg = ensureFg(world);
+    const d = getDlcState(world);
+    d.storySent = true;
+    fg.campaign.missions["rift_00_door"] = { id: "rift_00_door", status: "completed" } as any;
+    fg.campaign.missions["rift_01_signal"] = { id: "rift_01_signal", status: "completed" } as any;
+    world.tick = 10;
+    expect(maybeStartCampaignStoryDialogue(world)).toBe("dlg_campaign_ancient_archive");
+    finishDialogue(world, ["seal"]);
+    expect(fg.campaign.flags.camp_ancient_archive_seal).toBe(1);
+    expect(maybeStartCampaignStoryDialogue(world)).toBe("dlg_campaign_ancient_contact");
+    finishDialogue(world, ["refuse"]);
+    expect(maybeStartCampaignStoryDialogue(world)).toBeNull();
+    const json = serializeWorld(world);
+    const restored = deserializeWorld(json);
+    expect(restored.fg!.campaign.flags["campaign_scene:dlg_campaign_ancient_archive"]).toBe(1);
+    expect(restored.fg!.campaign.flags["campaign_scene:dlg_campaign_ancient_contact"]).toBe(1);
+    expect(serializeWorld(restored)).toBe(json);
   });
 });
 
