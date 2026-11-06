@@ -9,7 +9,7 @@
 import * as THREE from "three";
 import { DESIGN_BY_ID, HULL_BY_ID, WEAPON_BY_ID } from "@sf/data";
 import type { HullDef, ShipDesignDef, WeaponDef } from "@sf/data";
-import type { AncientsSectorSystem, Fleet, Ship, StarSystem, World } from "@sf/sim";
+import type { AncientsSectorSystem, Fleet, Planet, Ship, StarSystem, World } from "@sf/sim";
 import { sectorDeathReturn as simSectorDeathReturn, warpRadiusLy, warpStatus } from "@sf/sim";
 import type { FlightTelemetry, GameApi, RenderSettings } from "../../game/types";
 import type { SceneView } from "../contracts";
@@ -34,6 +34,8 @@ import {
 
 /** Стыковка (GDD §10.1 / docs/05_ux_ui_spec.md §5.2): ≤ 2,5 км и скорость < 120 м/с. */
 const DOCK_RANGE_M = 2500;
+/** Дистанция до поверхности планеты, на которой доступна высадка колонистов. */
+const PLANET_INTERACT_RANGE_M = 60000;
 const DOCK_SPEED_M_S = 120;
 /**
  * Автопилот-помощник стыковки (docs/06 M3: «стыковка: запрос, коридор, автопилот-помощник»).
@@ -1782,6 +1784,28 @@ export class SystemView implements SceneView {
     t.stationName = station ? station.name : "";
     t.stationDist = Math.round(safeNum(this.stationDistanceM));
     t.canDock = canDock;
+    // ближайшая планета и возможность высадить колонистов
+    t.nearPlanetId = null;
+    t.nearPlanetName = "";
+    t.nearPlanetDist = 0;
+    t.nearPlanetHabitability = 0;
+    t.canColonize = false;
+    t.colonizerFleetId = null;
+    let bestPlanetDist = Number.POSITIVE_INFINITY;
+    let bestPlanet: Planet | null = null;
+    for (const body of this.sysScene.bodies) {
+      const d = this.flight.position.distanceTo(body.position) - body.radiusM;
+      if (d < bestPlanetDist) { bestPlanetDist = d; bestPlanet = body.planet; }
+    }
+    if (bestPlanet) {
+      t.nearPlanetId = bestPlanet.id;
+      t.nearPlanetName = bestPlanet.name;
+      t.nearPlanetDist = Math.round(Math.max(0, safeNum(bestPlanetDist)));
+      t.nearPlanetHabitability = bestPlanet.habitability;
+      const fleet = this.game.world.fleets.find((f) => f.empireId === this.game.world.playerEmpireId && f.systemId === this.systemId && f.ships.some((ship) => ship.classId === "colonizer"));
+      t.colonizerFleetId = fleet ? fleet.id : null;
+      t.canColonize = Boolean(fleet) && bestPlanet.ownerId === 0 && bestPlanet.colonyId === 0 && bestPlanet.habitability >= 40 && bestPlanetDist <= PLANET_INTERACT_RANGE_M && !flight.isDead;
+    }
     t.massLocked = this.massLocked;
     t.fsdCharge = this.fsdJumping ? clamp01(safeNum(this.fsdCharge)) : 0;
 

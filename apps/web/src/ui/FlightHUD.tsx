@@ -63,6 +63,21 @@ export function FlightHUD({ game, state }: { game: Game; state: GameState }) {
           </div>
         ))}
       </div>
+      {tel.nearPlanetId != null && (
+        <div className="sf-hud-block" style={{ top: 60, left: 18 }} data-testid="flight-planet">
+          <Panel title={L("Планета", "Planet") + " · " + tel.nearPlanetName} testId="flight-planet-panel">
+            <div className="sf-meta">{L("до поверхности", "to surface")}: {distText(tel.nearPlanetDist)} · {L("пригодность", "habitability")}: {intText(tel.nearPlanetHabitability)}%</div>
+            <Btn size="sm" variant={tel.canColonize ? "primary" : "default"} disabled={!tel.canColonize}
+              onClick={() => {
+                if (tel.nearPlanetId == null || tel.colonizerFleetId == null) return;
+                game.sendCommand({ type: "colonize", fleetId: tel.colonizerFleetId, planetId: tel.nearPlanetId } as never);
+              }}
+              testId="btn-colonize-flight">
+              {tel.canColonize ? L("Высадить колонистов", "Deploy colonists") : L("Нужен колонизатор / ближе к планете", "Need a colonizer / get closer")}
+            </Btn>
+          </Panel>
+        </div>
+      )}
       <div className="sf-hud-block sf-hud-block--back">
         <Btn onClick={() => game.exitToGalaxy()} title={L("Вернуться на карту (Esc)", "Back to map (Esc)")} testId="btn-exit-map">
           « {tr("system.exit", undefined, "На карту")}

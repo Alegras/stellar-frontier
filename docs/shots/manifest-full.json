@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-06T21:38:03.022Z",
+  "generatedAt": "2026-11-06T21:55:56.333Z",
   "baseURL": "http://127.0.0.1:5173",
   "viewport": "1600x900",
   "shots": [
@@ -7,61 +7,61 @@
       "file": "08-traditions.png",
       "status": "captured",
       "note": "панель империи: traditions",
-      "at": "2026-11-06T21:37:06.618Z"
+      "at": "2026-11-06T21:54:59.918Z"
     },
     {
       "file": "09-diplomacy.png",
       "status": "captured",
       "note": "панель империи: diplomacy",
-      "at": "2026-11-06T21:37:07.673Z"
+      "at": "2026-11-06T21:55:00.942Z"
     },
     {
       "file": "10-campaign.png",
       "status": "captured",
       "note": "панель империи: campaign",
-      "at": "2026-11-06T21:37:08.711Z"
+      "at": "2026-11-06T21:55:01.971Z"
     },
     {
       "file": "11-market.png",
       "status": "captured",
       "note": "панель полной игры: market",
-      "at": "2026-11-06T21:37:11.802Z"
+      "at": "2026-11-06T21:55:05.100Z"
     },
     {
       "file": "12-contracts.png",
       "status": "captured",
       "note": "панель полной игры: contracts",
-      "at": "2026-11-06T21:37:13.030Z"
+      "at": "2026-11-06T21:55:06.318Z"
     },
     {
       "file": "13-victory.png",
       "status": "captured",
       "note": "панель полной игры: victory",
-      "at": "2026-11-06T21:37:14.232Z"
+      "at": "2026-11-06T21:55:07.546Z"
     },
     {
       "file": "14-anomalies.png",
       "status": "captured",
       "note": "панель полной игры: anomalies",
-      "at": "2026-11-06T21:37:15.430Z"
+      "at": "2026-11-06T21:55:08.744Z"
     },
     {
       "file": "14-anomalies.png",
       "status": "skipped",
       "note": "TimeoutError: locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-testid=\"btn-close-panel-anomalies\"]')\u001b[22m\n\u001b[2m    - locator",
-      "at": "2026-11-06T21:37:45.442Z"
+      "at": "2026-11-06T21:55:38.753Z"
     },
     {
       "file": "15-megastructures.png",
       "status": "skipped",
       "note": "TimeoutError: locator.click: Timeout 8000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-testid=\"btn-open-more\"]')\u001b[22m\n\u001b[2m    - locator resolved to ",
-      "at": "2026-11-06T21:38:01.810Z"
+      "at": "2026-11-06T21:55:55.132Z"
     },
     {
       "file": "16-coop-lobby.png",
       "status": "captured",
       "note": "панель полной игры: coop",
-      "at": "2026-11-06T21:38:02.681Z"
+      "at": "2026-11-06T21:55:55.992Z"
     }
   ],
   "consoleErrors": [],

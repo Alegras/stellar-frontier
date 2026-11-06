@@ -87,6 +87,13 @@ export interface FlightTelemetry {
   stationName: string;
   stationDist: number;
   canDock: boolean;
+  /** ближайшая планета в зоне высадки */
+  nearPlanetId: number | null;
+  nearPlanetName: string;
+  nearPlanetDist: number;
+  nearPlanetHabitability: number;
+  canColonize: boolean;
+  colonizerFleetId: number | null;
   massLocked: boolean;
   fsdCharge: number;
   contacts: FlightContact[];
@@ -119,6 +126,12 @@ export const EMPTY_TELEMETRY: FlightTelemetry = {
   stationName: "",
   stationDist: 0,
   canDock: false,
+  nearPlanetId: null,
+  nearPlanetName: "",
+  nearPlanetDist: 0,
+  nearPlanetHabitability: 0,
+  canColonize: false,
+  colonizerFleetId: null,
   massLocked: false,
   fsdCharge: 0,
   contacts: [],

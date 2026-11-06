@@ -7,7 +7,7 @@ import {
   aiStatusLabel, aiWorldEventsOf, aiWorldStateOf, chooseAiWorldEvent, type AiNewsItem, type AiWorldEvent,
 } from "./world-politics";
 
-type Tab = "overview" | "matrix" | "news" | "events";
+type Tab = "overview" | "matrix" | "news" | "events" | "history";
 
 /** task-43: «Мировая политика» — ИИ-ИИ отношения, лента, фракции, влияние на игрока, события. */
 export function WorldPoliticsPanel({ game, state }: FullPanelProps) {
@@ -15,9 +15,12 @@ export function WorldPoliticsPanel({ game, state }: FullPanelProps) {
   const [tab, setTab] = useState<Tab>("overview");
   const [filter, setFilter] = useState<string>("all");
   const [hiddenEvents, setHiddenEvents] = useState<string[]>([]);
+  const [historyEmpireId, setHistoryEmpireId] = useState<number | null>(null);
+  const [historySystemId, setHistorySystemId] = useState<number | null>(null);
   const pol = useMemo(() => (world ? aiWorldStateOf(world) : null), [world, state.tick]);
   const news = useMemo(() => (world ? aiNewsOf(world, 60) : []), [world, state.tick, game]);
   const events = useMemo(() => (world ? aiWorldEventsOf(world) : []), [world, state.tick]);
+  const eventLog = useMemo(() => game.getEvents(300), [game, state.tick]);
 
   if (!world || !pol) return <Panel title={L("Мировая политика", "World politics")} testId="world-politics-panel"><div className="sf-empty">{L("Нет мира.", "No world.")}</div></Panel>;
 
@@ -39,6 +42,7 @@ export function WorldPoliticsPanel({ game, state }: FullPanelProps) {
     ["matrix", L("Матрица", "Matrix") + " (" + pol.empires.length + ")"],
     ["news", L("Лента", "Feed") + " (" + news.length + ")"],
     ["events", L("События", "Events") + " (" + pending.length + ")"],
+    ["history", L("История", "History")],
   ];
   const tabBtn = (id: Tab, label: string) => (
     <button key={id} type="button" role="tab" aria-selected={tab === id}
@@ -178,6 +182,48 @@ export function WorldPoliticsPanel({ game, state }: FullPanelProps) {
           </div>
         </Panel>
       )}
+
+      {tab === "history" && (() => {
+        const empireId = historyEmpireId ?? pid;
+        const factionNews = news.filter((n) => n.actorEmpireId === empireId || n.targetEmpireId === empireId);
+        const factionLog = eventLog.filter((e) => e.empireId === empireId);
+        const systemLog = historySystemId != null ? eventLog.filter((e) => e.systemId === historySystemId) : [];
+        const rows = [
+          ...factionNews.map((n) => ({ key: "n" + n.id, tick: n.tick, kind: n.kind, text: (n.actorName ?? "") + (n.targetName ? " → " + n.targetName : "") + (n.textRu ? " · " + n.textRu : ""), tone: n.severity ?? "info" })),
+          ...factionLog.map((e) => ({ key: "e" + e.id, tick: e.tick, kind: e.kind, text: e.messageRu, tone: e.severity })),
+          ...systemLog.map((e) => ({ key: "s" + e.id, tick: e.tick, kind: e.kind, text: e.messageRu, tone: e.severity })),
+        ].sort((a, b) => b.tick - a.tick).slice(0, 150);
+        return (
+          <Panel title={L("История фракции и системы", "Faction and system history")} tall>
+            <div className="sf-row" style={{ flexWrap: "wrap", gap: 6 }}>
+              <label className="sf-meta">{L("Фракция", "Faction")}{" "}
+                <select data-testid="history-empire" value={empireId} onChange={(e) => setHistoryEmpireId(Number(e.target.value))}>
+                  {world.empires.map((emp) => <option key={emp.id} value={emp.id}>{emp.name}{emp.id === pid ? " (вы)" : ""}</option>)}
+                </select>
+              </label>
+              <label className="sf-meta">{L("Система", "System")}{" "}
+                <select data-testid="history-system" value={historySystemId ?? 0} onChange={(e) => setHistorySystemId(Number(e.target.value) || null)}>
+                  <option value={0}>{L("вся галактика", "whole galaxy")}</option>
+                  {world.systems.filter((sys) => sys.knownBy.includes(pid)).slice(0, 120).map((sys) => <option key={sys.id} value={sys.id}>{sys.name}</option>)}
+                </select>
+              </label>
+              <span className="sf-spacer" />
+              <span className="sf-meta" data-testid="history-count">{intText(rows.length)}</span>
+            </div>
+            <Sep />
+            <div className="sf-list" data-testid="politics-history">
+              {rows.length === 0 && <div className="sf-empty">{L("Пока нет действий по этой фракции/системе.", "No actions for this faction/system yet.")}</div>}
+              {rows.map((row) => (
+                <div className="sf-line" key={row.key} data-testid={"history-row-" + row.key}>
+                  <span className="sf-meta" style={{ width: 52 }}>{"т" + intText(row.tick)}</span>
+                  <Badge tone={row.tone === "bad" ? "bad" : row.tone === "warn" ? "warn" : row.tone === "good" ? "good" : "info"}>{row.kind}</Badge>
+                  <span className="sf-meta" style={{ minWidth: 0 }}>{row.text}</span>
+                </div>
+              ))}
+            </div>
+          </Panel>
+        );
+      })()}
 
       {tab === "events" && (
         <Panel title={L("События для вас", "Events for you")} tall>
