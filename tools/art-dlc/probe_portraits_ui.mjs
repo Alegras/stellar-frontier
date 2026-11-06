@@ -26,8 +26,8 @@ const started = await page.evaluate(() => {
   const g = window.__SF_GAME__;
   g.newGame(42, "campaign");
   const tries = [
-    { type: "dlc_dialogue_start", sceneId: "dlg_campaign_act2", questId: "q_pro_06_echo_core" },
-    { type: "dlc_dialogue_start", sceneId: "dlg_campaign_act2" },
+    { type: "dlc_dialogue_start", sceneId: "dlg_campaign_act2_council", questId: "q_pro_06_echo_core" },
+    { type: "dlc_dialogue_start", sceneId: "dlg_campaign_act2_council" },
   ];
   const out = [];
   for (const cmd of tries) { try { out.push({ cmd: cmd.questId ?? "no-quest", ok: g.sendCommand(cmd) }); if (out[out.length - 1].ok) break; } catch (e) { out.push({ err: String(e).slice(0, 80) }); } }

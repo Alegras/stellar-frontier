@@ -32,7 +32,8 @@
             "next": "n04",
             "effects": [
               {
-                "flag": "going_now"
+                "flag": "going_now",
+                "effectLabelKey": "dlg.q1.fx.going_now"
               }
             ]
           },
@@ -42,7 +43,8 @@
             "next": "n05",
             "effects": [
               {
-                "flag": "diagnose_first"
+                "flag": "diagnose_first",
+                "effectLabelKey": "dlg.q1.fx.diagnose"
               },
               {
                 "timeSkip": 3
@@ -80,7 +82,8 @@
             "next": "n07",
             "effects": [
               {
-                "flag": "leader_first"
+                "flag": "leader_first",
+                "effectLabelKey": "dlg.q1.fx.leader"
               },
               {
                 "rep": {
@@ -95,7 +98,8 @@
             "next": "n07",
             "effects": [
               {
-                "flag": "escort_first"
+                "flag": "escort_first",
+                "effectLabelKey": "dlg.q1.fx.escort"
               }
             ]
           },
@@ -105,7 +109,8 @@
             "next": "n07",
             "effects": [
               {
-                "flag": "no_shots"
+                "flag": "no_shots",
+                "effectLabelKey": "dlg.q1.fx.noshots"
               },
               {
                 "rep": {
@@ -172,7 +177,8 @@
             "next": "n13",
             "effects": [
               {
-                "flag": "honest_report"
+                "flag": "honest_report",
+                "effectLabelKey": "dlg.q1.fx.honest"
               },
               {
                 "rep": {
@@ -187,7 +193,8 @@
             "next": "n13",
             "effects": [
               {
-                "flag": "hide_core"
+                "flag": "hide_core",
+                "effectLabelKey": "dlg.q1.fx.hide"
               }
             ]
           },
@@ -197,7 +204,8 @@
             "next": "n13",
             "effects": [
               {
-                "flag": "teira_only"
+                "flag": "teira_only",
+                "effectLabelKey": "dlg.q1.fx.teira"
               },
               {
                 "rep": {
@@ -254,7 +262,8 @@
             "next": "k3",
             "effects": [
               {
-                "credits": -1200
+                "credits": -1200,
+                "effectLabelKey": "dlg.q1st.fx.repair"
               },
               {
                 "rep": {
@@ -272,7 +281,8 @@
             "next": "k4",
             "effects": [
               {
-                "credits": 800
+                "credits": 800,
+                "effectLabelKey": "dlg.q1st.fx.fee"
               },
               {
                 "flag": "kira_paid"
@@ -285,7 +295,8 @@
             "next": "k5",
             "effects": [
               {
-                "credits": 2400
+                "credits": 2400,
+                "effectLabelKey": "dlg.q1st.fx.salvage"
               },
               {
                 "rep": {
@@ -366,15 +377,15 @@
     ]
   },
   {
-    "id": "dlg_campaign_act2",
+    "id": "dlg_campaign_act2_council",
     "version": 1,
     "nodes": [
       {
         "id": "n01",
         "type": "line",
         "speaker": "admiral_kain",
-        "emotion": "neutral",
-        "textKey": "dlg.camp.act2.n01",
+        "emotion": "cold",
+        "textKey": "dlg.camp.act2_c.n01",
         "next": "n02"
       },
       {
@@ -382,7 +393,2135 @@
         "type": "line",
         "speaker": "counselor_selen",
         "emotion": "cold",
-        "textKey": "dlg.camp.act2.n02",
+        "textKey": "dlg.camp.act2_c.n02",
+        "next": "n03"
+      },
+      {
+        "id": "n03",
+        "type": "choice",
+        "speaker": "teira_os",
+        "emotion": "neutral",
+        "textKey": "dlg.camp.act2_c.c1",
+        "options": [
+          {
+            "id": "centralize",
+            "textKey": "dlg.camp.act2_c.c1.a",
+            "next": "n03_out_centralize",
+            "effects": [
+              {
+                "campaignFlag": "camp_central_fleet"
+              },
+              {
+                "campaignFlag": "camp_fleet_first"
+              },
+              {
+                "relation": {
+                  "admiral_kain": 10,
+                  "counselor_selen": -5
+                }
+              },
+              {
+                "unlockMission": "main_02_first_crisis"
+              },
+              {
+                "effectLabelKey": "dlg.camp.act2_c.fx.centralize"
+              }
+            ]
+          },
+          {
+            "id": "delegate",
+            "textKey": "dlg.camp.act2_c.c1.b",
+            "next": "n03_out_delegate",
+            "effects": [
+              {
+                "campaignFlag": "camp_delegate_fleet"
+              },
+              {
+                "campaignFlag": "camp_diplo_first"
+              },
+              {
+                "relation": {
+                  "admiral_kain": -10,
+                  "counselor_selen": 10
+                }
+              },
+              {
+                "unlockMission": "main_02_first_crisis"
+              },
+              {
+                "effectLabelKey": "dlg.camp.act2_c.fx.delegate"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "n04",
+        "type": "line",
+        "speaker": "svet",
+        "emotion": "neutral",
+        "textKey": "dlg.camp.act2_c.n04",
+        "next": "n05"
+      },
+      {
+        "id": "n05",
+        "type": "line",
+        "speaker": "kira7",
+        "emotion": "afraid",
+        "textKey": "dlg.camp.act2_c.n05",
+        "next": "n06"
+      },
+      {
+        "id": "n06",
+        "type": "choice",
+        "speaker": "counselor_selen",
+        "emotion": "cold",
+        "textKey": "dlg.camp.act2_c.c2",
+        "options": [
+          {
+            "id": "council_now",
+            "textKey": "dlg.camp.act2_c.c2.a",
+            "next": "n06_out_council_now",
+            "effects": [
+              {
+                "campaignFlag": "camp_council_now"
+              },
+              {
+                "relation": {
+                  "counselor_selen": 5,
+                  "teira_os": 5
+                }
+              },
+              {
+                "effectLabelKey": "dlg.camp.act2_c.fx.council_now"
+              }
+            ]
+          },
+          {
+            "id": "council_delay",
+            "textKey": "dlg.camp.act2_c.c2.b",
+            "next": "n06_out_council_delay",
+            "effects": [
+              {
+                "campaignFlag": "camp_council_delay"
+              },
+              {
+                "relation": {
+                  "admiral_kain": 10,
+                  "teira_os": -5
+                }
+              },
+              {
+                "effectLabelKey": "dlg.camp.act2_c.fx.council_delay"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "n07",
+        "type": "line",
+        "speaker": "admiral_kain",
+        "emotion": "neutral",
+        "textKey": "dlg.camp.act2_c.n07",
+        "next": "n08"
+      },
+      {
+        "id": "n08",
+        "type": "choice",
+        "speaker": "admiral_kain",
+        "emotion": "cold",
+        "textKey": "dlg.camp.act2_c.c3",
+        "options": [
+          {
+            "id": "trust_admiral",
+            "textKey": "dlg.camp.act2_c.c3.a",
+            "next": "n08_out_trust_admiral",
+            "effects": [
+              {
+                "campaignFlag": "camp_trust_admiral"
+              },
+              {
+                "relation": {
+                  "admiral_kain": 15,
+                  "counselor_selen": -5
+                }
+              },
+              {
+                "effectLabelKey": "dlg.camp.act2_c.fx.trust_admiral"
+              }
+            ]
+          },
+          {
+            "id": "trust_council",
+            "textKey": "dlg.camp.act2_c.c3.b",
+            "next": "n08_out_trust_council",
+            "effects": [
+              {
+                "campaignFlag": "camp_trust_council"
+              },
+              {
+                "relation": {
+                  "counselor_selen": 10,
+                  "admiral_kain": -5
+                }
+              },
+              {
+                "effectLabelKey": "dlg.camp.act2_c.fx.trust_council"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "n09",
+        "type": "line",
+        "speaker": "teira_os",
+        "emotion": "sad",
+        "textKey": "dlg.camp.act2_c.n09",
+        "next": "n10"
+      },
+      {
+        "id": "n10",
+        "type": "line",
+        "speaker": "svet",
+        "emotion": "neutral",
+        "textKey": "dlg.camp.act2_c.n10",
+        "next": "n11"
+      },
+      {
+        "id": "n11",
+        "type": "effect",
+        "effects": [
+          {
+            "chronicleKey": "dlg.camp.act2_c.chronicle"
+          }
+        ],
+        "next": "n12"
+      },
+      {
+        "id": "n12",
+        "type": "end"
+      },
+      {
+        "id": "n03_out_centralize",
+        "type": "line",
+        "speaker": "teira_os",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.act2_c.out.centralize",
+        "next": "n04"
+      },
+      {
+        "id": "n03_out_delegate",
+        "type": "line",
+        "speaker": "teira_os",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.act2_c.out.delegate",
+        "next": "n04"
+      },
+      {
+        "id": "n06_out_council_now",
+        "type": "line",
+        "speaker": "counselor_selen",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.act2_c.out.council_now",
+        "next": "n07"
+      },
+      {
+        "id": "n06_out_council_delay",
+        "type": "line",
+        "speaker": "counselor_selen",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.act2_c.out.council_delay",
+        "next": "n07"
+      },
+      {
+        "id": "n08_out_trust_admiral",
+        "type": "line",
+        "speaker": "admiral_kain",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.act2_c.out.trust_admiral",
+        "next": "n09"
+      },
+      {
+        "id": "n08_out_trust_council",
+        "type": "line",
+        "speaker": "admiral_kain",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.act2_c.out.trust_council",
+        "next": "n09"
+      }
+    ]
+  },
+  {
+    "id": "dlg_campaign_act3_truth",
+    "version": 1,
+    "nodes": [
+      {
+        "id": "n01",
+        "type": "line",
+        "speaker": "teira_os",
+        "emotion": "cold",
+        "textKey": "dlg.camp.act3_t.n01",
+        "next": "n02"
+      },
+      {
+        "id": "n02",
+        "type": "line",
+        "speaker": "svet",
+        "emotion": "neutral",
+        "textKey": "dlg.camp.act3_t.n02",
+        "next": "n03"
+      },
+      {
+        "id": "n03",
+        "type": "choice",
+        "speaker": "teira_os",
+        "emotion": "neutral",
+        "textKey": "dlg.camp.act3_t.c1",
+        "options": [
+          {
+            "id": "reveal",
+            "textKey": "dlg.camp.act3_t.c1.a",
+            "next": "n03_out_reveal",
+            "effects": [
+              {
+                "campaignFlag": "camp_truth_revealed"
+              },
+              {
+                "relation": {
+                  "teira_os": 15,
+                  "counselor_selen": -10
+                }
+              },
+              {
+                "endingHint": "ending_seal"
+              },
+              {
+                "unlockMission": "main_03_split"
+              },
+              {
+                "effectLabelKey": "dlg.camp.act3_t.fx.reveal"
+              }
+            ]
+          },
+          {
+            "id": "hide",
+            "textKey": "dlg.camp.act3_t.c1.b",
+            "next": "n03_out_hide",
+            "effects": [
+              {
+                "campaignFlag": "camp_truth_hidden"
+              },
+              {
+                "relation": {
+                  "counselor_selen": 15,
+                  "teira_os": -15
+                }
+              },
+              {
+                "endingHint": "ending_control"
+              },
+              {
+                "unlockMission": "main_03_split"
+              },
+              {
+                "effectLabelKey": "dlg.camp.act3_t.fx.hide"
+              }
+            ]
+          },
+          {
+            "id": "use",
+            "textKey": "dlg.camp.act3_t.c1.c",
+            "next": "n03_out_use",
+            "effects": [
+              {
+                "campaignFlag": "camp_truth_used"
+              },
+              {
+                "relation": {
+                  "admiral_kain": 10,
+                  "kira7": -5
+                }
+              },
+              {
+                "endingHint": "ending_whisper"
+              },
+              {
+                "unlockMission": "main_03_split"
+              },
+              {
+                "effectLabelKey": "dlg.camp.act3_t.fx.use"
+              }
+            ]
+          },
+          {
+            "id": "reveal_central",
+            "textKey": "dlg.camp.act3_t.c1.d",
+            "next": "n03_out_reveal_central",
+            "requiresFlag": "camp_central_fleet",
+            "effects": [
+              {
+                "campaignFlag": "camp_truth_revealed"
+              },
+              {
+                "campaignFlag": "camp_truth_revealed_fleet"
+              },
+              {
+                "rep": {
+                  "military": 5
+                }
+              },
+              {
+                "endingHint": "ending_seal"
+              },
+              {
+                "unlockMission": "main_03_split"
+              },
+              {
+                "effectLabelKey": "dlg.camp.act3_t.fx.reveal_fleet"
+              }
+            ]
+          },
+          {
+            "id": "hide_patrol",
+            "textKey": "dlg.camp.act3_t.c1.e",
+            "next": "n03_out_hide_patrol",
+            "requiresFlag": "camp_delegate_fleet",
+            "effects": [
+              {
+                "campaignFlag": "camp_truth_hidden"
+              },
+              {
+                "campaignFlag": "camp_truth_hidden_patrol"
+              },
+              {
+                "rep": {
+                  "traders": 5
+                }
+              },
+              {
+                "endingHint": "ending_control"
+              },
+              {
+                "unlockMission": "main_03_split"
+              },
+              {
+                "effectLabelKey": "dlg.camp.act3_t.fx.hide_patrol"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "n04",
+        "type": "line",
+        "speaker": "counselor_selen",
+        "emotion": "cold",
+        "textKey": "dlg.camp.act3_t.n04",
+        "next": "n05"
+      },
+      {
+        "id": "n05",
+        "type": "line",
+        "speaker": "admiral_kain",
+        "emotion": "cold",
+        "textKey": "dlg.camp.act3_t.n05",
+        "next": "n06"
+      },
+      {
+        "id": "n06",
+        "type": "choice",
+        "speaker": "admiral_kain",
+        "emotion": "neutral",
+        "textKey": "dlg.camp.act3_t.c2",
+        "options": [
+          {
+            "id": "relic_empire",
+            "textKey": "dlg.camp.act3_t.c2.a",
+            "next": "n06_out_relic_empire",
+            "effects": [
+              {
+                "campaignFlag": "camp_relic_empire"
+              },
+              {
+                "relation": {
+                  "admiral_kain": 10,
+                  "kira7": -5
+                }
+              },
+              {
+                "endingHint": "ending_ascension"
+              },
+              {
+                "effectLabelKey": "dlg.camp.act3_t.fx.relic_empire"
+              }
+            ]
+          },
+          {
+            "id": "relic_returned",
+            "textKey": "dlg.camp.act3_t.c2.b",
+            "next": "n06_out_relic_returned",
+            "effects": [
+              {
+                "campaignFlag": "camp_relic_returned"
+              },
+              {
+                "relation": {
+                  "teira_os": 10,
+                  "admiral_kain": -5
+                }
+              },
+              {
+                "endingHint": "ending_release"
+              },
+              {
+                "effectLabelKey": "dlg.camp.act3_t.fx.relic_returned"
+              }
+            ]
+          },
+          {
+            "id": "relic_burned",
+            "textKey": "dlg.camp.act3_t.c2.c",
+            "next": "n06_out_relic_burned",
+            "effects": [
+              {
+                "campaignFlag": "camp_relic_burned"
+              },
+              {
+                "relation": {
+                  "counselor_selen": 10,
+                  "teira_os": -5
+                }
+              },
+              {
+                "endingHint": "ending_seal"
+              },
+              {
+                "effectLabelKey": "dlg.camp.act3_t.fx.relic_burned"
+              }
+            ]
+          },
+          {
+            "id": "relic_council",
+            "textKey": "dlg.camp.act3_t.c2.d",
+            "next": "n06_out_relic_council",
+            "requiresFlag": "camp_trust_council",
+            "effects": [
+              {
+                "campaignFlag": "camp_relic_returned"
+              },
+              {
+                "campaignFlag": "camp_relic_council"
+              },
+              {
+                "rep": {
+                  "scholars": 5
+                }
+              },
+              {
+                "endingHint": "ending_release"
+              },
+              {
+                "effectLabelKey": "dlg.camp.act3_t.fx.relic_council"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "n07",
+        "type": "line",
+        "speaker": "kira7",
+        "emotion": "afraid",
+        "textKey": "dlg.camp.act3_t.n07",
+        "next": "n08"
+      },
+      {
+        "id": "n08",
+        "type": "choice",
+        "speaker": "admiral_kain",
+        "emotion": "cold",
+        "textKey": "dlg.camp.act3_t.c3",
+        "options": [
+          {
+            "id": "march_now",
+            "textKey": "dlg.camp.act3_t.c3.a",
+            "next": "n08_out_march_now",
+            "effects": [
+              {
+                "campaignFlag": "camp_march_now"
+              },
+              {
+                "relation": {
+                  "admiral_kain": 15,
+                  "counselor_selen": -10
+                }
+              },
+              {
+                "unlockMission": "main_03_invasion"
+              },
+              {
+                "effectLabelKey": "dlg.camp.act3_t.fx.march_now"
+              }
+            ]
+          },
+          {
+            "id": "fortify",
+            "textKey": "dlg.camp.act3_t.c3.b",
+            "next": "n08_out_fortify",
+            "effects": [
+              {
+                "campaignFlag": "camp_fortify"
+              },
+              {
+                "relation": {
+                  "counselor_selen": 10,
+                  "admiral_kain": -10
+                }
+              },
+              {
+                "unlockMission": "main_03_megastructure"
+              },
+              {
+                "effectLabelKey": "dlg.camp.act3_t.fx.fortify"
+              }
+            ]
+          },
+          {
+            "id": "march_council",
+            "textKey": "dlg.camp.act3_t.c3.c",
+            "next": "n08_out_march_council",
+            "requiresFlag": "camp_council_now",
+            "effects": [
+              {
+                "campaignFlag": "camp_march_now"
+              },
+              {
+                "campaignFlag": "camp_march_council"
+              },
+              {
+                "rep": {
+                  "scholars": 5
+                }
+              },
+              {
+                "unlockMission": "main_03_invasion"
+              },
+              {
+                "effectLabelKey": "dlg.camp.act3_t.fx.march_council"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "n09",
+        "type": "line",
+        "speaker": "teira_os",
+        "emotion": "sad",
+        "textKey": "dlg.camp.act3_t.n09",
+        "next": "n10"
+      },
+      {
+        "id": "n10",
+        "type": "line",
+        "speaker": "svet",
+        "emotion": "neutral",
+        "textKey": "dlg.camp.act3_t.n10",
+        "next": "n11"
+      },
+      {
+        "id": "n11",
+        "type": "effect",
+        "effects": [
+          {
+            "chronicleKey": "dlg.camp.act3_t.chronicle"
+          }
+        ],
+        "next": "n12"
+      },
+      {
+        "id": "n12",
+        "type": "end"
+      },
+      {
+        "id": "n03_out_reveal",
+        "type": "line",
+        "speaker": "teira_os",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.act3_t.out.reveal",
+        "next": "n04"
+      },
+      {
+        "id": "n03_out_hide",
+        "type": "line",
+        "speaker": "teira_os",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.act3_t.out.hide",
+        "next": "n04"
+      },
+      {
+        "id": "n03_out_use",
+        "type": "line",
+        "speaker": "teira_os",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.act3_t.out.use",
+        "next": "n04"
+      },
+      {
+        "id": "n03_out_reveal_central",
+        "type": "line",
+        "speaker": "teira_os",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.act3_t.fx.reveal_fleet",
+        "next": "n04"
+      },
+      {
+        "id": "n03_out_hide_patrol",
+        "type": "line",
+        "speaker": "teira_os",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.act3_t.fx.hide_patrol",
+        "next": "n04"
+      },
+      {
+        "id": "n06_out_relic_empire",
+        "type": "line",
+        "speaker": "admiral_kain",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.act3_t.out.relic_empire",
+        "next": "n07"
+      },
+      {
+        "id": "n06_out_relic_returned",
+        "type": "line",
+        "speaker": "admiral_kain",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.act3_t.out.relic_returned",
+        "next": "n07"
+      },
+      {
+        "id": "n06_out_relic_burned",
+        "type": "line",
+        "speaker": "admiral_kain",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.act3_t.out.relic_burned",
+        "next": "n07"
+      },
+      {
+        "id": "n06_out_relic_council",
+        "type": "line",
+        "speaker": "admiral_kain",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.act3_t.fx.relic_council",
+        "next": "n07"
+      },
+      {
+        "id": "n08_out_march_now",
+        "type": "line",
+        "speaker": "admiral_kain",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.act3_t.out.march_now",
+        "next": "n09"
+      },
+      {
+        "id": "n08_out_fortify",
+        "type": "line",
+        "speaker": "admiral_kain",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.act3_t.out.fortify",
+        "next": "n09"
+      },
+      {
+        "id": "n08_out_march_council",
+        "type": "line",
+        "speaker": "admiral_kain",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.act3_t.fx.march_council",
+        "next": "n09"
+      }
+    ]
+  },
+  {
+    "id": "dlg_campaign_act4_legacy",
+    "version": 1,
+    "nodes": [
+      {
+        "id": "n01",
+        "type": "line",
+        "speaker": "svet",
+        "emotion": "neutral",
+        "textKey": "dlg.camp.act4_l.n01",
+        "next": "n02"
+      },
+      {
+        "id": "n02",
+        "type": "line",
+        "speaker": "counselor_selen",
+        "emotion": "cold",
+        "textKey": "dlg.camp.act4_l.n02",
+        "next": "n03"
+      },
+      {
+        "id": "n03",
+        "type": "choice",
+        "speaker": "counselor_selen",
+        "emotion": "neutral",
+        "textKey": "dlg.camp.act4_l.c1",
+        "options": [
+          {
+            "id": "use_engine",
+            "textKey": "dlg.camp.act4_l.c1.a",
+            "next": "n03_out_use_engine",
+            "effects": [
+              {
+                "campaignFlag": "camp_use_engine"
+              },
+              {
+                "relation": {
+                  "admiral_kain": 15,
+                  "teira_os": -15
+                }
+              },
+              {
+                "endingHint": "ending_ascension"
+              },
+              {
+                "unlockMission": "main_04_titan"
+              },
+              {
+                "effectLabelKey": "dlg.camp.act4_l.fx.use_engine"
+              }
+            ]
+          },
+          {
+            "id": "seal_engine",
+            "textKey": "dlg.camp.act4_l.c1.b",
+            "next": "n03_out_seal_engine",
+            "effects": [
+              {
+                "campaignFlag": "camp_seal_engine"
+              },
+              {
+                "relation": {
+                  "teira_os": 15,
+                  "admiral_kain": -10
+                }
+              },
+              {
+                "endingHint": "ending_seal"
+              },
+              {
+                "unlockMission": "main_04_titan"
+              },
+              {
+                "effectLabelKey": "dlg.camp.act4_l.fx.seal_engine"
+              }
+            ]
+          },
+          {
+            "id": "trade_engine",
+            "textKey": "dlg.camp.act4_l.c1.c",
+            "next": "n03_out_trade_engine",
+            "effects": [
+              {
+                "campaignFlag": "camp_trade_engine"
+              },
+              {
+                "branch": "syndicate"
+              },
+              {
+                "relation": {
+                  "counselor_selen": 15,
+                  "kira7": -10
+                }
+              },
+              {
+                "endingHint": "ending_syndicate"
+              },
+              {
+                "unlockMission": "main_04_titan"
+              },
+              {
+                "effectLabelKey": "dlg.camp.act4_l.fx.trade_engine"
+              }
+            ]
+          },
+          {
+            "id": "engine_seal_truth",
+            "textKey": "dlg.camp.act4_l.c1.d",
+            "next": "n03_out_engine_seal_truth",
+            "requiresFlag": "camp_truth_revealed",
+            "effects": [
+              {
+                "campaignFlag": "camp_seal_engine"
+              },
+              {
+                "campaignFlag": "camp_engine_seal_truth"
+              },
+              {
+                "rep": {
+                  "survivors": 5
+                }
+              },
+              {
+                "endingHint": "ending_seal"
+              },
+              {
+                "unlockMission": "main_04_titan"
+              },
+              {
+                "effectLabelKey": "dlg.camp.act4_l.fx.seal_truth"
+              }
+            ]
+          },
+          {
+            "id": "engine_use_whisper",
+            "textKey": "dlg.camp.act4_l.c1.e",
+            "next": "n03_out_engine_use_whisper",
+            "requiresFlag": "camp_truth_used",
+            "effects": [
+              {
+                "campaignFlag": "camp_use_engine"
+              },
+              {
+                "campaignFlag": "camp_engine_whisper"
+              },
+              {
+                "endingHint": "ending_whisper"
+              },
+              {
+                "unlockMission": "main_04_titan"
+              },
+              {
+                "effectLabelKey": "dlg.camp.act4_l.fx.use_whisper"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "n04",
+        "type": "line",
+        "speaker": "admiral_kain",
+        "emotion": "cold",
+        "textKey": "dlg.camp.act4_l.n04",
+        "next": "n05"
+      },
+      {
+        "id": "n05",
+        "type": "line",
+        "speaker": "teira_os",
+        "emotion": "neutral",
+        "textKey": "dlg.camp.act4_l.n05",
+        "next": "n06"
+      },
+      {
+        "id": "n06",
+        "type": "choice",
+        "speaker": "admiral_kain",
+        "emotion": "cold",
+        "textKey": "dlg.camp.act4_l.c2",
+        "options": [
+          {
+            "id": "fleet_truth",
+            "textKey": "dlg.camp.act4_l.c2.a",
+            "next": "n06_out_fleet_truth",
+            "effects": [
+              {
+                "campaignFlag": "camp_fleet_truth"
+              },
+              {
+                "relation": {
+                  "teira_os": 10,
+                  "counselor_selen": -10
+                }
+              },
+              {
+                "effectLabelKey": "dlg.camp.act4_l.fx.fleet_truth"
+              }
+            ]
+          },
+          {
+            "id": "fleet_lie",
+            "textKey": "dlg.camp.act4_l.c2.b",
+            "next": "n06_out_fleet_lie",
+            "effects": [
+              {
+                "campaignFlag": "camp_fleet_lie"
+              },
+              {
+                "relation": {
+                  "counselor_selen": 10,
+                  "teira_os": -15,
+                  "admiral_kain": 5
+                }
+              },
+              {
+                "effectLabelKey": "dlg.camp.act4_l.fx.fleet_lie"
+              }
+            ]
+          },
+          {
+            "id": "fleet_truth_ansari",
+            "textKey": "dlg.camp.act4_l.c2.c",
+            "next": "n06_out_fleet_truth_ansari",
+            "requiresFlag": "camp_relic_returned",
+            "effects": [
+              {
+                "campaignFlag": "camp_fleet_truth"
+              },
+              {
+                "campaignFlag": "camp_fleet_truth_ansari"
+              },
+              {
+                "relation": {
+                  "teira_os": 10
+                }
+              },
+              {
+                "endingHint": "ending_release"
+              },
+              {
+                "effectLabelKey": "dlg.camp.act4_l.fx.fleet_ansari"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "n07",
+        "type": "line",
+        "speaker": "kira7",
+        "emotion": "afraid",
+        "textKey": "dlg.camp.act4_l.n07",
+        "next": "n08"
+      },
+      {
+        "id": "n08",
+        "type": "line",
+        "speaker": "svet",
+        "emotion": "neutral",
+        "textKey": "dlg.camp.act4_l.n08",
+        "next": "n09"
+      },
+      {
+        "id": "n09",
+        "type": "line",
+        "speaker": "admiral_kain",
+        "emotion": "neutral",
+        "textKey": "dlg.camp.act4_l.n09",
+        "next": "n10"
+      },
+      {
+        "id": "n10",
+        "type": "effect",
+        "effects": [
+          {
+            "chronicleKey": "dlg.camp.act4_l.chronicle"
+          }
+        ],
+        "next": "n11"
+      },
+      {
+        "id": "n11",
+        "type": "end"
+      },
+      {
+        "id": "n03_out_use_engine",
+        "type": "line",
+        "speaker": "counselor_selen",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.act4_l.out.use_engine",
+        "next": "n04"
+      },
+      {
+        "id": "n03_out_seal_engine",
+        "type": "line",
+        "speaker": "counselor_selen",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.act4_l.out.seal_engine",
+        "next": "n04"
+      },
+      {
+        "id": "n03_out_trade_engine",
+        "type": "line",
+        "speaker": "counselor_selen",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.act4_l.out.trade_engine",
+        "next": "n04"
+      },
+      {
+        "id": "n03_out_engine_seal_truth",
+        "type": "line",
+        "speaker": "counselor_selen",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.act4_l.fx.seal_truth",
+        "next": "n04"
+      },
+      {
+        "id": "n03_out_engine_use_whisper",
+        "type": "line",
+        "speaker": "counselor_selen",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.act4_l.fx.use_whisper",
+        "next": "n04"
+      },
+      {
+        "id": "n06_out_fleet_truth",
+        "type": "line",
+        "speaker": "admiral_kain",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.act4_l.out.fleet_truth",
+        "next": "n07"
+      },
+      {
+        "id": "n06_out_fleet_lie",
+        "type": "line",
+        "speaker": "admiral_kain",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.act4_l.out.fleet_lie",
+        "next": "n07"
+      },
+      {
+        "id": "n06_out_fleet_truth_ansari",
+        "type": "line",
+        "speaker": "admiral_kain",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.act4_l.fx.fleet_ansari",
+        "next": "n07"
+      }
+    ]
+  },
+  {
+    "id": "dlg_campaign_act4_betrayal",
+    "version": 1,
+    "nodes": [
+      {
+        "id": "n01",
+        "type": "line",
+        "speaker": "counselor_selen",
+        "emotion": "cold",
+        "textKey": "dlg.camp.act4_b.n01",
+        "next": "n02"
+      },
+      {
+        "id": "n02",
+        "type": "line",
+        "speaker": "teira_os",
+        "emotion": "neutral",
+        "textKey": "dlg.camp.act4_b.n02",
+        "next": "n03"
+      },
+      {
+        "id": "n03",
+        "type": "line",
+        "speaker": "admiral_kain",
+        "emotion": "cold",
+        "textKey": "dlg.camp.act4_b.n03",
+        "next": "n04"
+      },
+      {
+        "id": "n04",
+        "type": "choice",
+        "speaker": "counselor_selen",
+        "emotion": "cold",
+        "textKey": "dlg.camp.act4_b.c1",
+        "options": [
+          {
+            "id": "believe_selena",
+            "textKey": "dlg.camp.act4_b.c1.a",
+            "next": "n04_out_believe_selena",
+            "effects": [
+              {
+                "campaignFlag": "camp_believe_selena"
+              },
+              {
+                "relation": {
+                  "counselor_selen": 15,
+                  "teira_os": -15,
+                  "admiral_kain": -10
+                }
+              },
+              {
+                "effectLabelKey": "dlg.camp.act4_b.fx.believe_selena"
+              }
+            ]
+          },
+          {
+            "id": "believe_teira",
+            "textKey": "dlg.camp.act4_b.c1.b",
+            "next": "n04_out_believe_teira",
+            "effects": [
+              {
+                "campaignFlag": "camp_believe_teira"
+              },
+              {
+                "relation": {
+                  "teira_os": 15,
+                  "counselor_selen": -15,
+                  "admiral_kain": 5
+                }
+              },
+              {
+                "effectLabelKey": "dlg.camp.act4_b.fx.believe_teira"
+              }
+            ]
+          },
+          {
+            "id": "believe_engine",
+            "textKey": "dlg.camp.act4_b.c1.c",
+            "next": "n04_out_believe_engine",
+            "requiresFlag": "camp_use_engine",
+            "effects": [
+              {
+                "campaignFlag": "camp_believe_selena"
+              },
+              {
+                "campaignFlag": "camp_believe_engine"
+              },
+              {
+                "relation": {
+                  "admiral_kain": 5
+                }
+              },
+              {
+                "effectLabelKey": "dlg.camp.act4_b.fx.believe_engine"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "n05",
+        "type": "line",
+        "speaker": "svet",
+        "emotion": "neutral",
+        "textKey": "dlg.camp.act4_b.n05",
+        "next": "n06"
+      },
+      {
+        "id": "n06",
+        "type": "line",
+        "speaker": "counselor_selen",
+        "emotion": "cold",
+        "textKey": "dlg.camp.act4_b.n06",
+        "next": "n07"
+      },
+      {
+        "id": "n07",
+        "type": "choice",
+        "speaker": "teira_os",
+        "emotion": "neutral",
+        "textKey": "dlg.camp.act4_b.c2",
+        "options": [
+          {
+            "id": "forgive",
+            "textKey": "dlg.camp.act4_b.c2.a",
+            "next": "n07_out_forgive",
+            "effects": [
+              {
+                "campaignFlag": "camp_betrayal_forgiven"
+              },
+              {
+                "relation": {
+                  "counselor_selen": 10,
+                  "admiral_kain": -15,
+                  "teira_os": -10
+                }
+              },
+              {
+                "effectLabelKey": "dlg.camp.act4_b.fx.forgive"
+              }
+            ]
+          },
+          {
+            "id": "execute",
+            "textKey": "dlg.camp.act4_b.c2.b",
+            "next": "n07_out_execute",
+            "effects": [
+              {
+                "campaignFlag": "camp_betrayal_executed"
+              },
+              {
+                "relation": {
+                  "admiral_kain": 15,
+                  "counselor_selen": -50,
+                  "teira_os": -15
+                }
+              },
+              {
+                "endingHint": "ending_ironman"
+              },
+              {
+                "effectLabelKey": "dlg.camp.act4_b.fx.execute"
+              }
+            ]
+          },
+          {
+            "id": "exile",
+            "textKey": "dlg.camp.act4_b.c2.c",
+            "next": "n07_out_exile",
+            "effects": [
+              {
+                "campaignFlag": "camp_betrayal_exiled"
+              },
+              {
+                "relation": {
+                  "counselor_selen": -20,
+                  "teira_os": 10,
+                  "admiral_kain": 5
+                }
+              },
+              {
+                "endingHint": "ending_exile"
+              },
+              {
+                "effectLabelKey": "dlg.camp.act4_b.fx.exile"
+              }
+            ]
+          },
+          {
+            "id": "forgive_truth",
+            "textKey": "dlg.camp.act4_b.c2.d",
+            "next": "n07_out_forgive_truth",
+            "requiresFlag": "camp_fleet_truth",
+            "effects": [
+              {
+                "campaignFlag": "camp_betrayal_forgiven"
+              },
+              {
+                "campaignFlag": "camp_betrayal_truth"
+              },
+              {
+                "relation": {
+                  "teira_os": 10
+                }
+              },
+              {
+                "effectLabelKey": "dlg.camp.act4_b.fx.forgive_truth"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "n08",
+        "type": "line",
+        "speaker": "kira7",
+        "emotion": "afraid",
+        "textKey": "dlg.camp.act4_b.n08",
+        "next": "n09"
+      },
+      {
+        "id": "n09",
+        "type": "choice",
+        "speaker": "admiral_kain",
+        "emotion": "neutral",
+        "textKey": "dlg.camp.act4_b.c3",
+        "options": [
+          {
+            "id": "verdict_law",
+            "textKey": "dlg.camp.act4_b.c3.a",
+            "next": "n09_out_verdict_law",
+            "effects": [
+              {
+                "campaignFlag": "camp_verdict_law"
+              },
+              {
+                "relation": {
+                  "admiral_kain": 10,
+                  "counselor_selen": -5
+                }
+              },
+              {
+                "effectLabelKey": "dlg.camp.act4_b.fx.verdict_law"
+              }
+            ]
+          },
+          {
+            "id": "verdict_unity",
+            "textKey": "dlg.camp.act4_b.c3.b",
+            "next": "n09_out_verdict_unity",
+            "effects": [
+              {
+                "campaignFlag": "camp_verdict_unity"
+              },
+              {
+                "relation": {
+                  "admiral_kain": 5,
+                  "teira_os": 5
+                }
+              },
+              {
+                "effectLabelKey": "dlg.camp.act4_b.fx.verdict_unity"
+              }
+            ]
+          },
+          {
+            "id": "verdict_syndicate",
+            "textKey": "dlg.camp.act4_b.c3.c",
+            "next": "n09_out_verdict_syndicate",
+            "requiresFlag": "camp_trade_engine",
+            "effects": [
+              {
+                "campaignFlag": "camp_verdict_law"
+              },
+              {
+                "campaignFlag": "camp_verdict_syndicate"
+              },
+              {
+                "relation": {
+                  "counselor_selen": 10
+                }
+              },
+              {
+                "effectLabelKey": "dlg.camp.act4_b.fx.verdict_syndicate"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "n10",
+        "type": "line",
+        "speaker": "svet",
+        "emotion": "neutral",
+        "textKey": "dlg.camp.act4_b.n10",
+        "next": "n11"
+      },
+      {
+        "id": "n11",
+        "type": "effect",
+        "effects": [
+          {
+            "chronicleKey": "dlg.camp.act4_b.chronicle"
+          }
+        ],
+        "next": "n12"
+      },
+      {
+        "id": "n12",
+        "type": "end"
+      },
+      {
+        "id": "n04_out_believe_selena",
+        "type": "line",
+        "speaker": "counselor_selen",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.act4_b.out.believe_selena",
+        "next": "n05"
+      },
+      {
+        "id": "n04_out_believe_teira",
+        "type": "line",
+        "speaker": "counselor_selen",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.act4_b.out.believe_teira",
+        "next": "n05"
+      },
+      {
+        "id": "n04_out_believe_engine",
+        "type": "line",
+        "speaker": "counselor_selen",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.act4_b.fx.believe_engine",
+        "next": "n05"
+      },
+      {
+        "id": "n07_out_forgive",
+        "type": "line",
+        "speaker": "teira_os",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.act4_b.out.forgive",
+        "next": "n08"
+      },
+      {
+        "id": "n07_out_execute",
+        "type": "line",
+        "speaker": "teira_os",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.act4_b.out.execute",
+        "next": "n08"
+      },
+      {
+        "id": "n07_out_exile",
+        "type": "line",
+        "speaker": "teira_os",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.act4_b.out.exile",
+        "next": "n08"
+      },
+      {
+        "id": "n07_out_forgive_truth",
+        "type": "line",
+        "speaker": "teira_os",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.act4_b.fx.forgive_truth",
+        "next": "n08"
+      },
+      {
+        "id": "n09_out_verdict_law",
+        "type": "line",
+        "speaker": "admiral_kain",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.act4_b.out.verdict_law",
+        "next": "n10"
+      },
+      {
+        "id": "n09_out_verdict_unity",
+        "type": "line",
+        "speaker": "admiral_kain",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.act4_b.out.verdict_unity",
+        "next": "n10"
+      },
+      {
+        "id": "n09_out_verdict_syndicate",
+        "type": "line",
+        "speaker": "admiral_kain",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.act4_b.fx.verdict_syndicate",
+        "next": "n10"
+      }
+    ]
+  },
+  {
+    "id": "dlg_campaign_final_door",
+    "version": 1,
+    "nodes": [
+      {
+        "id": "n01",
+        "type": "line",
+        "speaker": "svet",
+        "emotion": "neutral",
+        "textKey": "dlg.camp.fin_d.n01",
+        "next": "n02"
+      },
+      {
+        "id": "n02",
+        "type": "line",
+        "speaker": "teira_os",
+        "emotion": "cold",
+        "textKey": "dlg.camp.fin_d.n02",
+        "next": "n03"
+      },
+      {
+        "id": "n03",
+        "type": "choice",
+        "speaker": "teira_os",
+        "emotion": "neutral",
+        "textKey": "dlg.camp.fin_d.c1",
+        "options": [
+          {
+            "id": "rift_door",
+            "textKey": "dlg.camp.fin_d.c1.a",
+            "next": "n03_out_rift_door",
+            "effects": [
+              {
+                "campaignFlag": "camp_rift_door"
+              },
+              {
+                "relation": {
+                  "teira_os": 5
+                }
+              },
+              {
+                "endingHint": "ending_ascension"
+              },
+              {
+                "effectLabelKey": "dlg.camp.fin_d.fx.rift_door"
+              }
+            ]
+          },
+          {
+            "id": "rift_weapon",
+            "textKey": "dlg.camp.fin_d.c1.b",
+            "next": "n03_out_rift_weapon",
+            "effects": [
+              {
+                "campaignFlag": "camp_rift_weapon"
+              },
+              {
+                "relation": {
+                  "admiral_kain": 10
+                }
+              },
+              {
+                "endingHint": "ending_control"
+              },
+              {
+                "effectLabelKey": "dlg.camp.fin_d.fx.rift_weapon"
+              }
+            ]
+          },
+          {
+            "id": "rift_grave",
+            "textKey": "dlg.camp.fin_d.c1.c",
+            "next": "n03_out_rift_grave",
+            "effects": [
+              {
+                "campaignFlag": "camp_rift_grave"
+              },
+              {
+                "relation": {
+                  "teira_os": 10
+                }
+              },
+              {
+                "endingHint": "ending_seal"
+              },
+              {
+                "effectLabelKey": "dlg.camp.fin_d.fx.rift_grave"
+              }
+            ]
+          },
+          {
+            "id": "rift_truth",
+            "textKey": "dlg.camp.fin_d.c1.d",
+            "next": "n03_out_rift_truth",
+            "requiresFlag": "camp_believe_teira",
+            "effects": [
+              {
+                "campaignFlag": "camp_rift_truth"
+              },
+              {
+                "endingHint": "ending_whisper"
+              },
+              {
+                "effectLabelKey": "dlg.camp.fin_d.fx.rift_truth"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "n04",
+        "type": "line",
+        "speaker": "admiral_kain",
+        "emotion": "neutral",
+        "textKey": "dlg.camp.fin_d.n04",
+        "next": "n05"
+      },
+      {
+        "id": "n05",
+        "type": "line",
+        "speaker": "counselor_selen",
+        "emotion": "cold",
+        "textKey": "dlg.camp.fin_d.n05",
+        "next": "n06"
+      },
+      {
+        "id": "n06",
+        "type": "choice",
+        "speaker": "svet",
+        "emotion": "neutral",
+        "textKey": "dlg.camp.fin_d.c2",
+        "options": [
+          {
+            "id": "final_seal",
+            "textKey": "dlg.camp.fin_d.c2.a",
+            "next": "n06_out_final_seal",
+            "effects": [
+              {
+                "campaignFlag": "camp_final_seal"
+              },
+              {
+                "endingHint": "ending_seal"
+              },
+              {
+                "relation": {
+                  "teira_os": 15
+                }
+              },
+              {
+                "unlockMission": "main_05_legacy_end"
+              },
+              {
+                "effectLabelKey": "dlg.camp.fin_d.fx.final_seal"
+              }
+            ]
+          },
+          {
+            "id": "final_control",
+            "textKey": "dlg.camp.fin_d.c2.b",
+            "next": "n06_out_final_control",
+            "effects": [
+              {
+                "campaignFlag": "camp_final_control"
+              },
+              {
+                "endingHint": "ending_control"
+              },
+              {
+                "relation": {
+                  "admiral_kain": 15
+                }
+              },
+              {
+                "unlockMission": "main_05_legacy_end"
+              },
+              {
+                "effectLabelKey": "dlg.camp.fin_d.fx.final_control"
+              }
+            ]
+          },
+          {
+            "id": "final_release",
+            "textKey": "dlg.camp.fin_d.c2.c",
+            "next": "n06_out_final_release",
+            "effects": [
+              {
+                "campaignFlag": "camp_final_release"
+              },
+              {
+                "endingHint": "ending_release"
+              },
+              {
+                "relation": {
+                  "kira7": 15
+                }
+              },
+              {
+                "unlockMission": "main_05_legacy_end"
+              },
+              {
+                "effectLabelKey": "dlg.camp.fin_d.fx.final_release"
+              }
+            ]
+          },
+          {
+            "id": "final_whisper",
+            "textKey": "dlg.camp.fin_d.c2.d",
+            "requiresFlag": "camp_truth_used",
+            "next": "n06_out_final_whisper",
+            "effects": [
+              {
+                "campaignFlag": "camp_final_whisper"
+              },
+              {
+                "endingHint": "ending_whisper"
+              },
+              {
+                "relation": {
+                  "teira_os": 10
+                }
+              },
+              {
+                "effectLabelKey": "dlg.camp.fin_d.fx.final_whisper"
+              }
+            ]
+          },
+          {
+            "id": "final_control_engine",
+            "textKey": "dlg.camp.fin_d.c2.e",
+            "next": "n06_out_final_control_engine",
+            "requiresFlag": "camp_use_engine",
+            "effects": [
+              {
+                "ending": "ending_control"
+              },
+              {
+                "campaignFlag": "camp_final_control_engine"
+              },
+              {
+                "unlockMission": "main_05_legacy_end"
+              },
+              {
+                "effectLabelKey": "dlg.camp.fin_d.fx.final_control_engine"
+              }
+            ]
+          },
+          {
+            "id": "final_syndicate",
+            "textKey": "dlg.camp.fin_d.c2.f",
+            "next": "n06_out_final_syndicate",
+            "requiresFlag": "camp_trade_engine",
+            "effects": [
+              {
+                "ending": "ending_syndicate"
+              },
+              {
+                "campaignFlag": "camp_final_syndicate"
+              },
+              {
+                "unlockMission": "main_05_legacy_end"
+              },
+              {
+                "effectLabelKey": "dlg.camp.fin_d.fx.final_syndicate"
+              }
+            ]
+          },
+          {
+            "id": "final_seal_quiet",
+            "textKey": "dlg.camp.fin_d.c2.g",
+            "next": "n06_out_final_seal_quiet",
+            "requiresFlag": "camp_seal_engine",
+            "effects": [
+              {
+                "ending": "ending_seal"
+              },
+              {
+                "campaignFlag": "camp_final_seal_quiet"
+              },
+              {
+                "unlockMission": "main_05_legacy_end"
+              },
+              {
+                "effectLabelKey": "dlg.camp.fin_d.fx.final_seal_quiet"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "n07",
+        "type": "line",
+        "speaker": "kira7",
+        "emotion": "afraid",
+        "textKey": "dlg.camp.fin_d.n07",
+        "next": "n08"
+      },
+      {
+        "id": "n08",
+        "type": "choice",
+        "speaker": "teira_os",
+        "emotion": "sad",
+        "textKey": "dlg.camp.fin_d.c3",
+        "options": [
+          {
+            "id": "price_fleet",
+            "textKey": "dlg.camp.fin_d.c3.a",
+            "next": "n08_out_price_fleet",
+            "effects": [
+              {
+                "campaignFlag": "camp_final_price_fleet"
+              },
+              {
+                "relation": {
+                  "admiral_kain": 20
+                }
+              },
+              {
+                "effectLabelKey": "dlg.camp.fin_d.fx.price_fleet"
+              }
+            ]
+          },
+          {
+            "id": "price_worlds",
+            "textKey": "dlg.camp.fin_d.c3.b",
+            "next": "n08_out_price_worlds",
+            "effects": [
+              {
+                "campaignFlag": "camp_final_price_worlds"
+              },
+              {
+                "relation": {
+                  "kira7": 20
+                }
+              },
+              {
+                "effectLabelKey": "dlg.camp.fin_d.fx.price_worlds"
+              }
+            ]
+          },
+          {
+            "id": "price_knowledge",
+            "textKey": "dlg.camp.fin_d.c3.c",
+            "next": "n08_out_price_knowledge",
+            "effects": [
+              {
+                "campaignFlag": "camp_final_price_knowledge"
+              },
+              {
+                "relation": {
+                  "teira_os": 20
+                }
+              },
+              {
+                "effectLabelKey": "dlg.camp.fin_d.fx.price_knowledge"
+              }
+            ]
+          },
+          {
+            "id": "price_law",
+            "textKey": "dlg.camp.fin_d.c3.d",
+            "next": "n08_out_price_law",
+            "requiresFlag": "camp_verdict_law",
+            "effects": [
+              {
+                "campaignFlag": "camp_final_price_law"
+              },
+              {
+                "rep": {
+                  "military": 10
+                }
+              },
+              {
+                "effectLabelKey": "dlg.camp.fin_d.fx.price_law"
+              }
+            ]
+          },
+          {
+            "id": "price_selena",
+            "textKey": "dlg.camp.fin_d.c3.e",
+            "next": "n08_out_price_selena",
+            "requiresFlag": "camp_believe_selena",
+            "effects": [
+              {
+                "campaignFlag": "camp_final_price_selena"
+              },
+              {
+                "relation": {
+                  "counselor_selen": 5
+                }
+              },
+              {
+                "effectLabelKey": "dlg.camp.fin_d.fx.price_selena"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "n09",
+        "type": "line",
+        "speaker": "admiral_kain",
+        "emotion": "cold",
+        "textKey": "dlg.camp.fin_d.n09",
+        "next": "n10"
+      },
+      {
+        "id": "n10",
+        "type": "line",
+        "speaker": "teira_os",
+        "emotion": "neutral",
+        "textKey": "dlg.camp.fin_d.n10",
+        "next": "n11"
+      },
+      {
+        "id": "n11",
+        "type": "line",
+        "speaker": "svet",
+        "emotion": "neutral",
+        "textKey": "dlg.camp.fin_d.n11",
+        "next": "n12"
+      },
+      {
+        "id": "n12",
+        "type": "effect",
+        "effects": [
+          {
+            "chronicleKey": "dlg.camp.fin_d.chronicle"
+          }
+        ],
+        "next": "n13"
+      },
+      {
+        "id": "n13",
+        "type": "end"
+      },
+      {
+        "id": "n03_out_rift_door",
+        "type": "line",
+        "speaker": "teira_os",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.fin_d.out.rift_door",
+        "next": "n04"
+      },
+      {
+        "id": "n03_out_rift_weapon",
+        "type": "line",
+        "speaker": "teira_os",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.fin_d.out.rift_weapon",
+        "next": "n04"
+      },
+      {
+        "id": "n03_out_rift_grave",
+        "type": "line",
+        "speaker": "teira_os",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.fin_d.out.rift_grave",
+        "next": "n04"
+      },
+      {
+        "id": "n03_out_rift_truth",
+        "type": "line",
+        "speaker": "teira_os",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.fin_d.fx.rift_truth",
+        "next": "n04"
+      },
+      {
+        "id": "n06_out_final_seal",
+        "type": "line",
+        "speaker": "svet",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.fin_d.out.final_seal",
+        "next": "n07"
+      },
+      {
+        "id": "n06_out_final_control",
+        "type": "line",
+        "speaker": "svet",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.fin_d.out.final_control",
+        "next": "n07"
+      },
+      {
+        "id": "n06_out_final_release",
+        "type": "line",
+        "speaker": "svet",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.fin_d.out.final_release",
+        "next": "n07"
+      },
+      {
+        "id": "n06_out_final_whisper",
+        "type": "line",
+        "speaker": "svet",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.fin_d.out.final_whisper",
+        "next": "n07"
+      },
+      {
+        "id": "n06_out_final_control_engine",
+        "type": "line",
+        "speaker": "svet",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.fin_d.fx.final_control_engine",
+        "next": "n07"
+      },
+      {
+        "id": "n06_out_final_syndicate",
+        "type": "line",
+        "speaker": "svet",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.fin_d.fx.final_syndicate",
+        "next": "n07"
+      },
+      {
+        "id": "n06_out_final_seal_quiet",
+        "type": "line",
+        "speaker": "svet",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.fin_d.fx.final_seal_quiet",
+        "next": "n07"
+      },
+      {
+        "id": "n08_out_price_fleet",
+        "type": "line",
+        "speaker": "teira_os",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.fin_d.out.price_fleet",
+        "next": "n09"
+      },
+      {
+        "id": "n08_out_price_worlds",
+        "type": "line",
+        "speaker": "teira_os",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.fin_d.out.price_worlds",
+        "next": "n09"
+      },
+      {
+        "id": "n08_out_price_knowledge",
+        "type": "line",
+        "speaker": "teira_os",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.fin_d.out.price_knowledge",
+        "next": "n09"
+      },
+      {
+        "id": "n08_out_price_law",
+        "type": "line",
+        "speaker": "teira_os",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.fin_d.fx.price_law",
+        "next": "n09"
+      },
+      {
+        "id": "n08_out_price_selena",
+        "type": "line",
+        "speaker": "teira_os",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.fin_d.fx.price_selena",
+        "next": "n09"
+      }
+    ]
+  },
+  {
+    "id": "dlg_campaign_epilogue",
+    "version": 1,
+    "nodes": [
+      {
+        "id": "n01",
+        "type": "line",
+        "speaker": "svet",
+        "emotion": "neutral",
+        "textKey": "dlg.camp.epi.n01",
+        "next": "n02"
+      },
+      {
+        "id": "n02",
+        "type": "line",
+        "speaker": "admiral_kain",
+        "emotion": "cold",
+        "textKey": "dlg.camp.epi.n02",
         "next": "n03"
       },
       {
@@ -390,15 +2529,523 @@
         "type": "choice",
         "speaker": "admiral_kain",
         "emotion": "neutral",
-        "textKey": "dlg.camp.act2.c1",
+        "textKey": "dlg.camp.epi.c1",
         "options": [
           {
-            "id": "fleet_first",
-            "textKey": "dlg.camp.act2.c1.a",
-            "next": "n04",
+            "id": "epi_transports",
+            "textKey": "dlg.camp.epi.c1.a",
+            "next": "n03_out_epi_transports",
             "effects": [
               {
-                "campaignFlag": "camp_fleet_first"
+                "campaignFlag": "camp_epi_transports"
+              },
+              {
+                "relation": {
+                  "teira_os": 10,
+                  "kira7": 10
+                }
+              },
+              {
+                "effectLabelKey": "dlg.camp.epi.fx.transports"
+              }
+            ]
+          },
+          {
+            "id": "epi_garrison",
+            "textKey": "dlg.camp.epi.c1.b",
+            "next": "n03_out_epi_garrison",
+            "effects": [
+              {
+                "campaignFlag": "camp_epi_garrison"
+              },
+              {
+                "relation": {
+                  "admiral_kain": 15,
+                  "teira_os": -10
+                }
+              },
+              {
+                "effectLabelKey": "dlg.camp.epi.fx.garrison"
+              }
+            ]
+          },
+          {
+            "id": "epi_selena",
+            "textKey": "dlg.camp.epi.c1.c",
+            "next": "n03_out_epi_selena",
+            "requiresFlag": "camp_betrayal_forgiven",
+            "effects": [
+              {
+                "campaignFlag": "camp_epi_selena"
+              },
+              {
+                "relation": {
+                  "counselor_selen": 5
+                }
+              },
+              {
+                "effectLabelKey": "dlg.camp.epi.fx.selena"
+              }
+            ]
+          },
+          {
+            "id": "epi_teira",
+            "textKey": "dlg.camp.epi.c1.d",
+            "next": "n03_out_epi_teira",
+            "requiresFlag": "camp_betrayal_executed",
+            "effects": [
+              {
+                "campaignFlag": "camp_epi_teira"
+              },
+              {
+                "relation": {
+                  "admiral_kain": 5
+                }
+              },
+              {
+                "effectLabelKey": "dlg.camp.epi.fx.teira"
+              }
+            ]
+          },
+          {
+            "id": "epi_exiled",
+            "textKey": "dlg.camp.epi.c1.e",
+            "next": "n03_out_epi_exiled",
+            "requiresFlag": "camp_betrayal_exiled",
+            "effects": [
+              {
+                "campaignFlag": "camp_epi_exiled"
+              },
+              {
+                "relation": {
+                  "kira7": 5
+                }
+              },
+              {
+                "effectLabelKey": "dlg.camp.epi.fx.exiled"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "n04",
+        "type": "line",
+        "speaker": "teira_os",
+        "emotion": "sad",
+        "textKey": "dlg.camp.epi.n04",
+        "next": "n05"
+      },
+      {
+        "id": "n05",
+        "type": "line",
+        "speaker": "kira7",
+        "emotion": "warm",
+        "textKey": "dlg.camp.epi.n05",
+        "next": "n06"
+      },
+      {
+        "id": "n06",
+        "type": "choice",
+        "speaker": "counselor_selen",
+        "emotion": "cold",
+        "textKey": "dlg.camp.epi.c2",
+        "options": [
+          {
+            "id": "epi_story_truth",
+            "textKey": "dlg.camp.epi.c2.a",
+            "next": "n06_out_epi_story_truth",
+            "effects": [
+              {
+                "campaignFlag": "camp_epi_story_truth"
+              },
+              {
+                "relation": {
+                  "teira_os": 15,
+                  "counselor_selen": -10
+                }
+              },
+              {
+                "effectLabelKey": "dlg.camp.epi.fx.story_truth"
+              }
+            ]
+          },
+          {
+            "id": "epi_story_myth",
+            "textKey": "dlg.camp.epi.c2.b",
+            "next": "n06_out_epi_story_myth",
+            "effects": [
+              {
+                "campaignFlag": "camp_epi_story_myth"
+              },
+              {
+                "relation": {
+                  "counselor_selen": 15,
+                  "admiral_kain": 10
+                }
+              },
+              {
+                "effectLabelKey": "dlg.camp.epi.fx.story_myth"
+              }
+            ]
+          },
+          {
+            "id": "epi_story_selena",
+            "textKey": "dlg.camp.epi.c2.c",
+            "next": "n06_out_epi_story_selena",
+            "requiresFlag": "camp_believe_selena",
+            "effects": [
+              {
+                "campaignFlag": "camp_epi_story_selena"
+              },
+              {
+                "relation": {
+                  "counselor_selen": 10
+                }
+              },
+              {
+                "effectLabelKey": "dlg.camp.epi.fx.story_selena"
+              }
+            ]
+          },
+          {
+            "id": "epi_story_teira",
+            "textKey": "dlg.camp.epi.c2.d",
+            "next": "n06_out_epi_story_teira",
+            "requiresFlag": "camp_believe_teira",
+            "effects": [
+              {
+                "campaignFlag": "camp_epi_story_teira"
+              },
+              {
+                "relation": {
+                  "teira_os": 10
+                }
+              },
+              {
+                "effectLabelKey": "dlg.camp.epi.fx.story_teira"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "n07",
+        "type": "line",
+        "speaker": "svet",
+        "emotion": "neutral",
+        "textKey": "dlg.camp.epi.n07",
+        "next": "n08"
+      },
+      {
+        "id": "n08",
+        "type": "choice",
+        "speaker": "svet",
+        "emotion": "neutral",
+        "textKey": "dlg.camp.epi.c3",
+        "options": [
+          {
+            "id": "legacy_warning",
+            "textKey": "dlg.camp.epi.c3.a",
+            "next": "n08_out_legacy_warning",
+            "effects": [
+              {
+                "campaignFlag": "camp_epi_legacy_warning"
+              },
+              {
+                "relation": {
+                  "admiral_kain": 10
+                }
+              },
+              {
+                "endingHint": "ending_seal"
+              },
+              {
+                "effectLabelKey": "dlg.camp.epi.fx.legacy_warning"
+              }
+            ]
+          },
+          {
+            "id": "legacy_gift",
+            "textKey": "dlg.camp.epi.c3.b",
+            "next": "n08_out_legacy_gift",
+            "effects": [
+              {
+                "campaignFlag": "camp_epi_legacy_gift"
+              },
+              {
+                "relation": {
+                  "teira_os": 10
+                }
+              },
+              {
+                "endingHint": "ending_release"
+              },
+              {
+                "effectLabelKey": "dlg.camp.epi.fx.legacy_gift"
+              }
+            ]
+          },
+          {
+            "id": "legacy_price_fleet",
+            "textKey": "dlg.camp.epi.c3.c",
+            "next": "n08_out_legacy_price_fleet",
+            "requiresFlag": "camp_final_price_fleet",
+            "effects": [
+              {
+                "campaignFlag": "camp_epi_legacy_fleet"
+              },
+              {
+                "effectLabelKey": "dlg.camp.epi.fx.legacy_fleet"
+              }
+            ]
+          },
+          {
+            "id": "legacy_price_worlds",
+            "textKey": "dlg.camp.epi.c3.d",
+            "next": "n08_out_legacy_price_worlds",
+            "requiresFlag": "camp_final_price_worlds",
+            "effects": [
+              {
+                "campaignFlag": "camp_epi_legacy_worlds"
+              },
+              {
+                "effectLabelKey": "dlg.camp.epi.fx.legacy_worlds"
+              }
+            ]
+          },
+          {
+            "id": "legacy_price_knowledge",
+            "textKey": "dlg.camp.epi.c3.e",
+            "next": "n08_out_legacy_price_knowledge",
+            "requiresFlag": "camp_final_price_knowledge",
+            "effects": [
+              {
+                "campaignFlag": "camp_epi_legacy_knowledge"
+              },
+              {
+                "effectLabelKey": "dlg.camp.epi.fx.legacy_knowledge"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "n09",
+        "type": "line",
+        "speaker": "teira_os",
+        "emotion": "neutral",
+        "textKey": "dlg.camp.epi.n09",
+        "next": "n10"
+      },
+      {
+        "id": "n10",
+        "type": "line",
+        "speaker": "svet",
+        "emotion": "neutral",
+        "textKey": "dlg.camp.epi.n10",
+        "next": "n11"
+      },
+      {
+        "id": "n11",
+        "type": "effect",
+        "effects": [
+          {
+            "chronicleKey": "dlg.camp.epi.chronicle"
+          }
+        ],
+        "next": "n12"
+      },
+      {
+        "id": "n12",
+        "type": "end"
+      },
+      {
+        "id": "n03_out_epi_transports",
+        "type": "line",
+        "speaker": "admiral_kain",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.epi.fx.transports",
+        "next": "n04"
+      },
+      {
+        "id": "n03_out_epi_garrison",
+        "type": "line",
+        "speaker": "admiral_kain",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.epi.fx.garrison",
+        "next": "n04"
+      },
+      {
+        "id": "n03_out_epi_selena",
+        "type": "line",
+        "speaker": "admiral_kain",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.epi.fx.selena",
+        "next": "n04"
+      },
+      {
+        "id": "n03_out_epi_teira",
+        "type": "line",
+        "speaker": "admiral_kain",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.epi.fx.teira",
+        "next": "n04"
+      },
+      {
+        "id": "n03_out_epi_exiled",
+        "type": "line",
+        "speaker": "admiral_kain",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.epi.fx.exiled",
+        "next": "n04"
+      },
+      {
+        "id": "n06_out_epi_story_truth",
+        "type": "line",
+        "speaker": "counselor_selen",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.epi.fx.story_truth",
+        "next": "n07"
+      },
+      {
+        "id": "n06_out_epi_story_myth",
+        "type": "line",
+        "speaker": "counselor_selen",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.epi.fx.story_myth",
+        "next": "n07"
+      },
+      {
+        "id": "n06_out_epi_story_selena",
+        "type": "line",
+        "speaker": "counselor_selen",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.epi.fx.story_selena",
+        "next": "n07"
+      },
+      {
+        "id": "n06_out_epi_story_teira",
+        "type": "line",
+        "speaker": "counselor_selen",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.epi.fx.story_teira",
+        "next": "n07"
+      },
+      {
+        "id": "n08_out_legacy_warning",
+        "type": "line",
+        "speaker": "svet",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.epi.fx.legacy_warning",
+        "next": "n09"
+      },
+      {
+        "id": "n08_out_legacy_gift",
+        "type": "line",
+        "speaker": "svet",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.epi.fx.legacy_gift",
+        "next": "n09"
+      },
+      {
+        "id": "n08_out_legacy_price_fleet",
+        "type": "line",
+        "speaker": "svet",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.epi.fx.legacy_fleet",
+        "next": "n09"
+      },
+      {
+        "id": "n08_out_legacy_price_worlds",
+        "type": "line",
+        "speaker": "svet",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.epi.fx.legacy_worlds",
+        "next": "n09"
+      },
+      {
+        "id": "n08_out_legacy_price_knowledge",
+        "type": "line",
+        "speaker": "svet",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.epi.fx.legacy_knowledge",
+        "next": "n09"
+      }
+    ]
+  },
+  {
+    "id": "dlg_campaign_act0_relic",
+    "version": 1,
+    "nodes": [
+      {
+        "id": "n01",
+        "type": "line",
+        "speaker": "kira7",
+        "emotion": "afraid",
+        "textKey": "dlg.camp.act0_r.n01",
+        "next": "n02"
+      },
+      {
+        "id": "n02",
+        "type": "line",
+        "speaker": "teira_os",
+        "emotion": "neutral",
+        "textKey": "dlg.camp.act0_r.n02",
+        "next": "n03"
+      },
+      {
+        "id": "n03",
+        "type": "choice",
+        "speaker": "teira_os",
+        "emotion": "neutral",
+        "textKey": "dlg.camp.act0_r.c1",
+        "options": [
+          {
+            "id": "relic_study",
+            "textKey": "dlg.camp.act0_r.c1.a",
+            "next": "n03_out_relic_study",
+            "effects": [
+              {
+                "campaignFlag": "camp_relic_study"
+              },
+              {
+                "relation": {
+                  "teira_os": 5
+                }
+              },
+              {
+                "credits": -1000
+              },
+              {
+                "unlockMission": "main_01_rift_rumor"
+              },
+              {
+                "effectLabelKey": "dlg.camp.act0_r.fx.study"
+              }
+            ]
+          },
+          {
+            "id": "relic_seal",
+            "textKey": "dlg.camp.act0_r.c1.b",
+            "next": "n03_out_relic_seal",
+            "effects": [
+              {
+                "campaignFlag": "camp_relic_sealed"
               },
               {
                 "rep": {
@@ -411,17 +3058,354 @@
                 }
               },
               {
-                "effectLabelKey": "dlg.camp.act2.fx.fleet"
+                "effectLabelKey": "dlg.camp.act0_r.fx.seal"
               }
             ]
           },
           {
-            "id": "diplo_first",
-            "textKey": "dlg.camp.act2.c1.b",
-            "next": "n04",
+            "id": "relic_give",
+            "textKey": "dlg.camp.act0_r.c1.c",
+            "next": "n03_out_relic_give",
             "effects": [
               {
-                "campaignFlag": "camp_diplo_first"
+                "campaignFlag": "camp_relic_given"
+              },
+              {
+                "relation": {
+                  "teira_os": 10
+                }
+              },
+              {
+                "endingHint": "ending_release"
+              },
+              {
+                "unlockMission": "main_01_rift_rumor"
+              },
+              {
+                "effectLabelKey": "dlg.camp.act0_r.fx.give"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "n04",
+        "type": "line",
+        "speaker": "svet",
+        "emotion": "cold",
+        "textKey": "dlg.camp.act0_r.n04",
+        "next": "n05"
+      },
+      {
+        "id": "n05",
+        "type": "choice",
+        "speaker": "kira7",
+        "emotion": "sad",
+        "textKey": "dlg.camp.act0_r.c2",
+        "options": [
+          {
+            "id": "voice_silence",
+            "textKey": "dlg.camp.act0_r.c2.a",
+            "next": "n05_out_voice_silence",
+            "effects": [
+              {
+                "campaignFlag": "camp_voice_silence"
+              },
+              {
+                "relation": {
+                  "kira7": 5
+                }
+              },
+              {
+                "effectLabelKey": "dlg.camp.act0_r.fx.silence"
+              }
+            ]
+          },
+          {
+            "id": "voice_answer",
+            "textKey": "dlg.camp.act0_r.c2.b",
+            "next": "n05_out_voice_answer",
+            "effects": [
+              {
+                "campaignFlag": "camp_voice_answer"
+              },
+              {
+                "rep": {
+                  "scholars": 5
+                }
+              },
+              {
+                "endingHint": "ending_whisper"
+              },
+              {
+                "effectLabelKey": "dlg.camp.act0_r.fx.answer"
+              }
+            ]
+          },
+          {
+            "id": "voice_mute",
+            "textKey": "dlg.camp.act0_r.c2.c",
+            "next": "n05_out_voice_mute",
+            "effects": [
+              {
+                "campaignFlag": "camp_voice_mute"
+              },
+              {
+                "rep": {
+                  "military": 5
+                }
+              },
+              {
+                "endingHint": "ending_seal"
+              },
+              {
+                "effectLabelKey": "dlg.camp.act0_r.fx.mute"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "n06",
+        "type": "line",
+        "speaker": "teira_os",
+        "emotion": "sad",
+        "textKey": "dlg.camp.act0_r.n06",
+        "next": "n07"
+      },
+      {
+        "id": "n07",
+        "type": "line",
+        "speaker": "svet",
+        "emotion": "neutral",
+        "textKey": "dlg.camp.act0_r.n07",
+        "next": "n08"
+      },
+      {
+        "id": "n08",
+        "type": "effect",
+        "effects": [
+          {
+            "chronicleKey": "dlg.camp.act0_r.chronicle"
+          },
+          {
+            "campaignFlag": "camp_act0_relic_done"
+          }
+        ],
+        "next": "n09"
+      },
+      {
+        "id": "n09",
+        "type": "line",
+        "speaker": "kira7",
+        "emotion": "warm",
+        "textKey": "dlg.camp.act0_r.n09",
+        "next": "n10"
+      },
+      {
+        "id": "n10",
+        "type": "end"
+      },
+      {
+        "id": "n03_out_relic_study",
+        "type": "line",
+        "speaker": "teira_os",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.act0_r.fx.study",
+        "next": "n04"
+      },
+      {
+        "id": "n03_out_relic_seal",
+        "type": "line",
+        "speaker": "teira_os",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.act0_r.fx.seal",
+        "next": "n04"
+      },
+      {
+        "id": "n03_out_relic_give",
+        "type": "line",
+        "speaker": "teira_os",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.act0_r.fx.give",
+        "next": "n04"
+      },
+      {
+        "id": "n05_out_voice_silence",
+        "type": "line",
+        "speaker": "kira7",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.act0_r.fx.silence",
+        "next": "n06"
+      },
+      {
+        "id": "n05_out_voice_answer",
+        "type": "line",
+        "speaker": "kira7",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.act0_r.fx.answer",
+        "next": "n06"
+      },
+      {
+        "id": "n05_out_voice_mute",
+        "type": "line",
+        "speaker": "kira7",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.act0_r.fx.mute",
+        "next": "n06"
+      }
+    ]
+  },
+  {
+    "id": "dlg_campaign_act1_hegemon",
+    "version": 1,
+    "nodes": [
+      {
+        "id": "n01",
+        "type": "line",
+        "speaker": "valerius",
+        "emotion": "cold",
+        "textKey": "dlg.camp.act1_h.n01",
+        "next": "n02"
+      },
+      {
+        "id": "n02",
+        "type": "line",
+        "speaker": "admiral_kain",
+        "emotion": "angry",
+        "textKey": "dlg.camp.act1_h.n02",
+        "next": "n03"
+      },
+      {
+        "id": "n03",
+        "type": "choice",
+        "speaker": "counselor_selen",
+        "emotion": "neutral",
+        "textKey": "dlg.camp.act1_h.c1",
+        "options": [
+          {
+            "id": "hegemon_accept",
+            "textKey": "dlg.camp.act1_h.c1.a",
+            "next": "n03_out_hegemon_accept",
+            "effects": [
+              {
+                "campaignFlag": "camp_hegemon_vassal"
+              },
+              {
+                "credits": 15000
+              },
+              {
+                "relation": {
+                  "counselor_selen": 15,
+                  "admiral_kain": -15
+                }
+              },
+              {
+                "effectLabelKey": "dlg.camp.act1_h.fx.vassal"
+              }
+            ]
+          },
+          {
+            "id": "hegemon_reject",
+            "textKey": "dlg.camp.act1_h.c1.b",
+            "next": "n03_out_hegemon_reject",
+            "effects": [
+              {
+                "campaignFlag": "camp_hegemon_rejected"
+              },
+              {
+                "rep": {
+                  "military": 5
+                }
+              },
+              {
+                "relation": {
+                  "admiral_kain": 15,
+                  "counselor_selen": -15
+                }
+              },
+              {
+                "unlockMission": "main_01_rift_rumor"
+              },
+              {
+                "effectLabelKey": "dlg.camp.act1_h.fx.reject"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "n04",
+        "type": "line",
+        "speaker": "valerius",
+        "emotion": "cold",
+        "textKey": "dlg.camp.act1_h.n04",
+        "next": "n05"
+      },
+      {
+        "id": "n05",
+        "type": "line",
+        "speaker": "counselor_selen",
+        "emotion": "cold",
+        "textKey": "dlg.camp.act1_h.n05",
+        "next": "n06"
+      },
+      {
+        "id": "n06",
+        "type": "choice",
+        "speaker": "admiral_kain",
+        "emotion": "neutral",
+        "textKey": "dlg.camp.act1_h.c2",
+        "options": [
+          {
+            "id": "trust_kane",
+            "textKey": "dlg.camp.act1_h.c2.a",
+            "next": "n06_out_trust_kane",
+            "effects": [
+              {
+                "campaignFlag": "camp_hegemon_trust_kane"
+              },
+              {
+                "relation": {
+                  "admiral_kain": 10
+                }
+              },
+              {
+                "effectLabelKey": "dlg.camp.act1_h.fx.trust_kane"
+              }
+            ]
+          },
+          {
+            "id": "trust_selena",
+            "textKey": "dlg.camp.act1_h.c2.b",
+            "next": "n06_out_trust_selena",
+            "effects": [
+              {
+                "campaignFlag": "camp_hegemon_trust_selena"
+              },
+              {
+                "relation": {
+                  "counselor_selen": 10
+                }
+              },
+              {
+                "effectLabelKey": "dlg.camp.act1_h.fx.trust_selena"
+              }
+            ]
+          },
+          {
+            "id": "compromise",
+            "textKey": "dlg.camp.act1_h.c2.c",
+            "next": "n06_out_compromise",
+            "effects": [
+              {
+                "campaignFlag": "camp_hegemon_compromise"
               },
               {
                 "rep": {
@@ -430,113 +3414,12 @@
               },
               {
                 "relation": {
+                  "admiral_kain": 5,
                   "counselor_selen": 5
                 }
               },
               {
-                "effectLabelKey": "dlg.camp.act2.fx.diplo"
-              }
-            ]
-          },
-          {
-            "id": "intel_first",
-            "textKey": "dlg.camp.act2.c1.c",
-            "next": "n04",
-            "effects": [
-              {
-                "campaignFlag": "camp_intel_first"
-              },
-              {
-                "credits": -2000
-              },
-              {
-                "relation": {
-                  "counselor_selen": 3
-                }
-              },
-              {
-                "effectLabelKey": "dlg.camp.act2.fx.intel"
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "id": "n04",
-        "type": "line",
-        "speaker": "counselor_selen",
-        "emotion": "neutral",
-        "textKey": "dlg.camp.act2.n04",
-        "next": "n05"
-      },
-      {
-        "id": "n05",
-        "type": "line",
-        "speaker": "admiral_kain",
-        "emotion": "neutral",
-        "textKey": "dlg.camp.act2.n05",
-        "next": "n06"
-      },
-      {
-        "id": "n06",
-        "type": "choice",
-        "speaker": "counselor_selen",
-        "emotion": "cold",
-        "textKey": "dlg.camp.act2.c2",
-        "options": [
-          {
-            "id": "trust_admiral",
-            "textKey": "dlg.camp.act2.c2.a",
-            "next": "n07",
-            "effects": [
-              {
-                "campaignFlag": "camp_trust_admiral"
-              },
-              {
-                "relation": {
-                  "admiral_kain": 10,
-                  "counselor_selen": -5
-                }
-              },
-              {
-                "effectLabelKey": "dlg.camp.act2.fx.trust_adm"
-              }
-            ]
-          },
-          {
-            "id": "trust_counselor",
-            "textKey": "dlg.camp.act2.c2.b",
-            "next": "n07",
-            "effects": [
-              {
-                "campaignFlag": "camp_trust_counselor"
-              },
-              {
-                "relation": {
-                  "counselor_selen": 10,
-                  "admiral_kain": -5
-                }
-              },
-              {
-                "effectLabelKey": "dlg.camp.act2.fx.trust_cns"
-              }
-            ]
-          },
-          {
-            "id": "trust_none",
-            "textKey": "dlg.camp.act2.c2.c",
-            "next": "n07",
-            "effects": [
-              {
-                "campaignFlag": "camp_trust_none"
-              },
-              {
-                "rep": {
-                  "own_empire": 5
-                }
-              },
-              {
-                "effectLabelKey": "dlg.camp.act2.fx.trust_none"
+                "effectLabelKey": "dlg.camp.act1_h.fx.compromise"
               }
             ]
           }
@@ -546,16 +3429,16 @@
         "id": "n07",
         "type": "line",
         "speaker": "admiral_kain",
-        "emotion": "warm",
-        "textKey": "dlg.camp.act2.n07",
+        "emotion": "neutral",
+        "textKey": "dlg.camp.act1_h.n07",
         "next": "n08"
       },
       {
         "id": "n08",
         "type": "line",
-        "speaker": "counselor_selen",
+        "speaker": "svet",
         "emotion": "neutral",
-        "textKey": "dlg.camp.act2.n08",
+        "textKey": "dlg.camp.act1_h.n08",
         "next": "n09"
       },
       {
@@ -563,218 +3446,159 @@
         "type": "effect",
         "effects": [
           {
-            "chronicleKey": "dlg.camp.act2.chronicle"
+            "chronicleKey": "dlg.camp.act1_h.chronicle"
           },
           {
-            "campaignFlag": "camp_act2_done"
+            "campaignFlag": "camp_act1_hegemon_done"
           }
         ],
         "next": "n10"
       },
       {
         "id": "n10",
+        "type": "line",
+        "speaker": "counselor_selen",
+        "emotion": "warm",
+        "textKey": "dlg.camp.act1_h.n10",
+        "next": "n11"
+      },
+      {
+        "id": "n11",
         "type": "end"
-      }
-    ]
-  },
-  {
-    "id": "dlg_campaign_branch",
-    "version": 1,
-    "nodes": [
+      },
       {
-        "id": "n01",
+        "id": "n03_out_hegemon_accept",
         "type": "line",
         "speaker": "counselor_selen",
         "emotion": "neutral",
-        "textKey": "dlg.camp.branch.n01",
-        "next": "n02"
+        "outcome": true,
+        "textKey": "dlg.camp.act1_h.fx.vassal",
+        "next": "n04"
       },
       {
-        "id": "n02",
-        "type": "line",
-        "speaker": "admiral_kain",
-        "emotion": "cold",
-        "textKey": "dlg.camp.branch.n02",
-        "next": "n03"
-      },
-      {
-        "id": "n03",
-        "type": "choice",
-        "speaker": "counselor_selen",
-        "emotion": "neutral",
-        "textKey": "dlg.camp.branch.c1",
-        "options": [
-          {
-            "id": "path_federation",
-            "textKey": "dlg.camp.branch.c1.a",
-            "next": "n04",
-            "effects": [
-              {
-                "branch": "federation"
-              },
-              {
-                "campaignFlag": "camp_branch_federation"
-              },
-              {
-                "relation": {
-                  "counselor_selen": 5
-                }
-              },
-              {
-                "effectLabelKey": "dlg.camp.branch.fx.federation"
-              }
-            ]
-          },
-          {
-            "id": "path_sovereignty",
-            "textKey": "dlg.camp.branch.c1.b",
-            "next": "n04",
-            "effects": [
-              {
-                "branch": "sovereignty"
-              },
-              {
-                "campaignFlag": "camp_branch_sovereignty"
-              },
-              {
-                "rep": {
-                  "military": 5
-                }
-              },
-              {
-                "effectLabelKey": "dlg.camp.branch.fx.sovereignty"
-              }
-            ]
-          },
-          {
-            "id": "path_syndicate",
-            "textKey": "dlg.camp.branch.c1.c",
-            "next": "n04",
-            "effects": [
-              {
-                "branch": "syndicate"
-              },
-              {
-                "campaignFlag": "camp_branch_syndicate"
-              },
-              {
-                "credits": 5000
-              },
-              {
-                "effectLabelKey": "dlg.camp.branch.fx.syndicate"
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "id": "n04",
-        "type": "line",
-        "speaker": "admiral_kain",
-        "emotion": "neutral",
-        "textKey": "dlg.camp.branch.n04",
-        "next": "n05"
-      },
-      {
-        "id": "n05",
-        "type": "choice",
-        "speaker": "admiral_kain",
-        "emotion": "neutral",
-        "textKey": "dlg.camp.branch.c2",
-        "options": [
-          {
-            "id": "lead_admiral",
-            "textKey": "dlg.camp.branch.c2.a",
-            "next": "n06",
-            "effects": [
-              {
-                "campaignFlag": "camp_lead_admiral"
-              },
-              {
-                "relation": {
-                  "admiral_kain": 10,
-                  "counselor_selen": -5
-                }
-              },
-              {
-                "effectLabelKey": "dlg.camp.branch.fx.lead_adm"
-              }
-            ]
-          },
-          {
-            "id": "lead_counselor",
-            "textKey": "dlg.camp.branch.c2.b",
-            "next": "n06",
-            "effects": [
-              {
-                "campaignFlag": "camp_lead_counselor"
-              },
-              {
-                "relation": {
-                  "counselor_selen": 10,
-                  "admiral_kain": -5
-                }
-              },
-              {
-                "effectLabelKey": "dlg.camp.branch.fx.lead_cns"
-              }
-            ]
-          },
-          {
-            "id": "lead_self",
-            "textKey": "dlg.camp.branch.c2.c",
-            "next": "n06",
-            "effects": [
-              {
-                "campaignFlag": "camp_lead_self"
-              },
-              {
-                "rep": {
-                  "own_empire": 5
-                }
-              },
-              {
-                "effectLabelKey": "dlg.camp.branch.fx.lead_self"
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "id": "n06",
+        "id": "n03_out_hegemon_reject",
         "type": "line",
         "speaker": "counselor_selen",
-        "emotion": "cold",
-        "textKey": "dlg.camp.branch.n06",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.act1_h.fx.reject",
+        "next": "n04"
+      },
+      {
+        "id": "n06_out_trust_kane",
+        "type": "line",
+        "speaker": "admiral_kain",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.act1_h.fx.trust_kane",
         "next": "n07"
       },
       {
-        "id": "n07",
-        "type": "choice",
-        "speaker": "counselor_selen",
+        "id": "n06_out_trust_selena",
+        "type": "line",
+        "speaker": "admiral_kain",
         "emotion": "neutral",
-        "textKey": "dlg.camp.branch.c3",
+        "outcome": true,
+        "textKey": "dlg.camp.act1_h.fx.trust_selena",
+        "next": "n07"
+      },
+      {
+        "id": "n06_out_compromise",
+        "type": "line",
+        "speaker": "admiral_kain",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.act1_h.fx.compromise",
+        "next": "n07"
+      }
+    ]
+  },
+  {
+    "id": "dlg_campaign_teira_arc",
+    "version": 1,
+    "nodes": [
+      {
+        "id": "n01",
+        "type": "line",
+        "speaker": "teira_os",
+        "emotion": "sad",
+        "textKey": "dlg.camp.teira_a.n01",
+        "next": "n02"
+      },
+      {
+        "id": "n02",
+        "type": "line",
+        "speaker": "teira_os",
+        "emotion": "sad",
+        "textKey": "dlg.camp.teira_a.n02",
+        "next": "n03"
+      },
+      {
+        "id": "n03",
+        "type": "choice",
+        "speaker": "teira_os",
+        "emotion": "neutral",
+        "textKey": "dlg.camp.teira_a.c1",
         "options": [
           {
-            "id": "commit_quiet",
-            "textKey": "dlg.camp.branch.c3.a",
-            "next": "n08",
+            "id": "promise_silence",
+            "textKey": "dlg.camp.teira_a.c1.a",
+            "next": "n03_out_promise_silence",
             "effects": [
               {
-                "campaignFlag": "camp_branch_committed"
+                "campaignFlag": "camp_teira_arc_promise"
               },
               {
-                "effectLabelKey": "dlg.camp.branch.fx.quiet"
+                "relation": {
+                  "teira_os": 15
+                }
+              },
+              {
+                "endingHint": "ending_seal"
+              },
+              {
+                "effectLabelKey": "dlg.camp.teira_a.fx.promise"
               }
             ]
           },
           {
-            "id": "commit_loud",
-            "textKey": "dlg.camp.branch.c3.b",
-            "next": "n08",
+            "id": "promise_truth",
+            "textKey": "dlg.camp.teira_a.c1.b",
+            "next": "n03_out_promise_truth",
             "effects": [
               {
-                "campaignFlag": "camp_branch_loud"
+                "campaignFlag": "camp_teira_arc_truth"
+              },
+              {
+                "relation": {
+                  "teira_os": 5
+                }
+              },
+              {
+                "rep": {
+                  "scholars": 5
+                }
+              },
+              {
+                "endingHint": "ending_whisper"
+              },
+              {
+                "effectLabelKey": "dlg.camp.teira_a.fx.truth"
+              }
+            ]
+          },
+          {
+            "id": "refuse_promise",
+            "textKey": "dlg.camp.teira_a.c1.c",
+            "next": "n03_out_refuse_promise",
+            "effects": [
+              {
+                "campaignFlag": "camp_teira_arc_refuse"
+              },
+              {
+                "relation": {
+                  "teira_os": -10
+                }
               },
               {
                 "rep": {
@@ -782,116 +3606,7 @@
                 }
               },
               {
-                "effectLabelKey": "dlg.camp.branch.fx.loud"
-              }
-            ]
-          },
-          {
-            "id": "delay",
-            "textKey": "dlg.camp.branch.c3.c",
-            "next": "n08",
-            "effects": [
-              {
-                "campaignFlag": "camp_branch_delayed"
-              },
-              {
-                "rep": {
-                  "traders": -5
-                }
-              },
-              {
-                "effectLabelKey": "dlg.camp.branch.fx.delay"
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "id": "n08",
-        "type": "line",
-        "speaker": "admiral_kain",
-        "emotion": "neutral",
-        "textKey": "dlg.camp.branch.n08",
-        "next": "n09"
-      },
-      {
-        "id": "n09",
-        "type": "end"
-      }
-    ]
-  },
-  {
-    "id": "dlg_campaign_finale",
-    "version": 1,
-    "nodes": [
-      {
-        "id": "n01",
-        "type": "line",
-        "speaker": "admiral_kain",
-        "emotion": "sad",
-        "textKey": "dlg.camp.finale.n01",
-        "next": "n02"
-      },
-      {
-        "id": "n02",
-        "type": "line",
-        "speaker": "counselor_selen",
-        "emotion": "neutral",
-        "textKey": "dlg.camp.finale.n02",
-        "next": "n03"
-      },
-      {
-        "id": "n03",
-        "type": "choice",
-        "speaker": "admiral_kain",
-        "emotion": "neutral",
-        "textKey": "dlg.camp.finale.c1",
-        "options": [
-          {
-            "id": "end_seal",
-            "textKey": "dlg.camp.finale.c1.a",
-            "next": "n04",
-            "effects": [
-              {
-                "ending": "ending_seal"
-              },
-              {
-                "campaignFlag": "camp_final_seal"
-              },
-              {
-                "effectLabelKey": "dlg.camp.finale.fx.seal"
-              }
-            ]
-          },
-          {
-            "id": "end_control",
-            "textKey": "dlg.camp.finale.c1.b",
-            "next": "n04",
-            "effects": [
-              {
-                "ending": "ending_control"
-              },
-              {
-                "campaignFlag": "camp_final_control"
-              },
-              {
-                "effectLabelKey": "dlg.camp.finale.fx.control"
-              }
-            ]
-          },
-          {
-            "id": "end_release",
-            "textKey": "dlg.camp.finale.c1.c",
-            "next": "n04",
-            "effects": [
-              {
-                "ending": "ending_release"
-              },
-              {
-                "campaignFlag": "camp_final_release"
-              },
-              {
-                "effectLabelKey": "dlg.camp.finale.fx.release"
+                "effectLabelKey": "dlg.camp.teira_a.fx.refuse"
               }
             ]
           }
@@ -900,56 +3615,229 @@
       {
         "id": "n04",
         "type": "line",
-        "speaker": "counselor_selen",
+        "speaker": "teira_os",
         "emotion": "sad",
-        "textKey": "dlg.camp.finale.n04",
+        "textKey": "dlg.camp.teira_a.n04",
         "next": "n05"
       },
       {
         "id": "n05",
         "type": "line",
-        "speaker": "admiral_kain",
-        "emotion": "cold",
-        "textKey": "dlg.camp.finale.n05",
+        "speaker": "svet",
+        "emotion": "neutral",
+        "textKey": "dlg.camp.teira_a.n05",
         "next": "n06"
       },
       {
         "id": "n06",
         "type": "choice",
-        "speaker": "counselor_selen",
-        "emotion": "neutral",
-        "textKey": "dlg.camp.finale.c2",
+        "speaker": "teira_os",
+        "emotion": "cold",
+        "textKey": "dlg.camp.teira_a.c2",
         "options": [
           {
-            "id": "save_fleet",
-            "textKey": "dlg.camp.finale.c2.a",
-            "next": "n07",
+            "id": "keep_record",
+            "textKey": "dlg.camp.teira_a.c2.a",
+            "next": "n06_out_keep_record",
             "effects": [
               {
-                "campaignFlag": "camp_save_fleet"
-              },
-              {
-                "rep": {
-                  "military": 10
-                }
+                "campaignFlag": "camp_teira_arc_record_keep"
               },
               {
                 "relation": {
-                  "admiral_kain": 10
+                  "teira_os": 5
                 }
               },
               {
-                "effectLabelKey": "dlg.camp.finale.fx.fleet"
+                "effectLabelKey": "dlg.camp.teira_a.fx.keep"
               }
             ]
           },
           {
-            "id": "save_people",
-            "textKey": "dlg.camp.finale.c2.b",
-            "next": "n07",
+            "id": "archive_record",
+            "textKey": "dlg.camp.teira_a.c2.b",
+            "next": "n06_out_archive_record",
             "effects": [
               {
-                "campaignFlag": "camp_save_people"
+                "campaignFlag": "camp_teira_arc_record_archive"
+              },
+              {
+                "rep": {
+                  "scholars": 5
+                }
+              },
+              {
+                "effectLabelKey": "dlg.camp.teira_a.fx.archive"
+              }
+            ]
+          },
+          {
+            "id": "erase_record",
+            "textKey": "dlg.camp.teira_a.c2.c",
+            "next": "n06_out_erase_record",
+            "effects": [
+              {
+                "campaignFlag": "camp_teira_arc_record_erase"
+              },
+              {
+                "relation": {
+                  "teira_os": -5
+                }
+              },
+              {
+                "effectLabelKey": "dlg.camp.teira_a.fx.erase"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "n07",
+        "type": "line",
+        "speaker": "svet",
+        "emotion": "neutral",
+        "textKey": "dlg.camp.teira_a.n07",
+        "next": "n08"
+      },
+      {
+        "id": "n08",
+        "type": "line",
+        "speaker": "teira_os",
+        "emotion": "warm",
+        "textKey": "dlg.camp.teira_a.n08",
+        "next": "n09"
+      },
+      {
+        "id": "n09",
+        "type": "effect",
+        "effects": [
+          {
+            "chronicleKey": "dlg.camp.teira_a.chronicle"
+          },
+          {
+            "campaignFlag": "camp_teira_arc_done"
+          }
+        ],
+        "next": "n10"
+      },
+      {
+        "id": "n10",
+        "type": "line",
+        "speaker": "teira_os",
+        "emotion": "neutral",
+        "textKey": "dlg.camp.teira_a.n10",
+        "next": "n11"
+      },
+      {
+        "id": "n11",
+        "type": "line",
+        "speaker": "svet",
+        "emotion": "neutral",
+        "textKey": "dlg.camp.teira_a.n11",
+        "next": "n12"
+      },
+      {
+        "id": "n12",
+        "type": "end"
+      },
+      {
+        "id": "n03_out_promise_silence",
+        "type": "line",
+        "speaker": "teira_os",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.teira_a.fx.promise",
+        "next": "n04"
+      },
+      {
+        "id": "n03_out_promise_truth",
+        "type": "line",
+        "speaker": "teira_os",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.teira_a.fx.truth",
+        "next": "n04"
+      },
+      {
+        "id": "n03_out_refuse_promise",
+        "type": "line",
+        "speaker": "teira_os",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.teira_a.fx.refuse",
+        "next": "n04"
+      },
+      {
+        "id": "n06_out_keep_record",
+        "type": "line",
+        "speaker": "teira_os",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.teira_a.fx.keep",
+        "next": "n07"
+      },
+      {
+        "id": "n06_out_archive_record",
+        "type": "line",
+        "speaker": "teira_os",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.teira_a.fx.archive",
+        "next": "n07"
+      },
+      {
+        "id": "n06_out_erase_record",
+        "type": "line",
+        "speaker": "teira_os",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.teira_a.fx.erase",
+        "next": "n07"
+      }
+    ]
+  },
+  {
+    "id": "dlg_campaign_kira_arc",
+    "version": 1,
+    "nodes": [
+      {
+        "id": "n01",
+        "type": "line",
+        "speaker": "kira7",
+        "emotion": "sad",
+        "textKey": "dlg.camp.kira_a.n01",
+        "next": "n02"
+      },
+      {
+        "id": "n02",
+        "type": "line",
+        "speaker": "kira7",
+        "emotion": "sad",
+        "textKey": "dlg.camp.kira_a.n02",
+        "next": "n03"
+      },
+      {
+        "id": "n03",
+        "type": "choice",
+        "speaker": "kira7",
+        "emotion": "afraid",
+        "textKey": "dlg.camp.kira_a.c1",
+        "options": [
+          {
+            "id": "filters_station",
+            "textKey": "dlg.camp.kira_a.c1.a",
+            "next": "n03_out_filters_station",
+            "effects": [
+              {
+                "campaignFlag": "camp_kira_arc_filters_station"
+              },
+              {
+                "flag": "kira_debt"
+              },
+              {
+                "relation": {
+                  "kira7": 15
+                }
               },
               {
                 "rep": {
@@ -957,30 +3845,112 @@
                 }
               },
               {
-                "relation": {
-                  "counselor_selen": 10
-                }
-              },
-              {
-                "effectLabelKey": "dlg.camp.finale.fx.people"
+                "effectLabelKey": "dlg.camp.kira_a.fx.station"
               }
             ]
           },
           {
-            "id": "save_knowledge",
-            "textKey": "dlg.camp.finale.c2.c",
-            "next": "n07",
+            "id": "filters_fleet",
+            "textKey": "dlg.camp.kira_a.c1.b",
+            "next": "n03_out_filters_fleet",
             "effects": [
               {
-                "campaignFlag": "camp_save_knowledge"
+                "campaignFlag": "camp_kira_arc_filters_fleet"
               },
               {
-                "rep": {
-                  "scholars": 10
+                "relation": {
+                  "kira7": -10
                 }
               },
               {
-                "effectLabelKey": "dlg.camp.finale.fx.knowledge"
+                "rep": {
+                  "military": 10
+                }
+              },
+              {
+                "effectLabelKey": "dlg.camp.kira_a.fx.fleet"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "n04",
+        "type": "line",
+        "speaker": "kira7",
+        "emotion": "sad",
+        "textKey": "dlg.camp.kira_a.n04",
+        "next": "n05"
+      },
+      {
+        "id": "n05",
+        "type": "line",
+        "speaker": "svet",
+        "emotion": "cold",
+        "textKey": "dlg.camp.kira_a.n05",
+        "next": "n06"
+      },
+      {
+        "id": "n06",
+        "type": "choice",
+        "speaker": "kira7",
+        "emotion": "neutral",
+        "textKey": "dlg.camp.kira_a.c2",
+        "options": [
+          {
+            "id": "compensate_civil",
+            "textKey": "dlg.camp.kira_a.c2.a",
+            "next": "n06_out_compensate_civil",
+            "effects": [
+              {
+                "campaignFlag": "camp_kira_arc_compensation_civil"
+              },
+              {
+                "credits": -2000
+              },
+              {
+                "relation": {
+                  "kira7": 5
+                }
+              },
+              {
+                "effectLabelKey": "dlg.camp.kira_a.fx.comp_civil"
+              }
+            ]
+          },
+          {
+            "id": "compensate_fleet",
+            "textKey": "dlg.camp.kira_a.c2.b",
+            "next": "n06_out_compensate_fleet",
+            "effects": [
+              {
+                "campaignFlag": "camp_kira_arc_compensation_fleet"
+              },
+              {
+                "rep": {
+                  "military": 5
+                }
+              },
+              {
+                "effectLabelKey": "dlg.camp.kira_a.fx.comp_fleet"
+              }
+            ]
+          },
+          {
+            "id": "compensate_none",
+            "textKey": "dlg.camp.kira_a.c2.c",
+            "next": "n06_out_compensate_none",
+            "effects": [
+              {
+                "campaignFlag": "camp_kira_arc_compensation_none"
+              },
+              {
+                "relation": {
+                  "kira7": -5
+                }
+              },
+              {
+                "effectLabelKey": "dlg.camp.kira_a.fx.comp_none"
               }
             ]
           }
@@ -989,17 +3959,17 @@
       {
         "id": "n07",
         "type": "line",
-        "speaker": "counselor_selen",
-        "emotion": "neutral",
-        "textKey": "dlg.camp.finale.n07",
+        "speaker": "kira7",
+        "emotion": "warm",
+        "textKey": "dlg.camp.kira_a.n07",
         "next": "n08"
       },
       {
         "id": "n08",
         "type": "line",
-        "speaker": "admiral_kain",
+        "speaker": "svet",
         "emotion": "neutral",
-        "textKey": "dlg.camp.finale.n08",
+        "textKey": "dlg.camp.kira_a.n08",
         "next": "n09"
       },
       {
@@ -1007,10 +3977,10 @@
         "type": "effect",
         "effects": [
           {
-            "campaignFlag": "camp_finale_done"
+            "chronicleKey": "dlg.camp.kira_a.chronicle"
           },
           {
-            "chronicleKey": "dlg.camp.finale.chronicle"
+            "campaignFlag": "camp_kira_arc_done"
           }
         ],
         "next": "n10"
@@ -1018,14 +3988,59 @@
       {
         "id": "n10",
         "type": "line",
-        "speaker": "counselor_selen",
-        "emotion": "warm",
-        "textKey": "dlg.camp.finale.n10",
+        "speaker": "kira7",
+        "emotion": "neutral",
+        "textKey": "dlg.camp.kira_a.n10",
         "next": "n11"
       },
       {
         "id": "n11",
         "type": "end"
+      },
+      {
+        "id": "n03_out_filters_station",
+        "type": "line",
+        "speaker": "kira7",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.kira_a.fx.station",
+        "next": "n04"
+      },
+      {
+        "id": "n03_out_filters_fleet",
+        "type": "line",
+        "speaker": "kira7",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.kira_a.fx.fleet",
+        "next": "n04"
+      },
+      {
+        "id": "n06_out_compensate_civil",
+        "type": "line",
+        "speaker": "kira7",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.kira_a.fx.comp_civil",
+        "next": "n07"
+      },
+      {
+        "id": "n06_out_compensate_fleet",
+        "type": "line",
+        "speaker": "kira7",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.kira_a.fx.comp_fleet",
+        "next": "n07"
+      },
+      {
+        "id": "n06_out_compensate_none",
+        "type": "line",
+        "speaker": "kira7",
+        "emotion": "neutral",
+        "outcome": true,
+        "textKey": "dlg.camp.kira_a.fx.comp_none",
+        "next": "n07"
       }
     ]
   }

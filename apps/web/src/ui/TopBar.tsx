@@ -5,10 +5,43 @@ import type { GameState } from "../game/types";
 import { resourceColor, resourceIcon, resourceLabel } from "../game/format";
 import { Btn, Bar, Tip, type TipData } from "./controls";
 import { L, ancientsOf, dlcOf, raceDefOf, tr } from "./fg";
+import { aiWorldEventsOf, aiWorldStateOf } from "./world-politics";
 import {
   SCIENCE_COLOR, SCIENCE_ICON, SCIENCE_ORDER, SCIENCE_RU, incomeBreakdown, incomeText, fleetCap, empireFleetPower, milliText, playerEmpire, projectedIncome, resourceConsequence, tickDate, worldOf, intText, signedText, rnd } from "./util";
 
 const SPEEDS = [0, 1, 2, 3, 5];
+
+function WorldPoliticsHud({ game }: { game: Game }) {
+  const world = game.hasWorld ? game.world : null;
+  const pol = aiWorldStateOf(world);
+  if (!pol || pol.empires.length === 0) return null;
+  const events = aiWorldEventsOf(world);
+  return (
+    <Tip data={() => ({
+      title: L("Мировая политика", "World politics"),
+      value: "⚔ " + pol.stats.wars + " · ◆ " + pol.stats.blocs,
+      lines: [
+        { label: L("Войн ИИ-ИИ", "AI-AI wars"), value: String(pol.stats.wars) },
+        { label: L("Союзов", "Alliances"), value: String(pol.stats.alliances) },
+        { label: L("Федераций", "Federations"), value: String(pol.stats.federations) },
+        { label: L("Блоков", "Blocs"), value: String(pol.stats.blocs) },
+        { label: L("Событий для вас", "Events for you"), value: String(events.length) },
+        { label: L("Ваших союзников", "Your allies"), value: String(pol.playerImpact.allies.length) },
+        { label: L("Угроз", "Threats"), value: String(pol.playerImpact.threats.length) },
+      ],
+      note: L("Панель «Мировая политика» — в меню «Ещё…»: матрица, лента, события.", "World politics panel is in the More menu: matrix, feed, events."),
+    })}>
+      <div className="sf-chip" data-testid="ai-world-hud">
+        <span className="sf-chip-ico" style={{ background: "#B06BFF" }}>⚔</span>
+        <span className="sf-chip-col">
+          <span className="sf-chip-name">{L("Мир", "World")}</span>
+          <span className="sf-chip-val" data-testid="world-war-hud">⚔{pol.stats.wars}</span>
+          <span className="sf-chip-delta" data-testid="world-bloc-hud" style={{ color: "#C9B8FF" }}>◆{pol.stats.blocs}{events.length > 0 ? " ⚑" + events.length : ""}</span>
+        </span>
+      </div>
+    </Tip>
+  );
+}
 
 function DlcSignalChip({ game }: { game: Game }) {
   const d = dlcOf(worldOf(game));
@@ -206,6 +239,7 @@ export function TopBar({ game, state, onMenu, onHelp, onSave, onLoad, onSettings
 
         <AncientsChip game={game} state={state} />
         <DlcSignalChip game={game} />
+        <WorldPoliticsHud game={game} />
 
         <Tip data={fleetTip}>
           <div className="sf-chip sf-chip--lead" data-testid="fleet-cap">

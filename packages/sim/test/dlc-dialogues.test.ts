@@ -3,10 +3,12 @@ import { BALANCE, MODE } from "@sf/data";
 import {
   applyCommand, bootstrapDlcStory, campaignPhase, createWorld, deserializeWorld, dlcDialogueEnd, dlcDialogueAdvance,
   dlcDialogueChoose, dlcPhase, dlcNotifyAction, endDlcDialogue, ensureDlc, getDlcConsequences,
-  getDlcDialogueView, getDlcModalState, getDlcState, narrativePhase, serializeWorld, setDlcCatalog,
-  startDlcDialogue,
+  ensureFg, getDlcDialogueView, getDlcModalState, getDlcState, narrativePhase, serializeWorld,
+  setDlcCatalog, startDlcDialogue,
 } from "../src/index";
 import { makeEvent } from "./campaignFixtures";
+import { CAMPAIGN_MISSION_DIALOGUES, getEndingHints, maybeStartCampaignStoryDialogue } from "../src/dlc";
+import type { CampaignMission } from "../src/fullgame";
 import type { DlcCatalog } from "../src/dlc";
 import type { World } from "../src/index";
 
@@ -51,37 +53,59 @@ const CATALOG: DlcCatalog = {
       ],
     },
     {
-      id: "dlg_campaign_act2", version: 1,
+      id: "dlg_effects", version: 1,
       nodes: [
-        { id: "c1", type: "line", textKey: "dlg.station.c1", next: "c2" },
-        { id: "c2", type: "choice", options: [
-          { id: "repair", textKey: "dlg.station.repair", next: "c3", effects: [{ flag: "kira_debt" }] },
-          { id: "fee", textKey: "dlg.station.fee", next: "c3", effects: [{ flag: "kira_paid", credits: 800 }] },
-          { id: "salvage", textKey: "dlg.station.salvage", next: "c3", effects: [{ flag: "kira_hostile" }] },
+        { id: "e1", type: "line", textKey: "dlg.e1", next: "e2" },
+        { id: "e2", type: "choice", options: [
+          { id: "hint", textKey: "dlg.hint", next: "e3", effects: [
+            { endingHint: "ending_seal", unlockMission: "main_02_council", effectLabelKey: "dlg.fx.hint" },
+          ] },
+          { id: "hint_gated", textKey: "dlg.hint_gated", next: "e3", effects: [], requiresFlag: "ending_hint:ending_seal" },
         ] },
-        { id: "c3", type: "end" },
+        { id: "e3", type: "end" },
       ],
     },
     {
-      id: "dlg_campaign_branch", version: 1,
+      id: "dlg_campaign_act0_relic", version: 1,
       nodes: [
-        { id: "b1", type: "line", textKey: "dlg.branch.b1", next: "b2" },
-        { id: "b2", type: "choice", options: [
-          { id: "federation", textKey: "dlg.branch.fed", next: "b3", effects: [{ campaignFlag: "branch_dialogue_fed" }] },
-          { id: "sovereignty", textKey: "dlg.branch.sov", next: "b3", effects: [{ campaignFlag: "branch_dialogue_sov" }] },
-          { id: "syndicate", textKey: "dlg.branch.syn", next: "b3", effects: [{ campaignFlag: "branch_dialogue_syn" }] },
+        { id: "l1", type: "line" as const, textKey: "act0.l1", next: "c1" },
+        { id: "c1", type: "choice" as const, options: [
+          { id: "accept", textKey: "act0.accept", next: "e", effects: [
+            { campaignFlag: "camp_relic_study", relation: { admiral_kain: 5 }, effectLabelKey: "act0.fx.study" },
+          ] },
+          { id: "reject", textKey: "act0.reject", next: "e", effects: [
+            { campaignFlag: "camp_relic_sealed", relation: { admiral_kain: -5 }, effectLabelKey: "act0.fx.sealed" },
+          ] },
         ] },
-        { id: "b3", type: "end" },
+        { id: "e", type: "end" as const },
       ],
     },
     {
-      id: "dlg_campaign_finale", version: 1,
+      id: "dlg_campaign_act1_hegemon", version: 1,
       nodes: [
-        { id: "f1", type: "line", textKey: "dlg.finale.f1", next: "f2" },
-        { id: "f2", type: "effect", effects: [{ campaignFlag: "finale_dialogue_done" }], next: "f3" },
-        { id: "f3", type: "end" },
+        { id: "l1", type: "line" as const, textKey: "act1.l1", next: "c1" },
+        { id: "c1", type: "choice" as const, options: [
+          { id: "accept", textKey: "act1.accept", next: "e", effects: [
+            { campaignFlag: "camp_hegemon_vassal", unlockMission: "main_02_council", effectLabelKey: "act1.fx.vassal" },
+          ] },
+          { id: "reject", textKey: "act1.reject", next: "e", effects: [
+            { campaignFlag: "camp_hegemon_rejected", effectLabelKey: "act1.fx.rejected" },
+          ] },
+        ] },
+        { id: "e", type: "end" as const },
       ],
     },
+    ...[
+      "dlg_campaign_teira_arc", "dlg_campaign_kira_arc",
+      "dlg_campaign_act2_council", "dlg_campaign_act3_truth", "dlg_campaign_act4_legacy",
+      "dlg_campaign_act4_betrayal", "dlg_campaign_final_door", "dlg_campaign_epilogue",
+    ].map((id) => ({
+      id, version: 1,
+      nodes: [
+        { id: "l1", type: "line" as const, textKey: id + ".l1", next: "e" },
+        { id: "e", type: "end" as const },
+      ],
+    })),
   ],
   characters: [{ id: "kira", nameKey: "char.kira.name", portrait: "kira", emotions: ["neutral"], race: "human", role: "mechanic", relation: { base: 0, grudgeAllowed: true } }],
   tree: { version: 1, nodes: [{ id: "q1", group: "prologue", type: "main", x: 0, y: 0 }], edges: [] },
@@ -118,7 +142,7 @@ describe("task-37 · one-shot сцен и storyStart", () => {
     startStory(world);
     const d = getDlcState(world);
     expect(d.dialogue?.active).toBe(true);
-    finishDialogue(world);
+    finishDialogue(world, ["o2"]);
     expect(d.seenScenes).toContain("dlg_a");
     expect(d.dialogue).toBeNull();
     // повторный старт завершённой сцены запрещён
@@ -135,7 +159,7 @@ describe("task-37 · one-shot сцен и storyStart", () => {
     startStory(world);
     const d = getDlcState(world);
     const scene = d.dialogue!.sceneId;
-    expect(startDlcDialogue(world, "dlg_campaign_act2", null).ok).toBe(false);
+    expect(startDlcDialogue(world, "dlg_campaign_act2_council", null).ok).toBe(false);
     expect(d.dialogue?.sceneId).toBe(scene);
   });
 });
@@ -263,43 +287,177 @@ describe("task-37 · флаги Q1 → Q2 (награды/модификатор
   });
 });
 
-describe("task-37 · сюжетные диалоги кампании", () => {
-  it("акт II и III: один раз, контекст campaign, выбор влияет на концовку", () => {
+describe("task-52 · акты 0/I: новые сцены один раз, эффекты выбора", () => {
+  it("main_00_relic/main_01_hegemon триггерят свои сцены, Q1 не дублируется", () => {
     const world = makeWorld();
+    const fg = ensureFg(world);
+    fg.campaign.missions["main_00_relic"] = {
+      id: "main_00_relic", act: 0, titleRu: "Обломок", briefingRu: "", giver: "", objectives: [],
+      failCondition: null, rewards: { credits: 0 }, branchRequired: null, secret: false,
+      status: "completed", acceptedTick: 0, flags: {},
+    };
+    fg.campaign.missions["main_01_hegemon"] = {
+      id: "main_01_hegemon", act: 1, titleRu: "Гегемон", briefingRu: "", giver: "", objectives: [],
+      failCondition: null, rewards: { credits: 0 }, branchRequired: null, secret: false,
+      status: "completed", acceptedTick: 0, flags: {},
+    };
     const d = getDlcState(world);
-    world.tick = 1200;
-    campaignPhase(world, { missions: [] });
-    expect(world.fg!.campaign.act).toBe(2);
-    expect(d.dialogue?.context).toBe("campaign");
-    expect(d.dialogue?.campaignAct).toBe(2);
-    expect(d.dialogue?.sceneId).toBe("dlg_campaign_act2");
-    // повторный вызов не открывает второй диалог
-    campaignPhase(world, { missions: [] });
-    expect(d.dialogue?.sceneId).toBe("dlg_campaign_act2");
-    dlcDialogueAdvance(world, 1);
-    const view = getDlcDialogueView(world)!;
-    dlcDialogueChoose(world, 1, view.nodeId, "salvage");
-    finishDialogue(world);
-    expect(world.fg!.campaign.flags["endingHint:ending_syndicate"]).toBe(1);
-    expect(d.seenScenes).toContain("dlg_campaign_act2");
-    // диалог ветки — только когда ветка выбрана
-    campaignPhase(world, { missions: [] });
-    expect(d.dialogue).toBeNull();
-    world.fg!.campaign.branch = "federation";
-    campaignPhase(world, { missions: [] });
-    expect(d.dialogue?.sceneId).toBe("dlg_campaign_branch");
-    finishDialogue(world);
-    expect(d.seenScenes).toContain("dlg_campaign_branch");
-    // финал кампании (акт V)
-    world.tick = 6200;
-    campaignPhase(world, { missions: [] });
-    expect(world.fg!.campaign.act).toBe(5);
-    expect(d.dialogue?.sceneId).toBe("dlg_campaign_finale");
-    finishDialogue(world);
-    expect(world.fg!.campaign.flags.finale_dialogue_done).toBe(1);
-    expect(d.seenScenes).toContain("dlg_campaign_finale");
-    // повторно не открывается
-    campaignPhase(world, { missions: [] });
-    expect(d.dialogue).toBeNull();
+    d.storySent = true; // Q1 уже обработан/не нужен в этом тесте
+    world.tick = 10;
+    const targetEntries = CAMPAIGN_MISSION_DIALOGUES.filter((entry) => ["main_00_relic", "main_01_hegemon"].includes(entry.missionId));
+    for (const entry of targetEntries) {
+      const started = maybeStartCampaignStoryDialogue(world);
+      expect(started).toBe(entry.scene);
+      expect(getDlcState(world).dialogue?.context).toBe("campaign");
+      finishDialogue(world, ["accept"]);
+      expect(getDlcState(world).seenScenes).toContain(entry.scene);
+    }
+    // обе сцены проиграны — новых нет
+    expect(maybeStartCampaignStoryDialogue(world)).toBeNull();
+    const fgFinal = ensureFg(world);
+    expect(fgFinal.campaign.flags.camp_relic_study).toBe(1);
+    expect(fgFinal.campaign.flags.camp_hegemon_vassal).toBe(1);
+    expect(fgFinal.campaign.flags["mission_unlocked:main_02_council"]).toBe(1);
+    expect(getDlcState(world).reputation.admiral_kain).toBe(5);
+    expect(getDlcConsequences(world).some((entry) => entry.sceneId === "dlg_campaign_act0_relic"
+      && entry.effects.some((effect) => effect.labelKey === "act0.fx.study"))).toBe(true);
+    expect(getDlcState(world).seenScenes).not.toContain("dlg_q1_briefing");
+    expect(getDlcState(world).seenScenes.filter((scene) => scene === "dlg_campaign_act0_relic").length).toBe(1);
   });
 });
+
+describe("task-55 · арки teira/kira и bridge-журнал", () => {
+  function completedMission(id: string) {
+    return {
+      id, act: 1, titleRu: id, briefingRu: "", giver: "", objectives: [], failCondition: null,
+      rewards: { credits: 0 }, branchRequired: null, secret: false, status: "completed",
+      acceptedTick: 0, flags: {},
+    } as unknown as CampaignMission;
+  }
+
+  it("dlg_campaign_teira_arc/kira_arc триггерятся один раз", () => {
+    const world = makeWorld();
+    const fg = ensureFg(world);
+    fg.campaign.missions["main_01_colony"] = completedMission("main_01_colony");
+    fg.campaign.missions["main_02_first_crisis"] = completedMission("main_02_first_crisis");
+    const d = getDlcState(world);
+    d.storySent = true;
+    d.flags["campaign_scene:main_00_relic"] = 1;
+    d.flags["campaign_scene:main_01_hegemon"] = 1;
+    d.seenScenes.push("dlg_campaign_act0_relic", "dlg_campaign_act1_hegemon");
+    world.tick = 10;
+    for (const [missionId, sceneId] of [
+      ["main_01_colony", "dlg_campaign_teira_arc"],
+      ["main_02_first_crisis", "dlg_campaign_kira_arc"],
+    ] as const) {
+      const started = maybeStartCampaignStoryDialogue(world);
+      expect(started).toBe(sceneId);
+      expect(getDlcState(world).dialogue?.context).toBe("campaign");
+      finishDialogue(world);
+      expect(getDlcState(world).flags["campaign_scene:" + missionId]).toBe(1);
+      expect(getDlcState(world).seenScenes).toContain(sceneId);
+    }
+    expect(maybeStartCampaignStoryDialogue(world)).toBeNull();
+    expect(getDlcState(world).seenScenes.filter((scene) => scene === "dlg_campaign_teira_arc").length).toBe(1);
+  });
+
+  it("bridge-записи в fg.journal при смене акта: один раз на переход, save/load", () => {
+    const world = makeWorld();
+    const fg = ensureFg(world);
+    world.tick = 1200;
+    campaignPhase(world, { missions: [] });
+    expect(fg.campaign.act).toBe(2);
+    const bridges = fg.journal.filter((entry) => entry.kind === "chronicle");
+    expect(bridges.length).toBe(2);
+    expect(bridges.some((entry) => entry.textRu.includes("Акт 0 → Акт I"))).toBe(true);
+    expect(bridges.some((entry) => entry.textRu.includes("Акт I → Акт II"))).toBe(true);
+    expect(fg.campaign.flags["bridge_journal:0_1"]).toBe(1);
+    expect(fg.campaign.flags["bridge_journal:1_2"]).toBe(1);
+    const count = fg.journal.length;
+    campaignPhase(world, { missions: [] });
+    expect(fg.journal.length).toBe(count);
+    const json = serializeWorld(world);
+    const restored = deserializeWorld(json);
+    expect(restored.fg!.campaign.flags["bridge_journal:1_2"]).toBe(1);
+    const restoredBridges = restored.fg!.journal.filter((entry) => entry.kind === "chronicle");
+    expect(restoredBridges.length).toBe(2);
+  });
+});
+
+describe("task-47 · endingHint/unlockMission и актовые сцены", () => {
+  function fakeMission(id: string, status: "locked" | "completed"): CampaignMission {
+    return {
+      id, act: 2, titleRu: id, briefingRu: "", giver: "", objectives: [], failCondition: null,
+      rewards: { credits: 0 }, branchRequired: null, secret: false, status,
+      acceptedTick: 0, flags: {},
+    };
+  }
+
+  it("endingHint/unlockMission: флаги, миссия открыта, consequences", () => {
+    const world = makeWorld();
+    const fg = ensureFg(world);
+    fg.campaign.missions["main_02_council"] = fakeMission("main_02_council", "locked");
+    expect(startDlcDialogue(world, "dlg_effects").ok).toBe(true);
+    dlcDialogueAdvance(world, 1);
+    const view = getDlcDialogueView(world)!;
+    expect(view.options[0]!.consequences.map((effect) => effect.kind)).toContain("endingHint");
+    expect(view.options[0]!.consequences.map((effect) => effect.kind)).toContain("unlockMission");
+    expect(view.options[1]!.available).toBe(false);
+    expect(dlcDialogueChoose(world, 1, view.nodeId, "hint").ok).toBe(true);
+    expect(fg.campaign.flags["ending_hint:ending_seal"]).toBe(1);
+    expect(fg.campaign.flags["mission_unlocked:main_02_council"]).toBe(1);
+    expect(fg.campaign.missions["main_02_council"]!.status).toBe("available");
+    expect(fg.campaign.missions["main_02_council"]!.flags.unlocked).toBe(1);
+    expect(getEndingHints(world)).toEqual(["ending_seal"]);
+    const consequence = getDlcConsequences(world).find((entry) => entry.sceneId === "dlg_effects")!;
+    expect(consequence.effects.some((effect) => effect.kind === "endingHint" && effect.labelKey === "dlg.fx.hint")).toBe(true);
+    expect(consequence.effects.some((effect) => effect.kind === "unlockMission" && effect.key === "main_02_council")).toBe(true);
+    const world2 = makeWorld();
+    ensureFg(world2).campaign.flags["ending_hint:ending_seal"] = 1;
+    startDlcDialogue(world2, "dlg_effects");
+    dlcDialogueAdvance(world2, 1);
+    expect(getDlcDialogueView(world2)!.options[1]!.available).toBe(true);
+  });
+
+  it("каждая актовая сцена триггерится ровно один раз (mission completed)", () => {
+    const world = makeWorld();
+    const fg = ensureFg(world);
+    for (const entry of CAMPAIGN_MISSION_DIALOGUES) {
+      fg.campaign.missions[entry.missionId] = fakeMission(entry.missionId, "completed");
+    }
+    getDlcState(world).storySent = true; // изолируем от Q1-пролога
+    world.tick = 10;
+    for (const entry of CAMPAIGN_MISSION_DIALOGUES) {
+      if (!getDlcState(world).dialogue?.active) dlcPhase(world);
+      expect(getDlcState(world).dialogue?.sceneId).toBe(entry.scene);
+      finishDialogue(world);
+      expect(getDlcState(world).seenScenes).toContain(entry.scene);
+    }
+    // все сцены проиграны — новых нет (one-shot, без спама)
+    dlcPhase(world);
+    dlcPhase(world);
+    expect(getDlcState(world).dialogue).toBeNull();
+    expect(maybeStartCampaignStoryDialogue(world)).toBeNull();
+    expect(getDlcState(world).seenScenes.filter((scene) => scene === "dlg_campaign_act2_council").length).toBe(1);
+  });
+
+  it("эпилог после концовки: one-shot, save/load", () => {
+    const world = makeWorld();
+    const fg = ensureFg(world);
+    fg.campaign.endings.push("ending_seal");
+    getDlcState(world).storySent = true;
+    world.tick = 10;
+    dlcPhase(world);
+    expect(getDlcState(world).dialogue?.sceneId).toBe("dlg_campaign_epilogue");
+    finishDialogue(world);
+    expect(getDlcState(world).seenScenes).toContain("dlg_campaign_epilogue");
+    dlcPhase(world);
+    expect(getDlcState(world).dialogue).toBeNull();
+    const json = serializeWorld(world);
+    const restored = deserializeWorld(json);
+    setDlcCatalog(CATALOG);
+    expect(ensureDlc(restored).seenScenes).toContain("dlg_campaign_epilogue");
+    expect(serializeWorld(restored)).toBe(json);
+  });
+});
+

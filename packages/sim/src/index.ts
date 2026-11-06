@@ -25,6 +25,7 @@ export type {
 export * from "./fullgame";
 export * from "./ancients";
 export * from "./dlc";
+export * from "./aiWorld";
 export * from "./modifiers";
 export * from "./traditions";
 export * from "./diplomacy";

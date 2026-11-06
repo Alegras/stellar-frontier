@@ -96,6 +96,33 @@ export function btnOrText(page: Page, testId: string, text: RegExp): Locator[] {
  * DLC XIV: story-диалог автооткрывается на первом тике и перекрывает базовый UI.
  * Базовые e2e закрывают его, если сценарий не про диалоги.
  */
+/**
+ * Закрывает все авто-оверлеи (бой/событие/диалог/мировая политика), появившиеся за тики.
+ * Используется спеками, которые прокручивают время и затем кликают базовый UI.
+ */
+export async function dismissAllOverlays(page: Page): Promise<void> {
+  for (let i = 0; i < 12; i++) {
+    const closed = await page.evaluate(() => {
+      const click = (sel: string): boolean => {
+        const el = document.querySelector<HTMLElement>(sel);
+        if (!el) return false;
+        el.click();
+        return true;
+      };
+      return click('[data-testid="btn-close-battle"]') || click('[data-testid="btn-close-battle-footer"]')
+        || click('[data-testid="btn-later-event"]') || click('[data-testid="btn-later-ai-event"]')
+        || click('[data-testid="dialogue-close"]');
+    });
+    if (closed) { await page.waitForTimeout(180); continue; }
+    if (await page.locator('[data-testid="overlays-root"]').count()) {
+      await page.keyboard.press("Escape");
+      await page.waitForTimeout(180);
+      continue;
+    }
+    break;
+  }
+}
+
 export async function dismissDialogueOverlay(page: Page): Promise<void> {
   // DLC-диалог может открыться чуть позже старта: опрашиваем ~1.2 с и закрываем,
   // попутно убирая модалку сюжетного события, если она перехватывает клики.
@@ -109,6 +136,11 @@ export async function dismissDialogueOverlay(page: Page): Promise<void> {
     }
     if (await page.locator('[data-testid="narrative-event"]').count()) {
       await page.evaluate(() => document.querySelector<HTMLElement>('[data-testid="btn-later-event"]')?.click());
+      await page.waitForTimeout(150);
+      continue;
+    }
+    if (await page.locator('[data-testid="ai-world-event"]').count()) {
+      await page.evaluate(() => document.querySelector<HTMLElement>('[data-testid="btn-later-ai-event"]')?.click());
       await page.waitForTimeout(150);
       continue;
     }

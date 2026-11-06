@@ -1,5 +1,28 @@
 # CHANGELOG
 
+## [0.7.2] — 2026-11-08 · Полная история 0–V (task-51/52/54/55)
+
+- Story: 10 кампанийных сцен (9 mission + epilogue): act0_relic, teira_arc, act1_hegemon, kira_arc, act2_council, act3_truth, act4_legacy, act4_betrayal, final_door, epilogue; 88 outcome-узлов; 5 мостиков (0→I…IV→V) в журнале; story-script v2 — 6 актов/18 сцен/16 развилок/40 вариантов/4 директивы/8 эпилогов.
+- Флаги/отношения: camp_relic_*, camp_voice_*, camp_hegemon_vassal/rejected, camp_teira_arc_*, camp_kira_arc_*, kira_debt; отношения teira_os/kain/kira7/selen; unlock main_01_rift_rumor.
+- l10n ru/en 1530↔1530; legacy-сцены/фразы удалены (legacy-check 0), docs/legacy-removed-keys.md, docs/story-script.md.
+- QA: story-verify 16/16, story-full e2e 3/3, unit 338/338, golden 8f52b0a6, полный e2e 64/64, acceptance §27/§28; gift 2.97 МБ/zip 1.04 МБ/verify 10/10; site синхронизирован.
+## [0.7.1] — 2026-11-07 · Финальная история/карта/арт v0.7 (task-46/47/48)
+
+- Story: 6 Gemini-сцен (акты II–V: 5 mission-сцен + эпилог); legacy-сцены/триггеры и 239 l10n-ключей удалены; endingHint/unlockMission (20/13); 20 payoff-флагов (requiresFlag) в поздних сценах; l10n ru/en 1407↔1407.
+- Legacy: tools/legacy-check.mjs (0 legacy-маркеров в source/dist/gift/site), docs/legacy-removed-keys.md.
+- Карта: политический слой AI-ИИ линий/столиц/статусов/фильтров (getPoliticalMap, map-pol-*), клик→панель; сектор Предела скрыт до revealSector, после — слой и туман; map-layer-sector.
+- Комикс: DOM-пузыри поверх Qwen-арта (позиции/адаптив 1280–2560), портрет не вылезает из grid, история ниже футера; dlc-comic.spec.
+- Арт: Qwen 4×6 портретов (24), фон/карточки/комикс, manifest 31 ассет.
+- UI: уведомления скрываются при активном диалоге (:has), исправления раскладки.
+- QA: story-verify 10/10, world-map/politics/dlc-comic/dialogue-fixes зелёные, unit 335/335, golden **8f52b0a6**, полный e2e **61/61**, acceptance §26, gift пересобран (2.89 МБ, verify 10/10).
+## [0.7.0] — 2026-11-07 · Мировая политика и динамика ИИ (task-42/43/44)
+
+- AI-AI слой: договоры/войны/федерации/дань/вассалитет; fg.aiWorld (news cap 50, events, blocs, statuses, stats), aiWorldPhase каждые 10 тактов, getAiNews/getAiRelations/getAiWorldState/getAiWorldEvents/getAiWorldHud.
+- Динамика: collapse (системы соседям, dead), absorb/merge (перенос систем/колоний/флотов/казны/техов, dead), вассал→интеграция, федерация→содружество→централизация в единую империю.
+- Игрок: события call-to-arms/trade_bloc/refugees/vassalization_demand/accession_offer/centralization_vote с выборами и эффектами; игрок никогда не удаляется молча; захват всех систем/forceAbsorb защищены.
+- UI: панель «Мировая политика» (обзор/матрица/лента/события/фильтры), HUD ai-world-hud/world-war-hud/world-bloc-hud, модалка ai-world-event с приоритетом к диалогу, статусы фракций, журнал; исправлен краш effectsRu string|string[].
+- Кампания: flags ai_war/ai_federation/ai_trade_bloc/ai_call_to_arms/ai_accession/ai_commonwealth; журнал politics.
+- QA: politics-verify 20/0/1, world-politics e2e 5/5, unit 335/335, golden **8f52b0a6**, полный e2e **61/61**, acceptance §25; gift пересобран.
 ## [0.6.1] — 2026-11-06 · Диалоги и арт: багфикс DLC XIV (task-40)
 
 - Диалоги: one-shot сцен (dlg_q1_briefing не запускается после завершения), закрытие X завершает сцену (нет active/зависшей паузы), приоритет модалок (narrative-event не поверх диалога, без накопления), сброс dismissed/seen при новой игре, save/load mid-dialogue.

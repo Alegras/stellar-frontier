@@ -1,0 +1,11 @@
+import * as fs from "node:fs";
+import * as data from "@sf/data";
+const dial = data.DLC_DIALOGUES ?? [];
+const camp = dial.filter((d) => String(d.id).startsWith("dlg_campaign"));
+const outcomes = [];
+for (const d of camp) for (const n of d.nodes ?? []) if (n.outcome === true) outcomes.push([d.id, n.id]);
+console.log("dialogues=" + dial.length + " campaign=" + camp.length + " outcomeNodes=" + outcomes.length);
+console.log("campaign ids:", camp.map((d) => d.id + ":" + d.nodes.length).join(","));
+const script = JSON.parse(fs.readFileSync("packages/data/src/campaign/story-script.json", "utf8"));
+console.log("script keys:", Object.keys(script).join(","));
+console.log("script summary:", JSON.stringify({ acts: script.acts?.length, scenes: script.scenes?.length, forks: script.forks?.length, variants: script.variants?.length, directives: script.directives?.length, epilogues: script.epilogues?.length, version: script.version }));

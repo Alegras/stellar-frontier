@@ -481,3 +481,30 @@ profit_h  = EV / cycle_h × contracts        ≤ 130 000
 - **Тесты**: packages/sim/test/dlc-dialogues.test.ts (8) — one-shot, dlc_dialogue_end, модалки/narrative, consequences/ветка/концовка, save/load mid-dialogue, Q1→Q2 modifiers, кампанийные сцены; dlc.test обновлён под schemaVersion 3.
 - **Гейты**: pnpm test 320/320; sim typecheck 0; QA tools/dialogue-bugs.mjs PASS=10 FAIL=0; golden hash **1bfd9c71** (seed 42, 100 тактов).
 
+
+## 13. Task-42 · Видимая мировая политика и внутренняя динамика ИИ
+
+- **fg.aiWorld** (schemaVersion 1): news (cap 50), events (cap 20, TTL 240), blocs, nextNewsId/nextEventId, lastPhaseTick/lastWarIds, flags (дедупликация), statuses (active/weakened/collapsed/annexed/absorbed/accession/commonwealth), stats.
+- **aiWorldPhase** каждые 10 тактов: новости о войнах/мирах/договорах/федерациях (дельта-наблюдение за ai.ts), редкие AI-данничества/вассалитет (cooldown, анти-снежок: не усиливаем лидера >40% ВВП), collapse/annex/absorb/accession, интеграция вассалов, содружество и централизация федераций, торговые блоки, события игрока.
+- **Распад/поглощение/объединение**: сила условий (истощение/потеря столицы/низкая стабильность/нет систем); системы/колонии/флоты/казна/технологии/перки/традиции/мегаструктуры переходят получателю; dead; империя удаляется из федераций и войн. Захват всех систем = уничтожение. Вассал интегрируется через 4000 тактов (для игрока — событие с выбором, не молчаливое удаление). Добровольное вхождение слабого ИИ в сильного/игрока (событие), содружество (≥4 участников или 5000 тактов; общая казна/флот) и централизация в единую империю (6500 тактов, без игрока в составе).
+- **События игрока**: call_to_arms, trade_bloc, refugees, vassalization_demand, accession_offer, centralization_vote; команда ai_world_event_choice; эффекты opinion:/join_war:/treaty:/break_treaty:/leave_federation/war:/merge_into: + applyCampaignEffect; игрок никогда не удаляется молча.
+- **Кампания**: флаги ai_war/ai_federation/ai_trade_bloc/ai_call_to_arms/ai_accession/ai_commonwealth; журнал (politics/war/federation).
+- **API UI/QA**: getAiNews(opts), getAiWorldState, getAiRelations, getAiWorldEvents, getAiWorldHud, aiWorldEventChoice; forceCollapse/forceAbsorb/forceMerge/forceCentralizeFederation/mergeEmpire для тестов.
+- **Тесты**: packages/sim/test/aiWorld.test.ts (10) — API/детерминизм/force collapse-absorb-centralize/вассалы/захват/события игрока/save-migration. QA politics-verify: PASS=20 FAIL=0 SKIP=1.
+- **Гейты**: pnpm test 331/331; typecheck 0; golden hash **f450a6ae** (seed 42, 100 тактов).
+
+
+### 13.1. Видимость сектора и карта (task-42 follow-up)
+- ensureSectorGenerated только генерирует 45 систем (knownBy пуст); сектор НЕ виден. revealSector (миссия 10/Врата, unlock:sector) ставит discovered, флаг sector_visible и knownBy/visibleTo игрока для секторных систем. sectorScan/sectorClaim до раскрытия отклоняются.
+- Для карты добавлены аксессоры: getKnownSystems(world, empireId) — галактика всегда (known/visible, capitalOf), сектор только после discover; getEmpireCapitals(world) — столицы со статусом/блоком/вассалом; getPoliticalMap(world) — systems+capitals+relations+blocs+sector{discovered,generated,visibleSystems}+playerImpact. getAiRelations/getAiWorldState используются для линий/статусов.
+- Тесты: aiWorld.test.ts «карта: сектор не виден раньше миссии 10/Врат» (2). pnpm test 333/333, typecheck 0, golden без изменений (f450a6ae).
+
+
+## 14. Task-47 · Story-интеграция: endingHint/unlockMission и актовые сцены
+
+- **DialogueEffectDef**: added optional endingHint / unlockMission (data task-46). endingHint → fg.campaign.flags["ending_hint:<id>"]=1 + consequence kind endingHint (labelKey effectLabelKey). unlockMission → campaign.flags["mission_unlocked:<id>"], mission.flags.unlocked=1, статус locked→available, journal mission, consequence kind unlockMission.
+- **endingHint в концовках**: checkEndings сортирует найденные концовки так, что подсказанные идут первыми (тон/порядок эпилога), ставит flag endingPreferred; жёсткие условия концовок не меняются. getEndingHints(world) — аксессор для UI/эпилога; опции диалогов могут требовать flag ending_hint:* (flagSet читает campaign.flags).
+- **unlockMission**: updateMissionStatus учитывает mission.flags.unlocked / campaign.flags mission_unlocked:*; миссия становится available без prerequisite, не блокируется повторно.
+- **Актовые one-shot сцены** (CAMPAIGN_MISSION_DIALOGUES): main_02_council→dlg_campaign_act2_council, main_03_truth→dlg_campaign_act3_truth, main_04_legacy_use→dlg_campaign_act4_legacy, main_04_betrayal→dlg_campaign_act4_betrayal, main_05_final_choice→dlg_campaign_final_door; epilogue — dlg_campaign_epilogue после первой концовки. Триггер в dlcPhase (mission.status==="completed", scene не seen, один активный диалог), one-shot через seenScenes+flags; save/load сохраняет.
+- **Контент**: 6 новых сцен task-46 присутствуют; маппинг миссий проверен. Тесты dlc-dialogues.test.ts +3 (endingHint/unlockMission/триггеры/эпилог); всего 336/336; typecheck 0; golden **a3b61434**.
+

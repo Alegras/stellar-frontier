@@ -530,7 +530,7 @@ if (QX.quests && QX.dialogues && QX.characters && QX.cards && QX.tree && Array.i
   const dqQuestIds = new Set(QX.quests.map((q) => q.id));
   const QCOUNTS = {
     "quests.quests": [QX.quests.length, 8, "=="],
-    "quests.dialogues": [QX.dialogues.length, 6, ">="],
+    "quests.dialogues": [QX.dialogues.length, 13, ">="],
     "quests.characters": [QX.characters.length, 4, ">="],
     "quests.cards": [QX.cards.length, 8, "=="],
     "quests.tree.nodes": [QX.tree.nodes.length, 8, "=="],
@@ -546,6 +546,13 @@ if (QX.quests && QX.dialogues && QX.characters && QX.cards && QX.tree && Array.i
   const CHANNELS = ["story_message", "board", "rumor", "signal"];
   const QUEST_TYPES = ["main", "side", "faction", "personal", "event", "investigation", "bounty", "delivery"];
   const l10nHas = (key) => key && key in F.ru && key in F.en;
+  const campaignEndingIds = new Set(F.endings.map((e) => e.id));
+  const branchIds = new Set(F.branches.map((b) => b.id));
+  const allCampaignFlags = new Set();
+  for (const d of QX.dialogues) for (const n of d.nodes) {
+    for (const e of n.effects ?? []) if (e.campaignFlag) allCampaignFlags.add(e.campaignFlag);
+    for (const o of n.options ?? []) for (const e of o.effects ?? []) if (e.campaignFlag) allCampaignFlags.add(e.campaignFlag);
+  }
   // quests
   for (const q of QX.quests) {
     if (!QUEST_TYPES.includes(q.type)) fail("quest " + q.id + ": type " + q.type);
@@ -620,6 +627,16 @@ if (QX.quests && QX.dialogues && QX.characters && QX.cards && QX.tree && Array.i
           oids.add(o.id);
           if (!l10nHas(o.textKey)) fail("dialogue " + d.id + " node " + n.id + " option " + o.id + ": нет l10n " + o.textKey);
           if (!nodeIdsD.has(o.next)) fail("dialogue " + d.id + " node " + n.id + " option " + o.id + ": next " + o.next);
+          if (o.requiresFlag) {
+            const Q1F = ["going_now","diagnose_first","leader_first","escort_first","no_shots","honest_report","hide_core","teira_only"];
+            if (o.requiresFlag.startsWith("ending_hint:")) {
+              if (!campaignEndingIds.has(o.requiresFlag.slice(12))) fail("dialogue " + d.id + " node " + n.id + " option " + o.id + ": ending_hint " + o.requiresFlag);
+            } else if (o.requiresFlag.startsWith("camp_")) {
+              if (!allCampaignFlags.has(o.requiresFlag)) fail("dialogue " + d.id + " node " + n.id + " option " + o.id + ": requiresFlag " + o.requiresFlag + " нигде не выставляется");
+            } else if (!Q1F.includes(o.requiresFlag)) {
+              fail("dialogue " + d.id + " node " + n.id + " option " + o.id + ": неизвестный requiresFlag " + o.requiresFlag);
+            }
+          }
           for (const eff of o.effects ?? []) {
             if (eff.flag) flagsSeen.add(eff.flag);
             if (eff.openQuest && !dqQuestIds.has(eff.openQuest)) fail("dialogue " + d.id + ": openQuest " + eff.openQuest);
@@ -636,7 +653,7 @@ if (QX.quests && QX.dialogues && QX.characters && QX.cards && QX.tree && Array.i
       }
       if (n.type !== "end" && n.type !== "choice" && n.type !== "check" && n.next && !nodeIdsD.has(n.next)) fail("dialogue " + d.id + " node " + n.id + ": next " + n.next);
       if (n.emotion && !EMO.includes(n.emotion)) fail("dialogue " + d.id + " node " + n.id + ": эмоция " + n.emotion);
-      if (n.speaker && !dqCharIds.has(n.speaker) && !["svet", "player", "command", "board", "ort", "skar", "ash", "bar"].includes(n.speaker)) fail("dialogue " + d.id + " node " + n.id + ": неизвестный speaker " + n.speaker);
+      if (n.speaker && !dqCharIds.has(n.speaker) && !["svet", "player", "command", "board", "ort", "skar", "ash", "bar", "valerius"].includes(n.speaker)) fail("dialogue " + d.id + " node " + n.id + ": неизвестный speaker " + n.speaker);
       if (n.type === "effect" || n.type === "end") for (const eff of n.effects ?? []) {
         if (eff.flag) flagsSeen.add(eff.flag);
         if (eff.openQuest && !dqQuestIds.has(eff.openQuest)) fail("dialogue " + d.id + ": openQuest " + eff.openQuest);
@@ -658,17 +675,20 @@ if (QX.quests && QX.dialogues && QX.characters && QX.cards && QX.tree && Array.i
     ok("dlg_q1_briefing: 14+ узлов, 3 выбора, все 8 ключевых флагов");
   }
   // кампанийные диалоги и расширенные эффекты
-  const branchIds = new Set(F.branches.map((b) => b.id));
-  const campaignEndingIds = new Set(F.endings.map((e) => e.id));
-  const MAX_NODES = 12, MIN_NODES = 8;
-  const CAMPAIGN_DLGS = ["dlg_campaign_act2", "dlg_campaign_branch", "dlg_campaign_finale"];
-  const effectFields = new Set(["flag","rep","openQuest","timeSkip","credits","chronicleKey","campaignFlag","relation","branch","ending","effectLabelKey","items"]);
+  const MAX_NODES = 32, MIN_NODES = 8;
+  const CAMPAIGN_DLGS = ["dlg_campaign_act0_relic","dlg_campaign_act1_hegemon","dlg_campaign_teira_arc","dlg_campaign_kira_arc","dlg_campaign_act2_council","dlg_campaign_act3_truth","dlg_campaign_act4_legacy","dlg_campaign_act4_betrayal","dlg_campaign_final_door","dlg_campaign_epilogue"];
+  const effectFields = new Set(["flag","rep","openQuest","timeSkip","credits","chronicleKey","campaignFlag","relation","branch","ending","endingHint","unlockMission","effectLabelKey","items"]);
   const allEffectKeys = new Set();
   const checkEffects = (d, where, effects) => {
     for (const e of effects ?? []) {
       for (const k of Object.keys(e)) if (!effectFields.has(k)) fail("dialogue " + d + " " + where + ": неизвестное поле эффекта " + k);
       if (e.branch && !branchIds.has(e.branch)) fail("dialogue " + d + " " + where + ": branch " + e.branch);
       if (e.ending && !campaignEndingIds.has(e.ending)) fail("dialogue " + d + " " + where + ": ending " + e.ending);
+      if (e.endingHint && !campaignEndingIds.has(e.endingHint)) fail("dialogue " + d + " " + where + ": endingHint " + e.endingHint);
+      if (e.unlockMission) {
+        const missionIds = new Set(F.missions.map((m) => m.id));
+        if (!missionIds.has(e.unlockMission)) fail("dialogue " + d + " " + where + ": unlockMission " + e.unlockMission);
+      }
       if (e.campaignFlag !== undefined && !e.campaignFlag) fail("dialogue " + d + " " + where + ": пустой campaignFlag");
       if (e.effectLabelKey) { allEffectKeys.add(e.effectLabelKey); if (!l10nHas(e.effectLabelKey)) fail("dialogue " + d + " " + where + ": нет l10n " + e.effectLabelKey); }
       for (const [cid, delta] of Object.entries(e.relation ?? {})) {
@@ -689,6 +709,29 @@ if (QX.quests && QX.dialogues && QX.characters && QX.cards && QX.tree && Array.i
       }
     }
   }
+  // outcome-узлы после выборов в кампанийных сценах
+  let outcomeNodes = 0, choicesChecked = 0;
+  for (const id of CAMPAIGN_DLGS) {
+    const dlg = QX.dialogues.find((d) => d.id === id);
+    if (!dlg) continue;
+    const byNode = new Map(dlg.nodes.map((n) => [n.id, n]));
+    for (const n of dlg.nodes) {
+      if (n.type !== "choice") continue;
+      for (const o of n.options ?? []) {
+        choicesChecked++;
+        const next = byNode.get(o.next);
+        if (!next) fail("outcome " + id + " " + n.id + " " + o.id + ": next " + o.next);
+        else if (next.outcome !== true) fail("outcome " + id + " " + n.id + " " + o.id + ": next-узел не outcome");
+        else {
+          outcomeNodes++;
+          if (!next.textKey && !(next.effects && next.effects.length)) fail("outcome " + id + " " + next.id + ": нет текста");
+          if (next.next && !byNode.has(next.next)) fail("outcome " + id + " " + next.id + ": next " + next.next);
+        }
+      }
+    }
+  }
+  if (choicesChecked < 50) fail("outcome: проверено выборов " + choicesChecked + " (нужно ≥50)");
+  ok("outcome-узлы: " + outcomeNodes + " после " + choicesChecked + " вариантов в " + CAMPAIGN_DLGS.length + " кампанийных сценах");
   for (const id of CAMPAIGN_DLGS) if (!dqIds.has(id)) fail("нет кампанийного диалога " + id);
   const q2 = QX.quests.find((q) => q.id === "q_pro_02_quiet_dock");
   const q5 = QX.quests.find((q) => q.id === "q_pro_05_inspection");
@@ -722,7 +765,11 @@ if (QX.quests && QX.dialogues && QX.characters && QX.cards && QX.tree && Array.i
   if (!(byIdQ4 && byIdQ4.nextHint === "q_pro_05_inspection")) fail("quest q_pro_04_courier: nextHint должен вести на Q5");
   const EXPECT_Q1_FLAGS = ["going_now", "diagnose_first", "leader_first", "escort_first", "no_shots", "honest_report", "hide_core", "teira_only"];
   for (const f of EXPECT_Q1_FLAGS) if (!modifierFlagKeys.has(f)) fail("Q1-флаг " + f + " не влияет ни на один modifier (косметика)");
-  ok("campaign: диалогов " + CAMPAIGN_DLGS.length + ", Q1-флагов в modifiers " + EXPECT_Q1_FLAGS.length + ", effectLabels " + allEffectKeys.size);
+  const consumedCampaign = new Set();
+  // task-48: payoff-слой должен читать не менее 18 campaign-флагов в поздних сценах
+  for (const d of QX.dialogues) for (const n of d.nodes) for (const o of n.options ?? []) if (o.requiresFlag && o.requiresFlag.startsWith("camp_")) consumedCampaign.add(o.requiresFlag);
+  if (consumedCampaign.size < 18) fail("payoff: campaign-флагов прочитано " + consumedCampaign.size + " (нужно ≥18)");
+  ok("campaign: диалогов " + CAMPAIGN_DLGS.length + ", Q1-флагов в modifiers " + EXPECT_Q1_FLAGS.length + ", effectLabels " + allEffectKeys.size + ", campaign-флагов прочитано " + consumedCampaign.size + "/" + allCampaignFlags.size);
   // characters
   for (const c of QX.characters) {
     if (!c.id || !c.nameKey || !l10nHas(c.nameKey)) fail("character " + c.id + ": nameKey");
@@ -744,6 +791,116 @@ if (QX.quests && QX.dialogues && QX.characters && QX.cards && QX.tree && Array.i
   }
   for (const q of QX.quests) if (!cardQuests.has(q.id)) fail("card: нет карточки для квеста " + q.id);
   ok("DLC XIV: квестов " + QX.quests.length + ", диалогов " + QX.dialogues.length + ", персонажей " + QX.characters.length + ", карточек " + QX.cards.length + ", дерево " + QX.tree.nodes.length + "/" + QX.tree.edges.length);
+}
+
+// ---------- Сценарий кампании (акты 0–V, полный Gemini markdown → JSON) ----------
+const STORY = load("campaign/story-script.json");
+if (STORY) {
+  const EXPECT_ACTS = [0, 1, 2, 3, 4, 5];
+  const EXPECT_FORKS = ["0.1","1.1","2.1","2.2","2.3","3.1","3.2","3.3","4.1","4.2","4.3","4.4","4.5","5.1","5.2","5.3"];
+  const endingIdsStory = new Set(F.endings.map((e) => e.id));
+  const missionIdsStory = new Set(F.missions.map((m) => m.id));
+  const relTargets = new Set(["admiral_kain", "counselor_selen", "teira_os", "kira7"]);
+  const allowedFlags = (f) => f.startsWith("camp_") || f === "going_now" || f === "diagnose_first";
+  const SCENE_KINDS = ["scene", "bridge", "arc", "ancient"];
+  if (STORY.version !== 2) fail("story-script: version " + STORY.version + " (нужно 2: полная версия акты 0–V)");
+  if (!STORY.titleRu) fail("story-script: пустой titleRu");
+  if (!Array.isArray(STORY.acts) || STORY.acts.length !== 6) fail("story-script: актов " + (STORY.acts || []).length + " (нужно 6: 0–V)");
+  const actNums = (STORY.acts || []).map((a) => a.act).sort((a, b) => a - b);
+  if (JSON.stringify(actNums) !== JSON.stringify(EXPECT_ACTS)) fail("story-script: акты " + actNums.join(",") + " (нужно 0,1,2,3,4,5)");
+  const forkIds = new Set();
+  const sceneIds = new Set();
+  const sceneKinds = new Set();
+  let scenesCount = 0, forksCount = 0, optionsCount = 0, optionsMissing = 0, relationsBad = 0, missionBad = 0, endingBad = 0, flagsBad = 0;
+  for (const act of STORY.acts || []) {
+    if (!act.id || !act.titleRu) fail("story-script act " + act.act + ": id/titleRu");
+    for (const sc of act.scenes || []) {
+      scenesCount++;
+      if (!sc.id || sceneIds.has(sc.id)) fail("story-script: сцена id " + sc.id);
+      sceneIds.add(sc.id);
+      if (!sc.titleRu) fail("story-script " + sc.id + ": titleRu");
+      if (!sc.chronoRu) fail("story-script " + sc.id + ": chronoRu");
+      if (!sc.bodyRu || sc.bodyRu.length < 80) fail("story-script " + sc.id + ": bodyRu слишком короткий (" + (sc.bodyRu || "").length + ")");
+      if (sc.kind) { sceneKinds.add(sc.kind); if (!SCENE_KINDS.includes(sc.kind)) fail("story-script " + sc.id + ": kind " + sc.kind); }
+      for (const f of sc.forks || []) {
+        forksCount++;
+        if (!f.id || forkIds.has(f.id)) fail("story-script: дубль/пустой fork id " + f.id);
+        forkIds.add(f.id);
+        if (!f.titleRu) fail("story-script fork " + f.id + ": titleRu");
+        if (!Array.isArray(f.options) || f.options.length < 2 || f.options.length > 4) fail("story-script fork " + f.id + ": вариантов " + (f.options || []).length + " (2..4)");
+        const optIds = new Set();
+        for (const o of f.options || []) {
+          optionsCount++;
+          if (!o.id || optIds.has(o.id)) fail("story-script fork " + f.id + ": дубль/пустой option id " + o.id);
+          optIds.add(o.id);
+          if (!o.titleRu) fail("story-script fork " + f.id + " option " + o.id + ": titleRu");
+          const hasText = !!(o.directRu || o.outcomeRu || (o.effectsRu && o.effectsRu.length));
+          if (!hasText) optionsMissing++;
+          if (!Array.isArray(o.flags)) fail("story-script fork " + f.id + " option " + o.id + ": flags[]");
+          for (const fl of o.flags) { if (typeof fl !== "string" || !allowedFlags(fl)) flagsBad++; }
+          if (!Array.isArray(o.relations)) fail("story-script fork " + f.id + " option " + o.id + ": relations[]");
+          for (const rel of o.relations) { if (!relTargets.has(rel.target)) relationsBad++; if (!Number.isFinite(rel.delta)) relationsBad++; }
+          if (o.unlockMission && !missionIdsStory.has(o.unlockMission)) missionBad++;
+          if (o.endingHint && !endingIdsStory.has(o.endingHint)) endingBad++;
+          if (o.branch && !["federation","sovereignty","syndicate"].includes(o.branch)) fail("story-script fork " + f.id + " option " + o.id + ": branch " + o.branch);
+        }
+      }
+    }
+  }
+  if (scenesCount !== 18) fail("story-script: сцен " + scenesCount + " (нужно 18: сцены+арки+мостики)");
+  if (forksCount !== 16) fail("story-script: развилок " + forksCount + " (нужно 16)");
+  for (const id of EXPECT_FORKS) if (!forkIds.has(id)) fail("story-script: нет развилки " + id);
+  if (optionsCount !== 40) fail("story-script: вариантов " + optionsCount + " (нужно 40)");
+  if (optionsMissing) fail("story-script: вариантов без текста " + optionsMissing);
+  if (relationsBad) fail("story-script: битых relations " + relationsBad);
+  if (missionBad) fail("story-script: неизвестных unlockMission " + missionBad);
+  if (endingBad) fail("story-script: неизвестных endingHint " + endingBad);
+  if (flagsBad) fail("story-script: недопустимых флагов " + flagsBad);
+  for (const kind of ["bridge","arc","ancient"]) if (!sceneKinds.has(kind)) fail("story-script: нет сцен kind=" + kind);
+  // 4 директивы
+  if (!Array.isArray(STORY.directives) || STORY.directives.length !== 4) fail("story-script: директив " + (STORY.directives || []).length + " (нужно 4)");
+  const directFlags = new Set((STORY.directives || []).map((d) => d.flag));
+  const directEndings = new Set((STORY.directives || []).map((d) => d.endingId));
+  for (const fl of ["camp_final_seal","camp_final_control","camp_final_release","camp_final_whisper"]) if (!directFlags.has(fl)) fail("story-script: нет директивы " + fl);
+  for (const e of ["ending_seal","ending_control","ending_release","ending_whisper"]) if (!directEndings.has(e)) fail("story-script: директива не ведёт к " + e);
+  for (const d of STORY.directives || []) { if (!d.titleRu || !d.actionRu) fail("story-script directive " + d.id + ": titleRu/actionRu"); if (!endingIdsStory.has(d.endingId)) fail("story-script directive " + d.id + ": endingId " + d.endingId); }
+  // 8 эпилогов — все концовки
+  if (!Array.isArray(STORY.epilogues) || STORY.epilogues.length !== 8) fail("story-script: эпилогов " + (STORY.epilogues || []).length + " (нужно 8)");
+  const epiEndings = new Set();
+  for (const e of STORY.epilogues || []) {
+    if (!endingIdsStory.has(e.endingId)) fail("story-script epilogue: неизвестный endingId " + e.endingId);
+    if (epiEndings.has(e.endingId)) fail("story-script epilogue: дубль " + e.endingId);
+    epiEndings.add(e.endingId);
+    if (!e.titleRu || !e.bodyRu || e.bodyRu.length < 200) fail("story-script epilogue " + e.endingId + ": titleRu/bodyRu");
+    for (const comp of e.companions ?? []) if (!comp.name || !comp.ru) fail("story-script epilogue " + e.endingId + ": companion");
+  }
+  for (const eid of endingIdsStory) if (!epiEndings.has(eid)) fail("story-script: нет эпилога для " + eid);
+  if (!STORY.finalPointRu || STORY.finalPointRu.length < 100) fail("story-script: finalPointRu");
+  if (!Array.isArray(STORY.finalMessages) || STORY.finalMessages.length !== 2) fail("story-script: финальных посланий " + (STORY.finalMessages || []).length + " (нужно 2)");
+  const kinds = new Set((STORY.finalMessages || []).map((m) => m.kind));
+  if (!kinds.has("warning") || !kinds.has("gift")) fail("story-script: финальные послания warning/gift");
+  ok("story-script: актов " + STORY.acts.length + ", сцен " + scenesCount + " (bridge/arc/ancient), развилок " + forksCount + ", вариантов " + optionsCount + ", директив " + STORY.directives.length + ", эпилогов " + STORY.epilogues.length);
+}
+
+// ---------- Мостики актов (журнал/хроника) ----------
+const BRIDGES = load("campaign/bridges.json");
+if (BRIDGES) {
+  const list = BRIDGES.bridges;
+  if (!Array.isArray(list) || list.length !== 5) fail("bridges: " + ((list || []).length) + " (нужно 5)");
+  const seen = new Set();
+  for (const b of list || []) {
+    if (!b.id || seen.has(b.id)) fail("bridges: дубль/пустой id " + b.id);
+    seen.add(b.id);
+    if (!(b.fromAct >= 0 && b.fromAct <= 4)) fail("bridges " + b.id + ": fromAct " + b.fromAct);
+    if (b.toAct !== b.fromAct + 1) fail("bridges " + b.id + ": toAct " + b.toAct + " (нужно fromAct+1)");
+    if (!b.titleRu || !b.chronoRu) fail("bridges " + b.id + ": titleRu/chronoRu");
+    if (!b.bodyRu || b.bodyRu.length < 200) fail("bridges " + b.id + ": bodyRu слишком короткий (" + (b.bodyRu || "").length + ")");
+    if (!/Хроника|АКТ/i.test(b.bodyRu)) warn("bridges " + b.id + ": bodyRu без «Хроники сектора» — проверь текст");
+  }
+  for (const [f, t] of [[0,1],[1,2],[2,3],[3,4],[4,5]]) {
+    if (!(list || []).some((b) => b.fromAct === f && b.toAct === t)) fail("bridges: нет мостика " + f + "→" + t);
+  }
+  ok("bridges: " + list.length + " мостиков 0→I … IV→V (журнал/хроника)");
 }
 
 // ---------- итог ----------

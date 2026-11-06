@@ -53,7 +53,8 @@ export interface DlcHistoryEntry {
 }
 
 export type DlcConsequenceKind =
-  | "flag" | "rep" | "relation" | "openQuest" | "branch" | "campaignFlag" | "credits" | "chronicle" | "reward";
+  | "flag" | "rep" | "relation" | "openQuest" | "branch" | "campaignFlag" | "credits" | "chronicle" | "reward"
+  | "endingHint" | "unlockMission";
 
 export interface DlcConsequenceEffect {
   kind: DlcConsequenceKind;
@@ -155,6 +156,10 @@ type ExtendedDialogueEffect = DialogueEffectDef & {
   ending?: string;
   effectLabelKey?: string;
   items?: string[];
+  /** Мягкая подсказка концовки: не фиксирует финал, участвует в выборе эпилога. */
+  endingHint?: string;
+  /** Открыть сюжетную миссию кампании (campaign.flags["mission_unlocked:<id>"]). */
+  unlockMission?: string;
 };
 
 interface QuestModifierDef {
@@ -178,11 +183,20 @@ type ExtendedQuestDef = QuestDef & {
 
 type ExtendedDialogueDef = DialogueDef & { repeatable?: boolean };
 
-export const CAMPAIGN_DIALOGUE_SCENES: Array<{ act: number; scene: string; flag: string; requiresBranch?: boolean }> = [
-  { act: 2, scene: "dlg_campaign_act2", flag: "campaign_dialogue_act2" },
-  { act: 2, scene: "dlg_campaign_branch", flag: "campaign_dialogue_branch", requiresBranch: true },
-  { act: 5, scene: "dlg_campaign_finale", flag: "campaign_dialogue_finale" },
+/** Акт/миссия → one-shot сюжетная сцена (task-46/47, story-bible §12.9). */
+export const CAMPAIGN_MISSION_DIALOGUES: Array<{ missionId: string; scene: string }> = [
+  { missionId: "main_00_relic", scene: "dlg_campaign_act0_relic" },
+  { missionId: "main_01_colony", scene: "dlg_campaign_teira_arc" },
+  { missionId: "main_01_hegemon", scene: "dlg_campaign_act1_hegemon" },
+  { missionId: "main_02_first_crisis", scene: "dlg_campaign_kira_arc" },
+  { missionId: "main_02_council", scene: "dlg_campaign_act2_council" },
+  { missionId: "main_03_truth", scene: "dlg_campaign_act3_truth" },
+  { missionId: "main_04_legacy_use", scene: "dlg_campaign_act4_legacy" },
+  { missionId: "main_04_betrayal", scene: "dlg_campaign_act4_betrayal" },
+  { missionId: "main_05_final_choice", scene: "dlg_campaign_final_door" },
 ];
+
+export const CAMPAIGN_EPILOGUE_SCENE = "dlg_campaign_epilogue";
 
 let overrideCatalog: DlcCatalog | null = null;
 
@@ -364,6 +378,8 @@ function consequenceLabel(kind: DlcConsequenceKind, key?: string): { labelKey: s
     case "branch": return { labelKey: "dlc.effect.branch:" + (key ?? ""), labelRu: "Ветка: " + (key ?? "") };
     case "chronicle": return { labelKey: "dlc.effect.chronicle", labelRu: "Запись хроники" };
     case "reward": return { labelKey: "dlc.effect.reward", labelRu: "Награда" };
+    case "endingHint": return { labelKey: "dlc.effect.ending_hint:" + (key ?? ""), labelRu: "Намёк на концовку: " + (key ?? "") };
+    case "unlockMission": return { labelKey: "dlc.effect.unlock_mission:" + (key ?? ""), labelRu: "Открыта сюжетная миссия: " + (key ?? "") };
     default: return { labelKey: "dlc.effect.unknown", labelRu: "Последствие" };
   }
 }
@@ -445,7 +461,9 @@ function chronicle(world: World, d: DlcState, textKey: string, questId?: string)
 
 function flagSet(world: World, d: DlcState, flag: string | undefined): boolean {
   if (!flag) return true;
-  return (d.flags[flag] ?? 0) > 0 || (world.flags[flag] ?? 0) > 0;
+  return (d.flags[flag] ?? 0) > 0
+    || (world.flags[flag] ?? 0) > 0
+    || (world.fg?.campaign.flags[flag] ?? 0) > 0;
 }
 
 function questGateOpen(world: World, d: DlcState, def: QuestDef): boolean {
@@ -855,6 +873,8 @@ export function describeDlcEffects(effects: DialogueEffectDef[] | undefined): Dl
     if (effect.branch) push("branch", effect.branch);
     if (effect.ending) push("campaignFlag", "ending:" + effect.ending);
     if (effect.chronicleKey) push("chronicle", effect.chronicleKey);
+    if (effect.endingHint) push("endingHint", effect.endingHint);
+    if (effect.unlockMission) push("unlockMission", effect.unlockMission);
     for (const item of effect.items ?? []) push("flag", "item:" + item);
   }
   return out;
@@ -917,6 +937,28 @@ function applyDlcEffects(
     if (effect.ending) {
       applyEnding(world, effect.ending);
       push("campaignFlag", "ending:" + effect.ending);
+    }
+    if (effect.endingHint) {
+      const campaign = campaignState(world);
+      d.flags["ending_hint:" + effect.endingHint] = 1;
+      if (campaign) campaign.flags["ending_hint:" + effect.endingHint] = 1;
+      push("endingHint", effect.endingHint);
+    }
+    if (effect.unlockMission) {
+      const campaign = campaignState(world);
+      d.flags["mission_unlocked:" + effect.unlockMission] = 1;
+      if (campaign) {
+        campaign.flags["mission_unlocked:" + effect.unlockMission] = 1;
+        const fgLocal = world.fg!;
+        const mission = (fgLocal.campaign.missions as Record<string, { status: string; flags?: Record<string, number> } | undefined>)[effect.unlockMission];
+        if (mission) {
+          mission.flags = mission.flags ?? {};
+          mission.flags.unlocked = 1;
+          if (mission.status === "locked") mission.status = "available";
+        }
+        fgLocal.journal.push({ tick: world.tick, kind: "mission", textRu: "Открыта сюжетная миссия: " + effect.unlockMission, missionId: effect.unlockMission });
+      }
+      push("unlockMission", effect.unlockMission);
     }
     for (const item of effect.items ?? []) {
       d.flags["item:" + item] = 1;
@@ -1279,6 +1321,60 @@ export function getDlcBoard(world: World): DlcState["board"] {
 
 // ------------------------------------------------------------------ фаза/хуки
 
+function maybeStartCampaignMissionDialogue(world: World, d: DlcState): void {
+  if (!d.enabled || d.dialogue?.active) return;
+  const pending = world.fg?.narrative?.pending ?? [];
+  if (pending.length > 0) return;
+  const campaign = world.fg?.campaign;
+  if (!campaign) return;
+  for (const entry of CAMPAIGN_MISSION_DIALOGUES) {
+    const flag = "campaign_scene:" + entry.missionId;
+    if (d.flags[flag]) continue;
+    const mission = (campaign.missions as Record<string, { status?: string } | undefined>)[entry.missionId];
+    if (mission?.status !== "completed") continue;
+    const dialogue = dlcDialogueById(entry.scene);
+    if (!dialogue) continue;
+    if (d.seenScenes.includes(entry.scene)) { d.flags[flag] = 1; continue; }
+    d.flags[flag] = 1;
+    startDlcDialogue(world, entry.scene, null, { context: "campaign" });
+    return;
+  }
+  // Эпилог — после первой достигнутой концовки; учитывает мягкие endingHint для тона/выбора.
+  const epilogueFlag = "campaign_scene:epilogue";
+  if (!d.flags[epilogueFlag] && campaign.endings.length > 0) {
+    const dialogue = dlcDialogueById(CAMPAIGN_EPILOGUE_SCENE);
+    if (dialogue && !d.seenScenes.includes(CAMPAIGN_EPILOGUE_SCENE)) {
+      d.flags[epilogueFlag] = 1;
+      startDlcDialogue(world, CAMPAIGN_EPILOGUE_SCENE, null, { context: "campaign" });
+    } else {
+      d.flags[epilogueFlag] = 1;
+    }
+  }
+}
+
+/**
+ * Headless/QA: попытаться запустить следующую актовую/эпилоговую сцену.
+ * Возвращает sceneId, если сцена стартовала, иначе null. One-shot: повторный вызов без
+ * новых completed-миссий вернёт null (флаги campaign_scene:<missionId>/seenScenes).
+ */
+export function maybeStartCampaignStoryDialogue(world: World): string | null {
+  const d = ensureDlc(world);
+  const before = d.dialogue?.active ? d.dialogue.sceneId : null;
+  maybeStartCampaignMissionDialogue(world, d);
+  const after = d.dialogue?.active ? d.dialogue.sceneId : null;
+  return after && after !== before ? after : null;
+}
+
+/** Мягкие подсказки концовок (ending_hint:<id>), детерминированный порядок. */
+export function getEndingHints(world: World): string[] {
+  const campaign = world.fg?.campaign;
+  if (!campaign) return [];
+  return Object.keys(campaign.flags)
+    .filter((key) => key.startsWith("ending_hint:"))
+    .map((key) => key.slice("ending_hint:".length))
+    .sort((a, b) => (a < b ? -1 : a > b ? 1 : 0));
+}
+
 function storyStart(world: World, d: DlcState): void {
   if (d.storySent) return;
   const catalog = dlcCatalog();
@@ -1355,27 +1451,6 @@ function hookReachAndKills(world: World, d: DlcState): void {
   }
 }
 
-/** Сюжетный диалог кампании (один раз на акт): акт II — станция, акт III — СВЕТ. */
-export function maybeStartCampaignDialogue(world: World): CommandResult | null {
-  const d = ensureDlc(world);
-  if (!d.enabled) return null;
-  if (d.dialogue?.active) return null;
-  const pending = world.fg?.narrative?.pending ?? [];
-  if (pending.length > 0) return null;
-  const act = world.fg?.campaign.act ?? 0;
-  const branch = world.fg?.campaign.branch ?? "undecided";
-  for (const entry of CAMPAIGN_DIALOGUE_SCENES) {
-    if (act < entry.act) continue;
-    if (entry.requiresBranch && branch === "undecided") continue;
-    if (d.flags[entry.flag]) continue;
-    if (d.seenScenes.includes(entry.scene)) { d.flags[entry.flag] = 1; continue; }
-    if (!dlcDialogueById(entry.scene)) continue;
-    d.flags[entry.flag] = 1;
-    return startDlcDialogue(world, entry.scene, null, { context: "campaign", campaignAct: entry.act });
-  }
-  return null;
-}
-
 /**
  * Синхронный старт истории DLC (для Game.newGame/UI): открывает Q1 и оверлей сразу,
  * без ожидания первого такта. Идемпотентно (storySent/seenScenes).
@@ -1394,6 +1469,7 @@ export function dlcPhase(world: World): void {
   if (!d.enabled) return;
   ensureDlcQuestSystems(world);
   if (!d.storySent) storyStart(world, d);
+  maybeStartCampaignMissionDialogue(world, d);
   ensureRumors(world, d);
   ensureSignals(world, d);
   refreshBoard(world, d);

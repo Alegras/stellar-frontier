@@ -408,7 +408,7 @@ export type Command =
   | { type: "tradition_unlock"; treeId: string; nodeId: string }
   | { type: "perk_unlock"; perkId: string }
   // --- M7: дипломатия, войны, федерации, совет, шпионаж
-  | { type: "treaty_offer"; targetEmpireId: number; treaty: "nap" | "trade" | "research" | "defensive" | "alliance" | "federation" }
+  | { type: "treaty_offer"; targetEmpireId: number; treaty: "nap" | "trade" | "research" | "defensive" | "alliance" | "federation" | "vassal" | "tribute" }
   | { type: "treaty_respond"; offerId: number; accept: boolean }
   | { type: "declare_war"; targetEmpireId: number; cb?: "conquest" | "liberation" | "humiliation" | "vassalization" | "defensive"; claims?: number[] }
   | { type: "make_peace"; targetEmpireId: number }
@@ -444,6 +444,7 @@ export type Command =
   | { type: "dlc_dialogue_choice"; nodeId: string; choiceId: string }
   | { type: "dlc_dialogue_advance" }
   | { type: "dlc_dialogue_end" }
+  | { type: "ai_world_event_choice"; eventId: number; choiceId: string }
   | { type: "dlc_action"; action: string; target?: string }
   | { type: "dlc_buy_rumor"; rumorId: string }
   | { type: "dlc_toggle"; enabled: boolean }

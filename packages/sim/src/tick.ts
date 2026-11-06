@@ -6,6 +6,7 @@
  */
 import { DESIGN_BY_ID, RESOURCE_BY_ID } from "@sf/data";
 import { aiTurn } from "./ai";
+import { aiWorldPhase } from "./aiWorld";
 import { areFleetsHostile, autoResolve } from "./combat";
 import {
   accrue, accrueUpkeep, applyDeficits, computeScience, createFleet, createShip, empireById,
@@ -353,6 +354,8 @@ export function tick(world: World): void {
   warPhase(world);
   // 10. дипломатия и ИИ
   aiTurn(world);
+  // 10b. видимая мировая политика: новости, распады/поглощения, события игрока (task-42)
+  aiWorldPhase(world);
   // 11. события, миссии, рынок
   missionsPhase(world);
   marketPhase(world);

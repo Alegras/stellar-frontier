@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-11-06T18:05:14.667Z",
-  "baseURL": "http://127.0.0.1:5173",
+  "generatedAt": "2026-11-06T20:55:41.684Z",
+  "baseURL": "http://127.0.0.1:5175",
   "screens": [
     {
       "screen": "menu",
@@ -13,12 +13,19 @@
     },
     {
       "screen": "map",
-      "violations": 0,
+      "violations": 1,
       "critical": 0,
-      "serious": 0,
+      "serious": 1,
       "moderate": 0,
       "minor": 0,
-      "details": []
+      "details": [
+        {
+          "id": "label-content-name-mismatch",
+          "impact": "serious",
+          "help": "Elements must have their visible text as part of their accessible name",
+          "nodes": 8
+        }
+      ]
     },
     {
       "screen": "station",
@@ -31,21 +38,35 @@
     },
     {
       "screen": "market-panel",
-      "violations": 0,
+      "violations": 1,
       "critical": 0,
-      "serious": 0,
+      "serious": 1,
       "moderate": 0,
       "minor": 0,
-      "details": []
+      "details": [
+        {
+          "id": "label-content-name-mismatch",
+          "impact": "serious",
+          "help": "Elements must have their visible text as part of their accessible name",
+          "nodes": 8
+        }
+      ]
     },
     {
       "screen": "ancients-panel",
-      "violations": 0,
+      "violations": 1,
       "critical": 0,
-      "serious": 0,
+      "serious": 1,
       "moderate": 0,
       "minor": 0,
-      "details": []
+      "details": [
+        {
+          "id": "label-content-name-mismatch",
+          "impact": "serious",
+          "help": "Elements must have their visible text as part of their accessible name",
+          "nodes": 8
+        }
+      ]
     }
   ],
   "consoleErrors": [],

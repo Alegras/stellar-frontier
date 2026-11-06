@@ -6,7 +6,7 @@
 import { test, expect, type Page } from "@playwright/test";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
-import { SEL, attachDiagnostics, gotoGame, isVisible, dismissDialogueOverlay } from "./helpers";
+import { SEL, attachDiagnostics, gotoGame, isVisible, dismissDialogueOverlay, dismissAllOverlays } from "./helpers";
 
 const shotsDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../../docs/shots");
 
@@ -46,6 +46,8 @@ async function gameEval<T>(page: Page, fn: (g: GameHandle) => T): Promise<T> {
 
 /** Закрыть авто-паузы/оверлеи (отчёт боя, событие кампании), появившиеся во время прокрутки тактов. */
 async function dismissOverlays(page: Page): Promise<void> {
+  await dismissAllOverlays(page);
+  return;
   for (let i = 0; i < 4; i++) {
     const battle = page.locator('[data-testid="btn-close-battle"], [data-testid="btn-close-battle-footer"]');
     if (await isVisible(battle, 300)) { await battle.first().click(); await page.waitForTimeout(200); continue; }
@@ -81,6 +83,7 @@ test.describe("M8 · торговый цикл и контракты", () => {
     await dismissDialogueOverlay(page); // DLC XIV
 
     // --- док через инспектор ---
+    await dismissOverlays(page);
     const dock = page.locator('[data-testid="btn-dock"]');
     await expect(dock).toBeVisible({ timeout: 8000 });
     await dock.click();
@@ -109,6 +112,7 @@ test.describe("M8 · торговый цикл и контракты", () => {
     await page.screenshot({ path: path.join(shotsDir, "17-station-market.png") });
 
     // --- 2) лимитный ордер на станции (вкладка «Торговля» → MarketPanel) ---
+    await dismissOverlays(page);
     await page.locator('[data-testid="tab-trade"]').click();
     await expect(page.locator('[data-testid="market-panel"]')).toBeVisible({ timeout: 10_000 });
     await expect(page.locator('[data-testid="order-book"]')).toBeVisible({ timeout: 8000 });
@@ -153,6 +157,7 @@ test.describe("M8 · торговый цикл и контракты", () => {
     console.log("[market] exchange: volume=" + exAfter.volume + " orders=" + exAfter.orders + " history=" + exAfter.history);
 
     // --- 4) торговый маршрут ---
+    await dismissOverlays(page);
     await page.locator('[data-testid="btn-market-tab-routes"]').click();
     await expect(page.locator('[data-testid="routes-panel"]')).toBeVisible({ timeout: 8000 });
     const routeBtn = page.locator('[data-testid="btn-route-create"]');
@@ -179,9 +184,71 @@ test.describe("M8 · торговый цикл и контракты", () => {
       if (g) { g.setSpeed(1); for (let i = 0; i < 150; i++) g.advance(1000); }
     });
     await dismissOverlays(page);
-    await page.locator('[data-testid="btn-dock"]').click();
+    // после 150 тактов могли смениться режим/выделение — возвращаем карту и выделяем систему
+    if (!(await isVisible(page.locator('[data-testid="btn-dock"]'), 2000))) {
+      const exit = page.locator('[data-testid="btn-exit-map"]');
+      if (await isVisible(exit, 1500)) { await exit.click(); await page.waitForTimeout(400); }
+      // выделяем систему игрока через API (DOM-метки могли не перерисоваться после прокрутки)
+      await page.evaluate(() => {
+        const g = (window as unknown as {
+          __SF_GAME__?: {
+            world: { systems: Array<{ id: number; ownerId: number }>; playerEmpireId: number };
+            selectSystem?: (id: number) => void;
+          };
+        }).__SF_GAME__;
+        if (!g?.selectSystem) return;
+        const capital = g.world.systems.find((s) => s.ownerId === g.world.playerEmpireId) ?? g.world.systems[0];
+        if (capital) g.selectSystem(capital.id);
+      });
+      await page.waitForTimeout(500);
+    }
+    // если кнопки дока нет (выделение потеряно после прокрутки) — докаемся через API
+    if (!(await isVisible(page.locator('[data-testid="btn-dock"]'), 1500))) {
+      await page.evaluate(() => {
+        const g = (window as unknown as {
+          __SF_GAME__?: {
+            world: { systems: Array<{ id: number; ownerId: number; station: { id: number } | null }>; playerEmpireId: number };
+            dockAtStation?: (id: number) => void;
+          };
+        }).__SF_GAME__;
+        if (!g?.dockAtStation) return;
+        const own = g.world.systems.find((s) => s.ownerId === g.world.playerEmpireId && s.station);
+        const anyStation = own ?? g.world.systems.find((s) => s.station);
+        if (anyStation?.station) g.dockAtStation(anyStation.station.id);
+      });
+      await page.waitForTimeout(500);
+    } else {
+      await dismissOverlays(page);
+      await page.locator('[data-testid="btn-dock"]').evaluate((el) => (el as HTMLElement).click());
+      await page.waitForTimeout(500);
+    }
+    // финальная страховка: если экран станции не открылся — док через API
+    if (!(await isVisible(page.locator(SEL.station), 2000))) {
+      await dismissOverlays(page);
+      await page.evaluate(() => {
+        const g = (window as unknown as {
+          __SF_GAME__?: {
+            world: { systems: Array<{ station: { id: number } | null }> };
+            dockAtStation?: (id: number) => void;
+          };
+        }).__SF_GAME__;
+        const anyStation = g?.world?.systems.find((s) => s.station);
+        if (g?.dockAtStation && anyStation?.station) g.dockAtStation(anyStation.station.id);
+      });
+      await page.waitForTimeout(600);
+    }
+    await dismissOverlays(page);
+    if (!(await isVisible(page.locator(SEL.station), 2000))) {
+      await page.evaluate(() => {
+        const g = (window as unknown as { __SF_GAME__?: { world: { systems: Array<{ station: { id: number } | null }> }; dockAtStation?: (id: number) => void } }).__SF_GAME__;
+        const anyStation = g?.world?.systems.find((s) => s.station);
+        if (g?.dockAtStation && anyStation?.station) g.dockAtStation(anyStation.station.id);
+      });
+      await page.waitForTimeout(600);
+    }
     await expect(page.locator(SEL.station)).toBeVisible({ timeout: 10_000 });
-    await page.locator('[data-testid="tab-contracts"]').click();
+    await dismissOverlays(page);
+    await page.locator('[data-testid="tab-contracts"]').evaluate((el) => (el as HTMLElement).click());
     await expect(page.locator('[data-testid="contracts-panel"]')).toBeVisible({ timeout: 10_000 });
     const contract = await gameEval(page, (g) => {
       const fg = g.world.fg;

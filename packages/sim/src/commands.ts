@@ -33,6 +33,7 @@ import {
 import { investigateAnomaly, archaeologyStep } from "./anomalies";
 import { buildMegastructure } from "./megastructures";
 import { createDesign, deleteDesign, findCustomDesign, saveDesign, updateDesign } from "./designs";
+import { aiWorldEventChoice } from "./aiWorld";
 import { ensureFg } from "./fullgame";
 import { onContractScan, onContractJump } from "./contracts";
 import { empireModifiers } from "./modifiers";
@@ -553,6 +554,8 @@ export function applyCommandAs(world: World, empireId: number, cmd: Command): Co
       return dlcDialogueAdvance(world, empireId);
     case "dlc_dialogue_end":
       return dlcDialogueEnd(world, empireId);
+    case "ai_world_event_choice":
+      return aiWorldEventChoice(world, empireId, cmd.eventId, cmd.choiceId);
     case "dlc_action":
       return dlcNotifyAction(world, cmd.action, cmd.target);
     case "dlc_buy_rumor":

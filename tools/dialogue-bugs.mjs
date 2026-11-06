@@ -156,45 +156,45 @@ try {
   const endings = [...new Set(effects.map((e) => e.ending).filter(Boolean))];
   const campFlags = [...new Set(effects.map((e) => e.campaignFlag).filter(Boolean))];
   info("кампания: диалоги/ветки", JSON.stringify({ dlcDialogues: dlgIds, campScenes: campScenes.map((d) => d.id), branches, endings, campFlags: campFlags.slice(0, 8) }));
-  if (campScenes.length >= 3 && branches.length >= 2 && endings.length >= 2 && campFlags.length >= 3) pass("B6: кампанийные диалоги с branch/ending/flags", "scenes=" + campScenes.length + " branches=" + branches.join(",") + " endings=" + endings.join(","));
-  else fail("B6: кампанийные диалоги", "scenes=" + campScenes.length + " branches=" + branches.join(",") + " endings=" + endings.join(","));
+  const hints = effects.filter((e) => e.endingHint).length;
+  const unlocks = effects.filter((e) => e.unlockMission).length;
+  const payoff = new Set();
+  for (const d of campScenes) for (const n of d.nodes ?? []) for (const o of n.options ?? []) if (o.requiresFlag?.startsWith("camp_")) payoff.add(o.requiresFlag);
+  if (campScenes.length === 6 && hints > 0 && unlocks > 0 && payoff.size >= 18) pass("B6: 6 новых сцен + endingHint/unlockMission + payoff", "scenes=" + campScenes.length + " hints=" + hints + " unlocks=" + unlocks + " payoff=" + payoff.size);
+  else fail("B6: кампанийные диалоги", JSON.stringify({ scenes: campScenes.length, hints, unlocks, payoff: payoff.size }));
 } catch (e) { fail("кампанийные диалоги", String(e)); }
 
-// ---------------------------------------------------------------- B6 runtime: кампанийные диалоги меняют flags/branch/ending
+// ---------------------------------------------------------------- B6 runtime: 6 новых сцен, flags/consequences, one-shot
 try {
-  const playCampaignScene = (w, scene) => {
-    const before = sim.getDlcState(w).seenScenes.length;
-    const started = sim.maybeStartCampaignDialogue(w);
-    const st = sim.getDlcState(w).dialogue;
-    const isScene = st?.sceneId === scene && st?.context === "campaign";
-    playDialogue(w);
-    return { started: started?.ok, isScene, before, seen: sim.getDlcState(w).seenScenes.includes(scene), consequences: sim.getDlcConsequences(w).length, campaignFlags: Object.keys(w.fg.campaign?.flags ?? {}).filter((f) => f.includes("dlc") || f.includes("camp") || f.includes("branch") || f.includes("ending")) };
-  };
   const w = world(71);
-  w.fg.campaign.act = 2;
-  const act2 = playCampaignScene(w, "dlg_campaign_act2");
-  const repeat = sim.maybeStartCampaignDialogue(w);
-  if (act2.started && act2.isScene && act2.seen && act2.consequences > 0 && act2.campaignFlags.length > 0 && repeat === null) pass("B6 runtime: act2 диалог → consequences/flags, one-shot", JSON.stringify({ consequences: act2.consequences, campFlags: act2.campaignFlags.slice(0, 6) }));
-  else fail("B6 runtime act2", JSON.stringify({ act2, repeat }));
-  // ветка: требует решённой branch; ставим branch и запускаем branch-сцену
-  w.fg.campaign.branch = "federation";
-  const branch = playCampaignScene(w, "dlg_campaign_branch");
-  const branchFlags = Object.keys(w.fg.campaign?.flags ?? {}).filter((f) => f.includes("branch") || f.includes("camp_branch"));
-  if (branch.started && branch.isScene && branch.seen && branchFlags.length > 0) pass("B6 runtime: branch-диалог → branch flags", branchFlags.slice(0, 6).join(","));
-  else fail("B6 runtime branch", JSON.stringify({ branch, branchFlags }));
-  // финал: акт 5
-  w.fg.campaign.act = 5;
-  const fin = playCampaignScene(w, "dlg_campaign_finale");
-  const endings = [...new Set([...(w.fg.campaign?.endings ?? []), ...Object.keys(w.fg.campaign?.flags ?? {}).filter((f) => f.includes("ending")).map((f) => f)])];
-  if (fin.started && fin.isScene && fin.seen && endings.length > 0) pass("B6 runtime: finale-диалог → ending hint", endings.slice(0, 5).join(","));
-  else fail("B6 runtime finale", JSON.stringify({ fin, endings }));
-  // варианты меняют campaign flags (две ветки act2)
-  const w2 = world(71); w2.fg.campaign.act = 2;
-  sim.maybeStartCampaignDialogue(w2);
-  playDialogue(w2, ["diplo_first", "trust_counselor"]);
+  if (sim.getDlcState(w).dialogue?.active) sim.applyCommand(w, { type: "dlc_dialogue_end" });
+  const missions = sim.CAMPAIGN_MISSION_DIALOGUES ?? [];
+  for (const entry of missions) w.fg.campaign.missions[entry.missionId] = { ...(w.fg.campaign.missions[entry.missionId] ?? {}), status: "completed" };
+  const sceneIds = new Set([...missions.map((x) => x.scene), sim.CAMPAIGN_EPILOGUE_SCENE]);
+  const seen = [];
+  w.fg.campaign.endings.push("ending_seal");
+  for (let i = 0; i < 10; i++) {
+    const started = sim.maybeStartCampaignStoryDialogue?.(w) ?? null;
+    if (!started) break;
+    seen.push(started);
+    const st = sim.getDlcState(w).dialogue;
+    if (!st?.active || st.context !== "campaign") { fail("B6 runtime: сцена не открылась", String(started)); break; }
+    playDialogue(w);
+  }
+  const flags = Object.keys(sim.getDlcState(w).flags).filter((k) => k.startsWith("campaign_scene:"));
+  const repeat = sim.maybeStartCampaignStoryDialogue?.(w) ?? null;
+  const uniq = [...new Set(seen)].filter((id) => sceneIds.has(id));
+  if (uniq.length === 6 && flags.length >= 6 && repeat === null) pass("B6 runtime: 6 актовых сцен, flags, без дублей", "scenes=" + uniq.join(",") + " flags=" + flags.length);
+  else fail("B6 runtime 6 сцен", JSON.stringify({ seen, uniq, flags, repeat }));
+  // выборы меняют campaign flags на новой act2_council
+  const w2 = world(71);
+  if (sim.getDlcState(w2).dialogue?.active) sim.applyCommand(w2, { type: "dlc_dialogue_end" });
+  w2.fg.campaign.missions["main_02_council"] = { status: "completed" };
+  sim.maybeStartCampaignStoryDialogue?.(w2);
+  playDialogue(w2, ["delegate", "council_delay", "trust_council"]);
   const flags2 = Object.keys(w2.fg.campaign?.flags ?? {});
-  if (flags2.includes("camp_diplo_first") && flags2.includes("camp_trust_counselor")) pass("B6: выборы act2 меняют campaign flags", flags2.filter((f) => f.includes("camp_")).join(","));
-  else fail("B6: выборы act2 campaign flags", flags2.filter((f) => f.includes("camp_")).join(","));
+  if (flags2.includes("camp_delegate_fleet") && flags2.includes("camp_trust_council")) pass("B6: выборы act2_council меняют campaign flags", flags2.filter((f) => f.startsWith("camp_")).slice(0, 8).join(","));
+  else fail("B6: выборы act2_council", flags2.filter((f) => f.startsWith("camp_")).join(","));
 } catch (e) { fail("B6 runtime", String(e)); }
 
 const counts = { PASS: 0, FAIL: 0, INFO: 0, SKIP: 0 };

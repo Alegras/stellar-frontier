@@ -1,49 +1,49 @@
 {
-  "generatedAt": "2026-11-06T18:10:04.901Z",
-  "baseURL": "http://127.0.0.1:5173",
+  "generatedAt": "2026-11-06T21:00:46.644Z",
+  "baseURL": "http://127.0.0.1:5175",
   "viewport": "1600x900",
   "browser": "chrome (channel), WebGL2, без swiftshader",
   "shots": [
     {
       "file": "01-menu.png",
       "status": "captured",
-      "at": "2026-11-06T18:09:51.839Z",
+      "at": "2026-11-06T21:00:33.727Z",
       "sha256": "c1bedbb0fbb2a83095abd30b07e1410d46d4aab410557f7469c324213cf4312c"
     },
     {
       "file": "02-map.png",
       "status": "captured",
       "note": "карта галактики после старта кампании (пауза)",
-      "at": "2026-11-06T18:09:55.580Z",
-      "sha256": "73876342959e7f91659c033f6393f23c152b951ab366f202a5266721e443f8d7"
+      "at": "2026-11-06T21:00:37.422Z",
+      "sha256": "968e9049dff4077ee62fe5f8b67d793a8f56d7024e6a0ca37fe5525d35496a21"
     },
     {
       "file": "03-system-inspector.png",
       "status": "captured",
       "note": "инспектор выделенной системы",
-      "at": "2026-11-06T18:09:56.660Z",
-      "sha256": "f57e288880188490b8175bbf5e561a82f27112a785677e123db252d49cff57ed"
+      "at": "2026-11-06T21:00:38.500Z",
+      "sha256": "7fd4564c2c46b135da56dc588d4c1fb3a373c3d2c33fc6f0f1f06654e526a46e"
     },
     {
       "file": "05-station.png",
       "status": "captured",
       "note": "экран станции L3 (док)",
-      "at": "2026-11-06T18:09:58.760Z",
-      "sha256": "adbe199cd673b503f7194ab9e08f09aef6cdbdcf51f5fc73bbf10ff2a849e2dd"
+      "at": "2026-11-06T21:00:40.604Z",
+      "sha256": "cc9927aeb722b5f4b99f70806a658e6cd3519193348b3a3faa500b1ceb4ec7cb"
     },
     {
       "file": "04-flight.png",
       "status": "captured",
       "note": "полёт L1: HUD и сцена системы",
-      "at": "2026-11-06T18:10:02.604Z",
-      "sha256": "ab9263a99de24fac9f48c316b040a0643a2dac07d1719b40926ce3e195a87222"
+      "at": "2026-11-06T21:00:44.390Z",
+      "sha256": "d5cf0f43efa4850faa8dfc315299cd4238603b75a97d7c6917dc92af597eb0ac"
     },
     {
       "file": "06-battle.png",
       "status": "captured",
       "note": "отчёт о бое (реальный авторезолв, такт 151)",
-      "at": "2026-11-06T18:10:04.862Z",
-      "sha256": "9ed3c3b7de22b4fa4ecf5e8ecf36240d8b177401748eb34b3cefc98e4ae0307e"
+      "at": "2026-11-06T21:00:46.612Z",
+      "sha256": "33a26b14b8e3a90aeda8156913944f4a2175d72067206a3ab64ab24e5270c769"
     }
   ],
   "consoleErrors": [],

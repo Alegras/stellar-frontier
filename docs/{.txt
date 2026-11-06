@@ -1,0 +1,1439 @@
+{
+"dialogues": [
+{
+"id": "dlg_campaign_act2_council",
+"version": 1,
+"nodes": [
+{
+"id": "n01",
+"type": "line",
+"speaker": "admiral_kain",
+"emotion": "serious",
+"textKey": "dlg.camp.act2_c.n01",
+"next": "n02"
+},
+{
+"id": "n02",
+"type": "line",
+"speaker": "counselor_selen",
+"emotion": "calculating",
+"textKey": "dlg.camp.act2_c.n02",
+"next": "n03"
+},
+{
+"id": "n03",
+"type": "choice",
+"speaker": "teira_os",
+"emotion": "firm",
+"textKey": "dlg.camp.act2_c.c1",
+"options": [
+{
+"id": "centralize",
+"textKey": "dlg.camp.act2_c.c1.a",
+"next": "n04",
+"effects": [
+{ "campaignFlag": "camp_central_fleet" },
+{ "campaignFlag": "camp_fleet_first" },
+{ "relation": { "admiral_kain": 10, "counselor_selen": -5 } },
+{ "unlockMission": "main_02_first_crisis" },
+{ "effectLabelKey": "dlg.camp.act2_c.fx.centralize" }
+]
+},
+{
+"id": "delegate",
+"textKey": "dlg.camp.act2_c.c1.b",
+"next": "n04",
+"effects": [
+{ "campaignFlag": "camp_delegate_fleet" },
+{ "campaignFlag": "camp_diplo_first" },
+{ "relation": { "admiral_kain": -10, "counselor_selen": 10 } },
+{ "unlockMission": "main_02_first_crisis" },
+{ "effectLabelKey": "dlg.camp.act2_c.fx.delegate" }
+]
+}
+]
+},
+{
+"id": "n04",
+"type": "line",
+"speaker": "svet",
+"emotion": "neutral",
+"textKey": "dlg.camp.act2_c.n04",
+"next": "n05"
+},
+{
+"id": "n05",
+"type": "line",
+"speaker": "kira7",
+"emotion": "alarm",
+"textKey": "dlg.camp.act2_c.n05",
+"next": "n06"
+},
+{
+"id": "n06",
+"type": "choice",
+"speaker": "counselor_selen",
+"emotion": "serious",
+"textKey": "dlg.camp.act2_c.c2",
+"options": [
+{
+"id": "council_now",
+"textKey": "dlg.camp.act2_c.c2.a",
+"next": "n07",
+"effects": [
+{ "campaignFlag": "camp_council_now" },
+{ "relation": { "counselor_selen": 5, "teira_os": 5 } },
+{ "effectLabelKey": "dlg.camp.act2_c.fx.council_now" }
+]
+},
+{
+"id": "council_delay",
+"textKey": "dlg.camp.act2_c.c2.b",
+"next": "n07",
+"effects": [
+{ "campaignFlag": "camp_council_delay" },
+{ "relation": { "admiral_kain": 10, "teira_os": -5 } },
+{ "effectLabelKey": "dlg.camp.act2_c.fx.council_delay" }
+]
+}
+]
+},
+{
+"id": "n07",
+"type": "line",
+"speaker": "admiral_kain",
+"emotion": "firm",
+"textKey": "dlg.camp.act2_c.n07",
+"next": "n08"
+},
+{
+"id": "n08",
+"type": "choice",
+"speaker": "admiral_kain",
+"emotion": "serious",
+"textKey": "dlg.camp.act2_c.c3",
+"options": [
+{
+"id": "trust_admiral",
+"textKey": "dlg.camp.act2_c.c3.a",
+"next": "n09",
+"effects": [
+{ "campaignFlag": "camp_trust_admiral" },
+{ "relation": { "admiral_kain": 15, "counselor_selen": -5 } },
+{ "effectLabelKey": "dlg.camp.act2_c.fx.trust_admiral" }
+]
+},
+{
+"id": "trust_council",
+"textKey": "dlg.camp.act2_c.c3.b",
+"next": "n09",
+"effects": [
+{ "campaignFlag": "camp_trust_council" },
+{ "relation": { "counselor_selen": 10, "admiral_kain": -5 } },
+{ "effectLabelKey": "dlg.camp.act2_c.fx.trust_council" }
+]
+}
+]
+},
+{
+"id": "n09",
+"type": "line",
+"speaker": "teira_os",
+"emotion": "sad",
+"textKey": "dlg.camp.act2_c.n09",
+"next": "n10"
+},
+{
+"id": "n10",
+"type": "line",
+"speaker": "svet",
+"emotion": "neutral",
+"textKey": "dlg.camp.act2_c.n10",
+"next": "n11"
+},
+{
+"id": "n11",
+"type": "effect",
+"effects": [
+{ "chronicleKey": "dlg.camp.act2_c.chronicle" }
+],
+"next": "n12"
+},
+{
+"id": "n12",
+"type": "end"
+}
+]
+},
+{
+"id": "dlg_campaign_act3_truth",
+"version": 1,
+"nodes": [
+{
+"id": "n01",
+"type": "line",
+"speaker": "teira_os",
+"emotion": "serious",
+"textKey": "dlg.camp.act3_t.n01",
+"next": "n02"
+},
+{
+"id": "n02",
+"type": "line",
+"speaker": "svet",
+"emotion": "neutral",
+"textKey": "dlg.camp.act3_t.n02",
+"next": "n03"
+},
+{
+"id": "n03",
+"type": "choice",
+"speaker": "teira_os",
+"emotion": "firm",
+"textKey": "dlg.camp.act3_t.c1",
+"options": [
+{
+"id": "reveal",
+"textKey": "dlg.camp.act3_t.c1.a",
+"next": "n04",
+"effects": [
+{ "campaignFlag": "camp_truth_revealed" },
+{ "relation": { "teira_os": 15, "counselor_selen": -10 } },
+{ "endingHint": "ending_seal" },
+{ "unlockMission": "main_03_split" },
+{ "effectLabelKey": "dlg.camp.act3_t.fx.reveal" }
+]
+},
+{
+"id": "hide",
+"textKey": "dlg.camp.act3_t.c1.b",
+"next": "n04",
+"effects": [
+{ "campaignFlag": "camp_truth_hidden" },
+{ "relation": { "counselor_selen": 15, "teira_os": -15 } },
+{ "endingHint": "ending_control" },
+{ "unlockMission": "main_03_split" },
+{ "effectLabelKey": "dlg.camp.act3_t.fx.hide" }
+]
+},
+{
+"id": "use",
+"textKey": "dlg.camp.act3_t.c1.c",
+"next": "n04",
+"effects": [
+{ "campaignFlag": "camp_truth_used" },
+{ "relation": { "admiral_kain": 10, "kira7": -5 } },
+{ "endingHint": "ending_whisper" },
+{ "unlockMission": "main_03_split" },
+{ "effectLabelKey": "dlg.camp.act3_t.fx.use" }
+]
+}
+]
+},
+{
+"id": "n04",
+"type": "line",
+"speaker": "counselor_selen",
+"emotion": "calculating",
+"textKey": "dlg.camp.act3_t.n04",
+"next": "n05"
+},
+{
+"id": "n05",
+"type": "line",
+"speaker": "admiral_kain",
+"emotion": "serious",
+"textKey": "dlg.camp.act3_t.n05",
+"next": "n06"
+},
+{
+"id": "n06",
+"type": "choice",
+"speaker": "admiral_kain",
+"emotion": "firm",
+"textKey": "dlg.camp.act3_t.c2",
+"options": [
+{
+"id": "relic_empire",
+"textKey": "dlg.camp.act3_t.c2.a",
+"next": "n07",
+"effects": [
+{ "campaignFlag": "camp_relic_empire" },
+{ "relation": { "admiral_kain": 10, "kira7": -5 } },
+{ "endingHint": "ending_ascension" },
+{ "effectLabelKey": "dlg.camp.act3_t.fx.relic_empire" }
+]
+},
+{
+"id": "relic_returned",
+"textKey": "dlg.camp.act3_t.c2.b",
+"next": "n07",
+"effects": [
+{ "campaignFlag": "camp_relic_returned" },
+{ "relation": { "teira_os": 10, "admiral_kain": -5 } },
+{ "endingHint": "ending_release" },
+{ "effectLabelKey": "dlg.camp.act3_t.fx.relic_returned" }
+]
+},
+{
+"id": "relic_burned",
+"textKey": "dlg.camp.act3_t.c2.c",
+"next": "n07",
+"effects": [
+{ "campaignFlag": "camp_relic_burned" },
+{ "relation": { "counselor_selen": 10, "teira_os": -5 } },
+{ "endingHint": "ending_seal" },
+{ "effectLabelKey": "dlg.camp.act3_t.fx.relic_burned" }
+]
+}
+]
+},
+{
+"id": "n07",
+"type": "line",
+"speaker": "kira7",
+"emotion": "alarm",
+"textKey": "dlg.camp.act3_t.n07",
+"next": "n08"
+},
+{
+"id": "n08",
+"type": "choice",
+"speaker": "admiral_kain",
+"emotion": "serious",
+"textKey": "dlg.camp.act3_t.c3",
+"options": [
+{
+"id": "march_now",
+"textKey": "dlg.camp.act3_t.c3.a",
+"next": "n09",
+"effects": [
+{ "campaignFlag": "camp_march_now" },
+{ "relation": { "admiral_kain": 15, "counselor_selen": -10 } },
+{ "unlockMission": "main_03_invasion" },
+{ "effectLabelKey": "dlg.camp.act3_t.fx.march_now" }
+]
+},
+{
+"id": "fortify",
+"textKey": "dlg.camp.act3_t.c3.b",
+"next": "n09",
+"effects": [
+{ "campaignFlag": "camp_fortify" },
+{ "relation": { "counselor_selen": 10, "admiral_kain": -10 } },
+{ "unlockMission": "main_03_megastructure" },
+{ "effectLabelKey": "dlg.camp.act3_t.fx.fortify" }
+]
+}
+]
+},
+{
+"id": "n09",
+"type": "line",
+"speaker": "teira_os",
+"emotion": "sad",
+"textKey": "dlg.camp.act3_t.n09",
+"next": "n10"
+},
+{
+"id": "n10",
+"type": "line",
+"speaker": "svet",
+"emotion": "neutral",
+"textKey": "dlg.camp.act3_t.n10",
+"next": "n11"
+},
+{
+"id": "n11",
+"type": "effect",
+"effects": [
+{ "chronicleKey": "dlg.camp.act3_t.chronicle" }
+],
+"next": "n12"
+},
+{
+"id": "n12",
+"type": "end"
+}
+]
+},
+{
+"id": "dlg_campaign_act4_legacy",
+"version": 1,
+"nodes": [
+{
+"id": "n01",
+"type": "line",
+"speaker": "svet",
+"emotion": "neutral",
+"textKey": "dlg.camp.act4_l.n01",
+"next": "n02"
+},
+{
+"id": "n02",
+"type": "line",
+"speaker": "counselor_selen",
+"emotion": "calculating",
+"textKey": "dlg.camp.act4_l.n02",
+"next": "n03"
+},
+{
+"id": "n03",
+"type": "choice",
+"speaker": "counselor_selen",
+"emotion": "firm",
+"textKey": "dlg.camp.act4_l.c1",
+"options": [
+{
+"id": "use_engine",
+"textKey": "dlg.camp.act4_l.c1.a",
+"next": "n04",
+"effects": [
+{ "campaignFlag": "camp_use_engine" },
+{ "relation": { "admiral_kain": 15, "teira_os": -15 } },
+{ "endingHint": "ending_ascension" },
+{ "unlockMission": "main_04_titan" },
+{ "effectLabelKey": "dlg.camp.act4_l.fx.use_engine" }
+]
+},
+{
+"id": "seal_engine",
+"textKey": "dlg.camp.act4_l.c1.b",
+"next": "n04",
+"effects": [
+{ "campaignFlag": "camp_seal_engine" },
+{ "relation": { "teira_os": 15, "admiral_kain": -10 } },
+{ "endingHint": "ending_seal" },
+{ "unlockMission": "main_04_titan" },
+{ "effectLabelKey": "dlg.camp.act4_l.fx.seal_engine" }
+]
+},
+{
+"id": "trade_engine",
+"textKey": "dlg.camp.act4_l.c1.c",
+"next": "n04",
+"effects": [
+{ "campaignFlag": "camp_trade_engine" },
+{ "branch": "syndicate" },
+{ "relation": { "counselor_selen": 15, "kira7": -10 } },
+{ "endingHint": "ending_syndicate" },
+{ "unlockMission": "main_04_titan" },
+{ "effectLabelKey": "dlg.camp.act4_l.fx.trade_engine" }
+]
+}
+]
+},
+{
+"id": "n04",
+"type": "line",
+"speaker": "admiral_kain",
+"emotion": "serious",
+"textKey": "dlg.camp.act4_l.n04",
+"next": "n05"
+},
+{
+"id": "n05",
+"type": "line",
+"speaker": "teira_os",
+"emotion": "firm",
+"textKey": "dlg.camp.act4_l.n05",
+"next": "n06"
+},
+{
+"id": "n06",
+"type": "choice",
+"speaker": "admiral_kain",
+"emotion": "serious",
+"textKey": "dlg.camp.act4_l.c2",
+"options": [
+{
+"id": "fleet_truth",
+"textKey": "dlg.camp.act4_l.c2.a",
+"next": "n07",
+"effects": [
+{ "campaignFlag": "camp_fleet_truth" },
+{ "relation": { "teira_os": 10, "counselor_selen": -10 } },
+{ "effectLabelKey": "dlg.camp.act4_l.fx.fleet_truth" }
+]
+},
+{
+"id": "fleet_lie",
+"textKey": "dlg.camp.act4_l.c2.b",
+"next": "n07",
+"effects": [
+{ "campaignFlag": "camp_fleet_lie" },
+{ "relation": { "counselor_selen": 10, "teira_os": -15, "admiral_kain": 5 } },
+{ "effectLabelKey": "dlg.camp.act4_l.fx.fleet_lie" }
+]
+}
+]
+},
+{
+"id": "n07",
+"type": "line",
+"speaker": "kira7",
+"emotion": "alarm",
+"textKey": "dlg.camp.act4_l.n07",
+"next": "n08"
+},
+{
+"id": "n08",
+"type": "line",
+"speaker": "svet",
+"emotion": "neutral",
+"textKey": "dlg.camp.act4_l.n08",
+"next": "n09"
+},
+{
+"id": "n09",
+"type": "line",
+"speaker": "admiral_kain",
+"emotion": "firm",
+"textKey": "dlg.camp.act4_l.n09",
+"next": "n10"
+},
+{
+"id": "n10",
+"type": "effect",
+"effects": [
+{ "chronicleKey": "dlg.camp.act4_l.chronicle" }
+],
+"next": "n11"
+},
+{
+"id": "n11",
+"type": "end"
+}
+]
+},
+{
+"id": "dlg_campaign_act4_betrayal",
+"version": 1,
+"nodes": [
+{
+"id": "n01",
+"type": "line",
+"speaker": "counselor_selen",
+"emotion": "cold",
+"textKey": "dlg.camp.act4_b.n01",
+"next": "n02"
+},
+{
+"id": "n02",
+"type": "line",
+"speaker": "teira_os",
+"emotion": "firm",
+"textKey": "dlg.camp.act4_b.n02",
+"next": "n03"
+},
+{
+"id": "n03",
+"type": "line",
+"speaker": "admiral_kain",
+"emotion": "serious",
+"textKey": "dlg.camp.act4_b.n03",
+"next": "n04"
+},
+{
+"id": "n04",
+"type": "choice",
+"speaker": "counselor_selen",
+"emotion": "cold",
+"textKey": "dlg.camp.act4_b.c1",
+"options": [
+{
+"id": "believe_selena",
+"textKey": "dlg.camp.act4_b.c1.a",
+"next": "n05",
+"effects": [
+{ "campaignFlag": "camp_believe_selena" },
+{ "relation": { "counselor_selen": 15, "teira_os": -15, "admiral_kain": -10 } },
+{ "effectLabelKey": "dlg.camp.act4_b.fx.believe_selena" }
+]
+},
+{
+"id": "believe_teira",
+"textKey": "dlg.camp.act4_b.c1.b",
+"next": "n05",
+"effects": [
+{ "campaignFlag": "camp_believe_teira" },
+{ "relation": { "teira_os": 15, "counselor_selen": -15, "admiral_kain": 5 } },
+{ "effectLabelKey": "dlg.camp.act4_b.fx.believe_teira" }
+]
+}
+]
+},
+{
+"id": "n05",
+"type": "line",
+"speaker": "svet",
+"emotion": "neutral",
+"textKey": "dlg.camp.act4_b.n05",
+"next": "n06"
+},
+{
+"id": "n06",
+"type": "line",
+"speaker": "counselor_selen",
+"emotion": "serious",
+"textKey": "dlg.camp.act4_b.n06",
+"next": "n07"
+},
+{
+"id": "n07",
+"type": "choice",
+"speaker": "teira_os",
+"emotion": "firm",
+"textKey": "dlg.camp.act4_b.c2",
+"options": [
+{
+"id": "forgive",
+"textKey": "dlg.camp.act4_b.c2.a",
+"next": "n08",
+"effects": [
+{ "campaignFlag": "camp_betrayal_forgiven" },
+{ "relation": { "counselor_selen": 10, "admiral_kain": -15, "teira_os": -10 } },
+{ "effectLabelKey": "dlg.camp.act4_b.fx.forgive" }
+]
+},
+{
+"id": "execute",
+"textKey": "dlg.camp.act4_b.c2.b",
+"next": "n08",
+"effects": [
+{ "campaignFlag": "camp_betrayal_executed" },
+{ "relation": { "admiral_kain": 15, "counselor_selen": -50, "teira_os": -15 } },
+{ "endingHint": "ending_ironman" },
+{ "effectLabelKey": "dlg.camp.act4_b.fx.execute" }
+]
+},
+{
+"id": "exile",
+"textKey": "dlg.camp.act4_b.c2.c",
+"next": "n08",
+"effects": [
+{ "campaignFlag": "camp_betrayal_exiled" },
+{ "relation": { "counselor_selen": -20, "teira_os": 10, "admiral_kain": 5 } },
+{ "endingHint": "ending_exile" },
+{ "effectLabelKey": "dlg.camp.act4_b.fx.exile" }
+]
+}
+]
+},
+{
+"id": "n08",
+"type": "line",
+"speaker": "kira7",
+"emotion": "alarm",
+"textKey": "dlg.camp.act4_b.n08",
+"next": "n09"
+},
+{
+"id": "n09",
+"type": "choice",
+"speaker": "admiral_kain",
+"emotion": "firm",
+"textKey": "dlg.camp.act4_b.c3",
+"options": [
+{
+"id": "verdict_law",
+"textKey": "dlg.camp.act4_b.c3.a",
+"next": "n10",
+"effects": [
+{ "campaignFlag": "camp_verdict_law" },
+{ "relation": { "admiral_kain": 10, "counselor_selen": -5 } },
+{ "effectLabelKey": "dlg.camp.act4_b.fx.verdict_law" }
+]
+},
+{
+"id": "verdict_unity",
+"textKey": "dlg.camp.act4_b.c3.b",
+"next": "n10",
+"effects": [
+{ "campaignFlag": "camp_verdict_unity" },
+{ "relation": { "admiral_kain": 5, "teira_os": 5 } },
+{ "effectLabelKey": "dlg.camp.act4_b.fx.verdict_unity" }
+]
+}
+]
+},
+{
+"id": "n10",
+"type": "line",
+"speaker": "svet",
+"emotion": "neutral",
+"textKey": "dlg.camp.act4_b.n10",
+"next": "n11"
+},
+{
+"id": "n11",
+"type": "effect",
+"effects": [
+{ "chronicleKey": "dlg.camp.act4_b.chronicle" }
+],
+"next": "n12"
+},
+{
+"id": "n12",
+"type": "end"
+}
+]
+},
+{
+"id": "dlg_campaign_final_door",
+"version": 1,
+"nodes": [
+{
+"id": "n01",
+"type": "line",
+"speaker": "svet",
+"emotion": "neutral",
+"textKey": "dlg.camp.fin_d.n01",
+"next": "n02"
+},
+{
+"id": "n02",
+"type": "line",
+"speaker": "teira_os",
+"emotion": "serious",
+"textKey": "dlg.camp.fin_d.n02",
+"next": "n03"
+},
+{
+"id": "n03",
+"type": "choice",
+"speaker": "teira_os",
+"emotion": "firm",
+"textKey": "dlg.camp.fin_d.c1",
+"options": [
+{
+"id": "rift_door",
+"textKey": "dlg.camp.fin_d.c1.a",
+"next": "n04",
+"effects": [
+{ "campaignFlag": "camp_rift_door" },
+{ "relation": { "teira_os": 5 } },
+{ "endingHint": "ending_ascension" },
+{ "effectLabelKey": "dlg.camp.fin_d.fx.rift_door" }
+]
+},
+{
+"id": "rift_weapon",
+"textKey": "dlg.camp.fin_d.c1.b",
+"next": "n04",
+"effects": [
+{ "campaignFlag": "camp_rift_weapon" },
+{ "relation": { "admiral_kain": 10 } },
+{ "endingHint": "ending_control" },
+{ "effectLabelKey": "dlg.camp.fin_d.fx.rift_weapon" }
+]
+},
+{
+"id": "rift_grave",
+"textKey": "dlg.camp.fin_d.c1.c",
+"next": "n04",
+"effects": [
+{ "campaignFlag": "camp_rift_grave" },
+{ "relation": { "teira_os": 10 } },
+{ "endingHint": "ending_seal" },
+{ "effectLabelKey": "dlg.camp.fin_d.fx.rift_grave" }
+]
+}
+]
+},
+{
+"id": "n04",
+"type": "line",
+"speaker": "admiral_kain",
+"emotion": "firm",
+"textKey": "dlg.camp.fin_d.n04",
+"next": "n05"
+},
+{
+"id": "n05",
+"type": "line",
+"speaker": "counselor_selen",
+"emotion": "serious",
+"textKey": "dlg.camp.fin_d.n05",
+"next": "n06"
+},
+{
+"id": "n06",
+"type": "choice",
+"speaker": "svet",
+"emotion": "neutral",
+"textKey": "dlg.camp.fin_d.c2",
+"options": [
+{
+"id": "final_seal",
+"textKey": "dlg.camp.fin_d.c2.a",
+"next": "n07",
+"effects": [
+{ "campaignFlag": "camp_final_seal" },
+{ "endingHint": "ending_seal" },
+{ "relation": { "teira_os": 15 } },
+{ "unlockMission": "main_05_legacy_end" },
+{ "effectLabelKey": "dlg.camp.fin_d.fx.final_seal" }
+]
+},
+{
+"id": "final_control",
+"textKey": "dlg.camp.fin_d.c2.b",
+"next": "n07",
+"effects": [
+{ "campaignFlag": "camp_final_control" },
+{ "endingHint": "ending_control" },
+{ "relation": { "admiral_kain": 15 } },
+{ "unlockMission": "main_05_legacy_end" },
+{ "effectLabelKey": "dlg.camp.fin_d.fx.final_control" }
+]
+},
+{
+"id": "final_release",
+"textKey": "dlg.camp.fin_d.c2.c",
+"next": "n07",
+"effects": [
+{ "campaignFlag": "camp_final_release" },
+{ "endingHint": "ending_release" },
+{ "relation": { "kira7": 15 } },
+{ "unlockMission": "main_05_legacy_end" },
+{ "effectLabelKey": "dlg.camp.fin_d.fx.final_release" }
+]
+},
+{
+"id": "final_whisper",
+"textKey": "dlg.camp.fin_d.c2.d",
+"requiresFlag": "camp_truth_used",
+"next": "n07",
+"effects": [
+{ "campaignFlag": "camp_final_whisper" },
+{ "endingHint": "ending_whisper" },
+{ "relation": { "teira_os": 10 } },
+{ "effectLabelKey": "dlg.camp.fin_d.fx.final_whisper" }
+]
+}
+]
+},
+{
+"id": "n07",
+"type": "line",
+"speaker": "kira7",
+"emotion": "alarm",
+"textKey": "dlg.camp.fin_d.n07",
+"next": "n08"
+},
+{
+"id": "n08",
+"type": "choice",
+"speaker": "teira_os",
+"emotion": "sad",
+"textKey": "dlg.camp.fin_d.c3",
+"options": [
+{
+"id": "price_fleet",
+"textKey": "dlg.camp.fin_d.c3.a",
+"next": "n09",
+"effects": [
+{ "campaignFlag": "camp_final_price_fleet" },
+{ "relation": { "admiral_kain": 20 } },
+{ "effectLabelKey": "dlg.camp.fin_d.fx.price_fleet" }
+]
+},
+{
+"id": "price_worlds",
+"textKey": "dlg.camp.fin_d.c3.b",
+"next": "n09",
+"effects": [
+{ "campaignFlag": "camp_final_price_worlds" },
+{ "relation": { "kira7": 20 } },
+{ "effectLabelKey": "dlg.camp.fin_d.fx.price_worlds" }
+]
+},
+{
+"id": "price_knowledge",
+"textKey": "dlg.camp.fin_d.c3.c",
+"next": "n09",
+"effects": [
+{ "campaignFlag": "camp_final_price_knowledge" },
+{ "relation": { "teira_os": 20 } },
+{ "effectLabelKey": "dlg.camp.fin_d.fx.price_knowledge" }
+]
+}
+]
+},
+{
+"id": "n09",
+"type": "line",
+"speaker": "admiral_kain",
+"emotion": "serious",
+"textKey": "dlg.camp.fin_d.n09",
+"next": "n10"
+},
+{
+"id": "n10",
+"type": "line",
+"speaker": "teira_os",
+"emotion": "firm",
+"textKey": "dlg.camp.fin_d.n10",
+"next": "n11"
+},
+{
+"id": "n11",
+"type": "line",
+"speaker": "svet",
+"emotion": "neutral",
+"textKey": "dlg.camp.fin_d.n11",
+"next": "n12"
+},
+{
+"id": "n12",
+"type": "effect",
+"effects": [
+{ "chronicleKey": "dlg.camp.fin_d.chronicle" }
+],
+"next": "n13"
+},
+{
+"id": "n13",
+"type": "end"
+}
+]
+},
+{
+"id": "dlg_campaign_epilogue",
+"version": 1,
+"nodes": [
+{
+"id": "n01",
+"type": "line",
+"speaker": "svet",
+"emotion": "neutral",
+"textKey": "dlg.camp.epi.n01",
+"next": "n02"
+},
+{
+"id": "n02",
+"type": "line",
+"speaker": "admiral_kain",
+"emotion": "serious",
+"textKey": "dlg.camp.epi.n02",
+"next": "n03"
+},
+{
+"id": "n03",
+"type": "choice",
+"speaker": "admiral_kain",
+"emotion": "firm",
+"textKey": "dlg.camp.epi.c1",
+"options": [
+{
+"id": "epi_transports",
+"textKey": "dlg.camp.epi.c1.a",
+"next": "n04",
+"effects": [
+{ "campaignFlag": "camp_epi_transports" },
+{ "relation": { "teira_os": 10, "kira7": 10 } },
+{ "effectLabelKey": "dlg.camp.epi.fx.transports" }
+]
+},
+{
+"id": "epi_garrison",
+"textKey": "dlg.camp.epi.c1.b",
+"next": "n04",
+"effects": [
+{ "campaignFlag": "camp_epi_garrison" },
+{ "relation": { "admiral_kain": 15, "teira_os": -10 } },
+{ "effectLabelKey": "dlg.camp.epi.fx.garrison" }
+]
+}
+]
+},
+{
+"id": "n04",
+"type": "line",
+"speaker": "teira_os",
+"emotion": "sad",
+"textKey": "dlg.camp.epi.n04",
+"next": "n05"
+},
+{
+"id": "n05",
+"type": "line",
+"speaker": "kira7",
+"emotion": "relief",
+"textKey": "dlg.camp.epi.n05",
+"next": "n06"
+},
+{
+"id": "n06",
+"type": "choice",
+"speaker": "counselor_selen",
+"emotion": "serious",
+"textKey": "dlg.camp.epi.c2",
+"options": [
+{
+"id": "epi_story_truth",
+"textKey": "dlg.camp.epi.c2.a",
+"next": "n07",
+"effects": [
+{ "campaignFlag": "camp_epi_story_truth" },
+{ "relation": { "teira_os": 15, "counselor_selen": -10 } },
+{ "effectLabelKey": "dlg.camp.epi.fx.story_truth" }
+]
+},
+{
+"id": "epi_story_myth",
+"textKey": "dlg.camp.epi.c2.b",
+"next": "n07",
+"effects": [
+{ "campaignFlag": "camp_epi_story_myth" },
+{ "relation": { "counselor_selen": 15, "admiral_kain": 10 } },
+{ "effectLabelKey": "dlg.camp.epi.fx.story_myth" }
+]
+}
+]
+},
+{
+"id": "n07",
+"type": "line",
+"speaker": "svet",
+"emotion": "neutral",
+"textKey": "dlg.camp.epi.n07",
+"next": "n08"
+},
+{
+"id": "n08",
+"type": "choice",
+"speaker": "svet",
+"emotion": "neutral",
+"textKey": "dlg.camp.epi.c3",
+"options": [
+{
+"id": "legacy_warning",
+"textKey": "dlg.camp.epi.c3.a",
+"next": "n09",
+"effects": [
+{ "campaignFlag": "camp_epi_legacy_warning" },
+{ "relation": { "admiral_kain": 10 } },
+{ "endingHint": "ending_seal" },
+{ "effectLabelKey": "dlg.camp.epi.fx.legacy_warning" }
+]
+},
+{
+"id": "legacy_gift",
+"textKey": "dlg.camp.epi.c3.b",
+"next": "n09",
+"effects": [
+{ "campaignFlag": "camp_epi_legacy_gift" },
+{ "relation": { "teira_os": 10 } },
+{ "endingHint": "ending_release" },
+{ "effectLabelKey": "dlg.camp.epi.fx.legacy_gift" }
+]
+}
+]
+},
+{
+"id": "n09",
+"type": "line",
+"speaker": "teira_os",
+"emotion": "firm",
+"textKey": "dlg.camp.epi.n09",
+"next": "n10"
+},
+{
+"id": "n10",
+"type": "line",
+"speaker": "svet",
+"emotion": "neutral",
+"textKey": "dlg.camp.epi.n10",
+"next": "n11"
+},
+{
+"id": "n11",
+"type": "effect",
+"effects": [
+{ "chronicleKey": "dlg.camp.epi.chronicle" }
+],
+"next": "n12"
+},
+{
+"id": "n12",
+"type": "end"
+}
+]
+}
+],
+"l10n": {
+"ru": {
+"dlg.camp.act2_c.n01": "Сорок два борта потеряно на рубеже. Мы не удержим фронт, если каждый сектор продолжит прятать свои корабли по ангарам.",
+"dlg.camp.act2_c.n02": "Колониальные миры напуганы централизацией больше, чем Хором. Одно неверное движение — и Гегемон введёт эмбарго на топливо.",
+"dlg.camp.act2_c.c1": "Как распределим командование флотом после первого кризиса?",
+"dlg.camp.act2_c.c1.a": "Подчинить все дивизионы флагману «Первый Свет». Единый кулак.",
+"dlg.camp.act2_c.c1.b": "Делегировать оборону местным флотилиям колоний.",
+"dlg.camp.act2_c.fx.centralize": "Флот централизован под единым командованием; доверие Кейна растёт.",
+"dlg.camp.act2_c.fx.delegate": "Автономия колоний сохранена; доверие Селены растёт.",
+"dlg.camp.act2_c.n04": "Телеметрия отклика флота пересчитана. Время реакции эскадр сокращено на двадцать четыре процента.",
+"dlg.camp.act2_c.n05": "Диспетчерский узел Свет-1 передаёт: четырнадцать секторов требуют аудиенции. В шлюзах паника, протокол нарушен.",
+"dlg.camp.act2_c.c2": "Когда созывать Большой Совет систем?",
+"dlg.camp.act2_c.c2.a": "Немедленно, пока кризис в горячей фазе. Никаких тайн.",
+"dlg.camp.act2_c.c2.b": "Отложить до стабилизации периметра. Границы важнее речей.",
+"dlg.camp.act2_c.fx.council_now": "Совет созван немедленно; открыт доступ к ранним дебатам.",
+"dlg.camp.act2_c.fx.council_delay": "Совет отложен; мобилизация ресурсов фронта ускорена.",
+"dlg.camp.act2_c.n07": "Мне плевать на протоколы залов. Мне нужно знать: если я отдам приказ атаковать, вы прикроете фланги?",
+"dlg.camp.act2_c.c3": "Какова основа нашей стратегии?",
+"dlg.camp.act2_c.c3.a": "Прямое доверие адмиралу Кейну и военной дисциплине.",
+"dlg.camp.act2_c.c3.b": "Институциональный контроль и согласие Совета.",
+"dlg.camp.act2_c.fx.trust_admiral": "Военный авторитет Кейна подтверждён личным приказом.",
+"dlg.camp.act2_c.fx.trust_council": "Решения увязаны с гражданским советом и дипломатией.",
+"dlg.camp.act2_c.n09": "Корабли можно склепать за шесть месяцев. Людей из оплавленных капсул вы ничем не замените.",
+"dlg.camp.act2_c.n10": "Запись завершена. Ошибка номер два в ядре флагмана изменила гармонику на три герца.",
+"dlg.camp.act2_c.chronicle": "Акт II: Завершён Совет после первого кризиса. Определена командная структура фронта.",
+"dlg.camp.act3_t.n01": "Данные с глубин Разлома расшифрованы. Ансары строили не орудие возмездия. Это глушитель.",
+"dlg.camp.act3_t.n02": "Акустический профиль Хора совпадает с сигнатурой бедствия третьей экспедиции. Вероятность совпадения: ноль целых шесть десятых процента.",
+"dlg.camp.act3_t.c1": "Что делать с правдой о Строителях и природе Разлома?",
+"dlg.camp.act3_t.c1.a": "Раскрыть архивы всем мирам. Галактика обязана знать правду.",
+"dlg.camp.act3_t.c1.b": "Засекретить. Паника на фронтире уничтожит оборону раньше Хора.",
+"dlg.camp.act3_t.c1.c": "Использовать частоту как оружие психологического сдерживания.",
+"dlg.camp.act3_t.fx.reveal": "Правда о Строителях опубликована; путь к запечатыванию открыт.",
+"dlg.camp.act3_t.fx.hide": "Архивы засекречены; контроль остаётся у высшего штаба.",
+"dlg.camp.act3_t.fx.use": "Резонанс обращён в инструмент силы; открыт путь Шёпота.",
+"dlg.camp.act3_t.n04": "Если биржи узнают, что Разлом реагирует на громкость наших гипердвигателей, экономика рухнет за полчаса.",
+"dlg.camp.act3_t.n05": "Реликвия Ансаров у нас на борту. Она резонирует с ядром «Первого Света». Кому принадлежит право распоряжаться находкой?",
+"dlg.camp.act3_t.c2": "Судьба реликвии Строителей:",
+"dlg.camp.act3_t.c2.a": "Интегрировать в энергосистему флагмана для усиления орудий.",
+"dlg.camp.act3_t.c2.b": "Передать независимой исследовательской группе Тейры.",
+"dlg.camp.act3_t.c2.c": "Изолировать в экранированном хранилище и заглушить излучение.",
+"dlg.camp.act3_t.fx.relic_empire": "Реликвия встроена в ядро; курс на технологическое превосходство.",
+"dlg.camp.act3_t.fx.relic_returned": "Реликвия передана исследователям; доверие совести сохранено.",
+"dlg.camp.act3_t.fx.relic_burned": "Реликвия нейтрализована; уровень фонового резонанса снижен.",
+"dlg.camp.act3_t.n07": "Свет-1 фиксирует массированный гравитационный сдвиг. Авангард Хора вышел из гиперпространства на рубеже тринадцать.",
+"dlg.camp.act3_t.c3": "Приказ силам обороны:",
+"dlg.camp.act3_t.c3.a": "Марш на перехват. Мы встретим их на пороге Разлома.",
+"dlg.camp.act3_t.c3.b": "Занять оборону вокруг мегаструктуры. Ни шагу назад.",
+"dlg.camp.act3_t.fx.march_now": "Флот выдвинут в контратаку; открыта миссия вторжения.",
+"dlg.camp.act3_t.fx.fortify": "Оборонительный периметр укреплён; открыта миссия мегаструктуры.",
+"dlg.camp.act3_t.n09": "Они слышат нас. Каждый залп кинетических орудий они воспринимают как вызов на дуэль.",
+"dlg.camp.act3_t.n10": "Гармонический сдвиг ядра зафиксирован. Три ошибки стали стабильным сигналом.",
+"dlg.camp.act3_t.chronicle": "Акт III: Правда о Строителях вскрыта. Хор перешёл в наступление по всему сектору.",
+"dlg.camp.act4_l.n01": "Двигатель Ансаров расшифрован. Коэффициент полезного действия превосходит совокупную мощность третьей эскадры в сорок раз.",
+"dlg.camp.act4_l.n02": "Представители Синдиката уже на защищённой линии. Они предлагают закрыть все наши военные долги за чертежи генератора.",
+"dlg.camp.act4_l.c1": "Решение по наследию Ансаров:",
+"dlg.camp.act4_l.c1.a": "Активировать двигатель на полную мощность. Нам нужна сила.",
+"dlg.camp.act4_l.c1.b": "Запечатать двигатель в стазис. Это оружие самоубийственно.",
+"dlg.camp.act4_l.c1.c": "Передать документацию Синдикату в обмен на финансирование.",
+"dlg.camp.act4_l.fx.use_engine": "Двигатель запущен; открыта миссия «Титан»; подсказка Вознесения.",
+"dlg.camp.act4_l.fx.seal_engine": "Наследие законсервировано; подсказка концовки Запечатывания.",
+"dlg.camp.act4_l.fx.trade_engine": "Сделка заключена; ветка Синдиката укреплена.",
+"dlg.camp.act4_l.n04": "Экипаж видит, как переборки светятся наведенным полем. Люди шепчутся, что мы превращаемся в чудовищ.",
+"dlg.camp.act4_l.n05": "Шестьсот инженеров дежурной смены подписали рапорты о тревожности. Скрывать правду дальше нельзя.",
+"dlg.camp.act4_l.c2": "Что объявить личному составу флота?",
+"dlg.camp.act4_l.c2.a": "Честный брифинг: двигатель приманивает Хор, но даёт шанс победить.",
+"dlg.camp.act4_l.c2.b": "Сфабриковать легенду об экспериментальной разработке людей.",
+"dlg.camp.act4_l.fx.fleet_truth": "Флот знает цену риска; доверие экипажа и Тейры высоко.",
+"dlg.camp.act4_l.fx.fleet_lie": "Правда скрыта легендой; паника предотвращена ценой доверия.",
+"dlg.camp.act4_l.n07": "Свет-1 перехватил узконаправленный сигнал с нашего корабля. Шифрование высшего дипломатического класса советника.",
+"dlg.camp.act4_l.n08": "Ключ дешифровки принадлежит терминалу Селены Вэр. Получатель — лидер Отступников Кхар-Ан.",
+"dlg.camp.act4_l.n09": "Измена на капитанском мостике. Охрана флота блокирует отсеки советника.",
+"dlg.camp.act4_l.chronicle": "Акт IV: Наследие Ансаров запущено в оборот. Раскрыт канал утечки советника.",
+"dlg.camp.act4_b.n01": "Я не стану оправдываться, адмирал. Я отдала им маршруты трёх конвоев, чтобы купить вам четыре месяца на достройку титана.",
+"dlg.camp.act4_b.n02": "Четыре месяца, оплаченные жизнями сорока тысяч колонистов с Рубежа-4. Вы торговали их координатами.",
+"dlg.camp.act4_b.n03": "Военно-полевой суд флота не требует долгих заседаний. Приказ на казнь готов к подписи.",
+"dlg.camp.act4_b.c1": "Кому верить в объяснении мотивов?",
+"dlg.camp.act4_b.c1.a": "Селене: расчёт был чудовищным, но сохранил империю от разгрома.",
+"dlg.camp.act4_b.c1.b": "Тейре: предательство остаётся предательством, оправданий нет.",
+"dlg.camp.act4_b.fx.believe_selena": "Принята циничная стратегия Селены; Тейра и Кейн разочарованы.",
+"dlg.camp.act4_b.fx.believe_teira": "Моральная позиция Тейры поддержана; Селена ожидает трибунала.",
+"dlg.camp.act4_b.n05": "Статистика потерь: сорок одна тысяча двести погибших. Сэкономленное время позволило развернуть вторую линию щитов.",
+"dlg.camp.act4_b.n06": "Выносите приговор. Но не притворяйтесь, что ваши руки чище моих, когда наводите орудия на станции.",
+"dlg.camp.act4_b.c2": "Приговор советнику Селене Вэр:",
+"dlg.camp.act4_b.c2.a": "Помиловать и оставить на посту под строгим надзором разведки.",
+"dlg.camp.act4_b.c2.b": "Казнить на мостике немедленно в соответствии со статьей трибунала.",
+"dlg.camp.act4_b.c2.c": "Лишить всех рангов и изгнать на необитаемый форпост за фронтиром.",
+"dlg.camp.act4_b.fx.forgive": "Селена помилована; офицеры возмущены мягкостью приговора.",
+"dlg.camp.act4_b.fx.execute": "Селена казнена; дисциплина утверждена кровью; намёк на «Железо».",
+"dlg.camp.act4_b.fx.exile": "Селена сослана в пустоту; подсказка концовки Изгнания.",
+"dlg.camp.act4_b.n08": "Гарнизон станции Свет-1 ожидает трансляции решения. Слухи о расколе командования парализуют снабжение.",
+"dlg.camp.act4_b.c3": "Финальное обращение к гарнизонам флота:",
+"dlg.camp.act4_b.c3.a": "«Закон суров, но обязателен для каждого носителя формы».",
+"dlg.camp.act4_b.c3.b": "«Орудия смотрят во тьму. Все личные счеты забыты до победы».",
+"dlg.camp.act4_b.fx.verdict_law": "Акцент на строгом законе и армейском порядке.",
+"dlg.camp.act4_b.fx.verdict_unity": "Акцент на внешнем враге и сохранении боевого единства.",
+"dlg.camp.act4_b.n10": "Канал связи закрыт. Протокол безопасности мостика переведён в статус чрезвычайного положения.",
+"dlg.camp.act4_b.chronicle": "Акт IV: Вынесен приговор Селене Вэр. Внутренний кризис штаба разрешён.",
+"dlg.camp.fin_d.n01": "Флагман вошёл в область абсолютного резонанса. Колебания ядра судна и Разлома синхронизированы на сто процентов.",
+"dlg.camp.fin_d.n02": "Мы стоим у последней черты. Разлом ждёт команды, которая определит, замолчит ли космос навсегда.",
+"dlg.camp.fin_d.c1": "Чем для нас является Разлом Строителей?",
+"dlg.camp.fin_d.c1.a": "Вратами в следующий масштаб бытия, где войну можно перерасти.",
+"dlg.camp.fin_d.c1.b": "Оружием монополии, которое должно принадлежать нашей силе.",
+"dlg.camp.fin_d.c1.c": "Братской могилой и напоминанием о цене громкого звука.",
+"dlg.camp.fin_d.fx.rift_door": "Разлом признан переходом; подсказка концовки Вознесения.",
+"dlg.camp.fin_d.fx.rift_weapon": "Разлом признан инструментом власти; подсказка Контроля.",
+"dlg.camp.fin_d.fx.rift_grave": "Разлом признан трагедией прошлого; подсказка Запечатывания.",
+"dlg.camp.fin_d.n04": "Хор окружил сектор плотным кольцом. Орудия заряжены. Жду вашего приказа, адмирал.",
+"dlg.camp.fin_d.n05": "Все каналы галактической связи перегружены. Четырнадцать миров слушают тональность нашего ядра.",
+"dlg.camp.fin_d.c2": "Финальная директива флагмана:",
+"dlg.camp.fin_d.c2.a": "Запечатать Разлом навсегда. Пять ключей Ансаров в тишину.",
+"dlg.camp.fin_d.c2.b": "Подчинить резонанс Разлома воле верховного командования.",
+"dlg.camp.fin_d.c2.c": "Освободить частоту для всех цивилизаций галактики.",
+"dlg.camp.fin_d.c2.d": "Передать в эфир гармонику Шёпота: перестать звучать.",
+"dlg.camp.fin_d.fx.final_seal": "Запечатывание активировано; подсказка концовки ending_seal.",
+"dlg.camp.fin_d.fx.final_control": "Контроль захвачен; подсказка концовки ending_control.",
+"dlg.camp.fin_d.fx.final_release": "Монополия разрушена; подсказка концовки ending_release.",
+"dlg.camp.fin_d.fx.final_whisper": "Шёпот запущен; подсказка тайной концовки ending_whisper.",
+"dlg.camp.fin_d.n07": "Диспетчер Кира-7 на связи: орбиты колоний держатся, но щиты исчерпали ресурс охлаждения.",
+"dlg.camp.fin_d.c3": "Кому вы отдаёте последний долг этой войны?",
+"dlg.camp.fin_d.c3.a": "Флоту и солдатам, сгоревшим в пустоте за наше выживание.",
+"dlg.camp.fin_d.c3.b": "Мирам и простым семьям, ждущим рассвета в бомбоубежищах.",
+"dlg.camp.fin_d.c3.c": "Истине и чистому знанию, которое переживет любые империи.",
+"dlg.camp.fin_d.fx.price_fleet": "Последний долг отдан военному флоту и погибшим бойцам.",
+"dlg.camp.fin_d.fx.price_worlds": "Последний долг отдан колониям и спасению мирных жителей.",
+"dlg.camp.fin_d.fx.price_knowledge": "Последний долг отдан архиву памяти и вечной правде.",
+"dlg.camp.fin_d.n09": "Приказ принят к исполнению. Эскадра держит строй до полного исчерпания реакторов.",
+"dlg.camp.fin_d.n10": "Пусть они хотя бы запишут, сколько нам стоило это молчание.",
+"dlg.camp.fin_d.n11": "Инициация финального цикла. СВЕТ завершает протокол сопровождения цели.",
+"dlg.camp.fin_d.chronicle": "Акт V: Пройдена последняя дверь. Выбран исход галактической войны.",
+"dlg.camp.epi.n01": "Хронограф: такт семь тысяч двести. Амплитуда колебаний Хора снизилась до фоновых шумов вселенной.",
+"dlg.camp.epi.n02": "Тактическая карта пуста. Сорок процентов брони флагмана выгорело до каркаса, но контуры целы.",
+"dlg.camp.epi.c1": "Распоряжение уцелевшими боевыми соединениями:",
+"dlg.camp.epi.c1.a": "Демонтировать батареи и передать корпуса под гуманитарные транспорты.",
+"dlg.camp.epi.c1.b": "Сохранить постоянную боевую готовность гарнизонов на рубеже.",
+"dlg.camp.epi.fx.transports": "Флот переоборудован для мирного восстановления миров.",
+"dlg.camp.epi.fx.garrison": "Флот остаётся на боевом дежурстве щитом сектора.",
+"dlg.camp.epi.n04": "Списки погибших закрыты. Впервые за три года в эфире нет сигналов SOS.",
+"dlg.camp.epi.n05": "Станция Свет-1 восстановила торговые шлюзы. Четырнадцать выживших встречают первый мирный караван.",
+"dlg.camp.epi.c2": "Как история запишет события этой кампании?",
+"dlg.camp.epi.c2.a": "Опубликовать без купюр полные протоколы предательств и потерь.",
+"dlg.camp.epi.c2.b": "Создать единый миф о непоколебимом героизме во имя стабильности.",
+"dlg.camp.epi.fx.story_truth": "Архивы открыты на века; горькая правда без цензуры.",
+"dlg.camp.epi.fx.story_myth": "Создана легенда о победе, объединяющая выжившие колонии.",
+"dlg.camp.epi.n07": "Запрос ИИ: три ошибки в ядре флагмана классифицировать как дефект или как голос предков?",
+"dlg.camp.epi.c3": "Финальное послание галактике:",
+"dlg.camp.epi.c3.a": "Предупреждение: «Молчание — это закон выживания во тьме».",
+"dlg.camp.epi.c3.b": "Дар: «Мы научились жить рядом с собственным голосом».",
+"dlg.camp.epi.fx.legacy_warning": "Предупреждение о тишине высечено на всех маяках рубежа.",
+"dlg.camp.epi.fx.legacy_gift": "Опыт выживания передан будущим поколениям как дар свободы.",
+"dlg.camp.epi.n09": "Все задачи выполнены, адмирал. Теперь вы имеете право сойти на берег.",
+"dlg.camp.epi.n10": "Бортовой журнал закрыт. Запись передана в вечный архив. «Первый Свет» спит.",
+"dlg.camp.epi.chronicle": "Эпилог: Кампания завершена. Зафиксировано историческое наследие эпохи."
+},
+"en": {
+"dlg.camp.act2_c.n01": "Forty-two hulls lost on the line. We cannot hold the front if every sector hoards its ships in deep hangars.",
+"dlg.camp.act2_c.n02": "The colonial worlds fear centralization far more than the Choir. One wrong move, and the Hegemon cuts our fuel lines.",
+"dlg.camp.act2_c.c1": "How shall we distribute fleet command after this first crisis?",
+"dlg.camp.act2_c.c1.a": "Subordinate all task forces to flagship First Light. A single fist.",
+"dlg.camp.act2_c.c1.b": "Delegate defensive patrol authority to local colonial flotillas.",
+"dlg.camp.act2_c.fx.centralize": "Fleet centralized under unified command; Kain's trust increases.",
+"dlg.camp.act2_c.fx.delegate": "Colonial autonomy preserved; Selena's trust increases.",
+"dlg.camp.act2_c.n04": "Fleet response telemetry recomputed. Reaction time across strike wings reduced by twenty-four percent.",
+"dlg.camp.act2_c.n05": "Light-1 hub routing incoming emergency packets: fourteen sectors demand audience. Airllocks crowded, protocol breached.",
+"dlg.camp.act2_c.c2": "When do we convene the Grand System Council?",
+"dlg.camp.act2_c.c2.a": "Immediately, while the crisis is raw. No secrets behind closed doors.",
+"dlg.camp.act2_c.c2.b": "Delay until the defensive rim stabilizes. Borders outrank speeches.",
+"dlg.camp.act2_c.fx.council_now": "Council convened immediately; early legislative debates opened.",
+"dlg.camp.act2_c.fx.council_delay": "Council postponed; resource mobilization accelerated.",
+"dlg.camp.act2_c.n07": "I do not care about protocol halls. I need to know: if I order an offensive strike, will you guard my flanks?",
+"dlg.camp.act2_c.c3": "What forms the foundation of our doctrine?",
+"dlg.camp.act2_c.c3.a": "Direct reliance on Admiral Kain and uncompromising fleet discipline.",
+"dlg.camp.act2_c.c3.b": "Institutional checks and broad civil Council consensus.",
+"dlg.camp.act2_c.fx.trust_admiral": "Kain's military authority confirmed by personal decree.",
+"dlg.camp.act2_c.fx.trust_council": "Decisions anchored to civil council protocols and diplomacy.",
+"dlg.camp.act2_c.n09": "Warships can be fabricated in six months. Humans pulled from melted pods cannot be replaced by any shipyard.",
+"dlg.camp.act2_c.n10": "Log entry stored. Core anomaly number two shifted frequency by three hertz.",
+"dlg.camp.act2_c.chronicle": "Act II: Post-crisis Council concluded. Frontline command hierarchy formalized.",
+"dlg.camp.act3_t.n01": "Telemetry from the Rift trench is decoded. The Ansars were not constructing a weapon of war. It is a muffler.",
+"dlg.camp.act3_t.n02": "Choir acoustic frequency matches the distress beacon of the Third Expedition. Probability of coincidence: zero point six percent.",
+"dlg.camp.act3_t.c1": "What do we do with the truth about the Builders and the Rift?",
+"dlg.camp.act3_t.c1.a": "Disclose the archives to all worlds. The galaxy deserves the truth.",
+"dlg.camp.act3_t.c1.b": "Classify the data. Mass panic on the frontier will break us before the Choir.",
+"dlg.camp.act3_t.c1.c": "Weaponize the resonance frequency as psychological deterrence.",
+"dlg.camp.act3_t.fx.reveal": "Builder truth published; path to sealing the Rift opened.",
+"dlg.camp.act3_t.fx.hide": "Archives classified; authority preserved within command staff.",
+"dlg.camp.act3_t.fx.use": "Resonance converted into deterrence; path of Whisper opened.",
+"dlg.camp.act3_t.n04": "If financial markets learn the Rift triggers on engine volume, interstellar trade collapses in under thirty minutes.",
+"dlg.camp.act3_t.n05": "The Ansar relic sits in our hangar. It hums in tandem with First Light's core. Who holds the right to direct it?",
+"dlg.camp.act3_t.c2": "Fate of the Builder relic:",
+"dlg.camp.act3_t.c2.a": "Integrate into the flagship power grid to reinforce heavy batteries.",
+"dlg.camp.act3_t.c2.b": "Transfer to Teira's independent research council for study.",
+"dlg.camp.act3_t.c2.c": "Contain in shielded cold-storage and dampen acoustic bleed.",
+"dlg.camp.act3_t.fx.relic_empire": "Relic fused with ship core; курс set toward technological dominance.",
+"dlg.camp.act3_t.fx.relic_returned": "Relic entrusted to researchers; conscience trust preserved.",
+"dlg.camp.act3_t.fx.relic_burned": "Relic neutralized; background resonance baseline reduced.",
+"dlg.camp.act3_t.n07": "Light-1 detects catastrophic gravitational shear. The Choir vanguard translated out of hyper-transit at marker thirteen.",
+"dlg.camp.act3_t.c3": "Fleet operational directive:",
+"dlg.camp.act3_t.c3.a": "Sortie immediately on intercept vector. Meet them at the threshold.",
+"dlg.camp.act3_t.c3.b": "Anchor formation around the megastructure. Not one step back.",
+"dlg.camp.act3_t.fx.march_now": "Fleet advances into counter-assault; invasion mission unlocked.",
+"dlg.camp.act3_t.fx.fortify": "Defensive perimeter consolidated; megastructure mission unlocked.",
+"dlg.camp.act3_t.n09": "They hear us. Every salvo from our kinetic batteries sounds to them like a formal duel challenge.",
+"dlg.camp.act3_t.n10": "Harmonic core displacement registered. Three errors stabilized into a coherent signal.",
+"dlg.camp.act3_t.chronicle": "Act III: Builder truth uncovered. The Choir launches full sector offensive.",
+"dlg.camp.act4_l.n01": "Ansar engine schematic decoded. Theoretical output exceeds Third Flotilla's total grid capacity by factor of forty.",
+"dlg.camp.act4_l.n02": "Syndicate envoys are holding on a scrambled line. They offer to erase our entire war debt for blueprint access.",
+"dlg.camp.act4_l.c1": "Disposition of the Ansar engine legacy:",
+"dlg.camp.act4_l.c1.a": "Ignite the engine at full yield. We require overwhelming force.",
+"dlg.camp.act4_l.c1.b": "Seal the drive in cryo-stasis. This power is inherently suicidal.",
+"dlg.camp.act4_l.c1.c": "Trade schematics to the Syndicate in exchange for complete war funding.",
+"dlg.camp.act4_l.fx.use_engine": "Engine ignited; Titan mission unlocked; Ascension hinted.",
+"dlg.camp.act4_l.fx.seal_engine": "Legacy placed in stasis; Seal ending hinted.",
+"dlg.camp.act4_l.fx.trade_engine": "Trade finalized; Syndicate branch reinforced.",
+"dlg.camp.act4_l.n04": "Crews see bulkheads glowing with induced harmonic discharge. Whispers spread that we are becoming monsters.",
+"dlg.camp.act4_l.n05": "Six hundred technicians signed panic incident reports today. We cannot maintain radio silence on this much longer.",
+"dlg.camp.act4_l.c2": "What statement do we issue to the fleet?",
+"dlg.camp.act4_l.c2.a": "Full honest brief: the engine lures the Choir, but grants victory.",
+"dlg.camp.act4_l.c2.b": "Fabricate cover story attributing the drive to home-world research.",
+"dlg.camp.act4_l.fx.fleet_truth": "Fleet briefed on actual stakes; crew and Teira's trust solidified.",
+"dlg.camp.act4_l.fx.fleet_lie": "Truth shielded by cover story; immediate panic averted.",
+"dlg.camp.act4_l.n07": "Light-1 intercepted an encrypted tight-beam transmission leaving our ship. Foreign office diplomatic key.",
+"dlg.camp.act4_l.n08": "Decryption header traces to Counselor Selena Varr's terminal. Recipient is Outcast warlord Khar-An.",
+"dlg.camp.act4_l.n09": "Treason on the bridge. Security detachments are sealing the diplomatic suite.",
+"dlg.camp.act4_l.chronicle": "Act IV: Ansar engine deployed. Counselor's unauthorized back-channel exposed.",
+"dlg.camp.act4_b.n01": "I make no excuses, Admiral. I handed over routing vectors for three convoys to buy you four months to finish the Titan.",
+"dlg.camp.act4_b.n02": "Four months bought with forty thousand colonial lives on Frontier-4. You traded their coordinates like scrap metal.",
+"dlg.camp.act4_b.n03": "Naval field courts need neither debate nor speeches. The execution order is drafted for your signature.",
+"dlg.camp.act4_b.c1": "Whose motivation do you credit?",
+"dlg.camp.act4_b.c1.a": "Selena's: the calculus was horrific, but spared the core empire collapse.",
+"dlg.camp.act4_b.c1.b": "Teira's: betrayal remains betrayal, no strategic excuse holds.",
+"dlg.camp.act4_b.fx.believe_selena": "Selena's cold calculus accepted; Teira and Kain alienated.",
+"dlg.camp.act4_b.fx.believe_teira": "Teira's moral stance affirmed; Selena awaits sentencing.",
+"dlg.camp.act4_b.n05": "Casualty audit: forty-one thousand two hundred confirmed dead. The delay permitted the secondary shield line to come online.",
+"dlg.camp.act4_b.n06": "Pass sentence, Admiral. But do not pretend your hands stayed cleaner than mine while ordering orbital strikes.",
+"dlg.camp.act4_b.c2": "Sentence for Counselor Selena Varr:",
+"dlg.camp.act4_b.c2.a": "Pardon into active duties under constant counter-intel surveillance.",
+"dlg.camp.act4_b.c2.b": "Summary execution on the bridge under emergency martial code.",
+"dlg.camp.act4_b.c2.c": "Strip all commissions and exile to an abandoned rim listening post.",
+"dlg.camp.act4_b.fx.forgive": "Selena pardoned; officer corps outraged by leniency.",
+"dlg.camp.act4_b.fx.execute": "Selena executed; discipline written in blood; Ironman hinted.",
+"dlg.camp.act4_b.fx.exile": "Selena exiled into the void; Exile ending hinted.",
+"dlg.camp.act4_b.n08": "Station Light-1 awaits official broadcast. Rumors of command schisms are paralyzing frontier supply runs.",
+"dlg.camp.act4_b.c3": "Final address to the fleet garrisons:",
+"dlg.camp.act4_b.c3.a": "'The law is absolute, binding every soul who wears our uniform.'",
+"dlg.camp.act4_b.c3.b": "'Guns train outward. All internal vendettas yield to victory.'",
+"dlg.camp.act4_b.fx.verdict_law": "Doctrine grounded in strict rule of law and naval discipline.",
+"dlg.camp.act4_b.fx.verdict_unity": "Doctrine focused on the outer enemy and fleet cohesion.",
+"dlg.camp.act4_b.n10": "Channel closed. Bridge internal security protocols set to code red.",
+"dlg.camp.act4_b.chronicle": "Act IV: Sentence passed upon Selena Varr. Internal leadership crisis resolved.",
+"dlg.camp.fin_d.n01": "Flagship entered full resonance basin. Core displacement and Rift harmonics are completely in phase.",
+"dlg.camp.fin_d.n02": "We stand before the final boundary. The Rift awaits the command that will decide if this galaxy falls silent forever.",
+"dlg.camp.fin_d.c1": "What does the Builders' Rift represent to us?",
+"dlg.camp.fin_d.c1.a": "A gateway to the next plane of existence, transcending physical war.",
+"dlg.camp.fin_d.c1.b": "An unmatched weapon of supremacy, rightful prize of our strength.",
+"dlg.camp.fin_d.c1.c": "A mass grave and eternal monument to the terrible price of loud noise.",
+"dlg.camp.fin_d.fx.rift_door": "Rift declared a threshold; Ascension ending hinted.",
+"dlg.camp.fin_d.fx.rift_weapon": "Rift declared a weapon of state; Control ending hinted.",
+"dlg.camp.fin_d.fx.rift_grave": "Rift recognized as tragedy; Seal ending hinted.",
+"dlg.camp.fin_d.n04": "The Choir fleet encloses the sector in a unbroken wall of resonance. Kinetic arrays loaded. Awaiting final command.",
+"dlg.camp.fin_d.n05": "All interstellar channels overloaded. Fourteen worlds are listening to the harmonic tone of our drive core.",
+"dlg.camp.fin_d.c2": "Final command directive of First Light:",
+"dlg.camp.fin_d.c2.a": "Seal the Rift permanently. Turn the five Ansar keys to silence.",
+"dlg.camp.fin_d.c2.b": "Subjugate the Rift resonance beneath the supreme will of our fleet.",
+"dlg.camp.fin_d.c2.c": "Release the frequency across all colonial worlds. End monopoly.",
+"dlg.camp.fin_d.c2.d": "Broadcast the Whisper harmonic: cease all acoustic projection.",
+"dlg.camp.fin_d.fx.final_seal": "Seal protocol initiated; ending_seal hinted.",
+"dlg.camp.fin_d.fx.final_control": "Control asserted; ending_control hinted.",
+"dlg.camp.fin_d.fx.final_release": "Monopoly shattered; ending_release hinted.",
+"dlg.camp.fin_d.fx.final_whisper": "Whisper harmonic broadcast; secret ending_whisper hinted.",
+"dlg.camp.fin_d.n07": "Dispatcher Kira-7 on priority relay: colonial orbits holding, but planetary thermal sinks are boiling away.",
+"dlg.camp.fin_d.c3": "To whom do you pledge the final debt of this war?",
+"dlg.camp.fin_d.c3.a": "To the fleet and the void crews who died in burning armor for us.",
+"dlg.camp.fin_d.c3.b": "To the worlds and civilian families waiting in bunker shelters.",
+"dlg.camp.fin_d.c3.c": "To truth and pure memory that will outlive every passing empire.",
+"dlg.camp.fin_d.fx.price_fleet": "Final debt dedicated to the navy and fallen void fighters.",
+"dlg.camp.fin_d.fx.price_worlds": "Final debt dedicated to civilian colonies and survivors.",
+"dlg.camp.fin_d.fx.price_knowledge": "Final debt dedicated to the archive of objective truth.",
+"dlg.camp.fin_d.n09": "Order received and confirmed. Task force holds battle stations until reactor burnout.",
+"dlg.camp.fin_d.n10": "May the archives at least record what this silence cost us.",
+"dlg.camp.fin_d.n11": "Initiating terminal sequence. SVET concludes escort telemetry routine.",
+"dlg.camp.fin_d.chronicle": "Act V: Threshold breached. Ultimate outcome of the galactic war determined.",
+"dlg.camp.epi.n01": "Chronometer: cycle seven thousand two hundred. Choir resonance amplitude dropped below universal cosmic background.",
+"dlg.camp.epi.n02": "Tactical grid clear. Forty percent of flagship armor plate scorched to framework, but structural integrity holds.",
+"dlg.camp.epi.c1": "Disposition of the surviving battle fleets:",
+"dlg.camp.epi.c1.a": "Dismantle weapon bays and convert hulls to civilian relief transports.",
+"dlg.camp.epi.c1.b": "Maintain permanent combat battle-stations along the frontier rim.",
+"dlg.camp.epi.fx.transports": "Fleet demilitarized into relief and reconstruction vessels.",
+"dlg.camp.epi.fx.garrison": "Fleet stands permanent guard over the sector perimeter.",
+"dlg.camp.epi.n04": "Casualty logs closed. For the first time in three operational years, there are no open distress beacons.",
+"dlg.camp.epi.n05": "Station Light-1 reopens commercial airlocks. The fourteen survivors welcome the first peacetime convoy.",
+"dlg.camp.epi.c2": "How shall history record the conduct of this war?",
+"dlg.camp.epi.c2.a": "Publish complete unredacted transcripts of all betrayals and losses.",
+"dlg.camp.epi.c2.b": "Author a unified myth of flawless heroism to preserve stability.",
+"dlg.camp.epi.fx.story_truth": "Uncensored records opened to public history; hard truth kept.",
+"dlg.camp.epi.fx.story_myth": "Heroic legend crafted to bind shattered frontier worlds.",
+"dlg.camp.epi.n07": "AI query: shall the three flagship core errors be logged as bugs or as the voice of predecessors?",
+"dlg.camp.epi.c3": "Final transmission to the galaxy:",
+"dlg.camp.epi.c3.a": "Warning: 'Silence is the sole law of survival in the deep dark.'",
+"dlg.camp.epi.c3.b": "Gift: 'We have learned to live alongside our own voice.'",
+"dlg.camp.epi.fx.legacy_warning": "Warning of silence carved into every navigation beacon.",
+"dlg.camp.epi.fx.legacy_gift": "Survival wisdom bequeathed to posterity as gift of freedom.",
+"dlg.camp.epi.n09": "Mission accomplished, Admiral. You have earned the right to step ashore.",
+"dlg.camp.epi.n10": "Bridge log finalized. Data pushed to permanent archive. First Light enters deep sleep.",
+"dlg.camp.epi.chronicle": "Epilogue: Campaign concluded. Historic legacy of the war sealed into record."
+}
+},
+"notes": {
+"summary": "Набор из 6 ключевых актовых диалогов (Акты II–V и эпилог), реализующих драматургические узлы, выборы с немедленной ценой и отдалённой расплатой согласно story-bible.",
+"flagsAdded": [
+"camp_central_fleet",
+"camp_delegate_fleet",
+"camp_fleet_first",
+"camp_diplo_first",
+"camp_council_now",
+"camp_council_delay",
+"camp_trust_admiral",
+"camp_trust_council",
+"camp_truth_revealed",
+"camp_truth_hidden",
+"camp_truth_used",
+"camp_relic_empire",
+"camp_relic_returned",
+"camp_relic_burned",
+"camp_march_now",
+"camp_fortify",
+"camp_use_engine",
+"camp_seal_engine",
+"camp_trade_engine",
+"camp_fleet_truth",
+"camp_fleet_lie",
+"camp_believe_selena",
+"camp_believe_teira",
+"camp_betrayal_forgiven",
+"camp_betrayal_executed",
+"camp_betrayal_exiled",
+"camp_verdict_law",
+"camp_verdict_unity",
+"camp_rift_door",
+"camp_rift_weapon",
+"camp_rift_grave",
+"camp_final_seal",
+"camp_final_control",
+"camp_final_release",
+"camp_final_whisper",
+"camp_final_price_fleet",
+"camp_final_price_worlds",
+"camp_final_price_knowledge",
+"camp_epi_transports",
+"camp_epi_garrison",
+"camp_epi_story_truth",
+"camp_epi_story_myth",
+"camp_epi_legacy_warning",
+"camp_epi_legacy_gift"
+],
+"missionsUnlocked": [
+"main_02_first_crisis",
+"main_03_split",
+"main_03_invasion",
+"main_03_megastructure",
+"main_04_titan",
+"main_05_legacy_end"
+],
+"endingsHinted": [
+"ending_seal",
+"ending_control",
+"ending_release",
+"ending_syndicate",
+"ending_ascension",
+"ending_whisper",
+"ending_exile",
+"ending_ironman"
+]
+}
+}

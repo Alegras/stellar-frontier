@@ -489,9 +489,8 @@ function unlockToken(world: World, a: AncientsState, token: string): void {
     return;
   }
   if (token === "sector") {
-    a.sector.discovered = true;
     a.flags["unlock:sector"] = 1;
-    ensureSectorGenerated(world);
+    revealSector(world);
     return;
   }
   if (token === "ending") {
@@ -576,8 +575,7 @@ export function advanceAncientsLine(world: World, catalogArg?: AncientsCatalog):
       a.flags["mission_started:" + quest.id] = 1;
       // Миссии с секторными объективами сами открывают сектор (иначе недостижимы).
       if (quest.objectives.some((objective) => objective.type === "sector_scan" || objective.type === "sector_claim")) {
-        a.sector.discovered = true;
-        ensureSectorGenerated(world, catalog);
+        revealSector(world, catalog);
       }
     }
     if (state.status === "active") {
@@ -922,13 +920,15 @@ function regionFactionId(catalog: AncientsCatalog, regionIndex: number, region: 
   return order[regionIndex % order.length] ?? "ansari_remnants";
 }
 
-/** Детерминированная генерация 45 систем/5 подрегионов; идемпотентно. */
+/**
+ * Детерминированная генерация 45 систем/5 подрегионов; идемпотентно.
+ * ВАЖНО: генерация не делает сектор видимым — для этого revealSector (миссия 10/Врата).
+ */
 export function ensureSectorGenerated(world: World, catalogArg?: AncientsCatalog): AncientsSectorState {
   const catalog = catalogArg ?? ancientsCatalog();
   const a = ensureAncients(world, catalog);
   if (a.sector.generated) return a.sector;
   a.sector.generated = true;
-  a.sector.discovered = true;
   const regions = catalog.regions.length > 0 ? catalog.regions : sectorFallbackRegions();
   const random = seedRng((world.seed ^ 0x5ec7a11) >>> 0);
   const perRegion: number[] = regions.map((region) => Math.max(0, Math.round(region.systemCount || 0)));
@@ -979,7 +979,7 @@ export function ensureSectorGenerated(world: World, catalogArg?: AncientsCatalog
         planets: [],
         links: [],
         ownerId: 0,
-        knownBy: [world.playerEmpireId],
+        knownBy: [],
         visibleTo: [],
         poi: [],
         station: null,
@@ -1033,6 +1033,22 @@ export function ensureSectorGenerated(world: World, catalogArg?: AncientsCatalog
   return a.sector;
 }
 
+/** Открыть сектор игроку (миссия 10/Врата): генерация + видимость систем. */
+export function revealSector(world: World, catalogArg?: AncientsCatalog): AncientsSectorState {
+  const catalog = catalogArg ?? ancientsCatalog();
+  const a = ensureAncients(world, catalog);
+  const sector = ensureSectorGenerated(world, catalog);
+  a.sector.discovered = true;
+  a.flags["sector_visible"] = 1;
+  for (const meta of sector.systems) {
+    const system = world.systems[meta.id];
+    if (!system) continue;
+    if (!system.knownBy.includes(world.playerEmpireId)) system.knownBy.push(world.playerEmpireId);
+    if (!system.visibleTo.includes(world.playerEmpireId)) system.visibleTo.push(world.playerEmpireId);
+  }
+  return sector;
+}
+
 export function getSectorState(world: World): AncientsSectorState {
   return ensureAncients(world).sector;
 }
@@ -1059,6 +1075,7 @@ function systemPoiDefs(world: World, systemId: number, catalog: AncientsCatalog)
 export function sectorScan(world: World, empireId: number, systemId: number): CommandResult {
   const catalog = ancientsCatalog();
   const a = ensureAncients(world, catalog);
+  if (!a.sector.discovered) return { ok: false, messageRu: "Сектор «Реликтовый Предел» ещё не открыт" };
   const meta = sectorSystemOf(world, systemId);
   if (!meta) return { ok: false, messageRu: "Система сектора не найдена" };
   if (empireId !== world.playerEmpireId) return { ok: false, messageRu: "Сектор доступен только игроку" };
@@ -1090,6 +1107,7 @@ export function sectorScan(world: World, empireId: number, systemId: number): Co
 
 export function sectorClaim(world: World, empireId: number, systemId: number): CommandResult {
   const a = ensureAncients(world);
+  if (!a.sector.discovered) return { ok: false, messageRu: "Сектор «Реликтовый Предел» ещё не открыт" };
   const meta = sectorSystemOf(world, systemId);
   if (!meta) return { ok: false, messageRu: "Система сектора не найдена" };
   if (empireId !== world.playerEmpireId) return { ok: false, messageRu: "Сектор доступен только игроку" };

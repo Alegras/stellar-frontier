@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { Command } from "@sf/sim";
 import type { World } from "@sf/sim";
+import { aiNewsKindLabel, aiNewsOf } from "./world-politics";
 import { DLC_CARD_BY_QUEST, DLC_QUESTS, DLC_QUEST_BY_ID, DLC_TREE } from "@sf/data";
 import type { QuestDef, QuestTreeDef, TreeEdgeDef, TreeQuestNodeDef } from "@sf/data";
 import { Badge, Btn, Panel, Sep } from "./controls";
@@ -139,11 +140,21 @@ function QuestList({ game, quests, emptyKey }: { game: Game; quests: QuestDef[];
 
 function Chronicle({ d, world }: { d: DlcState; world: World }) {
   const consequences = dlcConsequencesOf(world, 8);
-  if (d.chronicle.length === 0 && consequences.length === 0) {
+  const aiNews = aiNewsOf(world, 8);
+  if (d.chronicle.length === 0 && consequences.length === 0 && aiNews.length === 0) {
     return <div className="sf-empty" data-testid="journal-empty-chronicle">{L("Хроника пуста: записи появляются по ходу линии.", "The chronicle is empty: entries appear as the line progresses.")}</div>;
   }
   return (
     <div className="sf-journal__chronicle" data-testid="journal-chronicle">
+      <div className="sf-h" data-testid="journal-ai-news">{L("Мировые события", "World events")}</div>
+      {aiNews.length === 0 && <div className="sf-meta">{L("Пока тихо: ИИ-ИИ политика ещё не дала новостей.", "Quiet so far: AI-to-AI politics has no news yet.")}</div>}
+      {aiNews.map((n) => (
+        <div key={n.id} className="sf-line" data-testid={"ai-news-journal-" + n.id}>
+          <span className="sf-meta" style={{ width: 52 }}>{"т" + intText(n.tick)}</span>
+          <span className="sf-nowrap">{aiNewsKindLabel(n.kind)}</span>
+          <span className="sf-meta">{n.actorName}{n.targetName ? " → " + n.targetName : ""}</span>
+        </div>
+      ))}
       {consequences.length > 0 && (
         <div className="sf-h" data-testid="journal-consequences">{L("Последствия диалогов", "Dialogue consequences")}</div>
       )}

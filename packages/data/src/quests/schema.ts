@@ -86,6 +86,10 @@ export interface DialogueEffectDef {
   branch?: string;
   /** путь концовки кампании: ending_seal | ending_control | ... */
   ending?: string;
+  /** подсказка концовки без жёсткой фиксации (ending_*) */
+  endingHint?: string;
+  /** открыть сюжетную миссию кампании (id из campaign/missions.json) */
+  unlockMission?: string;
   /** l10n-ключ подписи последствия для журнала/UI */
   effectLabelKey?: string;
   /** предметы-флаги (d.flags["item:"+id]) */
@@ -112,6 +116,8 @@ export interface DialogueNodeDef {
   check?: { stat: string; dc: number; onSuccess: string; onFail: string };
   effects?: DialogueEffectDef[];
   comic?: string;
+  /** узел-исход после выбора (narrative outcome; ведёт себя как line) */
+  outcome?: boolean;
 }
 
 export interface DialogueDef {

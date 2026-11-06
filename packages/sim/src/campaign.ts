@@ -10,14 +10,18 @@
  *    награды выдаются ровно один раз (флаг rewarded);
  *  - мягкий провал: миссия становится failed и через retry-окно снова available (не game over).
  */
-import { CAMPAIGN_ACTS, CAMPAIGN_MISSIONS, BRANCHES, ENDINGS, RESOURCE_IDS, SCIENCE_IDS } from "@sf/data";
-import { maybeStartCampaignDialogue } from "./dlc";
+import {
+  CAMPAIGN_ACTS, CAMPAIGN_BRIDGES, CAMPAIGN_MISSIONS, BRANCHES, ENDINGS, RESOURCE_IDS, SCIENCE_IDS,
+} from "@sf/data";
+import type { StoryBridgeDef } from "@sf/data";
 import type {
   BranchDef, CampaignActDef, CampaignMissionDef, EndingDef, MissionObjectiveDef,
 } from "@sf/data";
 import type { CampaignBranch, CampaignMission, CampaignState, ContractObjective } from "./fullgame";
-import { advancedOf, ensureFg, pushJournal } from "./fullgame";
+import { advancedOf, ensureFg, pushJournal, relationOf } from "./fullgame";
 import { empireById, logEvent } from "./economy";
+import { getEmpireFleetPower } from "./queries";
+import { activateTreaty, breakTreaty, refreshOpinion, setWarSide, warSideOf } from "./diplomacy";
 import type { Empire, World } from "./types";
 
 // ------------------------------------------------------------------ константы (GDD/док 11 §2)
@@ -179,6 +183,64 @@ export function applyCampaignEffect(world: World, empireId: number, target: stri
   }
   if (target.startsWith("rep.")) {
     fg.campaign.flags[target] = (fg.campaign.flags[target] ?? 0) + value;
+    return;
+  }
+  if (target.startsWith("opinion:")) {
+    const otherId = Number(target.slice("opinion:".length));
+    if (Number.isFinite(otherId) && otherId !== empireId) {
+      const relation = relationOf(world, empireId, otherId);
+      relation.opinion = Math.max(-100, Math.min(100, relation.opinion + value));
+      refreshOpinion(world, Math.min(empireId, otherId), Math.max(empireId, otherId));
+    }
+    return;
+  }
+  if (target.startsWith("join_war:")) {
+    const parts = target.split(":");
+    const warId = Number(parts[1]);
+    const side = Number(parts[2] ?? 2) === 1 ? 1 : 2;
+    const war = fg.wars.find((entry) => entry.id === warId);
+    const empire = empireById(world, empireId);
+    if (war && empire) {
+      if (warSideOf(world, war.id, empireId) === 0) {
+        war.sides[empireId] = {
+          empireId,
+          fpStart: getEmpireFleetPower(world, empireId),
+          fpLost: 0,
+          claims: [],
+          occupiedSystems: [],
+        };
+        war.score[empireId] = 0;
+        war.exhaustion[empireId] = 0;
+        war.occupied[empireId] = 0;
+        setWarSide(world, war.id, empireId, side);
+      }
+      fg.campaign.flags.ai_call_to_arms = 1;
+    }
+    return;
+  }
+  if (target.startsWith("treaty:")) {
+    const [, kind, targetIdRaw] = target.split(":");
+    const targetId = Number(targetIdRaw);
+    if (Number.isFinite(targetId) && kind) {
+      activateTreaty(world, empireId, targetId, kind as never);
+      fg.campaign.flags["treaty:" + kind + ":" + targetId] = 1;
+    }
+    return;
+  }
+  if (target.startsWith("break_treaty:")) {
+    const [, kind, targetIdRaw] = target.split(":");
+    const targetId = Number(targetIdRaw);
+    if (Number.isFinite(targetId) && kind) breakTreaty(world, empireId, targetId, kind as never, "решение игрока");
+    return;
+  }
+  if (target.startsWith("leave_federation")) {
+    for (const federation of fg.federations) {
+      if (!federation.members.includes(empireId)) continue;
+      federation.members = federation.members.filter((id) => id !== empireId);
+      delete federation.votes[empireId];
+      if (federation.presidentId === empireId) federation.presidentId = federation.members.slice().sort((a, b) => a - b)[0] ?? 0;
+    }
+    fg.federations = fg.federations.filter((federation) => federation.members.length >= 2);
     return;
   }
   if (isResourceId(target)) {
@@ -471,7 +533,9 @@ function updateMissionStatus(world: World, mission: CampaignMission, def: Campai
   const fg = ensureFg(world);
   const campaign = fg.campaign;
   if (mission.status === "locked") {
-    if (missionRequirementsMet(world, mission, def)) {
+    const unlockedByEffect = mission.flags["unlocked"] === 1
+      || (campaign.flags["mission_unlocked:" + mission.id] ?? 0) > 0;
+    if (unlockedByEffect || missionRequirementsMet(world, mission, def)) {
       mission.status = "available";
       pushJournal(fg, world.tick, "mission", "Доступна сюжетная миссия: " + mission.titleRu, mission.id);
       logEvent(world, "mission", "info", "Доступна сюжетная миссия: " + mission.titleRu + ".", undefined, world.playerEmpireId);
@@ -604,14 +668,13 @@ export function campaignPhase(world: World, override?: Partial<CampaignCatalog>)
   // 1. Акт по такту (монотонно)
   const act = actForTick(world.tick, catalog);
   if (act > campaign.act) {
+    const fromAct = campaign.act;
     campaign.act = act;
     campaign.lastStoryTick = world.tick;
     pushJournal(fg, world.tick, "story", "Начался " + actName(act, catalog) + ".");
     logEvent(world, "system", "good", "Начался " + actName(act, catalog) + ".", undefined, world.playerEmpireId);
+    appendActBridgeJournal(world, fromAct, act);
   }
-
-  // 1b. Сюжетные диалоги DLC: один раз на акт II/III (см. maybeStartCampaignDialogue).
-  maybeStartCampaignDialogue(world);
 
   // 2. Локи: чистим истёкшие
   if (campaign.locks.length > 0) campaign.locks = campaign.locks.filter((lock) => lock.untilTick > world.tick);
@@ -1011,9 +1074,20 @@ export function checkEndings(world: World, override?: Partial<CampaignCatalog>):
       if (ending.condition(world)) found.push(ending.id);
     }
   }
+  // Мягкие подсказки (endingHint) влияют на порядок/тон эпилога, но не фиксируют финал.
+  const hints = Object.keys(campaign.flags)
+    .filter((key) => key.startsWith("ending_hint:"))
+    .map((key) => key.slice("ending_hint:".length));
+  found.sort((a, b) => {
+    const hintA = hints.includes(a) ? 0 : 1;
+    const hintB = hints.includes(b) ? 0 : 1;
+    if (hintA !== hintB) return hintA - hintB;
+    return a < b ? -1 : a > b ? 1 : 0;
+  });
   const added: string[] = [];
   for (const id of found) {
     if (campaign.endings.includes(id)) continue;
+    if (hints.includes(id)) campaign.flags["endingPreferred"] = 1;
     campaign.endings.push(id);
     added.push(id);
     pushJournal(fg, world.tick, "ending", "Достигнута концовка: " + endingName(id, catalog) + ".");
@@ -1021,6 +1095,28 @@ export function checkEndings(world: World, override?: Partial<CampaignCatalog>):
   }
   if (added.length > 0) campaign.lastStoryTick = world.tick;
   return found;
+}
+
+function bridgeFor(fromAct: number, toAct: number): StoryBridgeDef | undefined {
+  const preferred = "bridge_" + fromAct + "_" + toAct;
+  return CAMPAIGN_BRIDGES.find((bridge) => bridge.id === preferred)
+    ?? CAMPAIGN_BRIDGES.find((bridge) => bridge.fromAct === fromAct && bridge.toAct === toAct);
+}
+
+/** Журнал «мостиков» на смене акта: один раз на переход, данные — CAMPAIGN_BRIDGES. */
+function appendActBridgeJournal(world: World, fromAct: number, toAct: number): void {
+  const fg = ensureFg(world);
+  const campaign = fg.campaign;
+  for (let previous = fromAct; previous < toAct; previous++) {
+    const next = previous + 1;
+    const key = "bridge_journal:" + previous + "_" + next;
+    if ((campaign.flags[key] ?? 0) > 0) continue;
+    const bridge = bridgeFor(previous, next);
+    if (!bridge) continue;
+    campaign.flags[key] = 1;
+    const text = bridge.titleRu + "\n\n" + bridge.bodyRu;
+    pushJournal(fg, world.tick, "chronicle", text, bridge.id);
+  }
 }
 
 function endingName(endingId: string, catalog: CampaignCatalog): string {

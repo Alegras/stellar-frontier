@@ -60,3 +60,27 @@
 - [x] Арт 4×6 эмоций (24 PNG, manifest 31 ассет).
 - [x] QA: dialogue-bugs 14/14, dlc-validate 32/32, dlc-test 24/24, e2e 53/53, unit 321/321, golden 1bfd9c71, acceptance §24.
 - [ ] Перф-метрики диалогов/дерева — dlc-perf PASS (диалог 2.1 мс, дерево 0.10 мс, кадр 15.6 мс).
+
+## Мировая политика/динамика ИИ (task-42/43/44, закрыто 2026-11-07)
+
+- [x] AI-AI договоры/войны/федерации/дань/вассалитет; fg.aiWorld/news/events/blocs/statuses, aiWorldPhase, API + HUD.
+- [x] collapse/absorb/merge/centralize: dead, перенос систем/колоний/флотов/казны/техов, вассал-интеграция, содружество→единая империя.
+- [x] Игрок: call-to-arms/trade_bloc/refugees/vassalization/accession/centralization — события с выбором; защита от молчаливого удаления.
+- [x] UI-панель/матрица/лента/фильтры/HUD/модалка (приоритет к диалогу), журнал; фикс краша effectsRu.
+- [x] QA: politics-verify 21/0/1, world-politics 5/5, unit 335/335, golden 8f52b0a6, e2e 61/61, acceptance §25, gift.
+- [ ] Естественная генерация call-to-arms в headless — SKIP (нужны war+alliance в конкретном seed); покрыта e2e-событием/командой и unit sim.
+
+## Финальная приёмка v0.7 (task-48, закрыто 2026-11-07)
+
+- [x] Story 6 актовых сцен + эпилог, endingHint/unlockMission, 20 payoff-флагов; story-verify 10/10.
+- [x] Карта AI-ИИ линий и сектор Предела (скрыт до revealSector, открывается после) — world-map 1/1, ancients-ui 1/1.
+- [x] Комикс с DOM-пузырями 1280–2560 — dlc-comic 1/1; Qwen 4×6 арт/фон/карточки.
+- [x] typecheck 0, unit 335/335, golden 8f52b0a6, полный e2e **61/61**, acceptance §26, gift 2.89 МБ/verify 10/10.
+- [ ] Флейк долгих live-спеков (warp-sector/combat-live) в полном прогоне — в изоляции зелёные, финальный suite 61/61; при CI желательно retries=1 для двух спеков.
+
+## Полная история 0–V (task-53/54/55, закрыто 2026-11-08)
+
+- [x] 10 кампанийных сцен (9 mission + epilogue), 88 outcome-узлов, 5 мостиков в журнале; story-script v2 (6 актов/18 сцен/16 развилок/40 вариантов).
+- [x] Флаги/отношения/unlock актов 0/I + арки Тейры/Киры (camp_teira_arc_*, camp_kira_arc_*, kira_debt); legacy-сцены удалены, legacy-check 0.
+- [x] story-verify 16/16, story-full e2e 3/3, unit 338/338, golden 8f52b0a6, полный e2e **64/64**, acceptance §27/§28.
+- [x] gift 2.97 МБ/zip 1.04 МБ/verify 10/10, site синхронизирован; скриншоты dialogue-outcome/story-arcs.

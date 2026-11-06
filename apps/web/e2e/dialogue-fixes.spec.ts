@@ -1,6 +1,6 @@
 import { expect, test, type Page } from "@playwright/test";
 import { fileURLToPath } from "node:url";
-import { attachDiagnostics, expectNoErrors, gotoGame } from "./helpers";
+import { attachDiagnostics, dismissAllOverlays, expectNoErrors, gotoGame } from "./helpers";
 
 /**
  * task-38: единый диалоговый оверлей — приоритет модалок, закрытие через sim,
@@ -53,8 +53,15 @@ async function startGame(page: Page, seed = 42): Promise<void> {
 }
 
 async function play(page: Page, prefer: string[] = []): Promise<void> {
-  for (let i = 0; i < 40; i++) {
-    if (!(await page.locator('[data-testid="dialogue-overlay"]').count())) return;
+  let idle = 0;
+  for (let i = 0; i < 50; i++) {
+    if (!(await page.locator('[data-testid="dialogue-overlay"]').count())) {
+      idle++;
+      if (idle >= 4) return;
+      await page.waitForTimeout(200);
+      continue;
+    }
+    idle = 0;
     const ids = await page.locator('[data-testid^="dialogue-choice-"]').evaluateAll((els) => els.map((e) => (e as HTMLElement).dataset.testid ?? "")).catch(() => [] as string[]);
     if (ids.length > 0) {
       const want = prefer.find((p) => ids.includes("dialogue-choice-" + p));
@@ -67,7 +74,7 @@ async function play(page: Page, prefer: string[] = []): Promise<void> {
     if (await cont.count()) { await page.evaluate(() => document.querySelector<HTMLElement>('[data-testid="dialogue-continue"]')?.click()); await page.waitForTimeout(160); continue; }
     const roll = page.locator('[data-testid="dialogue-check-roll"]');
     if (await roll.count()) { await page.evaluate(() => document.querySelector<HTMLElement>('[data-testid="dialogue-check-roll"]')?.click()); await page.waitForTimeout(160); continue; }
-    return;
+    await page.waitForTimeout(220);
   }
 }
 
@@ -144,6 +151,7 @@ test.describe("Диалоги · task-38", () => {
     expect(Object.keys(st.rep).length).toBeGreaterThan(0);
     expect(st.q2).not.toBe("locked");
     // последствия в журнале (после диалога или в процессе)
+    await dismissAllOverlays(page);
     await page.keyboard.press("Escape");
     await page.waitForTimeout(300);
     await page.evaluate(() => document.querySelector<HTMLElement>('[data-testid="btn-later-event"]')?.click());
@@ -161,32 +169,6 @@ test.describe("Диалоги · task-38", () => {
     await page.screenshot({ path: shot("dialogue-consequences.png") });
   });
 
-  test("кампанийный контекст рендерится тем же оверлеем", async ({ page }) => {
-    test.setTimeout(180_000);
-    await startGame(page);
-    await closeDialog(page);
-    await expect(page.locator('[data-testid="dialogue-overlay"]')).toHaveCount(0, { timeout: 10_000 });
-    // доводим время до акта II: campaignPhase сам стартует сюжетный диалог с context=campaign
-    const advanced = await page.evaluate(() => {
-      const g = (window as unknown as { __SF_GAME__?: G }).__SF_GAME__!;
-      // переводим кампанию в акт II и очищаем очередь событий, затем один такт campaignPhase
-      const fg = g.world.fg as unknown as {
-        campaign?: { act?: number };
-        narrative?: { pending?: Array<Record<string, unknown>> };
-      };
-      if (fg.campaign) fg.campaign.act = 2;
-      if (fg.narrative && Array.isArray(fg.narrative.pending)) fg.narrative.pending.length = 0;
-      g.setSpeed?.(5);
-      try { for (let i = 0; i < 3; i++) g.advance(1000); } catch { /* stop */ }
-      const st = g.world.fg?.dlc?.dialogue;
-      return { tick: g.world.tick, active: st?.active === true, context: st?.context ?? null, act: st?.campaignAct ?? null };
-    });
-    test.skip(!advanced.active || advanced.context !== "campaign", "кампанийный диалог не стартовал (tick=" + advanced.tick + ")");
-    await expect(page.locator('[data-testid="dialogue-overlay"]')).toBeVisible({ timeout: 10_000 });
-    await expect(page.locator('[data-testid="dialogue-campaign"]')).toBeVisible({ timeout: 10_000 });
-    await page.screenshot({ path: shot("dialogue-campaign.png") });
-  });
-
   test("new game сбрасывает закрытые/seen сцены", async ({ page }) => {
     await startGame(page, 42);
     await closeDialog(page);
@@ -196,4 +178,75 @@ test.describe("Диалоги · task-38", () => {
     await expect(page.locator('[data-testid="dialogue-overlay"]')).toBeVisible({ timeout: 15_000 });
     expect(await gameEval(page, (g) => g.world.seed)).toBe(43);
   });
+  test("новые кампанийные сцены триггерятся завершёнными миссиями и берут текст из l10n", async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 720 });
+    await startGame(page, 42);
+    await closeDialog(page);
+    await expect(page.locator('[data-testid="dialogue-overlay"]')).toHaveCount(0, { timeout: 10_000 });
+    const check = async (missionId: string, sceneId: string, first: boolean, outcome = false): Promise<void> => {
+      await page.evaluate((id) => {
+        const g = (window as unknown as {
+          __SF_GAME__?: {
+            world: { fg?: { dlc?: { flags: Record<string, number> }; campaign?: { missions: Record<string, { status?: string }> }; narrative?: { pending: unknown[] } } };
+            getState?: () => { paused: boolean }; togglePause?: () => void; setSpeed?: (n: number) => void;
+            advance: (ms: number) => void; refresh?: (s?: unknown) => void;
+          };
+        }).__SF_GAME__;
+        if (!g?.world.fg) return;
+        const fg = g.world.fg;
+        fg.campaign!.missions[id] = { ...(fg.campaign!.missions[id] ?? {}), status: "completed" };
+        if (fg.dlc) delete fg.dlc.flags["campaign_scene:" + id];
+        if (fg.narrative) fg.narrative.pending = [];
+        if (g.getState?.().paused) g.togglePause?.();
+        g.setSpeed?.(1);
+        for (let i = 0; i < 4; i++) {
+          if (fg.narrative) fg.narrative.pending = [];
+          g.advance(1000);
+          if (g.world.fg?.dlc && (g.world.fg.dlc as unknown as { dialogue?: { active?: boolean } }).dialogue?.active) break;
+        }
+        g.refresh?.({});
+      }, missionId);
+      await expect(page.locator('[data-testid="dialogue-overlay"]')).toBeVisible({ timeout: 10_000 });
+      const st = await gameEval(page, (g) => ({ scene: g.world.fg?.dlc?.dialogue?.sceneId ?? null, context: g.world.fg?.dlc?.dialogue?.context ?? null }));
+      expect(st.scene, missionId).toBe(sceneId);
+      expect(st.context).toBe("campaign");
+      const text = await page.locator('[data-testid="dialogue-text"]').innerText();
+      expect(text.length, sceneId + " текст из l10n").toBeGreaterThan(40);
+      expect(text).not.toContain("dlg.campaign");
+      await expect(page.locator('[data-testid="dialogue-campaign"]')).toBeVisible();
+      if (outcome) {
+        // доходим до варианта, выбираем первый и проверяем подсветку узла-исхода
+        for (let i = 0; i < 8; i++) {
+          const options = page.locator('[data-testid="dialogue-options"]');
+          if (await options.isVisible().catch(() => false)) {
+            await page.locator('[data-testid^="dialogue-choice-"]').first().click();
+            break;
+          }
+          const cont = page.locator('[data-testid="dialogue-continue"]');
+          if (await cont.isVisible().catch(() => false)) { await cont.click(); await page.waitForTimeout(200); continue; }
+          break;
+        }
+        for (let i = 0; i < 8; i++) {
+          if (await page.locator('[data-testid="dialogue-outcome"]').isVisible().catch(() => false)) break;
+          const cont = page.locator('[data-testid="dialogue-continue"]');
+          if (await cont.isVisible().catch(() => false)) { await cont.click(); await page.waitForTimeout(200); continue; }
+          break;
+        }
+        await expect(page.locator('[data-testid="dialogue-outcome"]'), sceneId + " outcome").toBeVisible();
+        await expect(page.locator('[data-testid="dialogue-text"]')).toHaveClass(/sf-dlg__text--outcome/);
+        await page.screenshot({ path: shot("dialogue-outcome.png") });
+      }
+      if (first) await page.screenshot({ path: shot("dialogue-campaign.png") });
+      await closeDialog(page);
+      await expect(page.locator('[data-testid="dialogue-overlay"]')).toHaveCount(0, { timeout: 10_000 });
+    };
+
+    await check("main_00_relic", "dlg_campaign_act0_relic", false, true);
+    await check("main_01_hegemon", "dlg_campaign_act1_hegemon", false, true);
+    await check("main_01_colony", "dlg_campaign_teira_arc", false, true);
+    await check("main_02_first_crisis", "dlg_campaign_kira_arc", false, true);
+    await check("main_02_council", "dlg_campaign_act2_council", true);
+    await check("main_03_truth", "dlg_campaign_act3_truth", false);
+  });
+
 });

@@ -3,6 +3,7 @@ import type { FullPanelProps } from "./fg";
 import { AncientsPanel } from "./AncientsPanel";
 import { CampaignPanel } from "./CampaignPanel";
 import { JournalPanel } from "./JournalPanel";
+import { WorldPoliticsPanel } from "./WorldPoliticsPanel";
 import { ContractsPanel } from "./ContractsPanel";
 import { CoopPanel } from "./CoopPanel";
 import { DiplomacyPanel } from "./DiplomacyPanel";
@@ -17,6 +18,7 @@ export type PanelId =
   | "market" | "exchange" | "routes"
   | "contracts"
   | "journal"
+  | "politics"
   | "campaign" | "anomalies" | "megastructures" | "victory"
   | "ancients"
   | "coop"
@@ -24,7 +26,7 @@ export type PanelId =
 
 export const PANEL_IDS: PanelId[] = [
   "traditions", "perks", "diplomacy", "war", "council", "espionage",
-  "market", "exchange", "routes", "contracts", "journal",
+  "market", "exchange", "routes", "contracts", "journal", "politics",
   "campaign", "anomalies", "megastructures", "victory", "ancients", "coop", "settings",
 ];
 
@@ -40,6 +42,7 @@ export const PANEL_TITLES: Record<PanelId, string> = {
   routes: "Торговые маршруты",
   contracts: "Контракты",
   journal: "Журнал квестов",
+  politics: "Мировая политика",
   campaign: "Кампания",
   anomalies: "Аномалии и археология",
   megastructures: "Мегаструктуры",
@@ -61,6 +64,7 @@ export const PANEL_REGISTRY: Record<PanelId, ComponentType<FullPanelProps>> = {
   routes: MarketPanel,
   contracts: ContractsPanel,
   journal: JournalPanel,
+  politics: WorldPoliticsPanel,
   campaign: CampaignPanel,
   anomalies: CampaignPanel,
   megastructures: CampaignPanel,

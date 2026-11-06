@@ -1115,3 +1115,113 @@
 @media (max-height: 760px) {
   .sf-tree__wrap { height: clamp(220px, calc(100vh - 430px), 400px); }
 }
+
+
+/* ==========================================================================
+   Часть XV (task-43): «Мировая политика» — матрица, лента, события, HUD
+   ========================================================================== */
+.sf-politics__head {
+  display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+  padding: 4px 8px; background: #141226; border: 1px solid #3B2B5E;
+}
+.sf-politics__matrix-wrap { overflow: auto; max-width: 100%; border: 1px solid #2A3A56; }
+.sf-politics__matrix { border-collapse: collapse; font-size: .82em; }
+.sf-politics__matrix th, .sf-politics__matrix td {
+  border: 1px solid #22304A; padding: 3px 5px; text-align: center; white-space: nowrap;
+}
+.sf-politics__matrix th { background: #101A2E; color: var(--sf-text-2); font-weight: 600; position: sticky; top: 0; }
+.sf-politics__matrix tbody th { position: sticky; left: 0; z-index: 1; text-align: left; }
+.sf-politics__me { color: var(--sf-accent) !important; background: #1E2640 !important; }
+.sf-politics__cell { min-width: 26px; font-size: 1.1em; }
+.sf-politics__cell--self { color: #22304A; }
+.sf-politics__cell--war { background: #3A1620; color: #FF8A8A; }
+.sf-politics__cell--alliance { background: #2A2A14; color: #F5C542; }
+.sf-politics__cell--federation { background: #241A3A; color: #C9B8FF; }
+.sf-politics__cell--vassal { background: #2A2014; color: #F0A45A; }
+.sf-politics__cell--trade { background: #14261C; color: #6BE675; }
+.sf-politics__cell--nap { background: #14202A; color: #4FC3F7; }
+.sf-politics__cell--neutral { color: #5C6878; }
+.sf-politics__event {
+  border: 1px solid #3B2B5E; background: #141226; padding: 5px 8px; margin-bottom: 6px;
+}
+
+
+/* DLC XIV · комикс: DOM-текст поверх запечённых пузырей (640×240) */
+.sf-dlg__comic-wrap { position: relative; width: 100%; max-width: 640px; aspect-ratio: 640 / 240; margin-bottom: 4px; border: 1px solid #3A4A66; background: #05070E; overflow: hidden; }
+.sf-dlg__comic-wrap .sf-dlg__comic { position: absolute; inset: 0; width: 100%; height: 100%; max-width: none; border: 0; image-rendering: pixelated; object-fit: fill; }
+/* новый арт Qwen: тёмное верхнее поле без запечённых пузырей — рисуем DOM-бабблы */
+.sf-dlg__comic-bubble {
+  position: absolute; display: flex; align-items: center; justify-content: center;
+  overflow: hidden; padding: 2% 3%;
+  background: #F2EAD8; border: 2px solid #1A1208; border-radius: 2px;
+  color: #1A1208; font-family: var(--sf-font); font-size: clamp(7.5px, 0.82vw, 11.5px);
+  line-height: 1.12; text-align: center; overflow-wrap: anywhere;
+  box-shadow: 2px 2px 0 rgba(5, 7, 14, .6);
+}
+.sf-dlg__comic-bubble::after {
+  content: ""; position: absolute; left: 18%; bottom: -7px; width: 0; height: 0;
+  border-left: 6px solid transparent; border-right: 6px solid transparent; border-top: 8px solid #1A1208;
+}
+.sf-dlg__comic-bubble--1 { left: 4%; top: 5%; width: 30%; height: 24%; }
+.sf-dlg__comic-bubble--2 { left: 38%; top: 5%; width: 28%; height: 22%; }
+@media (max-width: 900px) { .sf-dlg__comic-bubble { font-size: 8px; } }
+
+
+/* ==========================================================================
+   task-43 · политическая карта: линии ИИ-ИИ, столицы/статусы, фильтры, туман Предела
+   ========================================================================== */
+.sf-map-pol-lines { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 2; }
+.sf-map-pol-line { stroke-width: 3; opacity: .95; filter: drop-shadow(0 0 3px rgba(0,0,0,.9)); }
+.sf-map-pol-line--war { stroke: #FF5A5A; stroke-width: 3; }
+.sf-map-pol-line--alliance { stroke: #6BE675; }
+.sf-map-pol-line--federation { stroke: #C9B8FF; stroke-width: 3; }
+.sf-map-pol-line--trade { stroke: #F5C542; stroke-dasharray: 7 5; }
+.sf-map-pol-line--vassal { stroke: #F0A45A; stroke-dasharray: 3 4; }
+.sf-map-pol-capital {
+  position: absolute; transform: translate(-50%, -50%); z-index: 3; pointer-events: auto;
+  display: inline-flex; align-items: center; gap: 3px; max-width: 180px;
+  padding: 1px 4px; background: rgba(10, 16, 32, .9);
+  border: 1px solid #66799A; color: var(--sf-text); font: inherit;
+  font-size: calc(10px * var(--sf-scale)); cursor: pointer; white-space: nowrap;
+}
+.sf-map-pol-capital:hover { background: #233A5C; z-index: 5; }
+.sf-map-pol-capital--player { border-color: var(--sf-accent); }
+.sf-map-pol-capital--weakened { opacity: .8; }
+.sf-map-pol-capital--collapsed, .sf-map-pol-capital--annexed, .sf-map-pol-capital--absorbed { opacity: .45; text-decoration: line-through; }
+.sf-map-pol-capital__dot { width: 7px; height: 7px; flex: 0 0 auto; }
+.sf-map-pol-capital__name { overflow: hidden; text-overflow: ellipsis; }
+.sf-map-pol-capital__status { color: var(--sf-text-3); font-size: .85em; }
+.sf-map-pol-legend {
+  position: absolute; right: 12px; bottom: 44px; z-index: 4; pointer-events: auto;
+  display: flex; align-items: center; gap: 4px; flex-wrap: wrap; max-width: min(560px, calc(100% - 360px));
+  background: rgba(10, 16, 32, .92); border: 1px solid #2A3A56; padding: 4px 6px;
+  font-size: calc(10px * var(--sf-scale));
+}
+.sf-map-pol-filter {
+  background: #101A2E; border: 1px solid #2A3A56; color: var(--sf-text-2); font: inherit;
+  font-size: .95em; padding: 1px 5px; cursor: pointer;
+}
+.sf-map-pol-filter--on { color: var(--sf-text); border-color: var(--sf-accent); }
+.sf-map-pol-open { background: var(--sf-accent); border: 1px solid var(--sf-accent-dark); color: #05070E; font: inherit; font-weight: 700; padding: 1px 6px; cursor: pointer; }
+.sf-sector-label--fog { opacity: .6; border-style: dashed; background: rgba(10, 16, 32, .78); color: #8FA3BF !important; font-style: italic; }
+
+
+/* ==========================================================================
+   FIX DIALOGUE LAYOUT (task-43 follow-up): портрет не вылезает из колонки,
+   комикс занимает свою область, история — ниже в потоке, без наложений.
+   ========================================================================== */
+.sf-dlg__stage { grid-template-columns: clamp(150px, 18vw, calc(272px * var(--sf-scale))) minmax(0, 1fr); align-items: start; }
+.sf-dlg__portrait { width: 100%; max-width: calc(256px * var(--sf-scale)); height: auto; aspect-ratio: 1 / 1; }
+.sf-dlg__main { min-width: 0; min-height: 0; }
+.sf-dlg__comic-wrap { width: 100%; max-width: min(640px, 100%); }
+.sf-dlg__history { max-height: min(160px, 22vh); }
+@media (max-width: 900px) {
+  .sf-dlg__stage { grid-template-columns: minmax(0, 1fr); }
+  .sf-dlg__portrait { max-width: 128px; }
+}
+/* пока открыт диалог — транзиентные уведомления игры не перекрывают сцену */
+.sf-ui:has(.sf-dlg-layer) .sf-notices { display: none !important; }
+
+
+/* task-51 · узел-исход кампанийного диалога подсвечен как последствие */
+.sf-dlg__text--outcome { border-left: 3px solid #C9B8FF; background: #101A2E; }

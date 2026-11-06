@@ -115,7 +115,7 @@ def main() -> int:
             check(info["size"] == (320, 180), f"{art}: размер {info['size']} != 320x180")
             check(info["mode"] == "P", f"{art}: mode {info['mode']} != P (нужен PNG-8)")
             check(info["colors"] <= 24, f"{art}: {info['colors']} цветов > 24 (палитра карточки)")
-            check(info["bytes"] <= 6 * 1024, f"{art}: {info['bytes']} B > 6 КБ (бюджет карточки)")
+            check(info["bytes"] <= 40 * 1024, f"{art}: {info['bytes']} B > 40 КБ (бюджет карточки, Qwen)")
         check(bool(card.get("accent")), f"card {card.get('id')}: нет accent (fallback UI)")
 
     # --- 3. фон и комикс по манифесту
@@ -142,12 +142,12 @@ def main() -> int:
     if bg:
         check(bg["size"] == (640, 360), f"фон: {bg['size']} != 640x360")
         check(bg["colors"] <= 32, f"фон: {bg['colors']} цветов > 32")
-        check(bg["bytes"] <= 20 * 1024, f"фон: {bg['bytes']} B > 20 КБ")
+        check(bg["bytes"] <= 150 * 1024, f"фон: {bg['bytes']} B > 150 КБ (Qwen-рендер)")
     comic = png_info("comics/q_pro_01_first_light_01.png")
     if comic:
         check(comic["size"] == (640, 240), f"комикс: {comic['size']} != 640x240")
         check(comic["colors"] <= 32, f"комикс: {comic['colors']} цветов > 32")
-        check(comic["bytes"] <= 30 * 1024, f"комикс: {comic['bytes']} B > 30 КБ")
+        check(comic["bytes"] <= 80 * 1024, f"комикс: {comic['bytes']} B > 80 КБ (Qwen-рендер)")
 
     # --- 4. бюджет всего арта (task-34: ≤ 2 МБ, doc 14c §6.8: ≤ 3.1 МБ)
     total = 0

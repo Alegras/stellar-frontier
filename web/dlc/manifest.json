@@ -384,8 +384,9 @@
       "path": "cards/q_pro_01_first_light.png",
       "width": 320,
       "height": 180,
-      "colors": 19,
-      "bytes": 1962
+      "colors": 24,
+      "bytes": 17143,
+      "generator": "qwen-image-2.1 (local ComfyUI, seed 5150, 1024x576 -> 320x180)"
     },
     {
       "questId": "q_pro_02_quiet_dock",
@@ -393,8 +394,9 @@
       "path": "cards/q_pro_02_quiet_dock.png",
       "width": 320,
       "height": 180,
-      "colors": 17,
-      "bytes": 1801
+      "colors": 24,
+      "bytes": 18341,
+      "generator": "qwen-image-2.1 (local ComfyUI, seed 5150, 1024x576 -> 320x180)"
     },
     {
       "questId": null,
@@ -402,24 +404,27 @@
       "path": "cards/placeholder.png",
       "width": 320,
       "height": 180,
-      "colors": 7,
-      "bytes": 1637
+      "colors": 24,
+      "bytes": 17341,
+      "generator": "qwen-image-2.1 (local ComfyUI, seed 5150, 1024x576 -> 320x180)"
     },
     {
       "id": "station_light_1",
       "path": "backgrounds/station_light_1.png",
       "width": 640,
       "height": 360,
-      "colors": 16,
-      "bytes": 6572
+      "colors": 32,
+      "bytes": 72894,
+      "generator": "qwen-image-2.1 (local ComfyUI, seed 5150, 1152x648 -> 640x360)"
     },
     {
       "id": "station_light_1_fore",
       "path": "backgrounds/station_light_1_fore.png",
       "width": 640,
       "height": 48,
-      "colors": 7,
-      "bytes": 1117
+      "colors": 32,
+      "bytes": 3668,
+      "generator": "derived from Qwen background (bottom 48 px, alpha ramp)"
     },
     {
       "questId": "q_pro_01_first_light",
@@ -427,8 +432,9 @@
       "path": "comics/q_pro_01_first_light_01.png",
       "width": 640,
       "height": 240,
-      "colors": 19,
-      "bytes": 3932
+      "colors": 32,
+      "bytes": 36462,
+      "generator": "qwen-image-2.1 (local ComfyUI, seed 5150, 1536x576 -> 640x240)"
     },
     {
       "id": "svet_wave",
@@ -439,8 +445,8 @@
       "bytes": 1372
     }
   ],
-  "totalBytes": 181630,
-  "totalKb": 177.4,
+  "totalBytes": 330458,
+  "totalKb": 322.7,
   "sha256_16": {
     "portraits/teira_os/neutral.png": "a0d8bd416a5e6965",
     "portraits/teira_os/warm.png": "9b2a66b594b0146d",
@@ -466,12 +472,12 @@
     "portraits/counselor_selen/angry.png": "37ee010f7b36ef72",
     "portraits/counselor_selen/afraid.png": "7d01379acf715c47",
     "portraits/counselor_selen/sad.png": "4e9663550df979ad",
-    "cards/q_pro_01_first_light.png": "db8f55454e2ec340",
-    "cards/q_pro_02_quiet_dock.png": "03b501fe6c7b67a2",
-    "cards/placeholder.png": "5c6202514c6f9172",
-    "backgrounds/station_light_1.png": "452e99e3e5ab40c4",
-    "backgrounds/station_light_1_fore.png": "a6d95d8fda133eee",
-    "comics/q_pro_01_first_light_01.png": "50c1f7d6d17d2937",
+    "cards/q_pro_01_first_light.png": "4082e84d17b8ef1a",
+    "cards/q_pro_02_quiet_dock.png": "5042c5bc3e5ba144",
+    "cards/placeholder.png": "5728615fbc4fda50",
+    "backgrounds/station_light_1.png": "8b843227a893a8cd",
+    "backgrounds/station_light_1_fore.png": "6812d2fe30d2bd57",
+    "comics/q_pro_01_first_light_01.png": "dd5b990ebaa7dc92",
     "voices/svet_wave.png": "a0f3c28a0da4a186"
   },
   "portraitPipeline": {
@@ -479,5 +485,11 @@
     "neutral": "text-to-image, 1024x1024, 25 steps, cfg 1, euler/simple, seed 424242",
     "emotions": "qwen-image-2.1 edit from neutral reference, denoise 0.72, same seed",
     "post": "crop bust -> 128x128 LANCZOS -> unsharp -> PNG-8 32 colors (no dither)"
+  },
+  "sceneryPipeline": {
+    "generator": "qwen-image-2.1-UC-fp8 + qwen3vl_8b (local ComfyUI)",
+    "comic": "1536x576 t2i, 25 steps, cfg 1, euler/simple, seed 5150; top band darkened for DOM bubbles",
+    "background": "1152x648 t2i -> 640x360; fore = bottom 48 px with alpha ramp",
+    "cards": "1024x576 t2i -> 320x180, 24 colours, no baked text"
   }
 }

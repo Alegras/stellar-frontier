@@ -7,6 +7,7 @@ import { L, dlcModalStateOf, dlcOf, fgOf, send, tr } from "./fg";
 import { PANEL_IDS, PANEL_REGISTRY, PANEL_TITLES } from "./fullgame-registry";
 import type { PanelId } from "./fullgame-registry";
 import { DialogueOverlay } from "./DialogueOverlay";
+import { AiWorldEventModal } from "./WorldPoliticsPanel";
 import { worldOf } from "./util";
 
 // PanelId/PANEL_TITLES/PANEL_REGISTRY живут в fullgame-registry.ts (без JSX), чтобы
@@ -126,6 +127,11 @@ export function FullGameOverlays({ game, state }: { game: Game; state: GameState
       <div style={{ pointerEvents: "auto" }}>
         <DialogueOverlay game={game} state={state} />
       </div>
+      {!dialogueActive && !event && (
+        <div style={{ pointerEvents: "auto" }}>
+          <AiWorldEventModal game={game} state={state} />
+        </div>
+      )}
       {mp?.enabled && (
         <div className="sf-mp-overlay" style={{ pointerEvents: "auto" }}>
           <MPStatusHud game={game} state={state} />

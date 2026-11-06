@@ -120,6 +120,93 @@ export interface Federation {
   votes: Record<number, number>;
 }
 
+export type AiNewsKind =
+  | "treaty" | "war" | "peace" | "federation" | "collapse" | "annexation" | "accession"
+  | "centralization" | "vassalization" | "commonwealth" | "call_to_arms" | "trade_bloc" | "tribute";
+
+export interface AiNewsItem {
+  id: number;
+  tick: number;
+  kind: AiNewsKind;
+  titleRu: string;
+  textRu: string;
+  a: number;
+  b?: number;
+  eventId?: number;
+  severity: "info" | "warn" | "bad" | "good";
+  playerImpact: "ally" | "threat" | "bloc" | null;
+}
+
+export interface AiWorldChoice {
+  id: string;
+  labelRu: string;
+  effectsRu?: string;
+  effects: { target: string; value: number }[];
+}
+
+export type AiWorldEventKind =
+  | "call_to_arms" | "trade_bloc" | "refugees" | "annexation_demand" | "vassalization_demand"
+  | "accession_offer" | "centralization_vote";
+
+export interface AiWorldEvent {
+  id: number;
+  kind: AiWorldEventKind;
+  tick: number;
+  fromEmpireId: number;
+  targetEmpireId?: number;
+  titleRu: string;
+  textRu: string;
+  expiresTick: number;
+  choices: AiWorldChoice[];
+  resolved: boolean;
+  choiceId?: string;
+  warId?: number;
+  federationId?: number;
+}
+
+export interface AiBloc {
+  id: string;
+  nameRu: string;
+  members: number[];
+  kind: "federation" | "trade" | "commonwealth";
+  formedTick: number;
+}
+
+export type AiEmpireStatus = "active" | "weakened" | "collapsed" | "annexed" | "absorbed" | "accession" | "commonwealth";
+
+export interface AiWorldState {
+  schemaVersion: number;
+  news: AiNewsItem[];
+  events: AiWorldEvent[];
+  blocs: AiBloc[];
+  nextNewsId: number;
+  nextEventId: number;
+  lastPhaseTick: number;
+  lastWarIds: number[];
+  flags: Record<string, number>;
+  statuses: Record<number, { state: AiEmpireStatus; absorbedBy?: number }>;
+  stats: {
+    wars: number; alliances: number; federations: number;
+    collapses: number; annexations: number; commonwealths: number;
+  };
+}
+
+export function emptyAiWorldState(): AiWorldState {
+  return {
+    schemaVersion: 1,
+    news: [],
+    events: [],
+    blocs: [],
+    nextNewsId: 1,
+    nextEventId: 1,
+    lastPhaseTick: 0,
+    lastWarIds: [],
+    flags: {},
+    statuses: {},
+    stats: { wars: 0, alliances: 0, federations: 0, collapses: 0, annexations: 0, commonwealths: 0 },
+  };
+}
+
 export interface CouncilResolution {
   id: string;
   type: string;
@@ -412,6 +499,8 @@ export interface FullGameState {
   ancients: AncientsState;
   /** Часть XIV: DLC «Квесты и диалоги» (вертикальный срез) */
   dlc: DlcState;
+  /** Видимая мировая политика и внутренняя динамика ИИ (task-42). */
+  aiWorld: AiWorldState;
 }
 
 export function relationKey(a: number, b: number): string {
@@ -423,6 +512,7 @@ export function ensureFg(world: World): FullGameState {
   if (!world.fg) world.fg = createFullGameState(world);
   if (!world.fg.ancients) world.fg.ancients = createAncientsState(world);
   if (!world.fg.dlc) world.fg.dlc = createDlcState(world, false);
+  if (!world.fg.aiWorld) world.fg.aiWorld = emptyAiWorldState();
   return world.fg;
 }
 
@@ -527,6 +617,7 @@ export function createFullGameState(world: World, options?: { raceId?: string; d
     missionAbandons: {},
     ancients: createAncientsState(world, options?.raceId),
     dlc: createDlcState(world, options?.dlcEnabled ?? true),
+    aiWorld: emptyAiWorldState(),
   };
   world.fg = fg;
   for (const empire of world.empires) advancedOf(world, empire.id);

@@ -1,6 +1,6 @@
 import { expect, test, type Page } from "@playwright/test";
 import { fileURLToPath } from "node:url";
-import { attachDiagnostics, expectNoErrors, gotoGame } from "./helpers";
+import { attachDiagnostics, dismissAllOverlays, expectNoErrors, gotoGame } from "./helpers";
 
 /**
  * DLC XIV «Первый Свет» (task-33): story-диалог → выбор → квест → журнал/дерево,
@@ -28,6 +28,7 @@ const domClick = async (page: Page, testId: string): Promise<void> => {
 };
 
 async function openJournal(page: Page): Promise<void> {
+  await dismissAllOverlays(page);
   await page.keyboard.press("Escape");
   await page.waitForTimeout(200);
   for (let attempt = 0; attempt < 3; attempt++) {

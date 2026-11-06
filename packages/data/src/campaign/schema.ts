@@ -110,6 +110,15 @@ export interface BranchDef {
   effects: Record<string, number>;
 }
 
+export interface ChronicleChapterDef {
+  id: string;
+  titleRu: string;
+  paragraphs: string[];
+  /** акт, с которого глава доступна; 99 — только после концовки */
+  unlockAct: number;
+  requiresEnding?: boolean;
+}
+
 export interface CampaignBundle {
   acts: CampaignActDef[];
   missions: CampaignMissionDef[];
@@ -119,4 +128,103 @@ export interface CampaignBundle {
   lore: LoreDef[];
   endings: EndingDef[];
   branches: BranchDef[];
+  chronicle: ChronicleChapterDef[];
+}
+// ===== Часть XIV/DLC: литературный сценарий кампании (акты II–V) =====
+export interface StoryRelationDef {
+  /** CharacterDef.id: admiral_kain | counselor_selen | teira_os | kira7 */
+  target: string;
+  delta: number;
+}
+
+export interface StoryOptionDef {
+  id: string;
+  titleRu: string;
+  /** действие/развитие событий (что делает игрок) */
+  directRu?: string;
+  /** реакции команды/последствия (несколько абзацев) */
+  effectsRu?: string[];
+  /** итог/смысл/посвящение */
+  outcomeRu?: string;
+  flags: string[];
+  relations: StoryRelationDef[];
+  /** миссия, которую открывает вариант */
+  unlockMission?: string | null;
+  /** подсказка концовки (ending_*) */
+  endingHint?: string | null;
+  /** переход в ветку кампании */
+  branch?: string | null;
+}
+
+export interface StoryForkDef {
+  id: string;
+  titleRu: string;
+  options: StoryOptionDef[];
+}
+
+export interface StorySceneDef {
+  id: string;
+  act: number;
+  /** scene | bridge | arc | ancient */
+  kind?: "scene" | "bridge" | "arc" | "ancient";
+  titleRu: string;
+  chronoRu?: string;
+  bodyRu: string;
+  forks?: StoryForkDef[];
+  flags?: string[];
+}
+
+export interface StoryActDef {
+  act: number;
+  id: string;
+  titleRu: string;
+  scenes: StorySceneDef[];
+}
+
+export interface StoryDirectiveDef {
+  id: string;
+  titleRu: string;
+  flag: string;
+  /** ending_seal | ending_control | ending_release | ending_whisper */
+  endingId: string;
+  actionRu: string;
+}
+
+export interface StoryEpilogueCompanionDef {
+  name: string;
+  ru: string;
+}
+
+export interface StoryEpilogueDef {
+  endingId: string;
+  titleRu: string;
+  toneRu?: string;
+  conditionRu?: string;
+  bodyRu: string;
+  companions?: StoryEpilogueCompanionDef[];
+}
+
+export interface StoryFinalMessageDef {
+  kind: "warning" | "gift";
+  textRu: string;
+}
+
+export interface StoryScriptDef {
+  version: number;
+  titleRu: string;
+  acts: StoryActDef[];
+  directives: StoryDirectiveDef[];
+  epilogues: StoryEpilogueDef[];
+  finalPointRu?: string;
+  finalMessages?: StoryFinalMessageDef[];
+}
+
+/** Мостик акта: запись журнала/хроники при смене акта. */
+export interface StoryBridgeDef {
+  id: string;
+  fromAct: number;
+  toAct: number;
+  titleRu: string;
+  chronoRu: string;
+  bodyRu: string;
 }

@@ -6,7 +6,7 @@
 import { test, expect, type Page } from "@playwright/test";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
-import { SEL, attachDiagnostics, gotoGame, isVisible, dismissDialogueOverlay } from "./helpers";
+import { SEL, attachDiagnostics, gotoGame, isVisible, dismissDialogueOverlay, dismissAllOverlays } from "./helpers";
 
 test.use({ trace: "off", video: "off" });
 const shotsDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../../docs/shots");
@@ -47,6 +47,8 @@ async function gameEval<T>(page: Page, fn: (g: G, arg?: unknown) => T, arg?: unk
 }
 
 async function dismissOverlays(page: Page): Promise<void> {
+  await dismissAllOverlays(page);
+  return;
   for (let i = 0; i < 8; i++) {
     const battle = page.locator('[data-testid="btn-close-battle"], [data-testid="btn-close-battle-footer"]');
     if (await isVisible(battle, 250)) { await battle.first().click(); await page.waitForTimeout(120); continue; }

@@ -535,6 +535,13 @@ export const DLC_EFFECT_KIND_RU: Record<string, [string, string]> = {
   timeSkip: ["сдвиг времени", "time skip"],
   chronicle: ["запись в хронику", "chronicle entry"],
   reward: ["награда", "reward"],
+  endingHint: ["намёк на концовку", "ending hint"],
+  unlockMission: ["открыта миссия", "mission unlocked"],
+  alloys: ["сплавы", "alloys"],
+  influence: ["влияние", "influence"],
+  science: ["наука", "science"],
+  item: ["предмет", "item"],
+  effect: ["последствие", "effect"],
 };
 /** Подпись эффекта: labelRu/labelKey из sim, иначе RU-название kind + ключ/значение. */
 export function dlcEffectLabel(e: DlcEffectView): string {
@@ -542,7 +549,7 @@ export function dlcEffectLabel(e: DlcEffectView): string {
   if (e.labelKey) return dlcText(e.labelKey);
   const kind = DLC_EFFECT_KIND_RU[e.kind] ?? [e.kind, e.kind];
   const base = L(kind[0], kind[1]);
-  const tail = e.key ? ": " + dlcText(String(e.key), String(e.key)) : "";
+  const tail = e.key && String(e.key) !== String(e.kind) ? ": " + dlcText(String(e.key), String(e.key)) : "";
   const val = e.value != null ? " " + (typeof e.value === "number" && e.value > 0 ? "+" : "") + String(e.value) : "";
   return base + tail + val;
 }
@@ -551,8 +558,21 @@ export function dlcPreviewEffects(effects: unknown): DlcEffectView[] {
   return effects.map((raw) => {
     const e = raw as Record<string, unknown>;
     if (e.kind) return e as unknown as DlcEffectView;
-    const kind = Object.keys(e).find((k) => k !== "labelKey" && k !== "labelRu") ?? "effect";
-    return { kind, key: e.flag ? String(e.flag) : kind, value: typeof e[kind] === "number" ? e[kind] as number : undefined };
+    if (typeof e.labelRu === "string") return { kind: "effect", labelRu: e.labelRu } as unknown as DlcEffectView;
+    // кампанийные сцены: {campaignFlag:"camp_x"}, {relation:{target:delta}}, {credits:-1000}, {effectLabelKey:"..."}
+    if (typeof e.effectLabelKey === "string") return { kind: "effect", labelKey: e.effectLabelKey } as unknown as DlcEffectView;
+    const keys = Object.keys(e).filter((k) => k !== "labelKey" && k !== "labelRu");
+    const kind = keys[0] ?? "effect";
+    const v = e[kind];
+    if (typeof e.labelKey === "string") return { kind, labelKey: e.labelKey } as unknown as DlcEffectView;
+    if (v && typeof v === "object" && !Array.isArray(v)) {
+      const parts = Object.entries(v as Record<string, unknown>).map(([k, n]) => k + " " + (typeof n === "number" && n > 0 ? "+" : "") + String(n));
+      return { kind, key: parts.join(", ") } as unknown as DlcEffectView;
+    }
+    if (typeof v === "number") return { kind, value: v } as unknown as DlcEffectView;
+    if (typeof v === "string") return { kind, key: v } as unknown as DlcEffectView;
+    if (typeof v === "boolean") return { kind } as unknown as DlcEffectView;
+    return { kind } as unknown as DlcEffectView;
   });
 }
 

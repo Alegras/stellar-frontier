@@ -111,6 +111,9 @@ export function DialogueOverlay({ game, state }: { game: Game; state: GameState 
   const emotion = node.emotion ?? "neutral";
   const emotionColor = EMOTION_COLOR[emotion] ?? EMOTION_COLOR.neutral;
   const text = dlcText(node.textKey);
+  const sentences = (text.match(/[^.!?…]+[.!?…]+/g) ?? [text]).map((s) => s.trim()).filter(Boolean);
+  // для комикса: при 3+ фразах пропускаем короткое вступление, берём «потери»/«обломки»
+  const comicLines = sentences.length >= 3 ? [sentences[1], sentences[2]] : sentences.slice(0, 2);
   const quest = questOf(active.questId);
   const portraitId = speaker?.portrait ?? "teira_os";
   const history = view?.history?.length
@@ -174,14 +177,27 @@ export function DialogueOverlay({ game, state }: { game: Game; state: GameState 
               {speaker?.role && <span className="sf-meta">{dlcText(speaker.role)}</span>}
               <span className="sf-spacer" />
               {campaign && <span data-testid="dialogue-campaign"><Badge tone="warn">{L("Кампания", "Campaign") + (campaignAct ? " · акт " + campaignAct : "")}</Badge></span>}
+              {node.outcome && <span data-testid="dialogue-outcome"><Badge tone="info">{L("последствие", "consequence")}</Badge></span>}
               {quest && <span data-testid="dialogue-quest"><Badge tone="info">{dlcText(quest.titleKey)}</Badge></span>}
               <Btn size="sm" variant="ghost" onClick={close} testId="dialogue-close" aria-label={L("Закрыть диалог и завершить сцену", "Close dialogue and end scene")}>✕</Btn>
             </header>
             {node.comic && (
-              <img className="sf-dlg__comic" src={"/dlc/comics/" + node.comic + ".png"} alt=""
-                onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }} />
+              <div className="sf-dlg__comic-wrap" data-testid="dialogue-comic">
+                <img className="sf-dlg__comic" src={"/dlc/comics/" + node.comic + ".png"} alt=""
+                  onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }} />
+                {comicLines[0] && (
+                  <span className="sf-dlg__comic-bubble sf-dlg__comic-bubble--1" data-testid="dialogue-comic-bubble-1">
+                    {comicLines[0]}
+                  </span>
+                )}
+                {comicLines[1] && (
+                  <span className="sf-dlg__comic-bubble sf-dlg__comic-bubble--2" data-testid="dialogue-comic-bubble-2">
+                    {comicLines[1]}
+                  </span>
+                )}
+              </div>
             )}
-            <p className="sf-dlg__text" id="sf-dlg-text" data-testid="dialogue-text" aria-live="polite">{text}</p>
+            <p className={"sf-dlg__text" + (node.outcome ? " sf-dlg__text--outcome" : "")} id="sf-dlg-text" data-testid="dialogue-text" aria-live="polite">{text}</p>
 
             {shownConsequences.length > 0 && node.type !== "choice" && (
               <div className="sf-dlg__effects" data-testid="dialogue-consequences" role="status">

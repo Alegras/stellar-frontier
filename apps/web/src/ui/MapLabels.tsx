@@ -5,6 +5,7 @@ import type { GameState } from "../game/types";
 
 import { SECTOR_FACTIONS, SECTOR_HAZARDS, SECTOR_REGIONS } from "@sf/data";
 import { ancientsOf, dlcOf, sectorOf } from "./fg";
+import { politicalMapOf, AI_RELATION_ICON } from "./world-politics";
 import { findSystem, isKnown, STATION_RU, STAR_RU, intText, rnd } from "./util";
 import type { TipData } from "./controls";
 import { L } from "./fg";
@@ -304,6 +305,8 @@ export function MapLabels({ game, state, onPick, onEnter }: MapLabelsProps) {
   const [hover, setHover] = useState<{ item: LabelItem; left: number; top: number; above: boolean } | null>(null);
   const [layer, setLayer] = useState<"political" | "sector">("political");
   const [sectorSel, setSectorSel] = useState<number | null>(null);
+  const [polFilters, setPolFilters] = useState<string[]>(["war", "alliance", "federation", "trade", "vassal"]);
+  const prevSector = useRef(false);
   const levelRef = useRef(3);
   const sigRef = useRef("");
 
@@ -388,10 +391,22 @@ export function MapLabels({ game, state, onPick, onEnter }: MapLabelsProps) {
 
   const world = game.hasWorld ? game.world : null;
   const ancients = ancientsOf(world);
+  const sectorAvailable = ancients?.sector?.discovered === true;
   const sector = layer === "sector" && world ? sectorOf(world) : null;
+  const polMap = layer === "political" && world ? politicalMapOf(world) : null;
+  useEffect(() => {
+    if (sectorAvailable && !prevSector.current) {
+      game.toast(L("Реликтовый Предел открыт: слой карты доступен.", "The Relic Expanse is open: map layer available."), "good");
+    }
+    prevSector.current = sectorAvailable;
+  }, [sectorAvailable, game]);
+  useEffect(() => {
+    if (layer === "sector" && !sectorAvailable) setLayer("political");
+  }, [layer, sectorAvailable]);
   const W = typeof window !== "undefined" ? window.innerWidth : 1600;
   const H = typeof window !== "undefined" ? window.innerHeight : 900;
-  const sectorBox = { x: Math.max(340, (W - 860) / 2), y: 170, w: Math.min(860, W - 420), h: Math.min(H - 320, 560) };
+  // сектор рисуем левее плавающих панелей карты (политическая карта/миникарта справа)
+  const sectorBox = { x: 344, y: 170, w: Math.min(460, Math.max(360, W - 900)), h: Math.min(H - 320, 480) };
   const sectorPos = (() => {
     const systems = sector?.systems ?? [];
     if (systems.length === 0) return [] as { sys: NonNullable<typeof sector>["systems"][number]; x: number; y: number }[];
@@ -399,10 +414,11 @@ export function MapLabels({ game, state, onPick, onEnter }: MapLabelsProps) {
     const ys = systems.map((v) => v.y);
     const minX = Math.min(...xs), maxX = Math.max(...xs), minY = Math.min(...ys), maxY = Math.max(...ys);
     const spanX = maxX - minX || 1, spanY = maxY - minY || 1;
+    // координаты ОТНОСИТЕЛЬНО контейнера .sf-sector-map (он смещён на x-8/y-54)
     return systems.map((sys) => ({
       sys,
-      x: sectorBox.x + ((sys.x - minX) / spanX) * sectorBox.w,
-      y: sectorBox.y + ((sys.y - minY) / spanY) * sectorBox.h,
+      x: 8 + ((sys.x - minX) / spanX) * sectorBox.w,
+      y: 54 + ((sys.y - minY) / spanY) * sectorBox.h,
     }));
   })();
   const sectorSelSys = sectorSel != null ? sector?.systems.find((v) => v.id === sectorSel) ?? null : null;
@@ -414,11 +430,80 @@ export function MapLabels({ game, state, onPick, onEnter }: MapLabelsProps) {
           onClick={() => setLayer("political")} data-testid="map-layer-political" aria-pressed={layer === "political"}>
           {L("Политическая", "Political")}
         </button>
-        <button type="button" className={"sf-map-layer-btn" + (layer === "sector" ? " sf-map-layer-btn--on" : "")}
-          onClick={() => setLayer("sector")} data-testid="map-layer-sector" aria-pressed={layer === "sector"}>
-          {L("Предел", "Expanse")}
-        </button>
+        {sectorAvailable && (
+          <button type="button" className={"sf-map-layer-btn" + (layer === "sector" ? " sf-map-layer-btn--on" : "")}
+            onClick={() => setLayer("sector")} data-testid="map-layer-sector" aria-pressed={layer === "sector"}>
+            {L("Предел", "Expanse")}
+          </button>
+        )}
       </div>
+      {layer === "political" && polMap && (() => {
+        const proj = game.mapProject;
+        if (!proj) return null;
+        const capitals = new Map(polMap.capitals.map((c) => [c.empireId, c]));
+        const lines = polMap.relations
+          .filter((r) => polFilters.includes(r.kind))
+          .map((r) => {
+            const a = capitals.get(r.a), b = capitals.get(r.b);
+            if (!a || !b) return null;
+            const pa = proj(a.x, a.y), pb = proj(b.x, b.y);
+            if (!pa || !pb) return null;
+            return { r, pa, pb };
+          })
+          .filter((v): v is { r: typeof polMap.relations[number]; pa: { x: number; y: number }; pb: { x: number; y: number } } => v !== null);
+        return (
+          <>
+            <svg className="sf-map-pol-lines" aria-hidden="true">
+              {lines.map(({ r, pa, pb }) => (
+                <line key={r.a + "-" + r.b} x1={pa.x} y1={pa.y} x2={pb.x} y2={pb.y}
+                  className={"sf-map-pol-line sf-map-pol-line--" + r.kind}
+                  data-testid={"map-pol-line-" + r.a + "-" + r.b} />
+              ))}
+            </svg>
+            {polMap.capitals.map((c) => {
+              const pt = proj(c.x, c.y);
+              if (!pt) return null;
+              return (
+                <button key={c.empireId} type="button"
+                  className={"sf-map-pol-capital sf-map-pol-capital--" + (c.status ?? "active") + (c.isPlayer ? " sf-map-pol-capital--player" : "")}
+                  style={{ left: pt.x, top: pt.y, borderColor: c.color }}
+                  data-testid={"map-pol-capital-" + c.empireId}
+                  title={c.name + " · " + (c.systemName ?? "") + " · " + (c.status ?? "")}
+                  aria-label={c.name + " · " + (c.status ?? "")}
+                  onClick={() => onPick(c.systemId)}
+                  onDoubleClick={() => window.dispatchEvent(new CustomEvent("sf:open-panel", { detail: "politics" }))}
+                >
+                  <span className="sf-map-pol-capital__dot" style={{ background: c.color }} />
+                  <span className="sf-map-pol-capital__name">{c.name}</span>
+                  <span className="sf-map-pol-capital__status" data-testid={"map-pol-status-" + c.empireId}>{c.status ?? "active"}</span>
+                </button>
+              );
+            })}
+            <div className="sf-map-pol-legend" data-testid="map-pol-legend">
+              <b>{L("Мировая политика", "World politics")}</b>
+              {(["war", "alliance", "federation", "trade", "vassal"] as const).map((kind) => {
+                const label: Record<string, [string, string]> = {
+                  war: ["война", "war"], alliance: ["союз", "alliance"], federation: ["федерация", "federation"],
+                  trade: ["торговля", "trade"], vassal: ["вассалитет", "vassal"],
+                };
+                return (
+                  <button key={kind} type="button"
+                    className={"sf-map-pol-filter" + (polFilters.includes(kind) ? " sf-map-pol-filter--on" : "")}
+                    data-testid={"map-pol-filter-" + kind}
+                    aria-pressed={polFilters.includes(kind)}
+                    onClick={() => setPolFilters((prev) => prev.includes(kind) ? prev.filter((k) => k !== kind) : [...prev, kind])}>
+                    {AI_RELATION_ICON[kind]} {L(label[kind][0], label[kind][1])}
+                  </button>
+                );
+              })}
+              <button type="button" className="sf-map-pol-open" data-testid="map-pol-open-panel"
+                onClick={() => window.dispatchEvent(new CustomEvent("sf:open-panel", { detail: "politics" }))}>
+                {L("Открыть панель", "Open panel")}
+              </button>
+            </div>
+          </>
+        );
+      })()}
       {layer === "political" && (() => {
         const dlc = world ? dlcOf(world) : null;
         const proj = game.mapProject;
@@ -445,7 +530,7 @@ export function MapLabels({ game, state, onPick, onEnter }: MapLabelsProps) {
         });
       })()}
       {layer === "sector" && (
-        <div className="sf-sector-map" data-testid="sector-map" style={{ left: sectorBox.x - 60, top: sectorBox.y - 54, width: sectorBox.w + 120, height: sectorBox.h + 90 }}>
+        <div className="sf-sector-map" data-testid="sector-map" style={{ left: sectorBox.x - 8, top: sectorBox.y - 54, width: sectorBox.w + 16, height: sectorBox.h + 90 }}>
           <div className="sf-sector-map__head">
             <b style={{ color: "#C9B8FF" }}>{L("Реликтовый Предел", "Relic Expanse")}</b>
             <span className="sf-meta">◈ {intText(ancients?.relics ?? 0)} · ◉ {intText(ancients?.cores ?? 0)}</span>
@@ -463,20 +548,24 @@ export function MapLabels({ game, state, onPick, onEnter }: MapLabelsProps) {
             const faction = SECTOR_FACTIONS.find((f) => f.id === sys.faction);
             const hazard = sys.hazard ? SECTOR_HAZARDS.find((h) => h.id === sys.hazard) : null;
             const color = region?.color ?? faction?.color ?? "#3A2B5C";
+            const known = sys.visited || sys.controlled;
             return (
               <button
                 key={sys.id}
                 type="button"
-                className={"sf-sector-label" + (sectorSel === sys.id ? " sf-sector-label--sel" : "")}
+                className={"sf-sector-label" + (sectorSel === sys.id ? " sf-sector-label--sel" : "") + (known ? "" : " sf-sector-label--fog")}
                 style={{ left: x, top: y, borderColor: color, color: faction?.hostile ? "#FFC2C2" : undefined }}
                 data-testid={"sector-label-" + sys.id}
-                aria-label={sys.name + " · " + (region?.ru ?? sys.region)}
-                title={sys.name + " · " + (region?.ru ?? sys.region) + (faction ? " · " + faction.ru : "") + (hazard ? " · " + hazard.ru : "")}
+                data-fog={known ? "false" : "true"}
+                aria-label={known ? sys.name + " · " + (region?.ru ?? sys.region) : L("Неизвестная система Предела", "Unknown Expanse system")}
+                title={known
+                  ? sys.name + " · " + (region?.ru ?? sys.region) + (faction ? " · " + faction.ru : "") + (hazard ? " · " + hazard.ru : "")
+                  : L("Неизвестная система Предела: скан/визит/квест раскроют её.", "Unknown Expanse system: scan/visit/quest reveals it.")}
                 onClick={() => setSectorSel(sys.id)}
               >
                 <span className="sf-sector-label__dot" style={{ background: color }} />
-                <span className="sf-nowrap">{sys.name}</span>
-                {(sys.relics > 0 || sys.cores > 0) && <span className="sf-meta">◈{sys.relics}◉{sys.cores}</span>}
+                <span className="sf-nowrap">{known ? sys.name : "?"}</span>
+                {known && (sys.relics > 0 || sys.cores > 0) && <span className="sf-meta">◈{sys.relics}◉{sys.cores}</span>}
                 {sys.controlled && <span className="sf-ok">✓</span>}
               </button>
             );
@@ -492,7 +581,7 @@ export function MapLabels({ game, state, onPick, onEnter }: MapLabelsProps) {
           {sectorSelSys && (
             <div className="sf-sector-map__info" data-testid="sector-map-info">
               <div className="sf-row">
-                <b>{sectorSelSys.name}</b>
+                <b>{sectorSelSys.visited || sectorSelSys.controlled ? sectorSelSys.name : L("Неизвестная система", "Unknown system")}</b>
                 <span className="sf-spacer" />
                 <span className="sf-meta">{L("регион", "region")}: {SECTOR_REGIONS.find((r) => r.id === sectorSelSys.region)?.ru ?? sectorSelSys.region}</span>
               </div>

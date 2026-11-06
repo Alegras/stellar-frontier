@@ -259,6 +259,22 @@ docs/                    ADR, демо-сценарий, приёмка
 - Арт: 24 портрета (4 персонажа × 6 эмоций) 128×128, сгенерированы локальной Qwen-Image 2.1 через ComfyUI; 31 ассет/177 КБ.
 - QA: dialogue-bugs 14/14, dlc-validate 32/32, dlc-test 24/24, e2e 53/53, unit 321/321, golden 1bfd9c71, acceptance §24.
 
+### Мировая политика и динамика ИИ (task-44)
+
+- AI-AI: договоры/войны/федерации/дань/вассалитет, новости (fg.aiWorld.news cap 50), без спама; getAiNews/getAiRelations/getAiWorldState/getAiWorldEvents/getAiWorldHud.
+- Динамика: collapse/absorb/merge с переносом систем/колоний/флотов/казны, dead; вассал интегрируется; федерация→содружество→единая империя; захват всех систем = уничтожение.
+- Игрок: call-to-arms/торговый блок/беженцы/вассалитет/вхождение — события с выборами; игрок не удаляется молча.
+- UI: панель «Мировая политика» (обзор/матрица/лента/события), HUD, модалка AI-события с приоритетом к диалогу, журнал politics.
+- QA: politics-verify 21/0/1, world-politics e2e 5/5, unit 335/335, e2e **61/61**, golden **8f52b0a6**, acceptance §25.
+
+### Финальная история/карта/арт v0.7 (task-46/47/48)
+
+- Story: 10 кампанийных сцен (9 mission + эпилог; включая teira/kira arcs), 88 outcome-узлов, 5 мостиков 0→I…IV→V в журнале; 6 актов/18 сцен/16 развилок/40 вариантов; l10n ru/en 1530↔1530.
+- Карта: политический слой AI-ИИ линий/столиц/статусов/фильтров, клик→панель; сектор Предела скрыт до revealSector и открывается после (слой+туман).
+- Комикс: DOM-пузыри поверх Qwen-арта (1280–2560), портрет/история без наложений.
+- Арт: 24 портрета (4×6) + фон/карточки/комикс, 31 ассет.
+- QA: story-verify 16/16, insight story-full 3/3, legacy-check 0 маркеров; e2e world-map/politics/world-politics/dlc-comic/dialogue-fixes зелёные; unit 338/338; e2e **64/64**; golden **8f52b0a6**; acceptance §27/§28; gift 2.97 МБ/verify 10/10, site синхронизирован.
+
 ## Портативная сборка (gift)
 
 `node <runtime>/pnpm.mjs build` → `tsx tools/make-portable.mjs` → `tsx tools/make-gift.mjs` → zip → `tsx tools/verify-portable.mjs` (file://, WebGL2, старт кампании, 0 ошибок консоли). Скрипты: tools/make-portable.mjs, tools/make-gift.mjs, tools/verify-portable.mjs.

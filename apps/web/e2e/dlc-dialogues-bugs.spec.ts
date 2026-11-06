@@ -207,11 +207,18 @@ test.describe("DLC диалоги · регрессии (task-40)", () => {
     await page.locator('[data-testid="dialogue-close"]').evaluate((el) => (el as HTMLElement).click());
     await page.waitForTimeout(300);
     await gameEval(page, (g) => {
-      const fg = g.world.fg as unknown as { campaign: { act: number }; narrative?: { pending: Array<unknown> } };
+      const fg = g.world.fg as unknown as {
+        campaign: { act: number; missions: Record<string, { status?: string }> };
+        narrative?: { pending: Array<unknown> };
+        dlc?: { flags: Record<string, number> };
+      };
       fg.campaign.act = 2;
+      // новая актовая сцена триггерится завершённой миссией main_02_council
+      fg.campaign.missions["main_02_council"] = { ...(fg.campaign.missions["main_02_council"] ?? {}), status: "completed" };
+      if (fg.dlc) delete fg.dlc.flags["campaign_scene:main_02_council"];
       if (fg.narrative) fg.narrative.pending = [];
     });
-    // кампанийные диалоги стартуют в campaignPhase на такте
+    // актовые сцены стартуют в dlcPhase на такте
     for (let i = 0; i < 6; i++) {
       if (await page.locator('[data-testid="dialogue-overlay"]').isVisible().catch(() => false)) break;
       await advanceTicks(page, 2);
@@ -219,13 +226,13 @@ test.describe("DLC диалоги · регрессии (task-40)", () => {
     }
     await expect(page.locator('[data-testid="dialogue-overlay"]')).toBeVisible({ timeout: 10_000 });
     const ctx = await gameEval(page, (g) => g.world.fg?.dlc?.dialogue ? { scene: g.world.fg.dlc.dialogue.sceneId, active: g.world.fg.dlc.dialogue.active } : null);
-    expect(ctx?.scene).toBe("dlg_campaign_act2");
-    await playDialogue(page, ["fleet_first", "trust_admiral"]);
+    expect(ctx?.scene).toBe("dlg_campaign_act2_council");
+    await playDialogue(page, ["centralize", "council_now", "trust_admiral"]);
     const camp = await gameEval(page, (g) => {
       const fg = g.world.fg as unknown as { campaign: { flags: Record<string, number>; branch: string } };
       return { flags: Object.keys(fg.campaign.flags).filter((f) => f.includes("camp_") || f.includes("dlc_campaign")), branch: fg.campaign.branch };
     });
-    expect(camp.flags).toEqual(expect.arrayContaining(["camp_fleet_first", "camp_trust_admiral"]));
+    expect(camp.flags).toEqual(expect.arrayContaining(["camp_central_fleet", "camp_fleet_first", "camp_trust_admiral"]));
     await advanceTicks(page, 4);
     expect(await page.locator('[data-testid="dialogue-overlay"]').isVisible().catch(() => false), "act2 диалог не повторяется").toBe(false);
   });

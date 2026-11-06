@@ -42,6 +42,15 @@ export function App() {
   const [empireTab, setEmpireTab] = useState<EmpireTab | null>(null);
   const [fullPanel, setFullPanel] = useState<PanelId | null>(null);
   const [panelMenu, setPanelMenu] = useState(false);
+  // карта может попросить открыть панель (клик по столице/легенде мировой политики)
+  useEffect(() => {
+    const onOpen = (ev: Event) => {
+      const id = (ev as CustomEvent).detail as PanelId | undefined;
+      if (id === "politics") { setPanelMenu(false); setFullPanel("politics"); }
+    };
+    window.addEventListener("sf:open-panel", onOpen);
+    return () => window.removeEventListener("sf:open-panel", onOpen);
+  }, []);
   const [mp, setMp] = useState<MpState | null>(null);
   const [lobbyOpen, setLobbyOpen] = useState(false);
   const netRef = useRef<ReturnType<typeof createNetClient> | null>(null);
