@@ -1289,3 +1289,11 @@
   .sf-menu-bg__gif { display: none !important; }
   .sf-menu-bg__poster { display: block !important; }
 }
+/* карта: траектории флотов и домашняя система */
+.sf-map-fleet-lines { position:absolute; inset:0; pointer-events:none; overflow:visible; width:100%; height:100%; z-index:4; }
+.sf-map-fleet-route { fill:none; stroke:#4FC3F7; stroke-width:1.5; stroke-dasharray:5 4; opacity:.75; }
+.sf-map-fleet-halo { fill:#4FC3F7; opacity:.18; }
+.sf-map-fleet-icon { fill:#9FE7FF; stroke:#05070E; stroke-width:1; }
+.sf-map-fleet-label { fill:#BFEFFF; font-size:11px; font-family:Consolas,monospace; paint-order:stroke; stroke:#05070E; stroke-width:3px; }
+.sf-map-label--home { border-color:#F5C542 !important; box-shadow:0 0 0 1px #F5C542, 0 0 12px #F5C54266; }
+.sf-map-label__home { color:#F5C542; border:1px solid #F5C542; padding:0 2px; margin-left:2px; font-size:9px; line-height:1.2; }
