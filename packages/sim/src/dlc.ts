@@ -1667,13 +1667,15 @@ export function getDlcCharacters(): CharacterDef[] {
   return dlcCatalog().characters;
 }
 
-/** 3D-маркеры сигналов квестов в системе. */
+/** 3D-маркеры сигналов квестов в системе: тип цели берётся из worldTarget квеста. */
 export interface DlcSignalMarker3D {
   id: string;
   questId: string;
   systemId: number;
-  bodyKind: "planet" | "moon" | "station";
+  bodyKind: "planet" | "moon" | "station" | "wreck" | "colony" | "ship";
   bodyId: number;
+  parentPlanetId?: number;
+  labelRu: string;
   titleKey: string;
 }
 
@@ -1686,12 +1688,33 @@ export function dlcSignalMarkers3D(world: World, systemId?: number): DlcSignalMa
     if (systemId !== undefined && signal.systemId !== systemId) continue;
     const system = world.systems[signal.systemId];
     if (!system) continue;
+    const quest = DLC_QUESTS.find((q) => q.id === signal.questId);
+    const target = quest?.worldTarget;
+    const kind = target?.kind ?? "wreck";
+    const labelRu = target?.labelRu ?? "Сигнал квеста";
     const planets = system.planets.filter((p) => p.colonyId === 0);
-    if (planets.length > 0) {
-      const p = planets[hashOf(world.seed, signal.questId, "marker") % planets.length]!;
-      out.push({ id: signal.id, questId: signal.questId, systemId: signal.systemId, bodyKind: p.isMoon ? "moon" : "planet", bodyId: p.id, titleKey: "dlc.marker.signal" });
+    const moons = planets.filter((p) => p.isMoon);
+    const normal = planets.filter((p) => !p.isMoon);
+    if (kind === "moon") {
+      if (moons.length > 0) {
+        const p = moons[hashOf(world.seed, signal.questId, "moon") % moons.length]!;
+        out.push({ id: signal.id, questId: signal.questId, systemId: system.id, bodyKind: "moon", bodyId: p.id, parentPlanetId: p.parentPlanetId, labelRu, titleKey: "dlc.marker.signal" });
+      } else if (normal.length > 0) {
+        const p = normal[hashOf(world.seed, signal.questId, "parent") % normal.length]!;
+        out.push({ id: signal.id, questId: signal.questId, systemId: system.id, bodyKind: "moon", bodyId: 0, parentPlanetId: p.id, labelRu, titleKey: "dlc.marker.signal" });
+      }
+    } else if (kind === "planet" || kind === "colony") {
+      if (normal.length > 0) {
+        const p = normal[hashOf(world.seed, signal.questId, "planet") % normal.length]!;
+        out.push({ id: signal.id, questId: signal.questId, systemId: system.id, bodyKind: kind, bodyId: p.id, labelRu, titleKey: "dlc.marker.signal" });
+      }
+    } else if (kind === "station") {
+      out.push({ id: signal.id, questId: signal.questId, systemId: system.id, bodyKind: "station", bodyId: system.station?.id ?? 0, labelRu, titleKey: "dlc.marker.signal" });
+    } else if (normal.length > 0) {
+      const p = normal[hashOf(world.seed, signal.questId, "object") % normal.length]!;
+      out.push({ id: signal.id, questId: signal.questId, systemId: system.id, bodyKind: kind, bodyId: p.id, labelRu, titleKey: "dlc.marker.signal" });
     } else {
-      out.push({ id: signal.id, questId: signal.questId, systemId: signal.systemId, bodyKind: "station", bodyId: system.station?.id ?? 0, titleKey: "dlc.marker.signal" });
+      out.push({ id: signal.id, questId: signal.questId, systemId: system.id, bodyKind: kind, bodyId: system.station?.id ?? 0, labelRu, titleKey: "dlc.marker.signal" });
     }
   }
   return out;

@@ -34,7 +34,7 @@ import { investigateAnomaly, archaeologyStep } from "./anomalies";
 import { buildMegastructure } from "./megastructures";
 import { createDesign, deleteDesign, findCustomDesign, saveDesign, updateDesign } from "./designs";
 import { aiWorldEventChoice } from "./aiWorld";
-import { ensureFg } from "./fullgame";
+import { consumePathfinderStock, ensureFg, pathfinderStockAt } from "./fullgame";
 import { onContractScan, onContractJump } from "./contracts";
 import { empireModifiers } from "./modifiers";
 import { colonyCostFor, outpostCostFor } from "./economy";
@@ -199,12 +199,10 @@ export function applyCommandAs(world: World, empireId: number, cmd: Command): Co
       const designFleetPower = custom ? custom.fleetPower : stock!.fleetPower;
       const designCostAlloys = custom ? custom.costAlloys : stock!.costAlloys;
       const designBuildTicks = custom ? custom.buildTicks : stock!.buildTicks;
-      const fgBuy = ensureFg(world);
-      const pathfinderStock = Math.max(0, fgBuy.campaign.flags["pathfinder_stock"] ?? 0);
       if (stock && stock.requiredTech && !empire.techs.completed.includes(stock.requiredTech)) {
-        const canBuy = Boolean(cmd.buy) && stock.id === "pathfinder_ark" && pathfinderStock > 0;
-        if (!canBuy) return deny("Технология корабля не исследована");
-        fgBuy.campaign.flags["pathfinder_stock"] = pathfinderStock - 1;
+        const canBuy = Boolean(cmd.buy) && stock.id === "pathfinder_ark" && pathfinderStockAt(world, cmd.systemId);
+        if (!canBuy) return deny("Технология корабля не исследована; на этой верфи нет редкого «Путевода»");
+        consumePathfinderStock(world, cmd.systemId);
       }
       const count = Math.floor(cmd.count);
       if (!Number.isFinite(count) || count < 1) return deny("Некорректное количество");

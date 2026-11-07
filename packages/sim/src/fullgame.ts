@@ -598,7 +598,7 @@ export function createFullGameState(world: World, options?: { raceId?: string; d
       artifactCount: 0,
       secretLine: 0,
       locks: [],
-      flags: { pathfinder_stock: 1 },
+      flags: {},
       tutorialStep: 0,
       lastStoryTick: 0,
     },
@@ -623,6 +623,12 @@ export function createFullGameState(world: World, options?: { raceId?: string; d
     pendingBattle: null,
   };
   world.fg = fg;
+  for (const system of world.systems) {
+    if (!system.station?.hasShipyard) continue;
+    if ((world.seed * 13 + system.id * 29) % 11 !== 0) continue;
+    fg.campaign.flags["pathfinder_stock:" + system.id] = 1;
+    fg.campaign.flags["pathfinder_stock_until:" + system.id] = 2500;
+  }
   for (const empire of world.empires) advancedOf(world, empire.id);
   for (const system of world.systems) {
     if (system.station) {
@@ -656,4 +662,32 @@ export function createFullGameState(world: World, options?: { raceId?: string; d
 export function pushJournal(fg: FullGameState, tick: number, kind: string, textRu: string, missionId?: string): void {
   fg.journal.push({ tick, kind, textRu, missionId });
   if (fg.journal.length > 300) fg.journal.splice(0, fg.journal.length - 300);
+}
+/** Редкий «Путевод» на конкретной верфи: запас с ограниченным сроком. */
+export function pathfinderStockAt(world: World, systemId: number): boolean {
+  const fg = ensureFg(world);
+  const until = fg.campaign.flags["pathfinder_stock_until:" + systemId] ?? 0;
+  return (fg.campaign.flags["pathfinder_stock:" + systemId] ?? 0) > 0 && until > world.tick;
+}
+
+/** Списать редкий корабль с верфи системы. */
+export function consumePathfinderStock(world: World, systemId: number): boolean {
+  if (!pathfinderStockAt(world, systemId)) return false;
+  const fg = ensureFg(world);
+  fg.campaign.flags["pathfinder_stock:" + systemId] = 0;
+  return true;
+}
+
+/** Периодическое обновление редких предложений на верфях (раз в 400 тактов). */
+export function refreshPathfinderStock(world: World): void {
+  if (world.tick % 400 !== 0) return;
+  const fg = ensureFg(world);
+  for (const system of world.systems) {
+    if (!system.station?.hasShipyard) continue;
+    if (pathfinderStockAt(world, system.id)) continue;
+    const roll = (world.seed * 31 + system.id * 17 + world.tick * 7) % 100;
+    if (roll >= 9) continue;
+    fg.campaign.flags["pathfinder_stock:" + system.id] = 1;
+    fg.campaign.flags["pathfinder_stock_until:" + system.id] = world.tick + 900;
+  }
 }

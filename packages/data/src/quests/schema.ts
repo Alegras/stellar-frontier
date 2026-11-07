@@ -19,6 +19,11 @@ export interface QuestStepDef {
   titleKey: string;
 }
 
+export interface QuestWorldTargetDef {
+  kind: "planet" | "moon" | "station" | "wreck" | "colony" | "ship";
+  labelRu: string;
+}
+
 export interface QuestSourceDef {
   channel: "story_message" | "board" | "rumor" | "signal";
   npc?: string;
@@ -56,6 +61,8 @@ export interface QuestDef {
   titleKey: string;
   summaryKey: string;
   source: QuestSourceDef;
+  /** цель для 3D-маркера и объекта квеста */
+  worldTarget?: QuestWorldTargetDef;
   steps: QuestStepDef[];
   rewards: QuestRewardDef;
   failPolicy: "soft" | "hard" | "none";

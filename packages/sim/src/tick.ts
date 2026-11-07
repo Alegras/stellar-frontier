@@ -23,7 +23,7 @@ import { warPhase } from "./war";
 import { marketExtPhase } from "./market";
 import { routesPhase } from "./routes";
 import { contractsPhase, onContractJump } from "./contracts";
-import { ensureFg } from "./fullgame";
+import { ensureFg, refreshPathfinderStock } from "./fullgame";
 import { ancientsPhase } from "./ancients";
 import { dlcPhase } from "./dlc";
 import { campaignPhase } from "./campaign";
@@ -167,6 +167,7 @@ function fleetsPhase(world: World): void {
   for (const system of world.systems) {
     if (system.ownerId !== 0 && !system.visibleTo.includes(system.ownerId)) system.visibleTo.push(system.ownerId);
   }
+  refreshPathfinderStock(world);
   // автобой при контакте враждебных флотов; бой с игроком ждёт выбора режима (L0).
   const fgTick = ensureFg(world);
   if (fgTick.pendingBattle) {

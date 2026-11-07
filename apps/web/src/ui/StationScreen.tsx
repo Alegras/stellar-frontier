@@ -3,6 +3,7 @@ import { BALANCE, DESIGNS, MISSION_BY_ID } from "@sf/data";
 import { RESOURCE_ORDER } from "@sf/sim";
 import type { ResourceId } from "@sf/sim";
 import type { Game } from "../game/Game";
+import { pathfinderStockAt } from "@sf/sim";
 import type { GameState } from "../game/types";
 import { resourceColor, resourceIcon, resourceLabel } from "../game/format";
 import { Badge, Bar, Btn, KV, Panel, Sep, TabBar } from "./controls";
@@ -65,7 +66,7 @@ export function StationScreen({ game, state }: { game: Game; state: GameState })
   const missions = world.missions
     .filter((m) => m.stationId === station.id || m.systemId === system.id)
     .filter((m) => !m.completed && !m.failed);
-  const pathfinderStock = Math.max(0, world.fg?.campaign.flags["pathfinder_stock"] ?? 0);
+  const pathfinderStock = pathfinderStockAt(world, system.id) ? 1 : 0;
   const designs = DESIGNS.filter((d) => {
     const techOk = !d.requiredTech || emp.techs.completed.includes(d.requiredTech);
     return (techOk || (d.id === "pathfinder_ark" && pathfinderStock > 0)) && (d.classId === "flagship" ? false : true);

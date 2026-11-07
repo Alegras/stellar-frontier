@@ -74,7 +74,11 @@
     "nextHint": "q_pro_02_quiet_dock",
     "effectLabels": [
       "quest.q1.fx.summary"
-    ]
+    ],
+    "worldTarget": {
+      "kind": "wreck",
+      "labelRu": "Обломки станции «Свет-1»"
+    }
   },
   {
     "id": "q_pro_02_quiet_dock",
@@ -194,7 +198,11 @@
           "quest.q2.fx.escort"
         ]
       }
-    ]
+    ],
+    "worldTarget": {
+      "kind": "station",
+      "labelRu": "Тихий док «Свет-1»"
+    }
   },
   {
     "id": "q_pro_03_salt_ash",
@@ -249,7 +257,11 @@
     },
     "failPolicy": "soft",
     "checkpoint": false,
-    "nextHint": "q_pro_04_courier"
+    "nextHint": "q_pro_04_courier",
+    "worldTarget": {
+      "kind": "colony",
+      "labelRu": "Заброшенная колония «Соль-Пепел»"
+    }
   },
   {
     "id": "q_pro_04_courier",
@@ -300,7 +312,11 @@
     },
     "failPolicy": "soft",
     "checkpoint": false,
-    "nextHint": "q_pro_05_inspection"
+    "nextHint": "q_pro_05_inspection",
+    "worldTarget": {
+      "kind": "ship",
+      "labelRu": "Курьерский корабль"
+    }
   },
   {
     "id": "q_pro_05_inspection",
@@ -406,7 +422,11 @@
         ]
       }
     ],
-    "nextHint": "q_pro_07_first_frontier"
+    "nextHint": "q_pro_07_first_frontier",
+    "worldTarget": {
+      "kind": "station",
+      "labelRu": "Инспекционный узел"
+    }
   },
   {
     "id": "q_pro_06_echo_core",
@@ -506,7 +526,11 @@
           "quest.q6.fx.leader"
         ]
       }
-    ]
+    ],
+    "worldTarget": {
+      "kind": "moon",
+      "labelRu": "Луна с эхом ядра"
+    }
   },
   {
     "id": "q_pro_07_first_frontier",
@@ -567,7 +591,11 @@
       ]
     },
     "failPolicy": "soft",
-    "checkpoint": true
+    "checkpoint": true,
+    "worldTarget": {
+      "kind": "planet",
+      "labelRu": "Планета Фронтира"
+    }
   },
   {
     "id": "q_side_rumor_01",
@@ -612,6 +640,10 @@
       ]
     },
     "failPolicy": "none",
-    "checkpoint": false
+    "checkpoint": false,
+    "worldTarget": {
+      "kind": "wreck",
+      "labelRu": "Старые обломки"
+    }
   }
 ]

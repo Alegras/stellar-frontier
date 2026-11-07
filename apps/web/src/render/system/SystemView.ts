@@ -88,7 +88,7 @@ export class SystemView implements SceneView {
   private readonly enemyShips: EnemyShip[] = [];
   private readonly asteroids: { id: number; mesh: THREE.Mesh; hp: number; radiusM: number }[] = [];
   private readonly salvage: { mesh: THREE.Mesh; credits: number; alloys: number }[] = [];
-  private readonly questMarkers: { mesh: THREE.Mesh; signalId: string; name: string; target: THREE.Vector3 }[] = [];
+  private readonly questMarkers: { mesh: THREE.Mesh; object: THREE.Object3D | null; signalId: string; name: string; target: THREE.Vector3 }[] = [];
 
   private readonly shipLengthM: number;
   private readonly laserWeapons: WeaponDef[] = [];
@@ -927,18 +927,73 @@ export class SystemView implements SceneView {
     }
   }
 
-  /** 3D-маркеры сигналов квестов: зелёный ромб на цели. */
+  private bodyById(id: number | undefined) {
+    return id == null ? null : (this.sysScene.bodies.find((b) => b.planet.id === id) ?? null);
+  }
+
+  private clearQuestMarkers(): void {
+    for (const marker of this.questMarkers) {
+      this.scene.remove(marker.mesh);
+      if (marker.object) this.scene.remove(marker.object);
+    }
+    this.questMarkers.length = 0;
+  }
+
+  private buildQuestObject(kind: string, pos: THREE.Vector3): THREE.Object3D | null {
+    const group = new THREE.Group();
+    const dark = new THREE.MeshLambertMaterial({ color: PAL.metalShadow, flatShading: true });
+    const metal = new THREE.MeshLambertMaterial({ color: PAL.metal2, flatShading: true });
+    if (kind === "moon") {
+      const moon = new THREE.Mesh(new THREE.SphereGeometry(1300, 16, 12), new THREE.MeshLambertMaterial({ color: PAL.metal1, flatShading: true }));
+      group.add(moon);
+    } else if (kind === "wreck") {
+      for (let i = 0; i < 6; i++) {
+        const piece = new THREE.Mesh(new THREE.BoxGeometry(180 + i * 35, 40 + i * 12, 90 + i * 20), i % 2 ? dark : metal);
+        piece.position.set((i - 2) * 140, (i % 3 - 1) * 70, (i % 2) * 160 - 80);
+        piece.rotation.set(i * 0.7, i * 1.1, i * 0.4);
+        group.add(piece);
+      }
+    } else if (kind === "colony") {
+      const base = new THREE.Mesh(new THREE.CylinderGeometry(160, 220, 60, 8), metal);
+      const dome = new THREE.Mesh(new THREE.SphereGeometry(130, 10, 6, 0, Math.PI * 2, 0, Math.PI / 2), new THREE.MeshLambertMaterial({ color: PAL.shield, flatShading: true }));
+      dome.position.y = 30;
+      group.add(base, dome);
+    } else if (kind === "ship") {
+      const hull = new THREE.Mesh(new THREE.BoxGeometry(120, 35, 260), metal);
+      const wing = new THREE.Mesh(new THREE.BoxGeometry(220, 12, 90), dark);
+      const engine = new THREE.Mesh(new THREE.BoxGeometry(40, 25, 60), new THREE.MeshBasicMaterial({ color: PAL.shield }));
+      engine.position.z = -150;
+      group.add(hull, wing, engine);
+    } else {
+      return null;
+    }
+    group.position.copy(pos);
+    this.scene.add(group);
+    return group;
+  }
+
+  /** 3D-маркеры сигналов квестов: тип цели и объект берутся из квеста. */
   private spawnQuestMarkers(): void {
     const world = this.safeWorld();
     if (!world) return;
+    this.clearQuestMarkers();
     for (const def of dlcSignalMarkers3D(world, this.systemId)) {
-      const body = this.sysScene.bodies.find((b) => b.planet.id === def.bodyId);
-      const pos = body ? body.position.clone() : (this.sysScene.station ? this.sysScene.station.group.position.clone() : new THREE.Vector3());
+      let body = this.bodyById(def.bodyId);
+      let pos = body ? body.position.clone() : (this.sysScene.station ? this.sysScene.station.group.position.clone() : new THREE.Vector3());
+      if (def.bodyKind === "moon" && !body && def.parentPlanetId != null) {
+        const parent = this.bodyById(def.parentPlanetId);
+        if (parent) pos = parent.position.clone().add(new THREE.Vector3(parent.radiusM * 3.2, 600, 0));
+      } else if (def.bodyKind === "colony" && body) {
+        pos.add(new THREE.Vector3(0, body.radiusM + 80, 0));
+      } else if ((def.bodyKind === "wreck" || def.bodyKind === "ship") && body) {
+        pos.add(new THREE.Vector3(body.radiusM * 1.6, 400, body.radiusM * 1.2));
+      }
+      const object = this.buildQuestObject(def.bodyKind, pos);
       const mesh = new THREE.Mesh(new THREE.OctahedronGeometry(120, 0), new THREE.MeshBasicMaterial({ color: 0x6be675, transparent: true, opacity: 0.95 }));
       mesh.position.copy(pos);
-      mesh.position.y += 220;
+      mesh.position.y += 260;
       this.scene.add(mesh);
-      this.questMarkers.push({ mesh, signalId: def.id, name: body ? body.planet.name : this.system.name, target: pos });
+      this.questMarkers.push({ mesh, object, signalId: def.id, name: def.labelRu, target: pos });
     }
   }
 
@@ -957,6 +1012,7 @@ export class SystemView implements SceneView {
       if (r.ok) {
         this.game.toast(r.messageRu ?? "Квест начат", "good");
         this.scene.remove(marker.mesh);
+        if (marker.object) this.scene.remove(marker.object);
         const idx = this.questMarkers.indexOf(marker);
         if (idx >= 0) this.questMarkers.splice(idx, 1);
         this.spawnQuestMarkers();

@@ -598,6 +598,60 @@ export class SystemScene {
     pad.position.set(0, -330, 0);
     group.add(pad);
 
+
+    // Варианты силуэта станции по типу системы/станции.
+    const kind = station.kind;
+    if (kind === "shipyard") {
+      const truss = this.track(new THREE.BoxGeometry(1500, 18, 30));
+      for (const sign of [-1, 1]) {
+        const arm = new THREE.Mesh(truss, shadow); arm.position.set(0, -120, sign * 380); group.add(arm);
+        const dock = new THREE.Mesh(this.track(new THREE.BoxGeometry(300, 60, 120)), metal1);
+        dock.position.set(0, -120, sign * 520); group.add(dock);
+      }
+      for (const x of [-420, 420]) {
+        const crane = new THREE.Mesh(this.track(new THREE.CylinderGeometry(10, 10, 360, 4)), gold);
+        crane.position.set(x, -10, 0); group.add(crane);
+      }
+    } else if (kind === "mining") {
+      for (let i = 0; i < 4; i++) {
+        const a = (i / 4) * Math.PI * 2;
+        const arm = new THREE.Mesh(this.track(new THREE.BoxGeometry(420, 42, 42)), shadow);
+        arm.position.set(Math.cos(a) * 380, -40, Math.sin(a) * 380); arm.rotation.y = -a; group.add(arm);
+        const silo = new THREE.Mesh(this.track(new THREE.CylinderGeometry(80, 100, 260, 6)), metal2);
+        silo.position.set(Math.cos(a) * 560, -30, Math.sin(a) * 560); group.add(silo);
+      }
+      const drill = new THREE.Mesh(this.track(new THREE.ConeGeometry(70, 420, 6)), gold);
+      drill.position.set(0, -360, 0); drill.rotation.x = Math.PI; group.add(drill);
+    } else if (kind === "research") {
+      const lab = new THREE.Mesh(this.track(new THREE.SphereGeometry(230, 12, 8)), metal1);
+      lab.position.set(0, 120, 0); group.add(lab);
+      const dish = new THREE.Mesh(this.track(new THREE.CylinderGeometry(300, 90, 60, 16)), gold);
+      dish.position.set(0, 360, 0); dish.rotation.x = 0.35; group.add(dish);
+      for (let i = 0; i < 3; i++) {
+        const ring = new THREE.Mesh(this.track(new THREE.TorusGeometry(330 + i * 22, 5, 4, 28)), this.basic({ color: PAL.shield }));
+        ring.position.y = 110 + i * 15; ring.rotation.x = Math.PI / 2; group.add(ring);
+      }
+    } else if (kind === "trade") {
+      for (let i = 0; i < 6; i++) {
+        const a = (i / 6) * Math.PI * 2;
+        const pod = new THREE.Mesh(this.track(new THREE.BoxGeometry(120, 90, 120)), i % 2 ? gold : metal2);
+        pod.position.set(Math.cos(a) * 300, -220, Math.sin(a) * 300); group.add(pod);
+      }
+    } else if (kind === "pirate") {
+      for (let i = 0; i < 6; i++) {
+        const a = (i / 6) * Math.PI * 2;
+        const spike = new THREE.Mesh(this.track(new THREE.ConeGeometry(45, 420, 4)), shadow);
+        spike.position.set(Math.cos(a) * 430, 0, Math.sin(a) * 430);
+        spike.rotation.z = Math.PI / 2; spike.rotation.y = -a; group.add(spike);
+      }
+    } else {
+      for (let i = 0; i < 4; i++) {
+        const a = (i / 4) * Math.PI * 2;
+        const block = new THREE.Mesh(this.track(new THREE.BoxGeometry(180, 120, 260)), metal2);
+        block.position.set(Math.cos(a) * 360, 40, Math.sin(a) * 360); block.rotation.y = -a; group.add(block);
+      }
+    }
+
     // ходовые огни по ободу и «окна» хаба — станцию видно и на 10 км
     const lightGeo = this.track(new THREE.BoxGeometry(46, 16, 16));
     const lightMat = this.basic({ color: PAL.gold });
