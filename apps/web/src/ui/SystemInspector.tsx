@@ -5,7 +5,14 @@ import { L, STATION_KIND_EN, tr } from "./fg";
 import {
   costText, findColonyByPlanet, findSystem, fleetsInSystem, enemyFleetsInSystem, isKnown, num, pctText, PLANET_RU, POI_RU, popsOf, playerEmpire, STATION_RU, STAR_RU, fleetCap, empireFleetPower, worldOf, intText, rnd } from "./util";
 
-function gridBattleFlagOn(): boolean { try { return localStorage.getItem("sf.gridBattle") === "1"; } catch { return false; } }
+function gridBattleFlagOn(world: { flags: Record<string, number> } | null): boolean {
+  try {
+    const ls = localStorage.getItem("sf.gridBattle");
+    if (ls === "0") return false;
+    if (ls === "1") return true;
+  } catch { /* noop */ }
+  return (world?.flags.grid_battle ?? 1) !== 0;
+}
 
 export function SystemInspector({ game, state }: { game: Game; state: GameState }) {
   const world = worldOf(game);
@@ -91,7 +98,7 @@ export function SystemInspector({ game, state }: { game: Game; state: GameState 
         </div>
       )}
 
-      {myFleets.length > 0 && (enemies.length > 0 || hostileFleets.length > 0) && gridBattleFlagOn() && (
+      {myFleets.length > 0 && (enemies.length > 0 || hostileFleets.length > 0) && gridBattleFlagOn(world) && (
         <Btn size="sm" variant="primary" testId="btn-grid-battle"
           title={L("Только стратегический слой L0; 6DOF-бой в системе не меняется", "Strategic L0 only; in-system 6DOF stays unchanged")}
           onClick={() => {

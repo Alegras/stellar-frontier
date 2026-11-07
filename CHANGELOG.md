@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## [0.8.0.1] — 2026-11-08 · M5b flag default ON
+
+- UI-вход в сетку включён по умолчанию для новых партий (`world.flags.grid_battle`), localStorage может отключить ("0") или включить ("1").
+- Planet colonization/flag tests, targeted grid e2e 3/3.
+
 ## [0.8.0] — 2026-11-08 · M5b «Сетка командования»
 
 - Новый слой L0: @sf/battle-grid — детерминированная пошаговая битва 15×11 (hex odd-r, pointy-top), 8 классов/16 способностей/6 террейнов/3 AI-профиля/3 сценария.
