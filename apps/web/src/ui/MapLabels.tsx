@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { Fleet, World } from "@sf/sim";
+import { findPath, fuelOf, pathFuelCost } from "@sf/sim";
 import type { Game } from "../game/Game";
 import type { GameState } from "../game/types";
 
@@ -508,33 +509,62 @@ export function MapLabels({ game, state, onPick, onEnter }: MapLabelsProps) {
         const proj = game.mapProject;
         if (!proj) return null;
         const pid = world.playerEmpireId;
-        const moving = world.fleets.filter((f) => f.empireId === pid && f.ships.length > 0 && f.status === "moving" && f.path.length > 0);
-        if (moving.length === 0) return null;
         const jumpTicks = Math.max(1, world.balance?.fleetSpeedTicksPerJump ?? 1);
+        const selectedFleetId = (game.getState?.() as { selectedFleetId?: number | null } | undefined)?.selectedFleetId ?? null;
+        const visibleFleets = world.fleets.filter((f) => f.ships.length > 0 && (f.empireId === pid || world.systems[f.systemId]?.visibleTo.includes(pid)));
+        if (visibleFleets.length === 0) return null;
+        const own = visibleFleets.filter((f) => f.empireId === pid);
+        const enemy = visibleFleets.filter((f) => f.empireId !== pid);
+        const selected = selectedFleetId != null ? own.find((f) => f.id === selectedFleetId) ?? null : null;
+        const fuelReach = new Set<number>();
+        if (selected) {
+          for (const sys of world.systems) {
+            const path = findPath(world, selected.systemId, sys.id);
+            if (path && path.length > 0 && pathFuelCost(world, selected, path) <= fuelOf(selected)) fuelReach.add(sys.id);
+          }
+        }
+        const marker = (f: Fleet, x: number, y: number, label: string, cls: string) => (
+          <g key={"fleet-" + f.id} data-testid={"map-fleet-" + f.id} className={cls}>
+            <circle cx={x} cy={y} r={9} className="sf-map-fleet-halo" />
+            <polygon points={x + "," + (y - 7) + " " + (x + 6) + "," + (y + 6) + " " + (x - 6) + "," + (y + 6)} className="sf-map-fleet-icon" />
+            <text x={x + 11} y={y + 4} className="sf-map-fleet-label">{label}</text>
+          </g>
+        );
         return (
           <svg className="sf-map-fleet-lines" aria-hidden="true" data-testid="map-fleets">
-            {moving.map((f) => {
-              const current = world.systems[f.systemId];
-              const targetId = f.path[Math.min(f.pathIndex, f.path.length - 1)];
-              const target = world.systems[targetId];
-              if (!current || !target) return null;
-              const p0 = proj(current.x, current.y), p1 = proj(target.x, target.y);
-              if (!p0 || !p1) return null;
-              const fraction = 1 - Math.min(1, Math.max(0, f.jumpTicksLeft / jumpTicks));
-              const x = p0.x + (p1.x - p0.x) * fraction;
-              const y = p0.y + (p1.y - p0.y) * fraction;
+            {[...fuelReach].map((id) => {
+              const sys = world.systems[id]; if (!sys) return null;
+              const p = proj(sys.x, sys.y); if (!p) return null;
+              return <circle key={"fuel-" + id} cx={p.x + 10} cy={p.y - 18} r={4} className="sf-map-fuel-dot" />;
+            })}
+            {own.map((f) => {
+              const current = world.systems[f.systemId]; if (!current) return null;
+              let x = 0, y = 0, label = "▲ " + f.name + " · ⛽ " + fuelOf(f) + "/" + (f.fuelMax ?? "?");
+              if (f.status === "moving" && f.path.length > 0) {
+                const target = world.systems[f.path[Math.min(f.pathIndex, f.path.length - 1)]];
+                if (!target) return null;
+                const p0 = proj(current.x, current.y), p1 = proj(target.x, target.y);
+                if (!p0 || !p1) return null;
+                const fraction = 1 - Math.min(1, Math.max(0, f.jumpTicksLeft / jumpTicks));
+                x = p0.x + (p1.x - p0.x) * fraction; y = p0.y + (p1.y - p0.y) * fraction;
+                label += " → " + target.name;
+              } else {
+                const p = proj(current.x, current.y); if (!p) return null; x = p.x + 14; y = p.y - 18;
+              }
               const route = [current, ...f.path.slice(Math.min(f.pathIndex, f.path.length - 1)).map((id) => world.systems[id])]
                 .filter((sys): sys is NonNullable<typeof sys> => Boolean(sys))
-                .map((sys) => proj(sys.x, sys.y))
-                .filter((p): p is { x: number; y: number } => p !== null);
+                .map((sys) => proj(sys.x, sys.y)).filter((p): p is { x: number; y: number } => p !== null);
               return (
-                <g key={"fleet-" + f.id} data-testid={"map-fleet-" + f.id}>
-                  {route.length > 1 && <polyline className="sf-map-fleet-route" points={route.map((p) => p.x + "," + p.y).join(" ")} />}
-                  <circle cx={x} cy={y} r={8} className="sf-map-fleet-halo" />
-                  <polygon points={x + "," + (y - 6) + " " + (x + 5) + "," + (y + 5) + " " + (x - 5) + "," + (y + 5)} className="sf-map-fleet-icon" />
-                  <text x={x + 10} y={y + 4} className="sf-map-fleet-label">{f.name} → {target.name}</text>
+                <g key={"own-" + f.id} data-testid={"map-fleet-" + f.id}>
+                  {route.length > 1 && <polyline className={"sf-map-fleet-route" + (selected?.id === f.id ? " sf-map-fleet-route--selected" : "")} points={route.map((p) => p.x + "," + p.y).join(" ")} />}
+                  {marker(f, x, y, label, "sf-map-fleet-own" + (selected?.id === f.id ? " sf-map-fleet-own--selected" : ""))}
                 </g>
               );
+            })}
+            {enemy.map((f) => {
+              const current = world.systems[f.systemId]; if (!current) return null;
+              const p = proj(current.x, current.y); if (!p) return null;
+              return marker(f, p.x - 18, p.y + 8, "▼ " + f.name, "sf-map-fleet-enemy");
             })}
           </svg>
         );

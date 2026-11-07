@@ -1020,11 +1020,10 @@ export class SystemView implements SceneView {
       const r = this.game.sendCommandDetailed({ type: "dlc_signal_reach", signalId: marker.signalId } as never);
       if (r.ok) {
         this.game.toast(r.messageRu ?? "Квест начат", "good");
+        // Убираем только маркер; объект (луна/обломки/колония) остаётся в системе.
         this.scene.remove(marker.mesh);
-        if (marker.object) this.scene.remove(marker.object);
         const idx = this.questMarkers.indexOf(marker);
         if (idx >= 0) this.questMarkers.splice(idx, 1);
-        this.spawnQuestMarkers();
       }
     }
     if (nearest) { t.questMarkerName = nearest.marker.name; t.questMarkerDist = Math.round(nearest.dist); }

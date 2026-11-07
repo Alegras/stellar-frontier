@@ -10,6 +10,7 @@ import { DialogueOverlay } from "./DialogueOverlay";
 import { AiWorldEventModal } from "./WorldPoliticsPanel";
 import { BattleChoiceModal } from "./BattleChoiceModal";
 import { worldOf } from "./util";
+import { DLC_QUEST_BY_ID, L10N_RU } from "@sf/data";
 import { GridBattleOverlay } from "./grid-battle/GridBattleOverlay";
 
 // PanelId/PANEL_TITLES/PANEL_REGISTRY живут в fullgame-registry.ts (без JSX), чтобы
@@ -202,6 +203,7 @@ export function FullGameOverlays({ game, state }: { game: Game; state: GameState
       {!dialogueActive && !event && (
         <div style={{ pointerEvents: "auto" }}>
           <BattleChoiceModal game={game} state={state} />
+          <QuestIntroModal game={game} state={state} />
         </div>
       )}
       {!dialogueActive && !event && (
@@ -268,6 +270,37 @@ export function FullGameOverlays({ game, state }: { game: Game; state: GameState
         </Modal>
       )}
     </div>
+  );
+}
+
+
+/** Вступительная карточка квеста: даже если первый шаг не диалог, игрок видит историю и цель. */
+function QuestIntroModal({ game, state }: { game: Game; state: GameState }) {
+  const world = worldOf(game);
+  const fg = fgOf(world);
+  const d = fg?.dlc;
+  const questId = d?.activeQuestId ?? null;
+  const quest = questId ? DLC_QUEST_BY_ID[questId] : null;
+  const [seen, setSeen] = useState<string | null>(null);
+  const open = Boolean(world && quest && d && !d.dialogue?.active && seen !== quest.id && (d.flags["quest_intro:" + quest.id] ?? 0) > 0);
+  useEffect(() => {
+    if (!open) return;
+    game.setNarrativeModalOpen(true);
+    return () => game.setNarrativeModalOpen(false);
+  }, [open, game]);
+  if (!world || !quest || !open) return null;
+  const ru = (key?: string): string => (key ? (L10N_RU[key] ?? key) : "");
+  return (
+    <Modal title={L("Новый квест", "New quest") + " · " + ru(quest.titleKey)} onClose={() => setSeen(quest.id)} testId="quest-intro-modal" closeTestId="btn-close-quest-intro" footer={<Btn variant="primary" onClick={() => setSeen(quest.id)} testId="btn-quest-intro-ok">{L("К цели", "To objective")}</Btn>}>
+      <div className="sf-gold" style={{ fontWeight: 700 }}>{ru(quest.titleKey)}</div>
+      <div className="sf-meta" style={{ marginTop: 4 }}>{ru(quest.summaryKey)}</div>
+      <Sep />
+      <div className="sf-h">{L("Цели", "Objectives")}</div>
+      <ol className="sf-list" style={{ margin: 0, paddingLeft: 18 }}>
+        {quest.steps.map((st, i) => <li key={st.id} style={{ opacity: i === 0 ? 1 : 0.65 }}>{ru(st.titleKey)}</li>)}
+      </ol>
+      <div className="sf-meta" style={{ marginTop: 6 }}>{L("Открыть журнал: Империя → Квесты.", "Journal: Empire → Quests.")}</div>
+    </Modal>
   );
 }
 

@@ -10,7 +10,7 @@
  * Feature-flag: новые игры enabled=true; старые сейвы без fg.dlc — off с миграцией.
  */
 import {
-  DLC_CARDS, DLC_CHARACTERS, DLC_DIALOGUES, DLC_QUESTS, DLC_TREE,
+  DLC_CARDS, DLC_CHARACTERS, DLC_DIALOGUES, DLC_QUESTS, DLC_TREE, L10N_RU,
 } from "@sf/data";
 import type {
   CharacterDef, DialogueDef, DialogueEffectDef, DialogueNodeDef, DialogueOptionDef, QuestCardDef,
@@ -1735,7 +1735,9 @@ export function revealDlcSignal(world: World, signalId: string): CommandResult {
   chronicle(world, d, "dlc.chronicle.signal:" + signal.id, signal.questId);
   // Достижение сигнала запускает сюжет, а не только открывает запись в журнале.
   const quest = DLC_QUESTS.find((q) => q.id === signal.questId);
+  const title = quest?.titleKey ? (L10N_RU[quest.titleKey] ?? quest.titleKey) : signal.questId;
+  d.flags["quest_intro:" + signal.questId] = 1;
   const accepted = dlcAcceptQuest(world, playerId, signal.questId, "signal");
-  if (accepted.ok) return { ok: true, messageRu: "Квест начат: " + (quest?.titleKey ?? signal.questId) };
+  if (accepted.ok) return { ok: true, messageRu: "Квест начат: " + title };
   return { ok: true, messageRu: "Сигнал достигнут. " + (accepted.messageRu ?? "Квест доступен в журнале") };
 }

@@ -1295,6 +1295,15 @@
 .sf-map-fleet-halo { fill:#4FC3F7; opacity:.18; }
 .sf-map-fleet-icon { fill:#9FE7FF; stroke:#05070E; stroke-width:1; }
 .sf-map-fleet-label { fill:#BFEFFF; font-size:11px; font-family:Consolas,monospace; paint-order:stroke; stroke:#05070E; stroke-width:3px; }
+.sf-map-fleet-vehicle { }
+.sf-map-fleet-own .sf-map-fleet-icon { fill:#9FE7FF; }
+.sf-map-fleet-enemy .sf-map-fleet-icon { fill:#FF6B6B; }
+.sf-map-fleet-enemy .sf-map-fleet-halo { fill:#FF6B6B; opacity:.22; }
+.sf-map-fleet-enemy .sf-map-fleet-label { fill:#FFB3B3; }
+.sf-map-fleet-own--selected .sf-map-fleet-icon { fill:#F5C542; }
+.sf-map-fleet-route--selected { stroke:#F5C542; stroke-width:2; }
+.sf-map-fuel-dot { fill:#6BE675; stroke:#05070E; stroke-width:1; opacity:.9; }
+
 .sf-map-label--home { border-color:#F5C542 !important; box-shadow:0 0 0 1px #F5C542, 0 0 12px #F5C54266; }
 .sf-map-label__home { color:#F5C542; border:1px solid #F5C542; padding:0 2px; margin-left:2px; font-size:9px; line-height:1.2; }
 
