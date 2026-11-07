@@ -8,7 +8,7 @@ import type { BuildingDef, DistrictDef, TechDef } from "@sf/data";
 import {
   canColonizePlanet, clamp, createColony, createFleet, empireById, findPlanet, logEvent, removeFleet, zeroResources,
 } from "./economy";
-import { applyBattleRecord } from "./combat";
+import { applyBattleRecord, autoResolve } from "./combat";
 import { canAfford, getBuildCost, getEmpireFleetPower, getFleetCap } from "./queries";
 import { unlockTradition, unlockPerk } from "./traditions";
 import { offerTreaty, respondTreaty, claimSystem, diplomacyPhase } from "./diplomacy";
@@ -497,6 +497,27 @@ export function applyCommandAs(world: World, empireId: number, cmd: Command): Co
         /* noop */
       }
       return ok();
+    }
+    case "auto_resolve": {
+      const system = world.systems[cmd.systemId];
+      if (!system) return deny("Система не найдена");
+      const own = world.fleets.find((f) => f.systemId === system.id && f.empireId === empireId && f.ships.length > 0);
+      const enemy = world.fleets.find((f) => f.systemId === system.id && f.empireId !== empireId && f.ships.length > 0);
+      if (!own) return deny("В системе нет вашего флота");
+      if (!enemy) return deny("В системе нет вражеских флотов");
+      const record = autoResolve(world, own.id, enemy.id);
+      return { ok: true, messageRu: "Авторезолв: " + (record.outcome === "attacker_win" ? "победа" : record.outcome === "defender_win" ? "поражение" : "ничья") + " (потери: " + Math.round(record.attackerLossFp) + " / " + Math.round(record.defenderLossFp) + " FP)" };
+    }
+    case "collect_salvage": {
+      const credits = Math.max(0, Math.min(5000, Math.floor(cmd.credits)));
+      const alloys = Math.max(0, Math.min(200, Math.floor(cmd.alloys)));
+      const empire = empireById(world, empireId);
+      if (!empire) return deny("Империя не найдена");
+      empire.resources.credits += credits;
+      empire.resources.alloys += alloys;
+      if (credits > 0) empire.stats.creditsEarned += credits;
+      if (credits > 0 || alloys > 0) logEvent(world, "economy", "good", "Собран salvage: +" + credits + " Cr, +" + alloys + " сплавов.", undefined, empireId);
+      return { ok: true, messageRu: "Salvage: +" + credits + " Cr, +" + alloys + " сплавов" };
     }
     case "join_battle": {
       const system = world.systems[cmd.systemId];

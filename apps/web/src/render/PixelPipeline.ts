@@ -194,7 +194,7 @@ export class PixelPipeline {
     this.width = Math.max(1, Math.floor(cssWidth));
     this.height = Math.max(1, Math.floor(cssHeight));
     this.renderer.setSize(this.width, this.height, false);
-    this.scale = Math.max(1, Math.floor(Math.min(this.width / this.options.internalWidth, this.height / this.options.internalHeight)));
+    this.scale = Math.max(0.1, Math.min(this.width / this.options.internalWidth, this.height / this.options.internalHeight));
   }
 
   render(scene: THREE.Scene, camera: THREE.Camera, timeSec = 0): void {
@@ -213,13 +213,8 @@ export class PixelPipeline {
     renderer.setClearColor(0x000000, 1);
     renderer.clear();
 
-    const vw = iw * this.scale;
-    const vh = ih * this.scale;
-    const vx = Math.floor((this.width - vw) / 2);
-    const vy = Math.floor((this.height - vh) / 2);
-    renderer.setViewport(vx, vy, vw, vh);
-    renderer.render(this.postScene, this.postCamera);
     renderer.setViewport(0, 0, this.width, this.height);
+    renderer.render(this.postScene, this.postCamera);
   }
 
   dispose(): void {

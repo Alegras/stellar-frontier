@@ -401,6 +401,8 @@ export type Command =
   | { type: "research"; school: ScienceId; techId: string }
   | { type: "trade"; stationId: number; good: ResourceId; qty: number; buy: boolean }
   | { type: "scan_system"; fleetId: number; systemId: number }
+  | { type: "auto_resolve"; systemId: number }
+  | { type: "collect_salvage"; credits: number; alloys: number }
   | { type: "accept_mission"; missionId: number }
   | { type: "abandon_mission"; missionId: number }
   | { type: "make_peace"; targetEmpireId: number }

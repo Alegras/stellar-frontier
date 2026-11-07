@@ -210,6 +210,8 @@ export interface ProjectileContext {
   playerRadius: number;
   playerAlive: boolean;
   enemies: EnemyShip[];
+  asteroids: { id: number; position: THREE.Vector3; radiusM: number }[];
+  onAsteroidHit: (id: number, damage: number, type: DamageType) => void;
   onPlayerHit: (damage: number, type: DamageType) => void;
   onEnemyHit: (enemy: EnemyShip, damage: number, type: DamageType) => void;
 }
@@ -290,6 +292,15 @@ export class ProjectileField {
             ctx.onEnemyHit(enemy, projectile.damage, projectile.type);
             consumed = true;
             break;
+          }
+        }
+        if (!consumed) {
+          for (const asteroid of ctx.asteroids) {
+            if (segmentHitsSphere(this.scratchA, projectile.mesh.position, asteroid.position, asteroid.radiusM)) {
+              ctx.onAsteroidHit(asteroid.id, projectile.damage, projectile.type);
+              consumed = true;
+              break;
+            }
           }
         }
       } else if (ctx.playerAlive) {

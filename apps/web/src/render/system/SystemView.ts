@@ -35,7 +35,7 @@ import {
 /** Стыковка (GDD §10.1 / docs/05_ux_ui_spec.md §5.2): ≤ 2,5 км и скорость < 120 м/с. */
 const DOCK_RANGE_M = 2500;
 /** Дистанция до поверхности планеты, на которой доступна высадка колонистов. */
-const PLANET_INTERACT_RANGE_M = 60000;
+const PLANET_INTERACT_RANGE_M = 500000;
 const DOCK_SPEED_M_S = 120;
 /**
  * Автопилот-помощник стыковки (docs/06 M3: «стыковка: запрос, коридор, автопилот-помощник»).
@@ -86,6 +86,8 @@ export class SystemView implements SceneView {
   private readonly projectileField = new ProjectileField();
   private readonly effectPool = new EffectPool();
   private readonly enemyShips: EnemyShip[] = [];
+  private readonly asteroids: { id: number; mesh: THREE.Mesh; hp: number; radiusM: number }[] = [];
+  private readonly salvage: { mesh: THREE.Mesh; credits: number; alloys: number }[] = [];
 
   private readonly shipLengthM: number;
   private readonly laserWeapons: WeaponDef[] = [];
@@ -237,6 +239,7 @@ export class SystemView implements SceneView {
 
     this.scene.add(this.projectileField.group);
     this.scene.add(this.effectPool.group);
+    this.spawnAsteroids();
 
     // --- камера сразу за кораблём (без рывка из начала координат)
     this.camera.position.copy(this.desiredCameraPosition(this.flight.position, this.flight.quaternion));
@@ -888,6 +891,8 @@ export class SystemView implements SceneView {
       playerRadius: this.shipLengthM * 0.45,
       playerAlive,
       enemies: this.enemyShips,
+      asteroids: this.asteroids.map((a) => ({ id: a.id, position: a.mesh.position, radiusM: a.radiusM })),
+      onAsteroidHit: (id, damage) => this.onAsteroidHit(id, damage),
       onPlayerHit: (damage, type) => {
         const applied = this.flight.takeDamage(damage, type);
         if (applied > 0) this.effectPool.spawnHit(this.flight.position.clone(), PAL.enemy);
@@ -899,6 +904,60 @@ export class SystemView implements SceneView {
       },
     });
     this.effectPool.update(dt);
+    this.updateSalvage(dt);
+  }
+
+  /** Небольшие разрушаемые астероиды с подбором обломков (F-огонь). */
+  private spawnAsteroids(): void {
+    for (let i = 0; i < 8; i++) {
+      const radius = this.rng.range(90, 220);
+      const mesh = new THREE.Mesh(
+        new THREE.IcosahedronGeometry(radius, 0),
+        new THREE.MeshLambertMaterial({ color: i % 2 ? PAL.metal2 : PAL.metalShadow, flatShading: true }),
+      );
+      const angle = this.rng.range(0, Math.PI * 2);
+      const dist = this.rng.range(1800, 9000);
+      mesh.position.set(Math.cos(angle) * dist, this.rng.range(-1200, 1200), Math.sin(angle) * dist);
+      mesh.rotation.set(this.rng.range(0, 3), this.rng.range(0, 3), this.rng.range(0, 3));
+      this.scene.add(mesh);
+      this.asteroids.push({ id: i, mesh, hp: 60, radiusM: radius * 1.05 });
+    }
+  }
+
+  private onAsteroidHit(id: number, damage: number): void {
+    const asteroid = this.asteroids.find((a) => a.id === id);
+    if (!asteroid) return;
+    asteroid.hp -= damage;
+    this.effectPool.spawnHit(asteroid.mesh.position.clone(), PAL.warn);
+    if (asteroid.hp > 0) return;
+    this.effectPool.spawnExplosion(asteroid.mesh.position.clone(), asteroid.radiusM * 2, PAL.metal2);
+    asteroid.mesh.visible = false;
+    this.scene.remove(asteroid.mesh);
+    const idx = this.asteroids.indexOf(asteroid);
+    if (idx >= 0) this.asteroids.splice(idx, 1);
+    const credits = 120 + (id % 4) * 90;
+    const alloys = 4 + (id % 3) * 3;
+    const pickup = new THREE.Mesh(new THREE.BoxGeometry(18, 18, 18), new THREE.MeshBasicMaterial({ color: PAL.gold }));
+    pickup.position.copy(asteroid.mesh.position);
+    this.scene.add(pickup);
+    this.salvage.push({ mesh: pickup, credits, alloys });
+    this.game.toast("Астероид разрушен: обломки дрейфуют рядом", "good");
+  }
+
+  private updateSalvage(dt: number): void {
+    for (let i = this.salvage.length - 1; i >= 0; i--) {
+      const item = this.salvage[i];
+      if (!item) continue;
+      item.mesh.rotation.y += dt * 1.8;
+      item.mesh.rotation.x += dt * 0.9;
+      if (this.flight.position.distanceTo(item.mesh.position) > 900) continue;
+      const r = this.game.sendCommandDetailed({ type: "collect_salvage", credits: item.credits, alloys: item.alloys } as never);
+      if (r.ok) {
+        this.game.toast(r.messageRu ?? "Обломки собраны", "good");
+        this.scene.remove(item.mesh);
+        this.salvage.splice(i, 1);
+      }
+    }
   }
 
   private onEnemyDestroyed(enemy: EnemyShip): void {

@@ -30,11 +30,22 @@ function groups(): { title: string; rows: [string, string][] }[] {
     rows: [
       ["W / S", L("тяга +/−", "throttle +/−")],
       ["A / D", L("рыскание", "yaw")],
-      ["F", L("сканировать систему", "scan system")],
+      ["F", L("скан системы: панель покажет планеты, POI, награды и прогресс миссий", "scan system: panel shows planets, POIs, rewards and mission progress")],
       ["C", L("суперкруиз", "supercruise")],
       ["J", L("прыжок FSD", "FSD jump")],
       ["G", L("стыковка у станции", "dock at station")],
       ["Esc / " + L("кнопка «На карту»", "To map button"), L("вернуться на карту", "return to the map")],
+      [" " + L("Подлёт к планете", "Fly to a planet"), L("появляется панель «Планета» и кнопка «Высадить колонистов» (нужен колонизатор, пригодность ≥ 40% и дистанция до поверхности ≤ 500 км)", "the Planet panel appears with a Deploy colonists button (colonizer + habitability ≥ 40%)")],
+      [" " + L("Луны", "Moons"), L("колонизируются после колонии на родительской планете; у них свои города/станции", "colonize after the parent planet has a colony; moons have their own cities/stations")],
+    ],
+  },
+  {
+    title: L("Бой: L0, авторезолв и сетка", "Combat: L0, auto-resolve and grid"),
+    rows: [
+      [" " + L("Свои + вражеские флоты в системе", "Own + hostile fleets in system"), L("в инспекторе системы появятся «Авторезолв» и «Сетка командования»", "the system inspector shows Auto-resolve and Grid Command")],
+      [" " + L("Авторезолв", "Auto-resolve"), L("мгновенный результат по формуле флота, без ручного боя", "instant result using fleet power, no manual fight")],
+      [" " + L("Сетка командования", "Grid Command"), L("пошаговая битва на гексах: расстановка 7+3, инициатива, способности, S32-итог", "turn-based hex battle: 7+3 deployment, initiative, abilities, S32 result")],
+      [" " + L("6DOF", "6DOF"), L("личный полёт в системе остаётся real-time; сетка и 6DOF не смешиваются", "in-system flight stays real-time; grid and 6DOF never mix")],
     ],
   },
   {
@@ -80,6 +91,9 @@ export function HelpContent() {
         <li>{L("Наука: у каждой школы три альтернативы — выбор влияет на доступные технологии и корабли.", "Research: each school offers three alternatives — your choice affects available tech and ships.")}</li>
         <li>{L("Флот без приказа простаивает. Выберите флот в панели «Флот» и кликните систему на карте.", "A fleet without orders idles. Select a fleet in the Fleet panel and click a system on the map.")}</li>
         <li>{L("Всё, что нельзя сделать, объясняется тултипом причины (нехватка кредитов, лимит, технология).", "Everything you cannot do explains the reason in a tooltip (credits, cap, technology).")}</li>
+        <li>{L("Скан: F в полёте. Если панель пишет «новых объектов нет» — система уже изучена; для квестов смотрите сигнал/миссии.", "Scan: F in flight. If the panel says no new objects, the system is already surveyed; for quests check signals/missions.")}</li>
+        <li>{L("Настройки → «Внутреннее разрешение»: 1920×1080 для FHD; кнопка «На весь экран» разворачивает окно.", "Settings → Internal resolution: 1920×1080 for FHD; Fullscreen button expands the window.")}</li>
+        <li>{L("Стреляйте по небольшим астероидам: они разрушаются, обломки подбираются автоматически при подлёте.", "Shoot small asteroids: they break, and salvage is collected automatically when you fly close.")}</li>
       </ul>
     </div>
   );

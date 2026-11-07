@@ -98,14 +98,21 @@ export function SystemInspector({ game, state }: { game: Game; state: GameState 
         </div>
       )}
 
-      {myFleets.length > 0 && (enemies.length > 0 || hostileFleets.length > 0) && gridBattleFlagOn(world) && (
-        <Btn size="sm" variant="primary" testId="btn-grid-battle"
-          title={L("Только стратегический слой L0; 6DOF-бой в системе не меняется", "Strategic L0 only; in-system 6DOF stays unchanged")}
-          onClick={() => {
-            try { window.dispatchEvent(new CustomEvent("sf:grid-battle", { detail: { systemId: sys.id, systemName: sys.name, seed: sys.id * 97 + emp.id, coop: false } })); } catch { /* noop */ }
-          }}>
-          {L("Сетка командования", "Grid Command")}
-        </Btn>
+      {myFleets.length > 0 && (enemies.length > 0 || hostileFleets.length > 0) && (
+        <>
+          <Btn size="sm" onClick={() => { game.sendCommand({ type: "auto_resolve", systemId: sys.id } as never); }} testId="btn-auto-resolve" title={L("Разрешить бой без сетки (потери как в авторезолве)", "Resolve battle without grid (auto-resolve losses)")}>
+            {L("Авторезолв", "Auto-resolve")}
+          </Btn>
+          {gridBattleFlagOn(world) && (
+            <Btn size="sm" variant="primary" testId="btn-grid-battle"
+              title={L("Только стратегический слой L0; 6DOF-бой в системе не меняется", "Strategic L0 only; in-system 6DOF stays unchanged")}
+              onClick={() => {
+                try { window.dispatchEvent(new CustomEvent("sf:grid-battle", { detail: { systemId: sys.id, systemName: sys.name, seed: sys.id * 97 + emp.id, coop: false } })); } catch { /* noop */ }
+              }}>
+              {L("Сетка командования", "Grid Command")}
+            </Btn>
+          )}
+        </>
       )}
 
       <Sep />

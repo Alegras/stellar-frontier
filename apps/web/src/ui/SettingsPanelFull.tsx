@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Check, Field, Panel, Sep } from "./controls";
+import { Btn, Check, Field, Panel, Sep } from "./controls";
 import { applyColorblind, dlcOf, getA11yFlags, getColorblind, L, send, setLocale, tr, useLocale, type ColorblindMode, type FullPanelProps } from "./fg";
 import { worldOf } from "./util";
 import { intText } from "./util";
@@ -65,9 +65,12 @@ export function SettingsPanelFull({ game, state }: FullPanelProps) {
               <option value={480}>480×270</option>
               <option value={640}>640×360</option>
               <option value={960}>960×540</option>
+              <option value={1280}>1280×720</option>
+              <option value={1920}>1920×1080</option>
             </select>
           </Field>
-          <div className="sf-meta">{L("Масштаб только целочисленный для пиксель-арта; текст масштабируется отдельно.", "Pixel art scales only by integer factors; text scales separately.")}</div>
+          <div className="sf-meta">{L("Внутреннее разрешение растягивается на весь экран; FHD — 1920×1080.", "Internal resolution fills the screen; FHD is 1920×1080.")}</div>
+          <Btn size="sm" onClick={() => { const el = document.documentElement; if (document.fullscreenElement) void document.exitFullscreen?.(); else void el.requestFullscreen?.(); }} testId="btn-fullscreen">{L("На весь экран", "Fullscreen")}</Btn>
         </Panel>
 
         <Panel title={tr("settings.accessibility", undefined, "Доступность")} tall>
