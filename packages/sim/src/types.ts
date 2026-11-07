@@ -380,6 +380,8 @@ export interface CommandResult {
   ok: boolean;
   /** отчёт сканирования для UI (система/планеты/POI/миссии) */
   scanReport?: { titleRu: string; tick: number; lines: string[] };
+  /** отчёт боя для UI после авторезолва */
+  battleReport?: BattleRecord;
   messageRu?: string;
   /** если команда создала сущность (флот/колонию) */
   createdId?: number;
@@ -403,6 +405,8 @@ export type Command =
   | { type: "scan_system"; fleetId: number; systemId: number }
   | { type: "auto_resolve"; systemId: number }
   | { type: "collect_salvage"; credits: number; alloys: number }
+  | { type: "resolve_pending_battle" }
+  | { type: "clear_pending_battle" }
   | { type: "accept_mission"; missionId: number }
   | { type: "abandon_mission"; missionId: number }
   | { type: "make_peace"; targetEmpireId: number }

@@ -779,6 +779,7 @@ export class Game implements GameApi {
     this.afterTick();
     this.refresh({ tick: this.w.tick });
     if (cmd.type === "scan_system" && result.messageRu) this.toast(result.messageRu, "good");
+    if (result.battleReport) this.setBattleReport(result.battleReport);
     return result;
   }
 

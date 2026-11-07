@@ -23,6 +23,7 @@ import { warPhase } from "./war";
 import { marketExtPhase } from "./market";
 import { routesPhase } from "./routes";
 import { contractsPhase, onContractJump } from "./contracts";
+import { ensureFg } from "./fullgame";
 import { ancientsPhase } from "./ancients";
 import { dlcPhase } from "./dlc";
 import { campaignPhase } from "./campaign";
@@ -166,7 +167,14 @@ function fleetsPhase(world: World): void {
   for (const system of world.systems) {
     if (system.ownerId !== 0 && !system.visibleTo.includes(system.ownerId)) system.visibleTo.push(system.ownerId);
   }
-  // автобой при контакте враждебных флотов (GDD §11.6: автобой обязателен)
+  // автобой при контакте враждебных флотов; бой с игроком ждёт выбора режима (L0).
+  const fgTick = ensureFg(world);
+  if (fgTick.pendingBattle) {
+    const pb = fgTick.pendingBattle;
+    const a = world.fleets.find((f) => f.id === pb.attackerFleetId && f.ships.length > 0);
+    const b = world.fleets.find((f) => f.id === pb.defenderFleetId && f.ships.length > 0);
+    if (!a || !b || a.systemId !== pb.systemId || b.systemId !== pb.systemId) fgTick.pendingBattle = null;
+  }
   for (const system of world.systems) {
     const fleetsIn = world.fleets
       .filter((f) => f.systemId === system.id && f.ships.length > 0)
@@ -179,6 +187,20 @@ function fleetsPhase(world: World): void {
         const b = world.fleets.find((f) => f.id === fleetsIn[j].id);
         if (!a || !b || a.ships.length === 0 || b.ships.length === 0) continue;
         if (!areFleetsHostile(world, a, b)) continue;
+        const playerInvolved = a.empireId === world.playerEmpireId || b.empireId === world.playerEmpireId;
+        if (playerInvolved) {
+          if (!fgTick.pendingBattle) {
+            fgTick.pendingBattle = {
+              systemId: system.id,
+              attackerFleetId: a.id,
+              defenderFleetId: b.id,
+              playerSide: a.empireId === world.playerEmpireId ? "attacker" : "defender",
+              tick: world.tick,
+            };
+          }
+          battleHappened = true;
+          break;
+        }
         autoResolve(world, a.id, b.id);
         battleHappened = true;
         break;

@@ -519,6 +519,21 @@ export function applyCommandAs(world: World, empireId: number, cmd: Command): Co
       if (credits > 0 || alloys > 0) logEvent(world, "economy", "good", "Собран salvage: +" + credits + " Cr, +" + alloys + " сплавов.", undefined, empireId);
       return { ok: true, messageRu: "Salvage: +" + credits + " Cr, +" + alloys + " сплавов" };
     }
+    case "resolve_pending_battle": {
+      const fg = ensureFg(world);
+      const pb = fg.pendingBattle;
+      if (!pb) return deny("Нет ожидающего боя");
+      const a = world.fleets.find((f) => f.id === pb.attackerFleetId && f.ships.length > 0);
+      const b = world.fleets.find((f) => f.id === pb.defenderFleetId && f.ships.length > 0);
+      if (!a || !b) { fg.pendingBattle = null; return deny("Флоты боя больше не существуют"); }
+      const record = autoResolve(world, a.id, b.id);
+      fg.pendingBattle = null;
+      return { ok: true, battleReport: record, messageRu: "Авторезолв: " + (record.outcome === "attacker_win" ? "победа атакующего" : record.outcome === "defender_win" ? "победа защитника" : "ничья") };
+    }
+    case "clear_pending_battle": {
+      ensureFg(world).pendingBattle = null;
+      return ok();
+    }
     case "join_battle": {
       const system = world.systems[cmd.systemId];
       if (!system) return deny("Система не найдена");

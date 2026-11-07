@@ -11,6 +11,7 @@ export function SettingsPanelFull({ game, state }: FullPanelProps) {
   const [cb, setCb] = useState<ColorblindMode>(getColorblind());
   const [a11y, setA11y] = useState(getA11yFlags());
   const [scale, setScale] = useState<number>(s.uiScale);
+  const [battleMode, setBattleModeState] = useState<string>(() => { try { return localStorage.getItem("sf.battleMode") ?? "ask"; } catch { return "ask"; } });
   const dlcState = dlcOf(worldOf(game));
   const [dlcOn, setDlcOn] = useState<boolean>(dlcState?.enabled ?? true);
   const changeDlc = (enabled: boolean) => {
@@ -70,6 +71,12 @@ export function SettingsPanelFull({ game, state }: FullPanelProps) {
             </select>
           </Field>
           <div className="sf-meta">{L("Внутреннее разрешение растягивается на весь экран; FHD — 1920×1080.", "Internal resolution fills the screen; FHD is 1920×1080.")}</div>
+          <Field label={L("Бои на карте", "Map battles")}>
+            <select className="sf-select" value={battleMode} data-testid="select-battle-mode" onChange={(e) => { const v = e.target.value; setBattleModeState(v); try { localStorage.setItem("sf.battleMode", v); } catch { /* noop */ } }}>
+              <option value="ask">{L("Спрашивать перед боем", "Ask before battle")}</option>
+              <option value="auto">{L("Авторезолв по умолчанию", "Auto-resolve by default")}</option>
+            </select>
+          </Field>
           <Btn size="sm" onClick={() => { const el = document.documentElement; if (document.fullscreenElement) void document.exitFullscreen?.(); else void el.requestFullscreen?.(); }} testId="btn-fullscreen">{L("На весь экран", "Fullscreen")}</Btn>
         </Panel>
 

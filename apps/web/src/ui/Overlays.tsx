@@ -124,6 +124,7 @@ export function Overlays({ game, state }: { game: Game; state: GameState }) {
     const def = world?.empires.find((e) => e.id === b.defender.empireId);
     const outcome = b.outcome === "attacker_win" ? L("Победа атакующего", "Attacker victory")
       : b.outcome === "defender_win" ? L("Победа защитника", "Defender victory") : L("Ничья", "Draw");
+    const winnerName = b.outcome === "attacker_win" ? (atk?.name ?? L("атакующий", "attacker")) : b.outcome === "defender_win" ? (def?.name ?? L("защитник", "defender")) : L("никто", "nobody");
     const sys = world?.systems.find((s) => s.id === b.systemId);
     return (
       <Modal
@@ -138,13 +139,14 @@ export function Overlays({ game, state }: { game: Game; state: GameState }) {
           </Btn>
         }
       >
-        <div className="sf-battle-outcome sf-gold">{outcome}</div>
+        <div className="sf-battle-outcome sf-gold">{outcome}: {winnerName}</div>
         <div className="sf-meta" style={{ textAlign: "center", marginBottom: 6 }}>
           {tr("hud.tick", undefined, "Такт")} {intText(b.tick)} · {L("длительность", "duration")} {rnd(b.durationSec)} {L("с", "s")} · {b.tactical ? L("тактический бой", "tactical battle") : L("авторезолв", "auto-resolve")}
         </div>
         <div className="sf-battle-cols">
           <div className="sf-battle-side">
             <div className="sf-h" style={{ color: atk?.color ?? "#4FC3F7" }}>{atk?.name ?? L("Атакующий", "Attacker")}</div>
+            <div className="sf-badge sf-badge--bad" style={{ marginBottom: 3 }}>{L("АТАКУЮЩИЙ", "ATTACKER")}</div>
             <div className="sf-battle-fp">{intText(b.attacker.fp)} FP</div>
             <KV k={L("Кораблей до боя", "Ships before")} v={intText(b.attacker.shipsBefore)} />
             <KV k={L("Потеряно FP", "FP lost")} v={intText(b.attackerLossFp)} className="sf-bad" />
@@ -153,6 +155,7 @@ export function Overlays({ game, state }: { game: Game; state: GameState }) {
           <div className="sf-dim" style={{ alignSelf: "center", fontSize: "1.4em" }}>⚔</div>
           <div className="sf-battle-side sf-battle-side--right">
             <div className="sf-h" style={{ color: def?.color ?? "#FF5A5A" }}>{def?.name ?? L("Защитник", "Defender")}</div>
+            <div className="sf-badge sf-badge--info" style={{ marginBottom: 3 }}>{L("ЗАЩИТНИК", "DEFENDER")}</div>
             <div className="sf-battle-fp">{intText(b.defender.fp)} FP</div>
             <KV k="Кораблей до боя" v={intText(b.defender.shipsBefore)} />
             <KV k="Потеряно FP" v={intText(b.defenderLossFp)} className="sf-bad" />

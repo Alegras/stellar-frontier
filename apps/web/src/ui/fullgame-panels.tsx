@@ -8,6 +8,7 @@ import { PANEL_IDS, PANEL_REGISTRY, PANEL_TITLES } from "./fullgame-registry";
 import type { PanelId } from "./fullgame-registry";
 import { DialogueOverlay } from "./DialogueOverlay";
 import { AiWorldEventModal } from "./WorldPoliticsPanel";
+import { BattleChoiceModal } from "./BattleChoiceModal";
 import { worldOf } from "./util";
 import { GridBattleOverlay } from "./grid-battle/GridBattleOverlay";
 
@@ -157,6 +158,11 @@ export function FullGameOverlays({ game, state }: { game: Game; state: GameState
       <div style={{ pointerEvents: "auto" }}>
         <DialogueOverlay game={game} state={state} />
       </div>
+      {!dialogueActive && !event && (
+        <div style={{ pointerEvents: "auto" }}>
+          <BattleChoiceModal game={game} state={state} />
+        </div>
+      )}
       {!dialogueActive && !event && (
         <div style={{ pointerEvents: "auto" }}>
           <AiWorldEventModal game={game} state={state} />

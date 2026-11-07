@@ -501,6 +501,8 @@ export interface FullGameState {
   dlc: DlcState;
   /** Видимая мировая политика и внутренняя динамика ИИ (task-42). */
   aiWorld: AiWorldState;
+  /** Бой с участием игрока ждёт выбора режима (L0). */
+  pendingBattle?: { systemId: number; attackerFleetId: number; defenderFleetId: number; playerSide: "attacker" | "defender"; tick: number } | null;
 }
 
 export function relationKey(a: number, b: number): string {
@@ -618,6 +620,7 @@ export function createFullGameState(world: World, options?: { raceId?: string; d
     ancients: createAncientsState(world, options?.raceId),
     dlc: createDlcState(world, options?.dlcEnabled ?? true),
     aiWorld: emptyAiWorldState(),
+    pendingBattle: null,
   };
   world.fg = fg;
   for (const empire of world.empires) advancedOf(world, empire.id);
