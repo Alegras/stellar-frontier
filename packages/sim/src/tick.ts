@@ -23,6 +23,7 @@ import { warPhase } from "./war";
 import { marketExtPhase } from "./market";
 import { routesPhase } from "./routes";
 import { contractsPhase, onContractJump } from "./contracts";
+import { ensureFleetFuel, fuelOf, jumpFuelCost, jumpTicksFor } from "./fuel";
 import { ensureFg, refreshPathfinderStock } from "./fullgame";
 import { ancientsPhase } from "./ancients";
 import { dlcPhase } from "./dlc";
@@ -131,6 +132,16 @@ function fleetsPhase(world: World): void {
         const nextId = fleet.path[fleet.pathIndex];
         const nextSystem = nextId !== undefined ? world.systems[nextId] : undefined;
         if (nextSystem) {
+          ensureFleetFuel(world, fleet);
+          const fuelCost = jumpFuelCost(world, fleet, fleet.systemId, nextId);
+          if (fuelOf(fleet) < fuelCost) {
+            fleet.path = [];
+            fleet.pathIndex = 0;
+            fleet.status = "idle";
+            if (fleet.empireId === world.playerEmpireId) logEvent(world, "fleet", "warn", "Флот «" + fleet.name + "» остался без топлива в системе " + (world.systems[fleet.systemId]?.name ?? "") + ".", fleet.systemId, fleet.empireId);
+            continue;
+          }
+          fleet.fuel = fuelOf(fleet) - fuelCost;
           fleet.systemId = nextId;
           try {
             onContractJump(world, fleet.empireId, nextId);
@@ -143,7 +154,7 @@ function fleetsPhase(world: World): void {
             fleet.pathIndex = 0;
             fleet.status = "idle";
           } else {
-            fleet.jumpTicksLeft = Math.max(1, world.balance.fleetSpeedTicksPerJump);
+            fleet.jumpTicksLeft = jumpTicksFor(world, fleet);
           }
         } else {
           fleet.path = [];
@@ -152,8 +163,13 @@ function fleetsPhase(world: World): void {
         }
       }
     }
+    ensureFleetFuel(world, fleet);
     const system = world.systems[fleet.systemId];
     if (!system) continue;
+    // ИИ сам дозаправляется на станциях; игрок — вручную.
+    if (fleet.empireId !== world.playerEmpireId && fleet.status !== "moving" && system.station && fuelOf(fleet) < (fleet.fuelMax ?? 0)) {
+      fleet.fuel = fleet.fuelMax;
+    }
     if (!system.visibleTo.includes(fleet.empireId)) system.visibleTo.push(fleet.empireId);
     if (!system.knownBy.includes(fleet.empireId)) {
       system.knownBy.push(fleet.empireId);

@@ -221,6 +221,9 @@ export interface Fleet {
   path: number[];         // полный маршрут (включая текущую систему? нет — только будущие)
   pathIndex: number;
   jumpTicksLeft: number;
+  /** запас топлива; топливо тратится на гиперпрыжки */
+  fuel?: number;
+  fuelMax?: number;
   status: FleetStatus;
   formation: Formation;
   admiralName: string | null;
@@ -390,6 +393,7 @@ export interface CommandResult {
 export type Command =
   | { type: "move_fleet"; fleetId: number; systemId: number }
   | { type: "stop_fleet"; fleetId: number }
+  | { type: "refuel_fleet"; fleetId: number }
   | { type: "colonize"; fleetId: number; planetId: number }
   | { type: "build_ship"; systemId: number; designId: string; count: number; buy?: boolean }
   // --- M5/M12: конструктор кораблей

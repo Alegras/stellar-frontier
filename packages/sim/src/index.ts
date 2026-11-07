@@ -12,6 +12,7 @@ export { createWorld, getFleetPower, getEmpireFleetPower, getFleetCap, getScore,
   getShipDesign, getHull, getWeapon, getModule, getTech, getBuilding, getDistrict, getJob,
   getMissionDef } from "./queries";
 export { tick } from "./tick";
+export * from "./fuel";
 export { applyCommand, applyCommandAs, findPath } from "./commands";
 export { canColonizePlanet } from "./economy";
 export { autoResolve, applyBattleRecord } from "./combat";

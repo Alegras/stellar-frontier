@@ -73,6 +73,7 @@ export function FleetPanel({ game, state }: { game: Game; state: GameState }) {
             <KV k={L("Система", "System")} v={findSystem(world, selected.systemId)?.name ?? "—"} />
             <KV k={L("Формация", "Formation")} v={FORMATIONS.find((x) => x.id === selected.formation)?.ru ?? selected.formation} />
             <KV k={L("Прыжков в пути", "Jumps en route")} v={intText(selected.path.length)} />
+            <KV k={L("Топливо", "Fuel")} v={intText(selected.fuel ?? 0) + " / " + intText(selected.fuelMax ?? 0)} />
             <KV k={L("Адмирал", "Admiral")} v={selected.admiralName ?? "—"} />
           </div>
 
@@ -91,6 +92,11 @@ export function FleetPanel({ game, state }: { game: Game; state: GameState }) {
           </div>
 
           <div className="sf-row" style={{ marginTop: 4, flexWrap: "wrap" }}>
+            {findSystem(world, selected.systemId)?.station && (
+              <Btn size="sm" variant="primary" onClick={() => game.sendCommand({ type: "refuel_fleet", fleetId: selected.id } as never)} testId="btn-refuel-fleet">
+                {L("Дозаправить", "Refuel")}
+              </Btn>
+            )}
             <Btn size="sm" onClick={() => game.sendCommand({ type: "repair_fleet", fleetId: selected.id })} testId="btn-repair-fleet">
               Ремонт
             </Btn>

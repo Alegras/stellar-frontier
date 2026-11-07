@@ -19,6 +19,7 @@ import type {
   Colony, Empire, Fleet, Formation, GameEvent, JobAssignment, Milli, Planet, PopCounts, Resources,
   ResourceId, ScienceId, Ship, ShipClassId, World,
 } from "./types";
+import { ensureFleetFuel } from "./fuel";
 
 // ------------------------------------------------------------------ константы формул (GDD)
 
@@ -289,6 +290,7 @@ export function createFleet(
     followFleetId: null,
   };
   world.fleets.push(fleet);
+  ensureFleetFuel(world, fleet);
   if (empire) empire.fleets.push(fleet.id);
   invalidateProjection(world, empireId);
   for (const ship of ships) {

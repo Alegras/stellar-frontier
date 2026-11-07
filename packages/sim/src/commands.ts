@@ -35,6 +35,7 @@ import { buildMegastructure } from "./megastructures";
 import { createDesign, deleteDesign, findCustomDesign, saveDesign, updateDesign } from "./designs";
 import { aiWorldEventChoice } from "./aiWorld";
 import { consumePathfinderStock, ensureFg, pathfinderStockAt } from "./fullgame";
+import { ensureFleetFuel, fuelOf, jumpTicksFor, pathFuelCost } from "./fuel";
 import { onContractScan, onContractJump } from "./contracts";
 import { empireModifiers } from "./modifiers";
 import { colonyCostFor, outpostCostFor } from "./economy";
@@ -145,15 +146,33 @@ export function applyCommandAs(world: World, empireId: number, cmd: Command): Co
       if (fleet.systemId === cmd.systemId) return deny("Флот уже в этой системе");
       const path = findPath(world, fleet.systemId, cmd.systemId);
       if (!path || path.length === 0) return deny("Нет гиперлинии до целевой системы");
+      ensureFleetFuel(world, fleet);
+      const cost = pathFuelCost(world, fleet, path);
+      if (cost > fuelOf(fleet)) return deny("Не хватает топлива: нужно " + cost + ", в баке " + fuelOf(fleet) + ". Долетите до станции и дозаправьтесь");
       fleet.path = path;
       fleet.pathIndex = 0;
-      fleet.jumpTicksLeft = Math.max(1, world.balance.fleetSpeedTicksPerJump);
+      fleet.jumpTicksLeft = jumpTicksFor(world, fleet);
       fleet.status = "moving";
       const target = world.systems[cmd.systemId];
       if (empire.isPlayer) {
         logEvent(world, "fleet", "info", `Флот «${fleet.name}» направлен в систему ${target.name} (${path.length} прыжк.).`, fleet.systemId, empireId);
       }
       return ok();
+    }
+    case "refuel_fleet": {
+      const fleet = findFleet(world, cmd.fleetId);
+      if (!fleet || fleet.empireId !== empireId) return deny("Флот не найден");
+      const system = world.systems[fleet.systemId];
+      if (!system?.station) return deny("В системе нет станции для дозаправки");
+      ensureFleetFuel(world, fleet);
+      const need = Math.max(0, (fleet.fuelMax ?? 0) - (fleet.fuel ?? 0));
+      if (need <= 0) return deny("Бак уже полон");
+      const cost = Math.max(50, Math.round(need * 3));
+      if (empire.resources.credits < cost) return deny("Не хватает кредитов на топливо: нужно " + cost + " Cr");
+      empire.resources.credits -= cost;
+      fleet.fuel = fleet.fuelMax;
+      logEvent(world, "fleet", "info", "Флот «" + fleet.name + "» дозаправлен за " + cost + " Cr.", system.id, empireId);
+      return { ok: true, messageRu: "Дозаправлено за " + cost + " Cr" };
     }
     case "stop_fleet": {
       const fleet = findFleet(world, cmd.fleetId);
