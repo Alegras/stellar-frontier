@@ -18,10 +18,6 @@ export function FlightHUD({ game, state }: { game: Game; state: GameState }) {
   const [scanReport, setScanReport] = useState<{ titleRu: string; tick: number; lines: string[] } | null>(null);
 
   useEffect(() => {
-    let raf = 0;
-    let last = 0;
-  
-  useEffect(() => {
     const onScan = (ev: Event) => {
       const detail = (ev as CustomEvent).detail as { titleRu?: string; tick?: number; lines?: string[] } | undefined;
       if (!detail || !Array.isArray(detail.lines)) return;
@@ -30,13 +26,17 @@ export function FlightHUD({ game, state }: { game: Game; state: GameState }) {
     window.addEventListener("sf:scan-report", onScan);
     return () => window.removeEventListener("sf:scan-report", onScan);
   }, []);
+
   useEffect(() => {
     if (!scanReport) return;
     const id = window.setTimeout(() => setScanReport(null), 14000);
     return () => window.clearTimeout(id);
   }, [scanReport]);
 
-  const loop = (now: number) => {
+  useEffect(() => {
+    let raf = 0;
+    let last = 0;
+    const loop = (now: number) => {
       raf = requestAnimationFrame(loop);
       if (now - last < 100) return; // троттлинг 10 Гц: HUD не рендерится 60 раз/с
       last = now;

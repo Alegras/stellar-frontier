@@ -536,6 +536,32 @@ export function applyCommandAs(world: World, empireId: number, cmd: Command): Co
       fg.pendingBattle = null;
       return { ok: true, battleReport: record, messageRu: "Авторезолв: " + (record.outcome === "attacker_win" ? "победа атакующего" : record.outcome === "defender_win" ? "победа защитника" : "ничья") };
     }
+    case "escape_battle": {
+      const fg = ensureFg(world);
+      const pb = fg.pendingBattle;
+      if (!pb) return deny("Нет боя, от которого можно уйти");
+      const playerFleet = world.fleets.find((f) => f.id === (pb.playerSide === "attacker" ? pb.attackerFleetId : pb.defenderFleetId));
+      const enemyFleet = world.fleets.find((f) => f.id === (pb.playerSide === "attacker" ? pb.defenderFleetId : pb.attackerFleetId));
+      if (!playerFleet || !enemyFleet) { fg.pendingBattle = null; return deny("Флоты боя больше не существуют"); }
+      const fpOf = (fl: typeof playerFleet): number => fl.ships.reduce((n, sh) => n + (DESIGN_BY_ID[sh.designId]?.fleetPower ?? 1), 0);
+      const playerFp = Math.max(1, fpOf(playerFleet));
+      const enemyFp = Math.max(1, fpOf(enemyFleet));
+      if (enemyFp >= playerFp * 2.2) return deny("Атакующий слишком силён: он блокирует отход");
+      const from = world.systems[playerFleet.systemId];
+      const candidates = (from?.links ?? []).map((id) => world.systems[id]).filter((s) => s && s.ownerId !== enemyFleet.empireId && s.ownerId !== PIRATE_EMPIRE_ID);
+      const dest = candidates.find((s) => s.ownerId === empireId) ?? candidates[0];
+      if (!dest) return deny("Нет безопасной системы для отхода");
+      const free = playerFp >= enemyFp * 0.8;
+      const frac = free ? 0 : Math.max(0.15, Math.min(0.4, 0.15 + 0.25 * ((enemyFp - playerFp) / enemyFp)));
+      const keep = Math.max(0, playerFleet.ships.length - Math.max(free ? 0 : 1, Math.floor(playerFleet.ships.length * frac)));
+      const lost = playerFleet.ships.length - keep;
+      if (lost > 0) playerFleet.ships = playerFleet.ships.filter((sh) => sh.isFlagship).concat(playerFleet.ships.filter((sh) => !sh.isFlagship).slice(0, Math.max(0, keep - playerFleet.ships.filter((sh) => sh.isFlagship).length)));
+      if (playerFleet.ships.length === 0) { removeFleet(world, playerFleet.id); }
+      else { playerFleet.systemId = dest.id; playerFleet.path = []; playerFleet.pathIndex = 0; playerFleet.jumpTicksLeft = 0; playerFleet.status = "idle"; }
+      fg.pendingBattle = null;
+      logEvent(world, "fleet", "warn", "Отход из боя в " + dest.name + (lost > 0 ? ", потеряно кораблей: " + lost : ", без потерь") + ".", dest.id, empireId);
+      return { ok: true, messageRu: free ? "Отход без потерь в " + dest.name : "Отход с потерями (" + lost + ") в " + dest.name };
+    }
     case "clear_pending_battle": {
       ensureFg(world).pendingBattle = null;
       return ok();

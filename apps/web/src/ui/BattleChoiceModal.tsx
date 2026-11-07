@@ -12,6 +12,7 @@ export function BattleChoiceModal({ game, state }: { game: Game; state: GameStat
   const pb = fg?.pendingBattle ?? null;
   const sent = useRef<string | null>(null);
   const [hidden, setHidden] = useState(false);
+  const [escapeReason, setEscapeReason] = useState<string | null>(null);
   const mode = typeof localStorage !== "undefined" ? (localStorage.getItem("sf.battleMode") ?? "ask") : "ask";
 
   useEffect(() => {
@@ -21,6 +22,12 @@ export function BattleChoiceModal({ game, state }: { game: Game; state: GameStat
     if (mode === "auto") { sent.current = key; game.sendCommand({ type: "resolve_pending_battle" } as never); }
   }, [pb?.tick, pb?.systemId, mode, game]);
 
+  useEffect(() => {
+    if (!pb) return;
+    game.setNarrativeModalOpen(true);
+    return () => game.setNarrativeModalOpen(false);
+  }, [pb?.tick, pb?.systemId, game]);
+
   if (!world || !pb || hidden) return null;
   const sys = world.systems[pb.systemId];
   const a = world.fleets.find((f) => f.id === pb.attackerFleetId);
@@ -28,7 +35,7 @@ export function BattleChoiceModal({ game, state }: { game: Game; state: GameStat
   const resolve = () => { game.sendCommand({ type: "resolve_pending_battle" } as never); };
   const openGrid = () => { setHidden(true); window.dispatchEvent(new CustomEvent("sf:grid-battle", { detail: { systemId: pb.systemId, systemName: sys?.name, seed: pb.tick * 31 + pb.systemId, coop: false, pending: { attackerFleetId: pb.attackerFleetId, defenderFleetId: pb.defenderFleetId, playerSide: pb.playerSide } } })); game.sendCommand({ type: "clear_pending_battle" } as never); };
   return (
-    <Modal title={L("Перед боем", "Before battle") + " · " + (sys?.name ?? "")} onClose={() => setHidden(true)} testId="battle-choice-modal" closeTestId="btn-close-battle-choice" footer={<Btn onClick={() => setHidden(true)} testId="btn-battle-later">{L("Позже", "Later")}</Btn>}>
+    <Modal title={L("Перед боем", "Before battle") + " · " + (sys?.name ?? "")} onClose={() => undefined} testId="battle-choice-modal">
       <div className="sf-meta">{L("Бой остановлен. Выберите, как его провести.", "Battle paused. Choose how to fight.")}</div>
       <Sep />
       <div className="sf-battle-cols">
@@ -49,6 +56,7 @@ export function BattleChoiceModal({ game, state }: { game: Game; state: GameStat
         <Btn variant="primary" onClick={resolve} testId="btn-battle-auto">{L("Авторезолв", "Auto-resolve")}</Btn>
         <Btn onClick={openGrid} testId="btn-battle-grid">{L("Сетка командования", "Grid Command")}</Btn>
         <Btn onClick={() => { game.exitToGalaxy(); setHidden(true); }} testId="btn-battle-flight">{L("Вести бой (6DOF)", "Fight in 6DOF")}</Btn>
+        <Btn onClick={() => { const r = game.sendCommandDetailed({ type: "escape_battle" } as never); if (!r.ok) setEscapeReason(r.messageRu ?? L("Отход невозможен", "Cannot escape")); }} title={escapeReason ?? L("Попытаться уйти; сильный атакующий может блокировать отход", "Try to escape; a much stronger attacker can block it")} testId="btn-battle-escape">{L("Уклониться", "Escape")}</Btn>
       </div>
       <div className="sf-meta" style={{ marginTop: 6 }}>{L("Режим по умолчанию меняется в Настройках → «Бои на карте».", "Default mode is changed in Settings → Map battles.")}</div>
     </Modal>

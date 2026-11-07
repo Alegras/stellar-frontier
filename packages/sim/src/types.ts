@@ -407,6 +407,7 @@ export type Command =
   | { type: "collect_salvage"; credits: number; alloys: number }
   | { type: "resolve_pending_battle" }
   | { type: "clear_pending_battle" }
+  | { type: "escape_battle" }
   | { type: "plot_hyperlane"; fleetId: number; targetSystemId: number }
   | { type: "accept_mission"; missionId: number }
   | { type: "abandon_mission"; missionId: number }
