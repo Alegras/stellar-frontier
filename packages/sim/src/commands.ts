@@ -342,34 +342,55 @@ export function applyCommandAs(world: World, empireId: number, cmd: Command): Co
       const inRange = fleet.systemId === system.id || system.links.includes(fleet.systemId);
       if (!inRange) return deny("Система вне зоны сенсоров флота");
       const wasKnown = system.knownBy.includes(empireId);
-      if (!wasKnown) system.knownBy.push(empireId);
-      if (!system.visibleTo.includes(empireId)) system.visibleTo.push(empireId);
-      for (const planet of system.planets) planet.scanned = true;
-      for (const poi of system.poi) {
-        const firstScan = !poi.scanned;
-        poi.scanned = true;
-        if (firstScan) {
-          if (poi.rewardCredits > 0) {
-            empire.resources.credits += poi.rewardCredits;
-            empire.stats.creditsEarned += poi.rewardCredits;
-          }
-          if (poi.rewardScience > 0) {
-            const per = Math.floor(poi.rewardScience / 3);
-            empire.science.physics += per;
-            empire.science.society += per;
-            empire.science.engineering += poi.rewardScience - per * 2;
-          }
-        }
+      const lines: string[] = [
+        "Планет: " + system.planets.length + " · POI: " + system.poi.length,
+      ];
+      if (!wasKnown) {
+        system.knownBy.push(empireId);
+        system.visibleTo.push(empireId);
+        lines.push("Новая система: " + system.name);
       }
+      let newPlanets = 0;
+      for (const planet of system.planets) {
+        if (!planet.scanned) { planet.scanned = true; newPlanets += 1; }
+      }
+      if (newPlanets > 0) lines.push("Изучено планет: " + newPlanets + " (" + system.planets.length + " в системе)");
+      let newPois = 0;
+      let rewardCredits = 0;
+      let rewardScience = 0;
+      for (const poi of system.poi) {
+        if (poi.scanned) continue;
+        poi.scanned = true;
+        newPois += 1;
+        if (poi.rewardCredits > 0) {
+          empire.resources.credits += poi.rewardCredits;
+          empire.stats.creditsEarned += poi.rewardCredits;
+          rewardCredits += poi.rewardCredits;
+        }
+        if (poi.rewardScience > 0) {
+          const per = Math.floor(poi.rewardScience / 3);
+          empire.science.physics += per;
+          empire.science.society += per;
+          empire.science.engineering += poi.rewardScience - per * 2;
+          rewardScience += poi.rewardScience;
+        }
+        lines.push("Найдено: " + poi.nameRu);
+      }
+      if (rewardCredits > 0) lines.push("Кредиты: +" + rewardCredits);
+      if (rewardScience > 0) lines.push("Наука: +" + rewardScience);
       for (const mission of world.missions) {
         if (!mission.accepted || mission.completed || mission.failed) continue;
         if (mission.kind === "scan" && mission.systemId === system.id) {
+          const before = mission.progress;
           mission.progress = Math.min(mission.targetAmount, mission.progress + 1);
+          if (mission.progress !== before) lines.push("Миссия «" + mission.titleRu + "»: " + mission.progress + "/" + mission.targetAmount);
         }
       }
-      if (!wasKnown) logEvent(world, "system", "good", `Обнаружена система ${system.name}.`, system.id, empireId);
-      else if (empire.isPlayer) logEvent(world, "system", "info", `Система ${system.name} просканирована.`, system.id, empireId);
-      return ok();
+      if (newPlanets === 0 && newPois === 0) lines.push("Новых объектов нет: данные системы уже актуальны.");
+      if (!wasKnown) logEvent(world, "system", "good", "Обнаружена система " + system.name + " (" + newPois + " POI).", system.id, empireId);
+      else if (empire.isPlayer) logEvent(world, "system", "info", "Сканирование " + system.name + ": " + lines.join(" · "), system.id, empireId);
+      const scanReport = { titleRu: system.name, tick: world.tick, lines };
+      return { ...ok(), messageRu: "Скан «" + system.name + "»: " + lines.join(" · "), scanReport };
     }
     case "accept_mission": {
       const mission = world.missions.find((m) => m.id === cmd.missionId);

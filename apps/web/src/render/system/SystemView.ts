@@ -1142,8 +1142,11 @@ export class SystemView implements SceneView {
       this.game.toast("Нет флота для сканирования в этой системе", "warn");
       return;
     }
-    if (this.game.sendCommand({ type: "scan_system", fleetId: fleet.id, systemId: this.systemId } as never)) {
-      this.game.toast("Сканирование системы запущено", "good");
+    const result = this.game.sendCommandDetailed({ type: "scan_system", fleetId: fleet.id, systemId: this.systemId } as never);
+    if (result.ok) {
+      if (result.scanReport) {
+        try { window.dispatchEvent(new CustomEvent("sf:scan-report", { detail: result.scanReport })); } catch { /* noop */ }
+      }
     }
   }
 

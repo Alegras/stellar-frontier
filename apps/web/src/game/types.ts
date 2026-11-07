@@ -157,6 +157,7 @@ export interface GameApi {
   undock(): void;
   setOverlay(id: OverlayId): void;
   sendCommand(cmd: Command): boolean;
+  sendCommandDetailed(cmd: Command): import("@sf/sim").CommandResult;
   toast(text: string, severity?: NoticeSeverity, systemId?: number): void;
   dismissNotice(id: number): void;
   setBattleReport(report: BattleRecord | null): void;

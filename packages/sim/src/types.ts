@@ -378,6 +378,8 @@ export interface World {
 
 export interface CommandResult {
   ok: boolean;
+  /** отчёт сканирования для UI (система/планеты/POI/миссии) */
+  scanReport?: { titleRu: string; tick: number; lines: string[] };
   messageRu?: string;
   /** если команда создала сущность (флот/колонию) */
   createdId?: number;

@@ -15,11 +15,28 @@ const MODE_RU: Record<string, string> = {
 
 export function FlightHUD({ game, state }: { game: Game; state: GameState }) {
   const [tel, setTel] = useState<FlightTelemetry>(() => ({ ...EMPTY_TELEMETRY }));
+  const [scanReport, setScanReport] = useState<{ titleRu: string; tick: number; lines: string[] } | null>(null);
 
   useEffect(() => {
     let raf = 0;
     let last = 0;
-    const loop = (now: number) => {
+  
+  useEffect(() => {
+    const onScan = (ev: Event) => {
+      const detail = (ev as CustomEvent).detail as { titleRu?: string; tick?: number; lines?: string[] } | undefined;
+      if (!detail || !Array.isArray(detail.lines)) return;
+      setScanReport({ titleRu: detail.titleRu ?? "Скан", tick: detail.tick ?? 0, lines: detail.lines });
+    };
+    window.addEventListener("sf:scan-report", onScan);
+    return () => window.removeEventListener("sf:scan-report", onScan);
+  }, []);
+  useEffect(() => {
+    if (!scanReport) return;
+    const id = window.setTimeout(() => setScanReport(null), 14000);
+    return () => window.clearTimeout(id);
+  }, [scanReport]);
+
+  const loop = (now: number) => {
       raf = requestAnimationFrame(loop);
       if (now - last < 100) return; // троттлинг 10 Гц: HUD не рендерится 60 раз/с
       last = now;
@@ -108,6 +125,18 @@ export function FlightHUD({ game, state }: { game: Game; state: GameState }) {
         </Btn>
       </div>
 
+      {scanReport && (
+        <div className="sf-hud-block" style={{ top: 88, left: 18, maxWidth: 420 }} data-testid="flight-scan-report">
+          <Panel title={L("Скан", "Scan") + " · " + scanReport.titleRu} right={<Btn size="sm" onClick={() => setScanReport(null)} testId="btn-close-scan-report">×</Btn>}>
+            <div className="sf-list">
+              {scanReport.lines.map((line, i) => (
+                <div className="sf-line" key={i} data-testid={"scan-line-" + i}><span className="sf-ok">✓</span><span className="sf-meta">{line}</span></div>
+              ))}
+            </div>
+            <div className="sf-meta">{L("такт", "tick")} {intText(scanReport.tick)} · {L("F — сканировать снова", "F — scan again")}</div>
+          </Panel>
+        </div>
+      )}
       <div className="sf-hud-block sf-hud-block--warnings">
         {tel.warnings.length > 0 && (
           <div className="sf-warn-strip">

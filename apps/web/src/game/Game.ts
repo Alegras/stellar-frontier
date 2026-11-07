@@ -752,28 +752,34 @@ export class Game implements GameApi {
 
   // --------------------------------------------------------------- commands
   sendCommand(cmd: Command): boolean {
+    return this.sendCommandDetailed(cmd).ok;
+  }
+
+  /** Как sendCommand, но возвращает полный CommandResult (для скана/панелей). */
+  sendCommandDetailed(cmd: Command): sim.CommandResult {
     if (this.net?.isActive) {
       const sent = this.net.sendCommand(cmd);
       if (!sent) this.toast("Нет соединения с сервером", "bad");
-      return sent;
+      return { ok: sent, messageRu: sent ? undefined : "Нет соединения с сервером" };
     }
-    if (!this.w) return false;
+    if (!this.w) return { ok: false, messageRu: "Мир не создан" };
     let result: sim.CommandResult;
     try {
       result = sim.applyCommand(this.w, cmd);
     } catch (e) {
       this.toast("Команда не выполнена: " + (e as Error).message, "bad");
       this.refresh();
-      return false;
+      return { ok: false, messageRu: (e as Error).message };
     }
     if (!result.ok) {
       if (result.messageRu) this.toast(result.messageRu, "warn");
       this.refresh();
-      return false;
+      return result;
     }
     this.afterTick();
     this.refresh({ tick: this.w.tick });
-    return true;
+    if (cmd.type === "scan_system" && result.messageRu) this.toast(result.messageRu, "good");
+    return result;
   }
 
   applyTacticalBattle(report: BattleRecord): void {
