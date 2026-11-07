@@ -436,5 +436,34 @@
       "logistics"
     ],
     "lengthM": 160
+  },
+  {
+    "id": "hull_pathfinder",
+    "ru": "Корпус «Разлом»",
+    "classId": "corvette",
+    "mass": 120,
+    "maxMass": 180,
+    "hullHp": 260,
+    "armorBase": 70,
+    "shieldBase": 140,
+    "slots": {
+      "small": 1,
+      "medium": 1,
+      "large": 0,
+      "utility": 5,
+      "internal": 3
+    },
+    "costAlloys": 32,
+    "baseSpeed": 390,
+    "boostSpeed": 500,
+    "pitchDegS": 32,
+    "buildTicks": 6,
+    "requiredTech": "eng_hull_2",
+    "roles": [
+      "pathfinder",
+      "survey",
+      "support"
+    ],
+    "lengthM": 90
   }
 ]

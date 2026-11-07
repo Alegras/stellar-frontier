@@ -1,4 +1,5 @@
 import type { Game } from "../game/Game";
+import { DESIGN_BY_ID } from "@sf/data";
 import type { GameState } from "../game/types";
 import { Badge, Btn, KV, Panel, Sep, Tip } from "./controls";
 import { L, STATION_KIND_EN, tr } from "./fg";
@@ -50,6 +51,8 @@ export function SystemInspector({ game, state }: { game: Game; state: GameState 
     .slice(0, 6);
 
   const canEnter = known || myFleets.length > 0;
+  const pathfinderFleet = world.fleets.find((f) => f.empireId === emp.id && f.ships.some((sh) => DESIGN_BY_ID[sh.designId]?.role === "pathfinder" || DESIGN_BY_ID[sh.designId]?.modules.includes("hyperlane_projector_mk1"))) ?? null;
+  const canPlot = Boolean(pathfinderFleet && pathfinderFleet.systemId !== sys.id && !world.systems[pathfinderFleet.systemId]?.links.includes(sys.id));
 
   return (
     <Panel
@@ -112,6 +115,17 @@ export function SystemInspector({ game, state }: { game: Game; state: GameState 
               {L("Сетка командования", "Grid Command")}
             </Btn>
           )}
+        </>
+      )}
+
+      {canPlot && pathfinderFleet && (
+        <>
+          <Btn size="sm" variant="primary" testId="btn-plot-hyperlane"
+            title={L("Проложить новый гиперпуть к выбранной системе (нужен «Путевод» с модулем «Разлом»)", "Plot a new hyperlane to the selected system (requires Pathfinder with Rift projector)")}
+            onClick={() => { game.sendCommand({ type: "plot_hyperlane", fleetId: pathfinderFleet.id, targetSystemId: sys.id } as never); }}>
+            {L("Проложить гиперпуть", "Plot hyperlane")}
+          </Btn>
+          <div className="sf-meta">{L("Гиперпрокладчик", "Pathfinder")}: {pathfinderFleet.name}</div>
         </>
       )}
 

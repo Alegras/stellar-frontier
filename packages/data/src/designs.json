@@ -502,5 +502,29 @@
     "role": "transport",
     "descRu": "Курьер и десантный шаттл: перевозки внутри системы.",
     "starter": false
+  },
+  {
+    "id": "pathfinder_ark",
+    "ru": "Гиперпрокладчик «Путевод»",
+    "classId": "corvette",
+    "hullId": "hull_pathfinder",
+    "weapons": [
+      "laser_s_mk1"
+    ],
+    "modules": [
+      "hyperlane_projector_mk1",
+      "pathfinder_survey_array",
+      "pathfinder_engine_mk1",
+      "shield_gen_mk1",
+      "reactor_mk1",
+      "fsd_mk1"
+    ],
+    "fleetPower": 14,
+    "costCredits": 520000,
+    "costAlloys": 55,
+    "buildTicks": 7,
+    "requiredTech": "eng_fsd_1",
+    "role": "pathfinder",
+    "descRu": "Специальный корабль для прокладки новых гиперпутей к дальним системам. Покупается на верфи редко, строится после ветки «Гиперпрокладка»."
   }
 ]

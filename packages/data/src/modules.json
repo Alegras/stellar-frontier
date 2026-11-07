@@ -292,5 +292,35 @@
       "fsd_range": 15
     },
     "tech": "eng_fsd_2"
+  },
+  {
+    "id": "hyperlane_projector_mk1",
+    "ru": "Гиперпрокладчик «Разлом»",
+    "slot": "utility",
+    "mass": 24,
+    "power": 18,
+    "costAlloys": 18,
+    "tech": "eng_fsd_1",
+    "descRu": "Создаёт новый гиперпуть к дальней системе (расход сплавов)."
+  },
+  {
+    "id": "pathfinder_survey_array",
+    "ru": "Дальний сенсорный массив",
+    "slot": "utility",
+    "mass": 10,
+    "power": 8,
+    "costAlloys": 8,
+    "tech": "eng_thrusters_1",
+    "descRu": "Увеличивает дальность прокладки и разведки."
+  },
+  {
+    "id": "pathfinder_engine_mk1",
+    "ru": "Двигатель «Путевод»",
+    "slot": "internal",
+    "mass": 18,
+    "power": 12,
+    "costAlloys": 12,
+    "tech": "eng_thrusters_1",
+    "descRu": "Стабильный двигатель для дальних переходов."
   }
 ]

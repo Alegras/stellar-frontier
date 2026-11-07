@@ -598,7 +598,7 @@ export function createFullGameState(world: World, options?: { raceId?: string; d
       artifactCount: 0,
       secretLine: 0,
       locks: [],
-      flags: {},
+      flags: { pathfinder_stock: 1 },
       tutorialStep: 0,
       lastStoryTick: 0,
     },

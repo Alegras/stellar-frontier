@@ -199,7 +199,13 @@ export function applyCommandAs(world: World, empireId: number, cmd: Command): Co
       const designFleetPower = custom ? custom.fleetPower : stock!.fleetPower;
       const designCostAlloys = custom ? custom.costAlloys : stock!.costAlloys;
       const designBuildTicks = custom ? custom.buildTicks : stock!.buildTicks;
-      if (stock && stock.requiredTech && !empire.techs.completed.includes(stock.requiredTech)) return deny("Технология корабля не исследована");
+      const fgBuy = ensureFg(world);
+      const pathfinderStock = Math.max(0, fgBuy.campaign.flags["pathfinder_stock"] ?? 0);
+      if (stock && stock.requiredTech && !empire.techs.completed.includes(stock.requiredTech)) {
+        const canBuy = Boolean(cmd.buy) && stock.id === "pathfinder_ark" && pathfinderStock > 0;
+        if (!canBuy) return deny("Технология корабля не исследована");
+        fgBuy.campaign.flags["pathfinder_stock"] = pathfinderStock - 1;
+      }
       const count = Math.floor(cmd.count);
       if (!Number.isFinite(count) || count < 1) return deny("Некорректное количество");
       if (count > 50) return deny("Максимум 50 кораблей за заказ");
@@ -541,6 +547,33 @@ export function applyCommandAs(world: World, empireId: number, cmd: Command): Co
       if (enemies.length === 0) return deny("В системе нет вражеских флотов");
       logEvent(world, "combat", "warn", `Адмирал вступает в бой в системе ${system.name}.`, system.id, empireId);
       return ok();
+    }
+    case "plot_hyperlane": {
+      const fleet = findFleet(world, cmd.fleetId);
+      if (!fleet || fleet.empireId !== empireId) return deny("Флот не найден");
+      const from = world.systems[fleet.systemId];
+      const target = world.systems[cmd.targetSystemId];
+      if (!from || !target) return deny("Система не найдена");
+      if (from.id === target.id) return deny("Выберите другую систему");
+      if (from.links.includes(target.id)) return deny("Гиперпуть уже существует");
+      const hasPathfinder = fleet.ships.some((ship) => {
+        const design = DESIGN_BY_ID[ship.designId];
+        return design?.role === "pathfinder" || design?.modules.includes("hyperlane_projector_mk1")
+;
+      });
+      if (!hasPathfinder) return deny("Нужен гиперпрокладчик «Путевод» с модулем «Разлом»");
+      const dist = Math.hypot(from.x - target.x, from.y - target.y);
+      const maxDist = empire.techs.completed.includes("eng_fsd_2") ? 1800 : 1200;
+      if (dist > maxDist) return deny("Система вне дальности прокладки");
+      const cost = { alloys: empire.techs.completed.includes("eng_fsd_2") ? 20 : 32, credits: 5000 };
+      if (!canAfford(world, empireId, cost)) return deny("Не хватает сплавов/кредитов на прокладку");
+      payCost(empire, cost);
+      from.links.push(target.id);
+      target.links.push(from.id);
+      if (!target.knownBy.includes(empireId)) target.knownBy.push(empireId);
+      if (!target.visibleTo.includes(empireId)) target.visibleTo.push(empireId);
+      logEvent(world, "fleet", "good", "Проложен новый гиперпуть: " + from.name + " ↔ " + target.name + ".", from.id, empireId);
+      return { ok: true, messageRu: "Новый гиперпуть: " + from.name + " ↔ " + target.name };
     }
     // ================================================================ M6–M12
     case "tradition_unlock":

@@ -391,7 +391,7 @@ export type Command =
   | { type: "move_fleet"; fleetId: number; systemId: number }
   | { type: "stop_fleet"; fleetId: number }
   | { type: "colonize"; fleetId: number; planetId: number }
-  | { type: "build_ship"; systemId: number; designId: string; count: number }
+  | { type: "build_ship"; systemId: number; designId: string; count: number; buy?: boolean }
   // --- M5/M12: конструктор кораблей
   | { type: "create_design"; nameRu: string; hullId: string; weapons: string[]; modules: string[] }
   | { type: "update_design"; designId: string; nameRu?: string; hullId?: string; weapons?: string[]; modules?: string[] }
@@ -407,6 +407,7 @@ export type Command =
   | { type: "collect_salvage"; credits: number; alloys: number }
   | { type: "resolve_pending_battle" }
   | { type: "clear_pending_battle" }
+  | { type: "plot_hyperlane"; fleetId: number; targetSystemId: number }
   | { type: "accept_mission"; missionId: number }
   | { type: "abandon_mission"; missionId: number }
   | { type: "make_peace"; targetEmpireId: number }

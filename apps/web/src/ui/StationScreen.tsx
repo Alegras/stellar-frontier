@@ -65,9 +65,10 @@ export function StationScreen({ game, state }: { game: Game; state: GameState })
   const missions = world.missions
     .filter((m) => m.stationId === station.id || m.systemId === system.id)
     .filter((m) => !m.completed && !m.failed);
+  const pathfinderStock = Math.max(0, world.fg?.campaign.flags["pathfinder_stock"] ?? 0);
   const designs = DESIGNS.filter((d) => {
     const techOk = !d.requiredTech || emp.techs.completed.includes(d.requiredTech);
-    return techOk && (d.classId === "flagship" ? false : true);
+    return (techOk || (d.id === "pathfinder_ark" && pathfinderStock > 0)) && (d.classId === "flagship" ? false : true);
   });
 
   return (
@@ -225,6 +226,7 @@ export function StationScreen({ game, state }: { game: Game; state: GameState })
                   {designs.length === 0 && <div className="sf-empty">{L("Нет доступных проектов: нужны технологии.", "No available designs: technologies required.")}</div>}
                   {designs.map((d) => {
                     const techOk = !d.requiredTech || emp.techs.completed.includes(d.requiredTech);
+                    const buyOnly = !techOk && d.id === "pathfinder_ark" && pathfinderStock > 0;
                     // Империя строит корабли за сплавы (канон §9.1): симуляция списывает только сплавы.
                     // Кредитная цена верфи — справочная (для свободного полёта/будущей покупки за кредиты).
                     const cost = { alloys: d.costAlloys };
@@ -248,12 +250,12 @@ export function StationScreen({ game, state }: { game: Game; state: GameState })
                         <Btn
                           size="sm"
                           variant={afford && techOk ? "primary" : "default"}
-                          disabled={!afford || !techOk}
-                          onClick={() => game.sendCommand({ type: "build_ship", systemId: system.id, designId: d.id, count: 1 })}
+                          disabled={!afford || (!techOk && !buyOnly)}
+                          onClick={() => game.sendCommand({ type: "build_ship", systemId: system.id, designId: d.id, count: 1, buy: buyOnly } as never)}
                           testId={"btn-build-ship-" + d.id}
-                          title={afford ? L("Построить 1 корабль за сплавы", "Build 1 ship for alloys") : !capOk ? L("Лимит флота", "Fleet cap") + ": " + fleetPower + "/" + fleetLimit + " FP, +" + d.fleetPower : L("Не хватает сплавов", "Not enough alloys")}
+                          title={buyOnly ? L("Купить rare-корабль на верфи; строительство недоступно без технологии", "Buy a rare ship at the shipyard; construction requires technology") : afford ? L("Построить 1 корабль за сплавы", "Build 1 ship for alloys") : !capOk ? L("Лимит флота", "Fleet cap") + ": " + fleetPower + "/" + fleetLimit + " FP, +" + d.fleetPower : L("Не хватает сплавов", "Not enough alloys")}
                         >
-                          {L("Построить", "Build")}
+                          {buyOnly ? L("Купить", "Buy") : L("Построить", "Build")}
                         </Btn>
                       </div>
                     );

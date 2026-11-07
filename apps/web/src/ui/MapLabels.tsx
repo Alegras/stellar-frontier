@@ -694,7 +694,7 @@ export function MapLabels({ game, state, onPick, onEnter }: MapLabelsProps) {
         );
       })}
       <div className="sf-map-hint">
-        {L("Колесо — зум · клик по метке — выбрать · двойной клик — войти в систему · Tab — следующая · M — карта", "Wheel — zoom · click a label — select · double click — enter · Tab — next · M — map")}
+        {L("Колесо — зум · клик — выбрать · двойной клик — войти · красные/жёлтые линии — войны и союзы ИИ, голубой пунктир — ваш флот · M — карта", "Wheel — zoom · click — select · double click — enter · red/yellow lines are AI wars/alliances, cyan dashes are your fleet route · M — map")}
       </div>
       {hover && tooltip && (
         <div
