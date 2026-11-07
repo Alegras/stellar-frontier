@@ -42,7 +42,7 @@ function groups(): { title: string; rows: [string, string][] }[] {
   {
     title: L("Бой: L0, авторезолв и сетка", "Combat: L0, auto-resolve and grid"),
     rows: [
-      [" " + L("Свои + вражеские флоты в системе", "Own + hostile fleets in system"), L("в инспекторе системы появятся «Авторезолв» и «Сетка командования»", "the system inspector shows Auto-resolve and Grid Command")],
+      [" " + L("Свои + вражеские флоты в системе", "Own + hostile fleets in system"), L("появляется окно «Перед боем»: авторезолв, сетка или 6DOF; режим по умолчанию — Настройки → «Бои на карте»", "a Before battle window appears: auto-resolve, grid or 6DOF; default is Settings → Map battles")],
       [" " + L("Авторезолв", "Auto-resolve"), L("мгновенный результат по формуле флота, без ручного боя", "instant result using fleet power, no manual fight")],
       [" " + L("Сетка командования", "Grid Command"), L("пошаговая битва на гексах: расстановка 7+3, инициатива, способности, S32-итог", "turn-based hex battle: 7+3 deployment, initiative, abilities, S32 result")],
       [" " + L("6DOF", "6DOF"), L("личный полёт в системе остаётся real-time; сетка и 6DOF не смешиваются", "in-system flight stays real-time; grid and 6DOF never mix")],

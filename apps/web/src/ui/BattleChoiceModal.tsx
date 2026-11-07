@@ -26,7 +26,7 @@ export function BattleChoiceModal({ game, state }: { game: Game; state: GameStat
   const a = world.fleets.find((f) => f.id === pb.attackerFleetId);
   const b = world.fleets.find((f) => f.id === pb.defenderFleetId);
   const resolve = () => { game.sendCommand({ type: "resolve_pending_battle" } as never); };
-  const openGrid = () => { setHidden(true); window.dispatchEvent(new CustomEvent("sf:grid-battle", { detail: { systemId: pb.systemId, systemName: sys?.name, seed: pb.tick * 31 + pb.systemId, coop: false } })); game.sendCommand({ type: "clear_pending_battle" } as never); };
+  const openGrid = () => { setHidden(true); window.dispatchEvent(new CustomEvent("sf:grid-battle", { detail: { systemId: pb.systemId, systemName: sys?.name, seed: pb.tick * 31 + pb.systemId, coop: false, pending: { attackerFleetId: pb.attackerFleetId, defenderFleetId: pb.defenderFleetId, playerSide: pb.playerSide } } })); game.sendCommand({ type: "clear_pending_battle" } as never); };
   return (
     <Modal title={L("Перед боем", "Before battle") + " · " + (sys?.name ?? "")} onClose={() => setHidden(true)} testId="battle-choice-modal" closeTestId="btn-close-battle-choice" footer={<Btn onClick={() => setHidden(true)} testId="btn-battle-later">{L("Позже", "Later")}</Btn>}>
       <div className="sf-meta">{L("Бой остановлен. Выберите, как его провести.", "Battle paused. Choose how to fight.")}</div>

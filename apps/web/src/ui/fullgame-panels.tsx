@@ -102,7 +102,7 @@ export function FullGameOverlays({ game, state }: { game: Game; state: GameState
   }, [game, state.started, state.seed]);
   const [dismissed, setDismissed] = useState<string[]>([]);
   const [lastPendingId, setLastPendingId] = useState<string | null>(null);
-  const [gridBattle, setGridBattle] = useState<{ seed: number; coop: boolean; systemName: string } | null>(null);
+  const [gridBattle, setGridBattle] = useState<{ seed: number; coop: boolean; systemName: string; systemId?: number; pending?: { attackerFleetId: number; defenderFleetId: number; playerSide: "attacker" | "defender" } } | null>(null);
 
   const pending = fg?.narrative.pending ?? [];
   const eventRaw = pending.find((e) => !dismissed.includes(e.id)) ?? null;
@@ -130,17 +130,53 @@ export function FullGameOverlays({ game, state }: { game: Game; state: GameState
 
   useEffect(() => {
     const onGrid = (ev: Event) => {
-      const detail = (ev as CustomEvent).detail as { seed?: number; coop?: boolean; systemId?: number } | undefined;
+      const detail = (ev as CustomEvent).detail as { seed?: number; coop?: boolean; systemId?: number; pending?: { attackerFleetId: number; defenderFleetId: number; playerSide: "attacker" | "defender" } } | undefined;
       let flag = "1";
       try { flag = localStorage.getItem("sf.gridBattle") ?? "0"; } catch { /* noop */ }
-      if (flag === "0") return;
+      if (flag === "0" && !detail?.pending) return;
       const world = worldOf(game);
       const system = world && detail?.systemId != null ? world.systems.find((s) => s.id === detail.systemId) : null;
-      setGridBattle({ seed: detail?.seed ?? 42, coop: Boolean(detail?.coop), systemName: system?.name ?? "Вега-II" });
+      setGridBattle({ seed: detail?.seed ?? 42, coop: Boolean(detail?.coop), systemName: system?.name ?? "Вега-II", systemId: detail?.systemId, pending: detail?.pending });
     };
     window.addEventListener("sf:grid-battle", onGrid);
     return () => window.removeEventListener("sf:grid-battle", onGrid);
   }, [game]);
+
+
+  const finishGrid = (result: { winner: "player" | "enemy" | "draw"; losses: { side: "player" | "enemy"; lost: number; fp: number }[]; spoils: { credits: number; alloys: number } }): void => {
+    const pendingBattle = gridBattle?.pending;
+    if (!pendingBattle) return;
+    const w = worldOf(game);
+    if (!w) return;
+    const a = w.fleets.find((f) => f.id === pendingBattle.attackerFleetId);
+    const b = w.fleets.find((f) => f.id === pendingBattle.defenderFleetId);
+    if (!a || !b) return;
+    const playerLoss = result.losses.filter((l) => l.side === "player").reduce((n, l) => n + l.fp, 0);
+    const enemyLoss = result.losses.filter((l) => l.side === "enemy").reduce((n, l) => n + l.fp, 0);
+    const playerShips = result.losses.filter((l) => l.side === "player").reduce((n, l) => n + l.lost, 0);
+    const enemyShips = result.losses.filter((l) => l.side === "enemy").reduce((n, l) => n + l.lost, 0);
+    const playerIsAttacker = pendingBattle.playerSide === "attacker";
+    const outcome = result.winner === "draw" ? "draw" : result.winner === "player"
+      ? (playerIsAttacker ? "attacker_win" : "defender_win")
+      : (playerIsAttacker ? "defender_win" : "attacker_win");
+    game.sendCommand({ type: "apply_battle", report: {
+      id: (w.battles[w.battles.length - 1]?.id ?? 0) + 1,
+      systemId: gridBattle?.systemId ?? a.systemId,
+      tick: w.tick,
+      durationSec: 0,
+      attacker: { empireId: a.empireId, fleetId: a.id, fp: 0, shipsBefore: a.ships.length },
+      defender: { empireId: b.empireId, fleetId: b.id, fp: 0, shipsBefore: b.ships.length },
+      attackerLossFp: playerIsAttacker ? playerLoss : enemyLoss,
+      defenderLossFp: playerIsAttacker ? enemyLoss : playerLoss,
+      attackerShipsLost: playerIsAttacker ? playerShips : enemyShips,
+      defenderShipsLost: playerIsAttacker ? enemyShips : playerShips,
+      spoilsAlloys: result.spoils.alloys,
+      spoilsCredits: result.spoils.credits,
+      outcome: outcome as never,
+      tactical: true,
+    } } as never);
+    setGridBattle(null);
+  };
 
   return (
     <div data-testid="fullgame-overlays" style={{ position: "absolute", inset: 0, pointerEvents: "none" }}>
@@ -175,7 +211,7 @@ export function FullGameOverlays({ game, state }: { game: Game; state: GameState
       )}
       {gridBattle && (
         <div style={{ pointerEvents: "auto" }}>
-          <GridBattleOverlay game={game} coop={gridBattle.coop} seed={gridBattle.seed} onClose={() => setGridBattle(null)} />
+          <GridBattleOverlay game={game} coop={gridBattle.coop} seed={gridBattle.seed} onFinish={finishGrid} onClose={() => setGridBattle(null)} />
         </div>
       )}
       {event && (

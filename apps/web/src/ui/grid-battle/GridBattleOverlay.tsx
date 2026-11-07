@@ -4,7 +4,7 @@ import { Badge, Btn, Panel, Sep } from "../controls";
 import { L } from "../fg";
 import { BATTLE_ABILITY_BY_ID, BATTLE_CLASS_BY_ID } from "@sf/data";
 import { HexField } from "./HexField";
-import { CLASS_RU, COLS, ROWS, obstacleAt, stackAt, type Battle, type Formation, type Stack } from "./model";
+import { CLASS_RU, COLS, ROWS, obstacleAt, stackAt, type Battle, type Formation, type Result, type Stack } from "./model";
 import {
   ability, activeStack, aiTurn, attack, autoBattle, canAttack, checkEnd, clone, createMockBattle,
   defend, deploy, formation, moveActive, preview, reachable, resetDeploy, start, wait,
@@ -24,7 +24,7 @@ function useReducedMotion(): boolean {
 }
 
 /** S30 расстановка / S31 бой / S32 итог — модальный слой L0 (мок-провайдер до battle-grid). */
-export function GridBattleOverlay({ game, onClose, coop = false, seed = 42 }: { game: Game; onClose: () => void; coop?: boolean; seed?: number }) {
+export function GridBattleOverlay({ game, onClose, onFinish, coop = false, seed = 42 }: { game: Game; onClose: () => void; onFinish?: (result: Result) => void; coop?: boolean; seed?: number }) {
   const [battle, setBattle] = useState<Battle>(() => createMockBattle({ coop, seed }));
   const [screen, setScreen] = useState<Screen>("deploy");
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -40,7 +40,11 @@ export function GridBattleOverlay({ game, onClose, coop = false, seed = 42 }: { 
   const playerStacks = battle.stacks.filter((s) => s.side === "player");
   const enemyStacks = battle.stacks.filter((s) => s.side === "enemy");
   const toast = (text: string): void => { try { game.toast(text, "info"); } catch { /* noop */ } };
-  const close = (): void => { try { game.setNarrativeModalOpen?.(false); } catch { /* noop */ } onClose(); };
+  const close = (): void => {
+    try { game.setNarrativeModalOpen?.(false); } catch { /* noop */ }
+    if (battle.phase === "result" && battle.result && onFinish) onFinish(battle.result);
+    onClose();
+  };
 
   const reach = useMemo(() => (screen === "battle" && active?.side === "player" ? reachable(battle, active.id) : []), [battle, active, screen]);
   const targets = useMemo(() => (screen === "battle" && active?.side === "player" ? battle.stacks.filter((s) => s.side === "enemy" && s.alive && !s.reserve) : [] as Stack[]), [battle, active, screen]);
