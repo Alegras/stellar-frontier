@@ -7,7 +7,7 @@ export type Terrain = "void" | "asteroid" | "nebula" | "debris" | "minefield" | 
 export type Formation = "line" | "wedge" | "echelon" | "guard";
 
 export interface Stack { id: string; side: Side; cls: Cls; name: string; count: number; startCount: number; hp: number; maxHp: number; shield: number; maxShield: number; mp: number; maxMp: number; init: number; dmg: number; range: number; q: number; r: number; facing: number; reserve: boolean; alive: boolean; moved: boolean; waited: boolean; defended: boolean; counterUsed: boolean; kills: number; abilities?: string[] }
-export interface Obstacle { q: number; r: number; kind: Terrain }
+export interface Obstacle { q: number; r: number; kind: Terrain; hp?: number; maxHp?: number }
 export interface LogEntry { round: number; text: string; kind: "damage" | "ability" | "system" | "death" | "move" }
 export interface Loss { side: Side; cls: Cls; name: string; lost: number; fp: number }
 export interface Result { winner: Side | "draw"; losses: Loss[]; spoils: { credits: number; alloys: number; samples: number }; xp: number; warScore: number; mvpName: string; mvpDamage: number; parity: { autoMin: number; autoMax: number; actual: number }; seed: number }
@@ -127,6 +127,19 @@ export function attack(b: Battle, aid: string, tid: string, ranged: boolean): bo
   if (t.hp <= 0 || t.count <= 0) { t.alive = false; log(b, CLASS_RU[t.cls] + " «" + t.name + "» уничтожен.", "death"); }
   else if (!ranged && !t.counterUsed) { t.counterUsed = true; const c = Math.round(dmg * 0.5 * (t.defended ? 1.15 : 1)); const cs = Math.min(a.shield, c); a.shield -= cs; a.hp = Math.max(0, a.hp - (c - cs)); if (a.hp <= 0) { a.alive = false; a.count = 0; } log(b, "Ответный удар: " + CLASS_RU[t.cls] + " «" + t.name + "» → " + c, "damage"); }
   if (!checkEnd(b)) endTurn(b); return true;
+}
+
+export function attackObstacle(b: Battle, q: number, r: number): boolean {
+  const a = activeStack(b); if (!a || a.side !== "player") return false;
+  const idx = b.obstacles.findIndex((o) => o.q === q && o.r === r); if (idx < 0) return false;
+  const o = b.obstacles[idx]!; if (o.kind !== "asteroid" && o.kind !== "debris") return false;
+  o.maxHp = o.maxHp ?? (o.kind === "asteroid" ? 120 : 80); o.hp = o.hp ?? o.maxHp;
+  const dmg = Math.round(a.dmg * a.count * 0.6); o.hp = Math.max(0, o.hp - dmg);
+  b.lastDamage.push({ q, r, amount: dmg, t: Date.now() });
+  b.lastEffects.push({ kind: "hit", from: { q: a.q, r: a.r }, to: { q, r }, amount: dmg, shield: 0, t: Date.now() });
+  log(b, "Обстрел " + (o.kind === "asteroid" ? "астероида" : "обломков") + ": " + dmg + " урона", "damage");
+  if (o.hp <= 0) { b.obstacles.splice(idx, 1); log(b, "Препятствие разрушено.", "system"); }
+  endTurn(b); return true;
 }
 export function wait(b: Battle): void { const a = activeStack(b); if (!a || a.side !== "player" || a.waited) return; a.waited = true; const i = b.order.indexOf(a.id); if (i >= 0) { b.order.splice(i, 1); b.order.push(a.id); } log(b, "Ожидание: " + CLASS_RU[a.cls] + " «" + a.name + "»", "system"); advanceTurn(b); }
 export function defend(b: Battle): void { const a = activeStack(b); if (!a) return; a.defended = true; log(b, CLASS_RU[a.cls] + " «" + a.name + "» защищается (+20%).", "system"); endTurn(b); }

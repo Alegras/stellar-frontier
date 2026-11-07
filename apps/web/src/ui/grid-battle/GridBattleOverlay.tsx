@@ -4,7 +4,7 @@ import { Badge, Btn, Panel, Sep } from "../controls";
 import { L } from "../fg";
 import { BATTLE_ABILITY_BY_ID, BATTLE_CLASS_BY_ID } from "@sf/data";
 import { HexField } from "./HexField";
-import { CLASS_RU, COLS, ROWS, obstacleAt, stackAt, type Battle, type Formation, type Result, type Stack } from "./model";
+import { CLASS_RU, COLS, ROWS, attackObstacle, obstacleAt, stackAt, type Battle, type Formation, type Result, type Stack } from "./model";
 import {
   ability, activeStack, aiTurn, attack, autoBattle, canAttack, checkEnd, clone, createMockBattle,
   defend, deploy, formation, moveActive, preview, reachable, resetDeploy, start, wait,
@@ -28,6 +28,8 @@ export function GridBattleOverlay({ game, onClose, onFinish, coop = false, seed 
   const [battle, setBattle] = useState<Battle>(() => createMockBattle({ coop, seed }));
   const [screen, setScreen] = useState<Screen>("deploy");
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [targetId, setTargetId] = useState<string | null>(null);
+  const [targetObstacle, setTargetObstacle] = useState<{ q: number; r: number } | null>(null);
   const [listMode, setListMode] = useState(false);
   const [hint, setHint] = useState(L("Расставьте стэки в 3 колонках слева или нажмите «Авто».", "Deploy stacks in the 3 left columns or press Auto."));
   const [hover, setHover] = useState<{ q: number; r: number } | null>(null);
@@ -37,6 +39,7 @@ export function GridBattleOverlay({ game, onClose, onFinish, coop = false, seed 
   const update = useCallback((next: Battle) => setBattle(next), []);
   const active = activeStack(battle);
   const selected = battle.stacks.find((s) => s.id === selectedId) ?? active;
+  useEffect(() => { setTargetId(null); setTargetObstacle(null); }, [battle.activeId]);
   const playerStacks = battle.stacks.filter((s) => s.side === "player");
   const enemyStacks = battle.stacks.filter((s) => s.side === "enemy");
   const toast = (text: string): void => { try { game.toast(text, "info"); } catch { /* noop */ } };
@@ -69,6 +72,20 @@ export function GridBattleOverlay({ game, onClose, onFinish, coop = false, seed 
     const b = clone(battle); ability(b, abilityId); setBattle(b); setAbilityOpen(false);
     if (b.phase === "result") setScreen("result");
   };
+
+  const doAttack = (): void => {
+    if (!active || active.side !== "player") return;
+    if (targetObstacle) {
+      const b = clone(battle); if (attackObstacle(b, targetObstacle.q, targetObstacle.r)) { setBattle(b); setTargetObstacle(null); showHint(L("Препятствие обстреляно.", "Obstacle hit.")); }
+      return;
+    }
+    const target = targetId ? battle.stacks.find((s) => s.id === targetId) : null;
+    if (!target || !target.alive) return;
+    const ranged = active.range > 1 && canAttack(battle, active, target, true).ok;
+    const res = canAttack(battle, active, target, ranged);
+    if (!res.ok) { showHint(res.reason ?? L("Цель недоступна", "Target unavailable")); return; }
+    const b = clone(battle); attack(b, active.id, target.id, ranged); setBattle(b); setTargetId(null); if (b.phase === "result") setScreen("result");
+  };
   const onHex = (q: number, r: number): void => {
     if (screen === "deploy") {
       if (selectedId && battle.stacks.find((s) => s.id === selectedId)?.side === "player" && battle.stacks.find((s) => s.id === selectedId)?.reserve) {
@@ -80,14 +97,16 @@ export function GridBattleOverlay({ game, onClose, onFinish, coop = false, seed 
     if (screen !== "battle" || !active || active.side !== "player") return;
     const target = stackAt(battle, q, r);
     if (target && target.side === "enemy") {
+      setTargetId(target.id); setTargetObstacle(null);
       const ranged = active.range > 1 && canAttack(battle, active, target, true).ok;
-      if (canAttack(battle, active, target, ranged).ok) {
-        const p = preview(battle, active.id, target.id, ranged); showHint(L("Прогноз: ", "Forecast: ") + p.min + "–" + p.max + L(" урона", " damage"));
-        const b = clone(battle); attack(b, active.id, target.id, ranged); setBattle(b); setSelectedId(target.id); if (b.phase === "result") setScreen("result"); return;
-      }
-      showHint(canAttack(battle, active, target, true).reason ?? L("Цель недоступна", "Target unavailable")); return;
+      const ok = canAttack(battle, active, target, ranged).ok;
+      const p = preview(battle, active.id, target.id, ranged);
+      showHint(ok ? L("Цель: ", "Target: ") + target.name + " · " + L("прогноз", "forecast") + " " + p.min + "–" + p.max + L(" урона. Нажмите «Атака».", " damage. Press Attack.") : (canAttack(battle, active, target, true).reason ?? L("Цель недоступна", "Target unavailable")));
+      return;
     }
-    if (reach.some((h) => h.q === q && h.r === r)) { const b = clone(battle); moveActive(b, q, r); setBattle(b); return; }
+    if (reach.some((h) => h.q === q && h.r === r)) { const b = clone(battle); moveActive(b, q, r); setBattle(b); setTargetId(null); setTargetObstacle(null); return; }
+    const obs = battle.obstacles.find((o) => o.q === q && o.r === r && (o.kind === "asteroid" || o.kind === "debris"));
+    if (obs) { setTargetObstacle({ q, r }); setTargetId(null); showHint(L("Препятствие: ", "Obstacle: ") + (obs.kind === "asteroid" ? "астероид" : "обломки") + " — «Атака» разрушит."); return; }
     const s = stackAt(battle, q, r); if (s) setSelectedId(s.id);
   };
 
@@ -162,8 +181,9 @@ export function GridBattleOverlay({ game, onClose, onFinish, coop = false, seed 
                   : L("Жёлтый — ваш активный стэк. Синие гексы — ход. Клик по врагу — атака; наведите для прогноза.", "Yellow is your active stack. Blue hexes are moves. Click an enemy to attack; hover for forecast.")}
               </div>
               {listMode ? <BattleList battle={battle} onSelect={setSelectedId} onAttack={(tid) => { if (!active || active.side !== "player") return; const target = battle.stacks.find((s) => s.id === tid); if (!target) return; const b = clone(battle); attack(b, active.id, target.id, active.range > 1 && canAttack(battle, active, target, true).ok); setBattle(b); if (b.phase === "result") setScreen("result"); }} />
-                : <HexField battle={battle} reach={reach} targets={targets} onHexClick={onHex} onHover={(q, r) => setHover({ q, r })} reducedMotion={reduced} />}
+                : <HexField battle={battle} reach={reach} targets={targets} selectedTargetId={targetId} targetObstacle={targetObstacle} onHexClick={onHex} onHover={(q, r) => setHover({ q, r })} reducedMotion={reduced} />}
               {screen === "battle" && <div className="sf-gridactions" data-testid="grid-actions">
+                <Btn size="sm" variant={targetId || targetObstacle ? "primary" : "default"} disabled={!active || active.side !== "player" || (!targetId && !targetObstacle)} onClick={doAttack} testId="btn-grid-attack">{L("Атака", "Attack")} [F]</Btn>
                 <Btn size="sm" variant="primary" disabled={!active || active.side !== "player"} onClick={() => doAction("wait")} testId="btn-grid-wait">{L("Ждать", "Wait")} [Space]</Btn>
                 <Btn size="sm" disabled={!active || active.side !== "player"} onClick={() => doAction("defend")} testId="btn-grid-defend">{L("Защита", "Defend")} [D]</Btn>
                 <Btn size="sm" disabled={!active || active.side !== "player" || active.mp < 1} onClick={() => { setAbilityOpen((v) => !v); }} testId="btn-grid-ability">{L("Способность", "Ability")} [E]</Btn>

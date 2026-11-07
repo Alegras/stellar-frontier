@@ -1,70 +1,50 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import type { Battle, Stack } from "./model";
+import type { Battle, Obstacle, Stack, Terrain } from "./model";
 import {
-  CLASS_RU, COLS, FIELD_H, FIELD_W, HEX_H, HEX_W, ROWS, TERRAIN_RU, distance, hexCenter,
-  obstacleAt, pixelToHex, stackAt, terrainBlocksLos, terrainBlocksMove,
+  CLASS_RU, COLS, FIELD_H, FIELD_W, HEX_W, ROWS, distance, hexCenter,
+  obstacleAt, pixelToHex, stackAt,
 } from "./model";
 
-interface ArtAsset { path: string; frameW: number; frameH: number; frames: number; fps: number; loop: boolean; anchor?: [number, number] }
-interface ArtManifest { tiles?: Record<string, ArtAsset>; units?: Record<string, Record<string, ArtAsset>>; effects?: Record<string, ArtAsset>; backgrounds?: Record<string, unknown> }
-const TERRAIN_ART: Record<string, string> = { void: "empty", debris: "wreck", minefield: "mines", gravity_anomaly: "gravity", asteroid: "asteroid", nebula: "nebula" };
-const TERRAIN_COLOR: Record<string, string> = { void: "#101A2E", asteroid: "#5C5044", nebula: "#3A2B5C", debris: "#3A4048", minefield: "#4A2A2A", gravity_anomaly: "#2A3A56" };
-const SIDE_COLOR = { player: "#4FC3F7", enemy: "#FF5A5A" } as const;
+const SIDE_COLOR = { player: "#4FC3F7", enemy: "#FF6B6B" } as const;
 const CLASS_CODE: Record<string, string> = { corvette: "CV", frigate: "FR", destroyer: "DD", cruiser: "CA", battleship: "BB", carrier: "CVN", titan: "TT", colossus: "CL" };
+const TERRAIN_COLOR: Record<Terrain, string> = { void: "#0B1422", asteroid: "#242018", nebula: "#1B1730", debris: "#1B2028", minefield: "#281818", gravity_anomaly: "#142033" };
+const TERRAIN_RU: Record<Terrain, string> = { void: "пусто", asteroid: "астероид", nebula: "туманность", debris: "обломки", minefield: "мины", gravity_anomaly: "гравитация" };
 
-function loadImage(src: string): Promise<HTMLImageElement> {
-  return new Promise((resolve, reject) => { const img = new Image(); img.onload = () => resolve(img); img.onerror = () => reject(new Error("img")); img.src = src; });
+function hexPath(ctx: CanvasRenderingContext2D, cx: number, cy: number, scale = 1): void {
+  const rx = 14 * scale, ry = 16 * scale;
+  ctx.beginPath();
+  for (let i = 0; i < 6; i++) {
+    const a = -Math.PI / 2 + (i * Math.PI) / 3;
+    const x = cx + Math.cos(a) * rx, y = cy + Math.sin(a) * ry;
+    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+  }
+  ctx.closePath();
 }
-function artUrl(path: string): string { return path.startsWith("/") ? path : "/battle/" + path; }
 
-/** Пиксельный 2.5D-гекс-рендер 15×11: canvas с nearest-масштабированием + graceful fallback без ассетов. */
-export function HexField({ battle, reach, targets, onHexClick, onHover, reducedMotion }: {
+/** Чистое тактическое поле: ровная сетка, читаемые токены, эффекты и анимация хода. */
+export function HexField({ battle, reach, targets, selectedTargetId, targetObstacle, onHexClick, onHover, reducedMotion }: {
   battle: Battle;
   reach: Array<{ q: number; r: number }>;
   targets: Stack[];
+  selectedTargetId?: string | null;
+  targetObstacle?: { q: number; r: number } | null;
   onHexClick: (q: number, r: number) => void;
   onHover: (q: number, r: number) => void;
   reducedMotion: boolean;
 }) {
   const ref = useRef<HTMLCanvasElement | null>(null);
   const hoverRef = useRef<{ q: number; r: number } | null>(null);
-  const [manifest, setManifest] = useState<ArtManifest | null>(null);
-  const artRef = useRef<{ tiles: Record<string, HTMLImageElement>; units: Record<string, HTMLImageElement> }>({ tiles: {}, units: {} });
-  const hoverState = useState(0)[1];
-  const [artTick, setArtTick] = useState(0);
-  const prevPosRef = useRef<Map<string, { q: number; r: number }>>(new Map());
-  const animRef = useRef<Map<string, { x0: number; y0: number; x1: number; y1: number; start: number }>>(new Map());
+  const [tick, setTick] = useState(0);
+  const targetIds = useMemo(() => new Set(targets.map((t) => t.id)), [targets]);
+  const reachSet = useMemo(() => new Set(reach.map((h) => h.q + "," + h.r)), [reach]);
 
-  useEffect(() => {
-    let alive = true;
-    (async () => {
-      try {
-        const res = await fetch("/battle/manifest.json");
-        if (!res.ok) return;
-        const man = (await res.json()) as ArtManifest;
-        if (!alive) return;
-        setManifest(man);
-        const tiles: Record<string, HTMLImageElement> = {};
-        for (const [k, a] of Object.entries(man.tiles ?? {})) { try { tiles[k] = await loadImage(artUrl(a.path)); } catch { /* fallback */ } }
-        const units: Record<string, HTMLImageElement> = {};
-        for (const side of ["player", "enemy"]) for (const [cls, a] of Object.entries(man.units?.[side] ?? {})) { try { units[side + ":" + cls] = await loadImage(artUrl(a.path)); } catch { /* fallback */ } }
-        if (alive) artRef.current = { tiles, units };
-      } catch { /* graceful fallback */ }
-    })();
-    return () => { alive = false; };
-  }, []);
-
-  // анимация idle/эффектов (отключается prefers-reduced-motion)
   useEffect(() => {
     if (reducedMotion) return;
     let raf = 0; let last = 0;
-    const tick = (now: number) => { raf = requestAnimationFrame(tick); if (now - last < 120) return; last = now; setArtTick((v) => v + 1); };
-    raf = requestAnimationFrame(tick);
+    const loop = (now: number) => { raf = requestAnimationFrame(loop); if (now - last < 50) return; last = now; setTick((v) => v + 1); };
+    raf = requestAnimationFrame(loop);
     return () => cancelAnimationFrame(raf);
   }, [reducedMotion]);
-
-  const targetIds = useMemo(() => new Set(targets.map((t) => t.id)), [targets]);
-  const reachSet = useMemo(() => new Set(reach.map((h) => h.q + "," + h.r)), [reach]);
 
   useEffect(() => {
     const canvas = ref.current;
@@ -72,141 +52,162 @@ export function HexField({ battle, reach, targets, onHexClick, onHover, reducedM
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
     ctx.imageSmoothingEnabled = false;
-    const dpr = 1;
-    canvas.width = FIELD_W * dpr; canvas.height = FIELD_H * dpr;
-    // фон
-    const bg = ctx.createLinearGradient(0, 0, FIELD_W, FIELD_H);
-    bg.addColorStop(0, "#05070E"); bg.addColorStop(0.5, "#0A1020"); bg.addColorStop(1, "#070B16");
+    canvas.width = FIELD_W; canvas.height = FIELD_H;
+
+    // Ровный фон без мозаичного шума.
+    const bg = ctx.createLinearGradient(0, 0, 0, FIELD_H);
+    bg.addColorStop(0, "#060B14"); bg.addColorStop(0.5, "#081120"); bg.addColorStop(1, "#050A12");
     ctx.fillStyle = bg; ctx.fillRect(0, 0, FIELD_W, FIELD_H);
-    // звёзды
-    ctx.fillStyle = "#26344A";
-    for (let i = 0; i < 90; i++) { const x = (i * 73 + 19) % FIELD_W, y = (i * 47 + 31) % FIELD_H; ctx.fillRect(x, y, 1, 1); }
-    const hexPath = (cx: number, cy: number, scale = 1): void => {
-      ctx.beginPath();
-      const rx = 14 * scale, ry = 16 * scale;
-      for (let i = 0; i < 6; i++) { const a = -Math.PI / 2 + i * Math.PI / 3; const x = cx + Math.cos(a) * rx, y = cy + Math.sin(a) * ry; if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y); }
-      ctx.closePath();
-    };
-    const t = artTick / 6;
-    for (let r = 0; r < ROWS; r++) for (let q = 0; q < COLS; q++) {
-      const { x, y } = hexCenter(q, r); const terrain = obstacleAt(battle, q, r);
-      const artKey = TERRAIN_ART[terrain] ?? "empty";
-      const img = artRef.current.tiles[artKey];
-      const meta = manifest?.tiles?.[artKey];
-      // 2.5D подложка-тень
-      hexPath(x + 2, y + 3); ctx.fillStyle = "#03050A"; ctx.fill();
-      hexPath(x, y);
-      if (img && meta) {
-        const frame = meta.frames > 1 && meta.loop ? Math.floor(t * meta.fps) % meta.frames : 0;
-        ctx.drawImage(img, frame * meta.frameW, 0, meta.frameW, meta.frameH, x - 16, y - 18, 32, 36);
-      } else {
-        ctx.fillStyle = TERRAIN_COLOR[terrain] ?? "#101A2E"; ctx.fill();
-        ctx.strokeStyle = terrain === "void" ? "#24324A" : "#7A6A4A"; ctx.lineWidth = 1; ctx.stroke();
+    ctx.fillStyle = "#1A2940";
+    for (let i = 0; i < 55; i++) { const x = (i * 97 + 31) % FIELD_W, y = (i * 61 + 17) % FIELD_H; ctx.fillRect(x, y, 1, 1); }
+
+    const center = (q: number, r: number) => hexCenter(q, r);
+    const active = battle.stacks.find((s) => s.id === battle.activeId) ?? null;
+    const selectedTarget = selectedTargetId ? battle.stacks.find((s) => s.id === selectedTargetId) ?? null : null;
+    const now = performance.now();
+
+    // Сетка и местность.
+    for (let r = 0; r < ROWS; r++) {
+      for (let q = 0; q < COLS; q++) {
+        const { x, y } = center(q, r);
+        const t = obstacleAt(battle, q, r);
+        hexPath(ctx, x, y);
+        ctx.fillStyle = TERRAIN_COLOR[t] ?? "#0B1422";
+        ctx.fill();
+        ctx.strokeStyle = t === "void" ? "#1C2A40" : "#3B4A60";
+        ctx.lineWidth = 1; ctx.stroke();
+        if (t !== "void") {
+          // Простая читаемая пиктограмма местности, без шумных спрайтов.
+          ctx.save(); ctx.globalAlpha = 0.9;
+          if (t === "asteroid" || t === "debris") {
+            ctx.fillStyle = t === "asteroid" ? "#5E5547" : "#4B5664";
+            ctx.beginPath(); ctx.arc(x, y, 7, 0, Math.PI * 2); ctx.fill();
+            ctx.fillStyle = "#262B30"; ctx.beginPath(); ctx.arc(x - 2, y - 1, 2, 0, Math.PI * 2); ctx.fill();
+          } else if (t === "nebula") {
+            ctx.fillStyle = "rgba(140,90,255,.25)"; ctx.beginPath(); ctx.arc(x, y, 14, 0, Math.PI * 2); ctx.fill();
+          } else if (t === "minefield") {
+            ctx.fillStyle = "#FF8A5A"; for (let i = 0; i < 3; i++) ctx.fillRect(x - 6 + i * 5, y - 2 - (i % 2) * 3, 2, 2);
+          } else if (t === "gravity_anomaly") {
+            ctx.strokeStyle = "#69A7FF"; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(x, y, 10, 0, Math.PI * 2); ctx.stroke();
+          }
+          ctx.restore();
+        }
+        if (reachSet.has(q + "," + r)) {
+          hexPath(ctx, x, y, 0.92); ctx.fillStyle = "rgba(79,195,247,.20)"; ctx.fill();
+          ctx.strokeStyle = "#4FC3F7"; ctx.lineWidth = 1.6; ctx.stroke();
+        }
+        if (battle.cursor.q === q && battle.cursor.r === r) { hexPath(ctx, x, y, 1.02); ctx.strokeStyle = "#F5C542"; ctx.lineWidth = 2; ctx.stroke(); }
       }
-      if (reachSet.has(q + "," + r)) { hexPath(x, y, 0.92); ctx.fillStyle = "rgba(79,195,247,.16)"; ctx.fill(); ctx.strokeStyle = "#4FC3F7"; ctx.lineWidth = 1.5; ctx.stroke(); }
-      if (battle.cursor.q === q && battle.cursor.r === r) { hexPath(x, y, 1.03); ctx.strokeStyle = "#F5C542"; ctx.lineWidth = 2; ctx.stroke(); }
     }
-    // LOS-линия от активного к наведённой цели (для стрелка)
-    const active = battle.stacks.find((s) => s.id === battle.activeId);
-    const hover = hoverRef.current;
-    if (active && hover && active.side === "player") {
-      const hoverStack = stackAt(battle, hover.q, hover.r);
-      if (hoverStack && hoverStack.side === "enemy") {
-        const a = hexCenter(active.q, active.r), b = hexCenter(hover.q, hover.r);
-        ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y);
-        ctx.strokeStyle = active.range > 1 && !hasLos(battle, active, hover) ? "#FF5A5A" : "#F5C542";
-        ctx.lineWidth = 1.5; ctx.setLineDash([5, 4]); ctx.stroke(); ctx.setLineDash([]);
+
+    // Линия выбранной цели — визуальная обратная связь, а не «декоративный» пунктир.
+    const targetPos = selectedTarget ?? (selectedTargetId ? null : null);
+    if (active && active.side === "player") {
+      const hover = hoverRef.current;
+      const hoverStack = hover ? stackAt(battle, hover.q, hover.r) : null;
+      const goal = selectedTarget ?? (hoverStack && hoverStack.side === "enemy" ? hoverStack : null);
+      if (goal) {
+        const a = center(active.q, active.r), b = center(goal.q, goal.r);
+        ctx.save(); ctx.strokeStyle = "#F5C542"; ctx.lineWidth = 2; ctx.setLineDash([6, 5]);
+        ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke(); ctx.setLineDash([]);
+        ctx.fillStyle = "#F5C542"; ctx.beginPath(); ctx.arc(b.x, b.y - 22, 3, 0, Math.PI * 2); ctx.fill();
+        ctx.restore();
       }
     }
-    // стэки
+    void targetPos;
+
     const drawStack = (s: Stack) => {
       if (!s.alive || s.reserve) return;
-      let { x, y } = hexCenter(s.q, s.r); const color = SIDE_COLOR[s.side];
-      const moveFx = [...battle.lastEffects].reverse().find((e) => e.kind === "move" && e.to.q === s.q && e.to.r === s.r);
-      if (moveFx) { const age = (performance.now() - moveFx.t) / 260; if (age < 1) { const a0 = hexCenter(moveFx.from.q, moveFx.from.r); const b0 = hexCenter(moveFx.to.q, moveFx.to.r); x = a0.x + (b0.x - a0.x) * Math.min(1, age); y = a0.y + (b0.y - a0.y) * Math.min(1, age); } }
-      const isActive = s.id === battle.activeId;
-      const targeted = targetIds.has(s.id);
-      if (isActive) { ctx.strokeStyle = "#F5C542"; ctx.lineWidth = 2; hexPath(x, y, 1.02); ctx.stroke(); }
-      if (targeted) { ctx.fillStyle = "rgba(255,90,90,.14)"; hexPath(x, y, 0.95); ctx.fill(); }
-      // Токен стэка: компактный, в пределах гекса; иконка — 22×22, не перекрывает соседей.
-      ctx.beginPath(); ctx.arc(x, y - 8, 13, 0, Math.PI * 2);
-      ctx.fillStyle = "rgba(5,7,14,.92)"; ctx.fill();
-      ctx.strokeStyle = color; ctx.lineWidth = 2; ctx.stroke();
-      const img = artRef.current.units[s.side + ":" + s.cls];
-      if (img) {
-        ctx.save(); ctx.beginPath(); ctx.arc(x, y - 8, 11, 0, Math.PI * 2); ctx.clip();
-        ctx.drawImage(img, 0, 0, 64, 64, x - 11, y - 20, 22, 22);
-        ctx.restore();
-      } else {
-        ctx.fillStyle = color; ctx.font = "bold 8px monospace"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
-        ctx.fillText(CLASS_CODE[s.cls] ?? "?", x, y - 8);
-      }
-      if (s.side === "player") { ctx.fillStyle = "#4FC3F7"; ctx.fillRect(x - 2, y + 3, 4, 4); }
-      // бейдж количества
-      ctx.fillStyle = "rgba(5,7,14,.9)"; ctx.fillRect(x - 13, y - 28, 26, 11);
-      ctx.strokeStyle = color; ctx.lineWidth = 1; ctx.strokeRect(x - 13, y - 28, 26, 11);
-      ctx.fillStyle = "#E8EEF7"; ctx.font = "bold 9px monospace"; ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.fillText(String(s.count), x, y - 22);
-      // hp bar
-      const pct = Math.max(0, Math.min(1, s.hp / s.maxHp));
-      ctx.fillStyle = "#241016"; ctx.fillRect(x - 16, y + 8, 32, 4);
-      ctx.fillStyle = pct > 0.5 ? "#6BE675" : pct > 0.2 ? "#F5C542" : "#FF5A5A"; ctx.fillRect(x - 16, y + 8, 32 * pct, 4);
-      if (s.defended) { ctx.fillStyle = "#4FC3F7"; ctx.fillRect(x - 18, y - 8, 5, 5); }
-      if (s.waited) { ctx.fillStyle = "#8FA3BF"; ctx.fillRect(x + 13, y - 8, 5, 5); }
-      if (s.side === "player" && !s.moved && isActive) { ctx.fillStyle = "#F5C542"; ctx.beginPath(); ctx.moveTo(x, y - 38); ctx.lineTo(x + 5, y - 32); ctx.lineTo(x - 5, y - 32); ctx.fill(); }
-    };
-    for (const s of battle.stacks) if (!s.reserve) drawStack(s);
-    // Эффекты боя: луч атаки, щит, взрыв, след движения.
-    for (const e of battle.lastEffects) {
-      const age = (performance.now() - e.t) / 700;
-      if (age < 0 || age > 1) continue;
-      const from = hexCenter(e.from.q, e.from.r);
-      const to = hexCenter(e.to.q, e.to.r);
-      ctx.save();
-      ctx.globalAlpha = 1 - age;
-      if (e.kind === "move") {
-        ctx.strokeStyle = "rgba(79,195,247,.75)";
-        ctx.lineWidth = 3; ctx.setLineDash([4, 5]);
-        ctx.beginPath(); ctx.moveTo(from.x, from.y); ctx.lineTo(to.x, to.y); ctx.stroke();
-        ctx.setLineDash([]);
-      } else {
-        // луч / снаряд
-        ctx.strokeStyle = e.kind === "shield" ? "#4FC3F7" : "#FFD36A";
-        ctx.lineWidth = 3;
-        ctx.shadowColor = ctx.strokeStyle; ctx.shadowBlur = 10;
-        ctx.beginPath(); ctx.moveTo(from.x, from.y); ctx.lineTo(to.x, to.y); ctx.stroke();
-        const px = from.x + (to.x - from.x) * Math.min(1, age * 2);
-        const py = from.y + (to.y - from.y) * Math.min(1, age * 2);
-        ctx.fillStyle = "#FFFFFF"; ctx.beginPath(); ctx.arc(px, py, 4, 0, Math.PI * 2); ctx.fill();
-        // взрыв / щит
-        const r = 8 + age * 26;
-        ctx.beginPath(); ctx.arc(to.x, to.y, r, 0, Math.PI * 2);
-        ctx.strokeStyle = e.kind === "shield" ? "rgba(79,195,247,.9)" : "rgba(255,211,106,.9)";
-        ctx.lineWidth = 3; ctx.stroke();
-        if (e.kind === "shield") {
-          ctx.beginPath(); ctx.arc(to.x, to.y, r + 7, 0, Math.PI * 2);
-          ctx.strokeStyle = "rgba(120,220,255,.5)"; ctx.lineWidth = 2; ctx.stroke();
+      let { x, y } = center(s.q, s.r);
+      // Плавное перемещение по последнему move-событию.
+      const mv = [...battle.lastEffects].reverse().find((e) => e.kind === "move" && e.to.q === s.q && e.to.r === s.r);
+      if (mv) {
+        const age = (now - mv.t) / 280;
+        if (age >= 0 && age < 1) {
+          const a0 = center(mv.from.q, mv.from.r), b0 = center(mv.to.q, mv.to.r);
+          x = a0.x + (b0.x - a0.x) * age; y = a0.y + (b0.y - a0.y) * age;
         }
+      }
+      const color = SIDE_COLOR[s.side];
+      const isActive = s.id === battle.activeId;
+      const isTarget = targetIds.has(s.id) || s.id === selectedTargetId;
+      hexPath(ctx, x, y, 0.86); ctx.fillStyle = "rgba(5,7,14,.55)"; ctx.fill();
+
+      // Читаемый токен: крупная окружность с кодом класса.
+      ctx.beginPath(); ctx.arc(x, y - 6, 13, 0, Math.PI * 2);
+      ctx.fillStyle = s.side === "player" ? "#0A1A2A" : "#2A1116"; ctx.fill();
+      ctx.strokeStyle = color; ctx.lineWidth = isTarget ? 3 : 2; ctx.stroke();
+      if (isActive) { ctx.beginPath(); ctx.arc(x, y - 6, 16, 0, Math.PI * 2); ctx.strokeStyle = "#F5C542"; ctx.lineWidth = 2; ctx.stroke(); }
+      if (isTarget) { ctx.beginPath(); ctx.arc(x, y - 6, 17, 0, Math.PI * 2); ctx.strokeStyle = "#FF5A5A"; ctx.lineWidth = 2; ctx.stroke(); }
+      ctx.fillStyle = color; ctx.font = "bold 9px monospace"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+      ctx.fillText(CLASS_CODE[s.cls] ?? "?", x, y - 6);
+      // количество
+      ctx.fillStyle = "#05070E"; ctx.fillRect(x - 12, y - 27, 24, 11);
+      ctx.strokeStyle = color; ctx.lineWidth = 1; ctx.strokeRect(x - 12, y - 27, 24, 11);
+      ctx.fillStyle = "#E8EEF7"; ctx.font = "bold 9px monospace"; ctx.fillText(String(s.count), x, y - 21);
+      // HP
+      const pct = Math.max(0, Math.min(1, s.hp / Math.max(1, s.maxHp)));
+      ctx.fillStyle = "#211016"; ctx.fillRect(x - 16, y + 10, 32, 4);
+      ctx.fillStyle = pct > 0.5 ? "#6BE675" : pct > 0.2 ? "#F5C542" : "#FF5A5A"; ctx.fillRect(x - 16, y + 10, 32 * pct, 4);
+      if (s.defended) { ctx.fillStyle = "#4FC3F7"; ctx.fillRect(x - 19, y - 10, 4, 7); }
+    };
+    for (const s of battle.stacks) drawStack(s);
+
+    // Эффекты боя.
+    for (const e of battle.lastEffects) {
+      const age = (now - e.t) / 700;
+      if (age < 0 || age > 1) continue;
+      const from = center(e.from.q, e.from.r), to = center(e.to.q, e.to.r);
+      ctx.save(); ctx.globalAlpha = 1 - age;
+      if (e.kind === "move") {
+        ctx.strokeStyle = "rgba(79,195,247,.8)"; ctx.lineWidth = 2; ctx.setLineDash([4, 5]);
+        ctx.beginPath(); ctx.moveTo(from.x, from.y); ctx.lineTo(to.x, to.y); ctx.stroke(); ctx.setLineDash([]);
+      } else {
+        ctx.strokeStyle = e.kind === "shield" ? "#4FC3F7" : "#FFD36A";
+        ctx.lineWidth = 3; ctx.shadowColor = ctx.strokeStyle; ctx.shadowBlur = 10;
+        ctx.beginPath(); ctx.moveTo(from.x, from.y); ctx.lineTo(to.x, to.y); ctx.stroke();
+        const px = from.x + (to.x - from.x) * Math.min(1, age * 2), py = from.y + (to.y - from.y) * Math.min(1, age * 2);
+        ctx.fillStyle = "#FFFFFF"; ctx.beginPath(); ctx.arc(px, py, 4, 0, Math.PI * 2); ctx.fill();
+        const rad = 8 + age * 24;
+        ctx.beginPath(); ctx.arc(to.x, to.y, rad, 0, Math.PI * 2);
+        ctx.strokeStyle = e.kind === "shield" ? "rgba(79,195,247,.95)" : "rgba(255,211,106,.95)";
+        ctx.lineWidth = 3; ctx.stroke();
+        if (e.kind === "shield") { ctx.beginPath(); ctx.arc(to.x, to.y, rad + 7, 0, Math.PI * 2); ctx.strokeStyle = "rgba(120,220,255,.55)"; ctx.lineWidth = 2; ctx.stroke(); }
       }
       ctx.restore();
     }
-    // числа урона
-    const now = Date.now();
-    for (const d of battle.lastDamage) {
-      const age = (now - d.t) / 1000; if (age > 0.9) continue;
-      const { x, y } = hexCenter(d.q, d.r); ctx.globalAlpha = Math.max(0, 1 - age);
-      ctx.fillStyle = "#FFD36A"; ctx.font = "bold 11px monospace"; ctx.textAlign = "center";
-      ctx.fillText("-" + d.amount, x, y - 32 - age * 18); ctx.globalAlpha = 1;
-    }
-    // легенда местности
-    ctx.fillStyle = "#8FA3BF"; ctx.font = "8px monospace"; ctx.textAlign = "left";
-    ctx.fillText("гексы 15×11 · " + (battle.coop ? "кооп" : "SP") + " · " + TERRAIN_RU[obstacleAt(battle, battle.cursor.q, battle.cursor.r)] + " (q" + battle.cursor.q + ",r" + battle.cursor.r + ")", 8, FIELD_H - 8);
-  }, [battle, battle.cursor, battle.activeId, battle.lastDamage, reachSet, targetIds, manifest, artTick]);
 
-  const handle = (e: React.PointerEvent<HTMLCanvasElement> | React.MouseEvent<HTMLCanvasElement>, click: boolean): void => {
-    const canvas = ref.current; if (!canvas) return; const rect = canvas.getBoundingClientRect();
-    const x = (e.clientX - rect.left) / rect.width * FIELD_W; const y = (e.clientY - rect.top) / rect.height * FIELD_H;
-    const hex = pixelToHex(x, y); hoverRef.current = hex; onHover(hex.q, hex.r); if (click) onHexClick(hex.q, hex.r);
+    // Числа урона.
+    for (const d of battle.lastDamage) {
+      const age = (now - d.t) / 900; if (age > 1) continue;
+      const { x, y } = center(d.q, d.r); ctx.globalAlpha = Math.max(0, 1 - age);
+      ctx.fillStyle = "#FFD36A"; ctx.font = "bold 14px monospace"; ctx.textAlign = "center";
+      ctx.fillText("-" + d.amount, x, y - 30 - age * 16);
+      ctx.globalAlpha = 1;
+    }
+
+    // Нижняя строка с координатами/местностью.
+    const hover = hoverRef.current;
+    const ht = hover ? obstacleAt(battle, hover.q, hover.r) : "void";
+    ctx.fillStyle = "#8FA3BF"; ctx.font = "10px monospace"; ctx.textAlign = "left";
+    ctx.fillText("гексы 15×11 · SP · " + TERRAIN_RU[ht] + (hover ? " (q" + hover.q + ",r" + hover.r + ")" : ""), 8, FIELD_H - 8);
+  }, [battle, battle.cursor, battle.activeId, battle.lastDamage, battle.lastEffects, reachSet, targetIds, tick, selectedTargetId, targetObstacle]);
+
+  const toHex = (ev: React.PointerEvent<HTMLCanvasElement>): { q: number; r: number } => {
+    const rect = ev.currentTarget.getBoundingClientRect();
+    const x = (ev.clientX - rect.left) * (FIELD_W / rect.width);
+    const y = (ev.clientY - rect.top) * (FIELD_H / rect.height);
+    return pixelToHex(x, y);
   };
-  return <canvas ref={ref} className="sf-gridhex" data-testid="grid-hex-canvas" width={FIELD_W} height={FIELD_H} style={{ width: "100%", height: "auto", imageRendering: "pixelated", touchAction: "none" }} onPointerMove={(e) => handle(e, false)} onClick={(e) => handle(e, true)} aria-label="Поле боя 15 на 11 гексов" role="img" />;
+  return (
+    <canvas
+      ref={ref}
+      className="sf-hexfield"
+      data-testid="grid-hex-canvas"
+      style={{ width: "100%", height: "auto", aspectRatio: FIELD_W + "/" + FIELD_H, imageRendering: "pixelated", cursor: "crosshair" }}
+      onPointerMove={(ev) => { const h = toHex(ev); hoverRef.current = h; onHover(h.q, h.r); }}
+      onPointerLeave={() => { hoverRef.current = null; }}
+      onPointerDown={(ev) => { if (ev.button !== 0) return; const h = toHex(ev); onHexClick(h.q, h.r); }}
+    />
+  );
 }
-function hasLos(b: Battle, a: { q: number; r: number }, t: { q: number; r: number }): boolean { const n = distance(a, t); if (n <= 1) return true; for (let i = 1; i < n; i++) { const f = i / n; const q = Math.round(a.q + (t.q - a.q) * f), r = Math.round(a.r + (t.r - a.r) * f); if (terrainBlocksLos(obstacleAt(b, q, r))) return false; } return true; }
