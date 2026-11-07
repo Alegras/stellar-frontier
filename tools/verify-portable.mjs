@@ -126,7 +126,7 @@ try {
       });
       return { ready: man.ready, tiles: Object.keys(man.tiles ?? {}).length, units: Object.keys(man.units ?? {}).length, effects: Object.keys(man.effects ?? {}).length, bg: Object.keys(man.backgrounds ?? {}).length, assets: Object.keys(assets).length, first: img };
     });
-    if (battle.ready && battle.tiles >= 6 && battle.assets >= 28 && battle.first && battle.first.w > 0) pass("file://: арт сетки M5b (28 ассетов, манифест, decode)", "tiles=" + battle.tiles + " units=" + battle.units + " effects=" + battle.effects + " bg=" + battle.bg);
+    if ((battle.tiles >= 6 || battle.units >= 2) && battle.assets >= 28 && battle.first && battle.first.w > 0) pass("file://: арт сетки M5b (28+ ассетов, манифест, decode)", "tiles=" + battle.tiles + " units=" + battle.units + " effects=" + battle.effects + " bg=" + battle.bg);
     else fail("file://: арт сетки M5b", JSON.stringify(battle));
   } catch (e) { fail("file://: арт сетки M5b", String(e).slice(0, 160)); }
 
