@@ -143,6 +143,11 @@ export function FlightHUD({ game, state }: { game: Game; state: GameState }) {
             {tel.warnings.slice(0, 3).map((w, i) => <div key={i}>⚠ {w}</div>)}
           </div>
         )}
+        {tel.questMarkerName && (
+          <div className="sf-warn-strip" data-testid="flight-quest-marker" style={{ marginTop: 4 }}>
+            ◆ {L("Квестовая зона", "Quest zone")}: {tel.questMarkerName} · {distText(tel.questMarkerDist)}
+          </div>
+        )}
         {dlcSignalsHere.length > 0 && (
           <div className="sf-warn-strip sf-dlc-signal" data-testid="flight-signal" style={{ marginTop: 4 }}>
             ✦ {L("Сигнал квеста", "Quest signal")}: {dlcSignalsHere.length} · {L("подойдите и нажмите F — скан", "approach and press F to scan")}

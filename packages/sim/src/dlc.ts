@@ -1434,11 +1434,7 @@ function discoverSignals(world: World, d: DlcState): void {
   for (const signal of d.signals) {
     if (signal.revealed) continue;
     if (world.tick > signal.expiresTick) { signal.revealed = false; continue; }
-    if (!playerFleets.some((fleet) => fleet.systemId === signal.systemId)) continue;
-    signal.revealed = true;
-    d.flags["signal_seen:" + signal.id] = 1;
-    makeAvailable(d, signal.questId);
-    chronicle(world, d, "dlc.chronicle.signal:" + signal.id, signal.questId);
+    // Сигнал открывается при достижении 3D-маркера (dlc_signal_reach), а не при входе в систему.
   }
 }
 
@@ -1669,4 +1665,50 @@ export function getDlcMarkers(world: World): DlcMarker[] {
 
 export function getDlcCharacters(): CharacterDef[] {
   return dlcCatalog().characters;
+}
+
+/** 3D-маркеры сигналов квестов в системе. */
+export interface DlcSignalMarker3D {
+  id: string;
+  questId: string;
+  systemId: number;
+  bodyKind: "planet" | "moon" | "station";
+  bodyId: number;
+  titleKey: string;
+}
+
+export function dlcSignalMarkers3D(world: World, systemId?: number): DlcSignalMarker3D[] {
+  const d = ensureDlc(world);
+  if (!d.enabled) return [];
+  const out: DlcSignalMarker3D[] = [];
+  for (const signal of d.signals) {
+    if (signal.revealed) continue;
+    if (systemId !== undefined && signal.systemId !== systemId) continue;
+    const system = world.systems[signal.systemId];
+    if (!system) continue;
+    const planets = system.planets.filter((p) => p.colonyId === 0);
+    if (planets.length > 0) {
+      const p = planets[hashOf(world.seed, signal.questId, "marker") % planets.length]!;
+      out.push({ id: signal.id, questId: signal.questId, systemId: signal.systemId, bodyKind: p.isMoon ? "moon" : "planet", bodyId: p.id, titleKey: "dlc.marker.signal" });
+    } else {
+      out.push({ id: signal.id, questId: signal.questId, systemId: signal.systemId, bodyKind: "station", bodyId: system.station?.id ?? 0, titleKey: "dlc.marker.signal" });
+    }
+  }
+  return out;
+}
+
+/** Достижение 3D-маркера сигнала: открывает квест. */
+export function revealDlcSignal(world: World, signalId: string): CommandResult {
+  const d = ensureDlc(world);
+  const signal = d.signals.find((s) => s.id === signalId);
+  if (!signal) return { ok: false, messageRu: "Сигнал квеста не найден" };
+  if (signal.revealed) return { ok: false, messageRu: "Квест уже открыт" };
+  const playerId = world.playerEmpireId;
+  const playerFleet = world.fleets.find((f) => f.empireId === playerId && f.systemId === signal.systemId && f.ships.length > 0);
+  if (!playerFleet) return { ok: false, messageRu: "Подойдите к сигналу флотом" };
+  signal.revealed = true;
+  d.flags["signal_seen:" + signal.id] = 1;
+  makeAvailable(d, signal.questId);
+  chronicle(world, d, "dlc.chronicle.signal:" + signal.id, signal.questId);
+  return { ok: true, messageRu: "Квест открыт: сигнал достигнут" };
 }

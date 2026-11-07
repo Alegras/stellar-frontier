@@ -94,6 +94,8 @@ export interface FlightTelemetry {
   nearPlanetHabitability: number;
   canColonize: boolean;
   colonizerFleetId: number | null;
+  questMarkerName: string;
+  questMarkerDist: number;
   massLocked: boolean;
   fsdCharge: number;
   contacts: FlightContact[];
@@ -132,6 +134,8 @@ export const EMPTY_TELEMETRY: FlightTelemetry = {
   nearPlanetHabitability: 0,
   canColonize: false,
   colonizerFleetId: null,
+  questMarkerName: "",
+  questMarkerDist: 0,
   massLocked: false,
   fsdCharge: 0,
   contacts: [],

@@ -408,6 +408,7 @@ export type Command =
   | { type: "resolve_pending_battle" }
   | { type: "clear_pending_battle" }
   | { type: "escape_battle" }
+  | { type: "dlc_signal_reach"; signalId: string }
   | { type: "plot_hyperlane"; fleetId: number; targetSystemId: number }
   | { type: "accept_mission"; missionId: number }
   | { type: "abandon_mission"; missionId: number }

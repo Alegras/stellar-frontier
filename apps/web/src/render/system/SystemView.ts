@@ -10,7 +10,7 @@ import * as THREE from "three";
 import { DESIGN_BY_ID, HULL_BY_ID, WEAPON_BY_ID } from "@sf/data";
 import type { HullDef, ShipDesignDef, WeaponDef } from "@sf/data";
 import type { AncientsSectorSystem, Fleet, Planet, Ship, StarSystem, World } from "@sf/sim";
-import { sectorDeathReturn as simSectorDeathReturn, warpRadiusLy, warpStatus } from "@sf/sim";
+import { dlcSignalMarkers3D, sectorDeathReturn as simSectorDeathReturn, warpRadiusLy, warpStatus } from "@sf/sim";
 import type { FlightTelemetry, GameApi, RenderSettings } from "../../game/types";
 import type { SceneView } from "../contracts";
 import { PixelPipeline, type PixelOptions } from "../PixelPipeline";
@@ -88,6 +88,7 @@ export class SystemView implements SceneView {
   private readonly enemyShips: EnemyShip[] = [];
   private readonly asteroids: { id: number; mesh: THREE.Mesh; hp: number; radiusM: number }[] = [];
   private readonly salvage: { mesh: THREE.Mesh; credits: number; alloys: number }[] = [];
+  private readonly questMarkers: { mesh: THREE.Mesh; signalId: string; name: string; target: THREE.Vector3 }[] = [];
 
   private readonly shipLengthM: number;
   private readonly laserWeapons: WeaponDef[] = [];
@@ -240,6 +241,7 @@ export class SystemView implements SceneView {
     this.scene.add(this.projectileField.group);
     this.scene.add(this.effectPool.group);
     this.spawnAsteroids();
+    this.spawnQuestMarkers();
 
     // --- камера сразу за кораблём (без рывка из начала координат)
     this.camera.position.copy(this.desiredCameraPosition(this.flight.position, this.flight.quaternion));
@@ -905,6 +907,7 @@ export class SystemView implements SceneView {
     });
     this.effectPool.update(dt);
     this.updateSalvage(dt);
+    this.updateQuestMarkers(dt);
   }
 
   /** Небольшие разрушаемые астероиды с подбором обломков (F-огонь). */
@@ -922,6 +925,44 @@ export class SystemView implements SceneView {
       this.scene.add(mesh);
       this.asteroids.push({ id: i, mesh, hp: 60, radiusM: radius * 1.05 });
     }
+  }
+
+  /** 3D-маркеры сигналов квестов: зелёный ромб на цели. */
+  private spawnQuestMarkers(): void {
+    const world = this.safeWorld();
+    if (!world) return;
+    for (const def of dlcSignalMarkers3D(world, this.systemId)) {
+      const body = this.sysScene.bodies.find((b) => b.planet.id === def.bodyId);
+      const pos = body ? body.position.clone() : (this.sysScene.station ? this.sysScene.station.group.position.clone() : new THREE.Vector3());
+      const mesh = new THREE.Mesh(new THREE.OctahedronGeometry(120, 0), new THREE.MeshBasicMaterial({ color: 0x6be675, transparent: true, opacity: 0.95 }));
+      mesh.position.copy(pos);
+      mesh.position.y += 220;
+      this.scene.add(mesh);
+      this.questMarkers.push({ mesh, signalId: def.id, name: body ? body.planet.name : this.system.name, target: pos });
+    }
+  }
+
+  private updateQuestMarkers(dt: number): void {
+    const t = this.game.flightTelemetry;
+    t.questMarkerName = "";
+    t.questMarkerDist = 0;
+    let nearest: { marker: { mesh: THREE.Mesh; signalId: string; name: string; target: THREE.Vector3 }; dist: number } | null = null;
+    for (const marker of [...this.questMarkers]) {
+      marker.mesh.rotation.y += dt * 1.4;
+      marker.mesh.position.y += Math.sin(this.time * 2 + marker.mesh.position.x) * 2 * dt;
+      const dist = this.flight.position.distanceTo(marker.target);
+      if (!nearest || dist < nearest.dist) nearest = { marker, dist };
+      if (dist > 1200) continue;
+      const r = this.game.sendCommandDetailed({ type: "dlc_signal_reach", signalId: marker.signalId } as never);
+      if (r.ok) {
+        this.game.toast(r.messageRu ?? "Квест начат", "good");
+        this.scene.remove(marker.mesh);
+        const idx = this.questMarkers.indexOf(marker);
+        if (idx >= 0) this.questMarkers.splice(idx, 1);
+        this.spawnQuestMarkers();
+      }
+    }
+    if (nearest) { t.questMarkerName = nearest.marker.name; t.questMarkerDist = Math.round(nearest.dist); }
   }
 
   private onAsteroidHit(id: number, damage: number): void {

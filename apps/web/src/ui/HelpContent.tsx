@@ -94,6 +94,7 @@ export function HelpContent() {
         <li>{L("Скан: F в полёте. Если панель пишет «новых объектов нет» — система уже изучена; для квестов смотрите сигнал/миссии.", "Scan: F in flight. If the panel says no new objects, the system is already surveyed; for quests check signals/missions.")}</li>
         <li>{L("Настройки → «Внутреннее разрешение»: 1920×1080 для FHD; кнопка «На весь экран» разворачивает окно.", "Settings → Internal resolution: 1920×1080 for FHD; Fullscreen button expands the window.")}</li>
         <li>{L("Стреляйте по небольшим астероидам: они разрушаются, обломки подбираются автоматически при подлёте.", "Shoot small asteroids: they break, and salvage is collected automatically when you fly close.")}</li>
+        <li>{L("Квестовый сигнал в 3D: зелёный ромб на планете/луне/станции; летите к нему — при подлёте квест откроется.", "3D quest signal: a green diamond on a planet/moon/station; fly to it and the quest opens on approach.")}</li>
         <li>{L("Гиперпрокладчик «Путевод»: ветка «Инженерия → FSD/Корпуса» (FSD II). После неё его можно построить; иногда он продаётся на верфи даже без технологии (кнопка «Купить»). Выбери дальнюю систему и нажми «Проложить гиперпуть».", "Pathfinder Putevod: Engineering → Hyperlane I–III. After II it can be built; sometimes sold at a shipyard without the tech. Select a far system and press Plot hyperlane.")}</li>
       </ul>
     </div>

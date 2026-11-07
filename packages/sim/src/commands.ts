@@ -27,7 +27,7 @@ import {
   sectorClaim, sectorEnter, sectorExit, sectorScan, warpJump, warpRecharge,
 } from "./ancients";
 import {
-  dlcAcceptQuest, dlcBuyRumor, dlcDialogueAdvance, dlcDialogueChoose, dlcDialogueEnd, dlcNotifyAction,
+  revealDlcSignal, dlcAcceptQuest, dlcBuyRumor, dlcDialogueAdvance, dlcDialogueChoose, dlcDialogueEnd, dlcNotifyAction,
   dlcToggle, startDlcDialogue,
 } from "./dlc";
 import { investigateAnomaly, archaeologyStep } from "./anomalies";
@@ -536,6 +536,8 @@ export function applyCommandAs(world: World, empireId: number, cmd: Command): Co
       fg.pendingBattle = null;
       return { ok: true, battleReport: record, messageRu: "Авторезолв: " + (record.outcome === "attacker_win" ? "победа атакующего" : record.outcome === "defender_win" ? "победа защитника" : "ничья") };
     }
+    case "dlc_signal_reach":
+      return revealDlcSignal(world, cmd.signalId);
     case "escape_battle": {
       const fg = ensureFg(world);
       const pb = fg.pendingBattle;
