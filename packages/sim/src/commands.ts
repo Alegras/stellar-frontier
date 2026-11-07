@@ -286,6 +286,18 @@ export function applyCommandAs(world: World, empireId: number, cmd: Command): Co
       if (empire.isPlayer) logEvent(world, "colony", "info", `Строительство отменено (возврат 50%).`, colony.systemId, empireId);
       return ok();
     }
+    case "research_branch": {
+      const tech = TECH_BY_ID[cmd.techId];
+      if (!tech || !tech.branch) return deny("Это не технология отдельной ветки");
+      const empire = empireById(world, empireId);
+      if (!empire) return deny("Империя не найдена");
+      if (empire.techs.completed.includes(tech.id)) return deny("Технология уже исследована");
+      const missing = (tech.requires ?? []).filter((id) => !empire.techs.completed.includes(id));
+      if (missing.length > 0) return deny("Не выполнены требования ветки: " + missing.join(", "));
+      empire.techs.progress[tech.school] = { techId: tech.id, points: 0, frac: 0 };
+      if (empire.isPlayer) logEvent(world, "research", "info", "Ветка «Гиперпрокладка»: исследование " + tech.ru + ".", undefined, empireId);
+      return { ok: true, messageRu: "Исследование начато: " + tech.ru };
+    }
     case "research": {
       if (!SCIENCE_ORDER.includes(cmd.school)) return deny("Неизвестная школа науки");
       const tech: TechDef | undefined = TECH_BY_ID[cmd.techId];

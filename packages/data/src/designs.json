@@ -523,7 +523,7 @@
     "costCredits": 520000,
     "costAlloys": 55,
     "buildTicks": 7,
-    "requiredTech": "eng_fsd_1",
+    "requiredTech": "eng_hyperlane_2",
     "role": "pathfinder",
     "descRu": "Специальный корабль для прокладки новых гиперпутей к дальним системам. Покупается на верфи редко, строится после ветки «Гиперпрокладка»."
   }

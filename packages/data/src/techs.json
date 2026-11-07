@@ -1356,5 +1356,80 @@
     "requires": [
       "eng_megastructure_1"
     ]
+  },
+  {
+    "id": "eng_hyperlane_1",
+    "school": "engineering",
+    "tier": 2,
+    "ru": "Гиперпрокладка I",
+    "descRu": "Начало отдельной ветки: сенсорный массив и двигатель «Путевод».",
+    "cost": 180,
+    "weight": 0,
+    "branch": "hyperlane",
+    "requires": [
+      "phys_scanners_1",
+      "eng_hull_2",
+      "eng_thrusters_1",
+      "eng_fsd_1",
+      "eng_shipyard_1"
+    ],
+    "effects": [
+      {
+        "kind": "unlock",
+        "target": "module:pathfinder_survey_array"
+      },
+      {
+        "kind": "unlock",
+        "target": "module:pathfinder_engine_mk1"
+      }
+    ]
+  },
+  {
+    "id": "eng_hyperlane_2",
+    "school": "engineering",
+    "tier": 3,
+    "ru": "Гиперпрокладка II",
+    "descRu": "Гиперпроектор «Разлом» и корпус «Путевод»: можно строить гиперпрокладчик.",
+    "cost": 300,
+    "weight": 0,
+    "branch": "hyperlane",
+    "requires": [
+      "eng_hyperlane_1",
+      "eng_hull_3"
+    ],
+    "effects": [
+      {
+        "kind": "unlock",
+        "target": "module:hyperlane_projector_mk1"
+      },
+      {
+        "kind": "unlock",
+        "target": "design:pathfinder_ark"
+      },
+      {
+        "kind": "unlock",
+        "target": "hull:hull_pathfinder"
+      }
+    ]
+  },
+  {
+    "id": "eng_hyperlane_3",
+    "school": "engineering",
+    "tier": 4,
+    "ru": "Гиперпрокладка III",
+    "descRu": "Дальность 1800 и сниженная стоимость прокладки.",
+    "cost": 480,
+    "weight": 0,
+    "branch": "hyperlane",
+    "requires": [
+      "eng_hyperlane_2",
+      "eng_fsd_2"
+    ],
+    "effects": [
+      {
+        "kind": "unlock",
+        "target": "module:hyperlane_projector_mk1"
+      }
+    ]
   }
 ]

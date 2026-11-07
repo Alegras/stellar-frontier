@@ -625,6 +625,7 @@ export function generateTechOffers(world: World, empire: Empire, school: Science
       if (tech.school !== school) return false;
       if (tech.tier > cap) return false;
       if (empire.techs.completed.includes(tech.id)) return false;
+      if (tech.branch) return false;
       if (tech.requires) {
         for (const req of tech.requires) if (!empire.techs.completed.includes(req)) return false;
       }

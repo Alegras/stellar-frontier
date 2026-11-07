@@ -2,7 +2,7 @@ import { describe, expect, it, afterEach } from "vitest";
 import { BALANCE, MODE } from "@sf/data";
 import {
   applyCommand, createWorld, deserializeWorld, dlcBuyRumor, dlcDialogueAdvance, dlcDialogueChoose,
-  dlcNotifyAction, dlcPhase, dlcToggle, ensureDlc, getDlcBoard, getDlcChronicle, getDlcDialogueView,
+  dlcNotifyAction, dlcPhase, dlcToggle, ensureDlc, getDlcBoard, getDlcChronicle, getDlcDialogueView, revealDlcSignal,
   getDlcJournal, getDlcMarkers, getDlcRumors, getDlcSaveMeta, getDlcSignals, getDlcState, getDlcTree,
   serializeWorld, setDlcCatalog, startDlcDialogue,
 } from "../src/index";
@@ -279,7 +279,7 @@ describe("DLC XIV · 4 канала и маркеры", () => {
     expect(d.flags["rumor_refuted:rumor:q_02_board"]).toBe(1);
   });
 
-  it("сигнал открывается входом флота в систему", () => {
+  it("сигнал открывается достижением 3D-маркера", () => {
     const world = makeWorld();
     const d = getDlcState(world);
     dlcPhase(world);
@@ -288,7 +288,8 @@ describe("DLC XIV · 4 канала и маркеры", () => {
     const signal = signals[0]!;
     const fleet = world.fleets.find((entry) => entry.empireId === 1 && entry.ships.length > 0)!;
     fleet.systemId = signal.systemId;
-    dlcPhase(world);
+    const result = revealDlcSignal(world, signal.id);
+    expect(result.ok).toBe(true);
     expect(getDlcSignals(world)[0]!.revealed).toBe(true);
     expect(d.quests[signal.questId]!.status).toBe("available");
   });

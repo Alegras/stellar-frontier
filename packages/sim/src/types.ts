@@ -401,6 +401,7 @@ export type Command =
   | { type: "build_building"; colonyId: number; buildingId: string }
   | { type: "cancel_build"; colonyId: number; index: number }
   | { type: "research"; school: ScienceId; techId: string }
+  | { type: "research_branch"; techId: string }
   | { type: "trade"; stationId: number; good: ResourceId; qty: number; buy: boolean }
   | { type: "scan_system"; fleetId: number; systemId: number }
   | { type: "auto_resolve"; systemId: number }

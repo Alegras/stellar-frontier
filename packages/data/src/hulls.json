@@ -458,7 +458,7 @@
     "boostSpeed": 500,
     "pitchDegS": 32,
     "buildTicks": 6,
-    "requiredTech": "eng_hull_2",
+    "requiredTech": "eng_hyperlane_2",
     "roles": [
       "pathfinder",
       "survey",

@@ -16,6 +16,9 @@ export function ResearchPanel({ game, state }: { game: Game; state: GameState })
   }
 
   const completed = new Set(emp.techs.completed);
+  const branchTechs = TECHS.filter((t) => t.branch === "hyperlane").sort((a, b) => a.tier - b.tier);
+  const branchPrereq = branchTechs[0]?.requires ?? [];
+  const branchUnlocked = branchPrereq.every((id) => completed.has(id)) && world.colonies.filter((c) => c.empireId === emp.id).length >= 3;
 
   return (
     <Panel title={tr("tech.title", undefined, "Наука") + " · 3 " + L("школы", "schools")} testId="research-panel" tall>
@@ -151,6 +154,34 @@ export function ResearchPanel({ game, state }: { game: Game; state: GameState })
           );
         })}
       </div>
+
+      <Sep />
+      <div className="sf-h">{L("Отдельная ветка: Гиперпрокладка", "Separate branch: Hyperlane")}</div>
+      {!branchUnlocked ? (
+        <div className="sf-meta" data-testid="hyperlane-branch-locked">
+          {L("Ветка откроется после 5 технологий: Сканеры I, Корпуса II, Двигатели I, FSD II, Верфи — и 3 колоний.", "The branch unlocks after 5 techs: Scanners I, Hulls II, Thrusters I, FSD II, Shipyards — and 3 colonies.")}
+        </div>
+      ) : (
+        <div className="sf-list" data-testid="hyperlane-branch">
+          <div className="sf-meta">{L("Отдельные узлы не участвуют в случайных офферах; исследование запускается напрямую.", "Branch nodes are not random offers; research starts directly.")}</div>
+          {branchTechs.map((t) => {
+            const done = completed.has(t.id);
+            const active = emp.techs.progress.engineering?.techId === t.id;
+            const locked = (t.requires ?? []).some((id) => !completed.has(id));
+            return (
+              <div key={t.id} className="sf-line" data-testid={"hyperlane-tech-" + t.id}>
+                <span className={done ? "sf-ok" : locked ? "sf-bad" : "sf-gold"}>{done ? "✓" : locked ? "×" : "•"}</span>
+                <div style={{ flex: "1 1 auto", minWidth: 0 }}>
+                  <div className="sf-row"><b>{t.ru}</b><span className="sf-spacer" /><span className="sf-meta">T{t.tier} · {intText(t.cost)}</span></div>
+                  <div className="sf-meta">{t.descRu}</div>
+                  {locked && <div className="sf-meta sf-bad">{L("Требует", "Requires")}: {(t.requires ?? []).map(techName).join(", ")}</div>}
+                </div>
+                <Btn size="sm" variant={active ? "default" : "primary"} disabled={done || locked || active} onClick={() => game.sendCommand({ type: "research_branch", techId: t.id } as never)} testId={"btn-hyperlane-" + t.id}>{done ? L("Готово", "Done") : active ? L("В работе", "Active") : L("Исследовать", "Research")}</Btn>
+              </div>
+            );
+          })}
+        </div>
+      )}
     </Panel>
   );
 }

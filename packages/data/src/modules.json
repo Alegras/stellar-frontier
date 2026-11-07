@@ -300,7 +300,7 @@
     "mass": 24,
     "power": 18,
     "costAlloys": 18,
-    "tech": "eng_fsd_1",
+    "tech": "eng_hyperlane_2",
     "descRu": "Создаёт новый гиперпуть к дальней системе (расход сплавов)."
   },
   {
@@ -310,7 +310,7 @@
     "mass": 10,
     "power": 8,
     "costAlloys": 8,
-    "tech": "eng_thrusters_1",
+    "tech": "eng_hyperlane_1",
     "descRu": "Увеличивает дальность прокладки и разведки."
   },
   {
@@ -320,7 +320,7 @@
     "mass": 18,
     "power": 12,
     "costAlloys": 12,
-    "tech": "eng_thrusters_1",
+    "tech": "eng_hyperlane_1",
     "descRu": "Стабильный двигатель для дальних переходов."
   }
 ]

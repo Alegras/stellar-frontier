@@ -81,6 +81,8 @@ export interface TechDef {
   effects: TechEffect[];
   weight: number;
   requires?: string[];
+  /** отдельная ветка науки, не попадает в случайные офферы */
+  branch?: string;
 }
 
 export type ShipClassId =
