@@ -1,6 +1,6 @@
 {
   "version": "2.0",
-  "generated": "deterministic-pillow",
+  "generated": "qwen-image-2.1-local + pillow pixel postprocess",
   "tiers": [
     16,
     24,
@@ -1474,5 +1474,12 @@
     "sniper": "icons/ability_sniper_24.png",
     "fortitude": "icons/ability_fortitude_24.png",
     "tactician": "icons/ability_tactician_24.png"
+  },
+  "provenance": {
+    "model": "qwen-image-2.1-UC-fp8",
+    "workflow": "local ComfyUI/Qwen Chat",
+    "postprocess": "remove black bg, nearest tiers, 4-frame sheet",
+    "source": "docs/art/qwen-sprites",
+    "license": "local project asset"
   }
 }
