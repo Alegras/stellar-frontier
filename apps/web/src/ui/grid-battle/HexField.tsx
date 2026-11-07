@@ -6,6 +6,8 @@ import {
 } from "./model";
 
 const SIDE_COLOR = { player: "#4FC3F7", enemy: "#FF6B6B" } as const;
+type UnitArt = { tiers: Record<string, { path: string }>; frameW?: number; frameH?: number; frames?: number; fps?: number; loop?: boolean };
+type SpriteManifest = { units?: Record<string, Record<string, UnitArt>> };
 const CLASS_CODE: Record<string, string> = { corvette: "CV", frigate: "FR", destroyer: "DD", cruiser: "CA", battleship: "BB", carrier: "CVN", titan: "TT", colossus: "CL" };
 const TERRAIN_COLOR: Record<Terrain, string> = { void: "#0B1422", asteroid: "#242018", nebula: "#1B1730", debris: "#1B2028", minefield: "#281818", gravity_anomaly: "#142033" };
 const TERRAIN_RU: Record<Terrain, string> = { void: "пусто", asteroid: "астероид", nebula: "туманность", debris: "обломки", minefield: "мины", gravity_anomaly: "гравитация" };
@@ -35,8 +37,27 @@ export function HexField({ battle, reach, targets, selectedTargetId, targetObsta
   const ref = useRef<HTMLCanvasElement | null>(null);
   const hoverRef = useRef<{ q: number; r: number } | null>(null);
   const [tick, setTick] = useState(0);
+  const unitArt = useRef<Record<string, HTMLImageElement>>({});
+  const unitMeta = useRef<Record<string, UnitArt>>({});
   const targetIds = useMemo(() => new Set(targets.map((t) => t.id)), [targets]);
   const reachSet = useMemo(() => new Set(reach.map((h) => h.q + "," + h.r)), [reach]);
+
+  useEffect(() => {
+    let alive = true;
+    (async () => {
+      try {
+        const res = await fetch("/battle/manifest.json"); if (!res.ok) return;
+        const man = await res.json() as SpriteManifest; const out: Record<string, HTMLImageElement> = {};
+        const tier = "48";
+        for (const side of ["player", "enemy"]) for (const [cls, art] of Object.entries(man.units?.[side] ?? {})) {
+          const t = art.tiers[tier] ?? art.tiers["32"] ?? art.tiers["48"]; if (!t) continue;
+          await new Promise<void>((ok) => { const img = new Image(); img.onload = () => { out[side + ":" + cls] = img; unitMeta.current[side + ":" + cls] = art; ok(); }; img.onerror = () => ok(); img.src = t.path.startsWith("/") ? t.path : "/battle/" + t.path; });
+        }
+        if (alive) unitArt.current = out;
+      } catch { /* fallback */ }
+    })();
+    return () => { alive = false; };
+  }, []);
 
   useEffect(() => {
     if (reducedMotion) return;
@@ -142,8 +163,14 @@ export function HexField({ battle, reach, targets, selectedTargetId, targetObsta
       ctx.strokeStyle = color; ctx.lineWidth = isTarget ? 3 : 2; ctx.stroke();
       if (isActive) { ctx.beginPath(); ctx.arc(x, y - 6, 16, 0, Math.PI * 2); ctx.strokeStyle = "#F5C542"; ctx.lineWidth = 2; ctx.stroke(); }
       if (isTarget) { ctx.beginPath(); ctx.arc(x, y - 6, 17, 0, Math.PI * 2); ctx.strokeStyle = "#FF5A5A"; ctx.lineWidth = 2; ctx.stroke(); }
-      ctx.fillStyle = color; ctx.font = "bold 9px monospace"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
-      ctx.fillText(CLASS_CODE[s.cls] ?? "?", x, y - 6);
+      const sprite = unitArt.current[s.side + ":" + s.cls]; const meta = unitMeta.current[s.side + ":" + s.cls];
+      if (sprite) {
+        const frameW = meta?.frameW ?? sprite.width, frameH = meta?.frameH ?? sprite.height, frames = meta?.frames ?? 1, fps = meta?.fps ?? 8;
+        const frame = frames > 1 ? Math.floor(performance.now() / 1000 * fps) % frames : 0;
+        ctx.save(); ctx.beginPath(); ctx.arc(x, y - 6, 12, 0, Math.PI * 2); ctx.clip();
+        ctx.drawImage(sprite, frame * frameW, 0, frameW, frameH, x - 12, y - 18, 24, 24); ctx.restore();
+      }
+      else { ctx.fillStyle = color; ctx.font = "bold 9px monospace"; ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.fillText(CLASS_CODE[s.cls] ?? "?", x, y - 6); }
       // количество
       ctx.fillStyle = "#05070E"; ctx.fillRect(x - 12, y - 27, 24, 11);
       ctx.strokeStyle = color; ctx.lineWidth = 1; ctx.strokeRect(x - 12, y - 27, 24, 11);

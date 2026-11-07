@@ -1,782 +1,1478 @@
 {
-  "version": 1,
-  "part": "XV-b · grid battle",
-  "generator": "qwen-image-2.1 (local ComfyUI) + pixel postprocess",
-  "palette": [
-    "#05070E",
-    "#0A1020",
-    "#101A2E",
-    "#142038",
-    "#1B2A4A",
-    "#233A5C",
-    "#2E4A70",
-    "#38414F",
-    "#5C6878",
-    "#8C99A8",
-    "#B7C2D0",
-    "#E8EEF7",
-    "#FFFFFF",
-    "#F5C542",
-    "#B8862A",
-    "#6BE675",
-    "#3FA35A",
-    "#4FC3F7",
-    "#2A7CA8",
-    "#7A5CFF",
-    "#FF5A5A",
-    "#A33030",
-    "#F08A24",
-    "#FFCF6B",
-    "#3A2B5C",
-    "#6BE08A"
+  "version": "2.0",
+  "generated": "deterministic-pillow",
+  "tiers": [
+    16,
+    24,
+    32,
+    48,
+    64,
+    96
   ],
-  "hex": {
-    "orientation": "pointy-top",
-    "frameW": 32,
-    "frameH": 36,
-    "anchor": [
-      16,
-      18
-    ],
-    "axial": true
-  },
-  "tiles": {
-    "empty": {
-      "path": "tiles/empty.png",
-      "frameW": 32,
-      "frameH": 36,
-      "frames": 1,
-      "fps": 0,
-      "loop": false,
-      "anchor": [
-        16,
-        18
-      ],
-      "bytes": 282,
-      "colors": 4,
-      "source": {
-        "prompt": "Pixel art game asset, single centered object, an empty deep-space hexagon tile with a few tiny white stars on a very dark navy background, on plain pure black background, crisp pixel shading, limited colour palette, high contrast, no text.  Square composition, object fills the frame.",
-        "seed": 9100,
-        "model": "qwen-image-2.1-UC-fp8",
-        "steps": 18
-      }
-    },
-    "asteroid": {
-      "path": "tiles/asteroid.png",
-      "frameW": 32,
-      "frameH": 36,
-      "frames": 4,
-      "fps": 2,
-      "loop": true,
-      "anchor": [
-        16,
-        18
-      ],
-      "bytes": 1357,
-      "colors": 5,
-      "source": {
-        "prompt": "Pixel art game asset, single centered object, a hexagon space tile with grey rocky asteroids and floating stones on a very dark navy background, on plain pure black background, crisp pixel shading, limited colour palette, high contrast, no text.  Square composition, object fills the frame.",
-        "seed": 9101,
-        "model": "qwen-image-2.1-UC-fp8",
-        "steps": 18
-      }
-    },
-    "nebula": {
-      "path": "tiles/nebula.png",
-      "frameW": 32,
-      "frameH": 36,
-      "frames": 4,
-      "fps": 2,
-      "loop": true,
-      "anchor": [
-        16,
-        18
-      ],
-      "bytes": 831,
-      "colors": 5,
-      "source": {
-        "prompt": "Pixel art game asset, single centered object, a hexagon space tile with soft purple and blue nebula clouds on a very dark navy background, on plain pure black background, crisp pixel shading, limited colour palette, high contrast, no text.  Square composition, object fills the frame.",
-        "seed": 9102,
-        "model": "qwen-image-2.1-UC-fp8",
-        "steps": 18
-      }
-    },
-    "mines": {
-      "path": "tiles/mines.png",
-      "frameW": 32,
-      "frameH": 36,
-      "frames": 6,
-      "fps": 5,
-      "loop": true,
-      "anchor": [
-        16,
-        18
-      ],
-      "bytes": 570,
-      "colors": 6,
-      "source": {
-        "prompt": "Pixel art game asset, single centered object, a hexagon space tile with small glowing orange space mines and warning lights on a very dark navy background, on plain pure black background, crisp pixel shading, limited colour palette, high contrast, no text.  Square composition, object fills the frame.",
-        "seed": 9103,
-        "model": "qwen-image-2.1-UC-fp8",
-        "steps": 18
-      }
-    },
-    "gravity": {
-      "path": "tiles/gravity.png",
-      "frameW": 32,
-      "frameH": 36,
-      "frames": 4,
-      "fps": 2,
-      "loop": true,
-      "anchor": [
-        16,
-        18
-      ],
-      "bytes": 827,
-      "colors": 5,
-      "source": {
-        "prompt": "Pixel art game asset, single centered object, a hexagon space tile with a glowing purple gravity anomaly ring and swirl on a very dark navy background, on plain pure black background, crisp pixel shading, limited colour palette, high contrast, no text.  Square composition, object fills the frame.",
-        "seed": 9104,
-        "model": "qwen-image-2.1-UC-fp8",
-        "steps": 18
-      }
-    },
-    "wreck": {
-      "path": "tiles/wreck.png",
-      "frameW": 32,
-      "frameH": 36,
-      "frames": 1,
-      "fps": 0,
-      "loop": false,
-      "anchor": [
-        16,
-        18
-      ],
-      "bytes": 623,
-      "colors": 5,
-      "source": {
-        "prompt": "Pixel art game asset, single centered object, a hexagon space tile with metallic ship wreckage, torn hull plates and debris on a very dark navy background, on plain pure black background, crisp pixel shading, limited colour palette, high contrast, no text.  Square composition, object fills the frame.",
-        "seed": 9105,
-        "model": "qwen-image-2.1-UC-fp8",
-        "steps": 18
-      }
-    }
-  },
   "units": {
     "player": {
       "corvette": {
-        "path": "units/player/corvette.png",
-        "frameW": 64,
-        "frameH": 64,
-        "frames": 6,
-        "fps": 6,
-        "loop": true,
-        "anchor": [
-          32,
-          56
-        ],
-        "frameOrder": [
-          "idle_0",
-          "idle_1",
-          "move_0",
-          "move_1",
-          "attack_0",
-          "attack_1"
-        ],
-        "bytes": 14609,
-        "colors": 0,
-        "frameSource": "postprocess(Qwen source: bob/bank/glow/muzzle)",
-        "source": {
-          "prompt": "Pixel art game asset, single centered object, a small fast dart-shaped corvette spaceship, top-down three-quarter view spaceship, on plain pure black background, crisp pixel shading, limited colour palette, high contrast, no text. blue and cyan hull markings, cool blue engine glow",
-          "seed": 9201,
-          "model": "qwen-image-2.1-UC-fp8",
-          "steps": 18
-        }
+        "tiers": {
+          "16": {
+            "path": "sprites/player_corvette_16.png",
+            "w": 16,
+            "h": 16
+          },
+          "24": {
+            "path": "sprites/player_corvette_24.png",
+            "w": 24,
+            "h": 24
+          },
+          "32": {
+            "path": "sprites/player_corvette_32.png",
+            "w": 32,
+            "h": 32
+          },
+          "48": {
+            "path": "sprites/player_corvette_48_sheet.png",
+            "w": 48,
+            "h": 48
+          },
+          "64": {
+            "path": "sprites/player_corvette_64.png",
+            "w": 64,
+            "h": 64
+          },
+          "96": {
+            "path": "sprites/player_corvette_96.png",
+            "w": 96,
+            "h": 96
+          }
+        },
+        "frameW": 48,
+        "frameH": 48,
+        "frames": 4,
+        "fps": 8,
+        "loop": true
       },
       "frigate": {
-        "path": "units/player/frigate.png",
-        "frameW": 64,
-        "frameH": 64,
-        "frames": 6,
-        "fps": 6,
-        "loop": true,
-        "anchor": [
-          32,
-          56
-        ],
-        "frameOrder": [
-          "idle_0",
-          "idle_1",
-          "move_0",
-          "move_1",
-          "attack_0",
-          "attack_1"
-        ],
-        "bytes": 17972,
-        "colors": 0,
-        "frameSource": "postprocess(Qwen source: bob/bank/glow/muzzle)",
-        "source": {
-          "prompt": "Pixel art game asset, single centered object, a frigate spaceship with two side fins and twin engines, top-down three-quarter view spaceship, on plain pure black background, crisp pixel shading, limited colour palette, high contrast, no text. blue and cyan hull markings, cool blue engine glow",
-          "seed": 9202,
-          "model": "qwen-image-2.1-UC-fp8",
-          "steps": 18
-        }
+        "tiers": {
+          "16": {
+            "path": "sprites/player_frigate_16.png",
+            "w": 16,
+            "h": 16
+          },
+          "24": {
+            "path": "sprites/player_frigate_24.png",
+            "w": 24,
+            "h": 24
+          },
+          "32": {
+            "path": "sprites/player_frigate_32.png",
+            "w": 32,
+            "h": 32
+          },
+          "48": {
+            "path": "sprites/player_frigate_48_sheet.png",
+            "w": 48,
+            "h": 48
+          },
+          "64": {
+            "path": "sprites/player_frigate_64.png",
+            "w": 64,
+            "h": 64
+          },
+          "96": {
+            "path": "sprites/player_frigate_96.png",
+            "w": 96,
+            "h": 96
+          }
+        },
+        "frameW": 48,
+        "frameH": 48,
+        "frames": 4,
+        "fps": 8,
+        "loop": true
       },
       "destroyer": {
-        "path": "units/player/destroyer.png",
-        "frameW": 64,
-        "frameH": 64,
-        "frames": 6,
-        "fps": 6,
-        "loop": true,
-        "anchor": [
-          32,
-          56
-        ],
-        "frameOrder": [
-          "idle_0",
-          "idle_1",
-          "move_0",
-          "move_1",
-          "attack_0",
-          "attack_1"
-        ],
-        "bytes": 9266,
-        "colors": 0,
-        "frameSource": "postprocess(Qwen source: bob/bank/glow/muzzle)",
-        "source": {
-          "prompt": "Pixel art game asset, single centered object, a long narrow destroyer spaceship with a spine cannon, top-down three-quarter view spaceship, on plain pure black background, crisp pixel shading, limited colour palette, high contrast, no text. blue and cyan hull markings, cool blue engine glow",
-          "seed": 9203,
-          "model": "qwen-image-2.1-UC-fp8",
-          "steps": 18
-        }
+        "tiers": {
+          "16": {
+            "path": "sprites/player_destroyer_16.png",
+            "w": 16,
+            "h": 16
+          },
+          "24": {
+            "path": "sprites/player_destroyer_24.png",
+            "w": 24,
+            "h": 24
+          },
+          "32": {
+            "path": "sprites/player_destroyer_32.png",
+            "w": 32,
+            "h": 32
+          },
+          "48": {
+            "path": "sprites/player_destroyer_48_sheet.png",
+            "w": 48,
+            "h": 48
+          },
+          "64": {
+            "path": "sprites/player_destroyer_64.png",
+            "w": 64,
+            "h": 64
+          },
+          "96": {
+            "path": "sprites/player_destroyer_96.png",
+            "w": 96,
+            "h": 96
+          }
+        },
+        "frameW": 48,
+        "frameH": 48,
+        "frames": 4,
+        "fps": 8,
+        "loop": true
       },
       "cruiser": {
-        "path": "units/player/cruiser.png",
-        "frameW": 64,
-        "frameH": 64,
-        "frames": 6,
-        "fps": 6,
-        "loop": true,
-        "anchor": [
-          32,
-          56
-        ],
-        "frameOrder": [
-          "idle_0",
-          "idle_1",
-          "move_0",
-          "move_1",
-          "attack_0",
-          "attack_1"
-        ],
-        "bytes": 13291,
-        "colors": 0,
-        "frameSource": "postprocess(Qwen source: bob/bank/glow/muzzle)",
-        "source": {
-          "prompt": "Pixel art game asset, single centered object, a bulky cruiser spaceship with several turrets, top-down three-quarter view spaceship, on plain pure black background, crisp pixel shading, limited colour palette, high contrast, no text. blue and cyan hull markings, cool blue engine glow",
-          "seed": 9204,
-          "model": "qwen-image-2.1-UC-fp8",
-          "steps": 18
-        }
+        "tiers": {
+          "16": {
+            "path": "sprites/player_cruiser_16.png",
+            "w": 16,
+            "h": 16
+          },
+          "24": {
+            "path": "sprites/player_cruiser_24.png",
+            "w": 24,
+            "h": 24
+          },
+          "32": {
+            "path": "sprites/player_cruiser_32.png",
+            "w": 32,
+            "h": 32
+          },
+          "48": {
+            "path": "sprites/player_cruiser_48_sheet.png",
+            "w": 48,
+            "h": 48
+          },
+          "64": {
+            "path": "sprites/player_cruiser_64.png",
+            "w": 64,
+            "h": 64
+          },
+          "96": {
+            "path": "sprites/player_cruiser_96.png",
+            "w": 96,
+            "h": 96
+          }
+        },
+        "frameW": 48,
+        "frameH": 48,
+        "frames": 4,
+        "fps": 8,
+        "loop": true
       },
       "battleship": {
-        "path": "units/player/battleship.png",
-        "frameW": 64,
-        "frameH": 64,
-        "frames": 6,
-        "fps": 6,
-        "loop": true,
-        "anchor": [
-          32,
-          56
-        ],
-        "frameOrder": [
-          "idle_0",
-          "idle_1",
-          "move_0",
-          "move_1",
-          "attack_0",
-          "attack_1"
-        ],
-        "bytes": 12775,
-        "colors": 0,
-        "frameSource": "postprocess(Qwen source: bob/bank/glow/muzzle)",
-        "source": {
-          "prompt": "Pixel art game asset, single centered object, a heavy battleship spaceship with thick armor and big gun turrets, top-down three-quarter view spaceship, on plain pure black background, crisp pixel shading, limited colour palette, high contrast, no text. blue and cyan hull markings, cool blue engine glow",
-          "seed": 9205,
-          "model": "qwen-image-2.1-UC-fp8",
-          "steps": 18
-        }
+        "tiers": {
+          "16": {
+            "path": "sprites/player_battleship_16.png",
+            "w": 16,
+            "h": 16
+          },
+          "24": {
+            "path": "sprites/player_battleship_24.png",
+            "w": 24,
+            "h": 24
+          },
+          "32": {
+            "path": "sprites/player_battleship_32.png",
+            "w": 32,
+            "h": 32
+          },
+          "48": {
+            "path": "sprites/player_battleship_48_sheet.png",
+            "w": 48,
+            "h": 48
+          },
+          "64": {
+            "path": "sprites/player_battleship_64.png",
+            "w": 64,
+            "h": 64
+          },
+          "96": {
+            "path": "sprites/player_battleship_96.png",
+            "w": 96,
+            "h": 96
+          }
+        },
+        "frameW": 48,
+        "frameH": 48,
+        "frames": 4,
+        "fps": 8,
+        "loop": true
       },
       "carrier": {
-        "path": "units/player/carrier.png",
-        "frameW": 64,
-        "frameH": 64,
-        "frames": 6,
-        "fps": 6,
-        "loop": true,
-        "anchor": [
-          32,
-          56
-        ],
-        "frameOrder": [
-          "idle_0",
-          "idle_1",
-          "move_0",
-          "move_1",
-          "attack_0",
-          "attack_1"
-        ],
-        "bytes": 15603,
-        "colors": 0,
-        "frameSource": "postprocess(Qwen source: bob/bank/glow/muzzle)",
-        "source": {
-          "prompt": "Pixel art game asset, single centered object, a flat-decked carrier spaceship with a hangar flight deck, top-down three-quarter view spaceship, on plain pure black background, crisp pixel shading, limited colour palette, high contrast, no text. blue and cyan hull markings, cool blue engine glow",
-          "seed": 9206,
-          "model": "qwen-image-2.1-UC-fp8",
-          "steps": 18
-        }
+        "tiers": {
+          "16": {
+            "path": "sprites/player_carrier_16.png",
+            "w": 16,
+            "h": 16
+          },
+          "24": {
+            "path": "sprites/player_carrier_24.png",
+            "w": 24,
+            "h": 24
+          },
+          "32": {
+            "path": "sprites/player_carrier_32.png",
+            "w": 32,
+            "h": 32
+          },
+          "48": {
+            "path": "sprites/player_carrier_48_sheet.png",
+            "w": 48,
+            "h": 48
+          },
+          "64": {
+            "path": "sprites/player_carrier_64.png",
+            "w": 64,
+            "h": 64
+          },
+          "96": {
+            "path": "sprites/player_carrier_96.png",
+            "w": 96,
+            "h": 96
+          }
+        },
+        "frameW": 48,
+        "frameH": 48,
+        "frames": 4,
+        "fps": 8,
+        "loop": true
       },
       "titan": {
-        "path": "units/player/titan.png",
-        "frameW": 64,
-        "frameH": 64,
-        "frames": 6,
-        "fps": 6,
-        "loop": true,
-        "anchor": [
-          32,
-          56
-        ],
-        "frameOrder": [
-          "idle_0",
-          "idle_1",
-          "move_0",
-          "move_1",
-          "attack_0",
-          "attack_1"
-        ],
-        "bytes": 15885,
-        "colors": 0,
-        "frameSource": "postprocess(Qwen source: bob/bank/glow/muzzle)",
-        "source": {
-          "prompt": "Pixel art game asset, single centered object, a massive ornate titan dreadnought spaceship with layered fins, top-down three-quarter view spaceship, on plain pure black background, crisp pixel shading, limited colour palette, high contrast, no text. blue and cyan hull markings, cool blue engine glow",
-          "seed": 9207,
-          "model": "qwen-image-2.1-UC-fp8",
-          "steps": 18
-        }
+        "tiers": {
+          "16": {
+            "path": "sprites/player_titan_16.png",
+            "w": 16,
+            "h": 16
+          },
+          "24": {
+            "path": "sprites/player_titan_24.png",
+            "w": 24,
+            "h": 24
+          },
+          "32": {
+            "path": "sprites/player_titan_32.png",
+            "w": 32,
+            "h": 32
+          },
+          "48": {
+            "path": "sprites/player_titan_48_sheet.png",
+            "w": 48,
+            "h": 48
+          },
+          "64": {
+            "path": "sprites/player_titan_64.png",
+            "w": 64,
+            "h": 64
+          },
+          "96": {
+            "path": "sprites/player_titan_96.png",
+            "w": 96,
+            "h": 96
+          }
+        },
+        "frameW": 48,
+        "frameH": 48,
+        "frames": 4,
+        "fps": 8,
+        "loop": true
       },
       "colossus": {
-        "path": "units/player/colossus.png",
-        "frameW": 64,
-        "frameH": 64,
-        "frames": 6,
-        "fps": 6,
-        "loop": true,
-        "anchor": [
-          32,
-          56
-        ],
-        "frameOrder": [
-          "idle_0",
-          "idle_1",
-          "move_0",
-          "move_1",
-          "attack_0",
-          "attack_1"
-        ],
-        "bytes": 24777,
-        "colors": 0,
-        "frameSource": "postprocess(Qwen source: bob/bank/glow/muzzle)",
-        "source": {
-          "prompt": "Pixel art game asset, single centered object, a colossal ring-shaped super-heavy spaceship with a glowing core, top-down three-quarter view spaceship, on plain pure black background, crisp pixel shading, limited colour palette, high contrast, no text. blue and cyan hull markings, cool blue engine glow",
-          "seed": 9208,
-          "model": "qwen-image-2.1-UC-fp8",
-          "steps": 18
-        }
+        "tiers": {
+          "16": {
+            "path": "sprites/player_colossus_16.png",
+            "w": 16,
+            "h": 16
+          },
+          "24": {
+            "path": "sprites/player_colossus_24.png",
+            "w": 24,
+            "h": 24
+          },
+          "32": {
+            "path": "sprites/player_colossus_32.png",
+            "w": 32,
+            "h": 32
+          },
+          "48": {
+            "path": "sprites/player_colossus_48_sheet.png",
+            "w": 48,
+            "h": 48
+          },
+          "64": {
+            "path": "sprites/player_colossus_64.png",
+            "w": 64,
+            "h": 64
+          },
+          "96": {
+            "path": "sprites/player_colossus_96.png",
+            "w": 96,
+            "h": 96
+          }
+        },
+        "frameW": 48,
+        "frameH": 48,
+        "frames": 4,
+        "fps": 8,
+        "loop": true
       }
     },
     "enemy": {
       "corvette": {
-        "path": "units/enemy/corvette.png",
-        "frameW": 64,
-        "frameH": 64,
-        "frames": 6,
-        "fps": 6,
-        "loop": true,
-        "anchor": [
-          32,
-          56
-        ],
-        "frameOrder": [
-          "idle_0",
-          "idle_1",
-          "move_0",
-          "move_1",
-          "attack_0",
-          "attack_1"
-        ],
-        "bytes": 12030,
-        "colors": 0,
-        "frameSource": "postprocess(Qwen source: bob/bank/glow/muzzle)",
-        "source": {
-          "prompt": "Pixel art game asset, single centered object, a small fast dart-shaped corvette spaceship, top-down three-quarter view spaceship, on plain pure black background, crisp pixel shading, limited colour palette, high contrast, no text. red and orange hull markings, warm red engine glow",
-          "seed": 9209,
-          "model": "qwen-image-2.1-UC-fp8",
-          "steps": 18
-        }
+        "tiers": {
+          "16": {
+            "path": "sprites/enemy_corvette_16.png",
+            "w": 16,
+            "h": 16
+          },
+          "24": {
+            "path": "sprites/enemy_corvette_24.png",
+            "w": 24,
+            "h": 24
+          },
+          "32": {
+            "path": "sprites/enemy_corvette_32.png",
+            "w": 32,
+            "h": 32
+          },
+          "48": {
+            "path": "sprites/enemy_corvette_48_sheet.png",
+            "w": 48,
+            "h": 48
+          },
+          "64": {
+            "path": "sprites/enemy_corvette_64.png",
+            "w": 64,
+            "h": 64
+          },
+          "96": {
+            "path": "sprites/enemy_corvette_96.png",
+            "w": 96,
+            "h": 96
+          }
+        },
+        "frameW": 48,
+        "frameH": 48,
+        "frames": 4,
+        "fps": 8,
+        "loop": true
       },
       "frigate": {
-        "path": "units/enemy/frigate.png",
-        "frameW": 64,
-        "frameH": 64,
-        "frames": 6,
-        "fps": 6,
-        "loop": true,
-        "anchor": [
-          32,
-          56
-        ],
-        "frameOrder": [
-          "idle_0",
-          "idle_1",
-          "move_0",
-          "move_1",
-          "attack_0",
-          "attack_1"
-        ],
-        "bytes": 20419,
-        "colors": 0,
-        "frameSource": "postprocess(Qwen source: bob/bank/glow/muzzle)",
-        "source": {
-          "prompt": "Pixel art game asset, single centered object, a frigate spaceship with two side fins and twin engines, top-down three-quarter view spaceship, on plain pure black background, crisp pixel shading, limited colour palette, high contrast, no text. red and orange hull markings, warm red engine glow",
-          "seed": 9210,
-          "model": "qwen-image-2.1-UC-fp8",
-          "steps": 18
-        }
+        "tiers": {
+          "16": {
+            "path": "sprites/enemy_frigate_16.png",
+            "w": 16,
+            "h": 16
+          },
+          "24": {
+            "path": "sprites/enemy_frigate_24.png",
+            "w": 24,
+            "h": 24
+          },
+          "32": {
+            "path": "sprites/enemy_frigate_32.png",
+            "w": 32,
+            "h": 32
+          },
+          "48": {
+            "path": "sprites/enemy_frigate_48_sheet.png",
+            "w": 48,
+            "h": 48
+          },
+          "64": {
+            "path": "sprites/enemy_frigate_64.png",
+            "w": 64,
+            "h": 64
+          },
+          "96": {
+            "path": "sprites/enemy_frigate_96.png",
+            "w": 96,
+            "h": 96
+          }
+        },
+        "frameW": 48,
+        "frameH": 48,
+        "frames": 4,
+        "fps": 8,
+        "loop": true
       },
       "destroyer": {
-        "path": "units/enemy/destroyer.png",
-        "frameW": 64,
-        "frameH": 64,
-        "frames": 6,
-        "fps": 6,
-        "loop": true,
-        "anchor": [
-          32,
-          56
-        ],
-        "frameOrder": [
-          "idle_0",
-          "idle_1",
-          "move_0",
-          "move_1",
-          "attack_0",
-          "attack_1"
-        ],
-        "bytes": 6850,
-        "colors": 495,
-        "frameSource": "postprocess(Qwen source: bob/bank/glow/muzzle)",
-        "source": {
-          "prompt": "Pixel art game asset, single centered object, a long narrow destroyer spaceship with a spine cannon, top-down three-quarter view spaceship, on plain pure black background, crisp pixel shading, limited colour palette, high contrast, no text. red and orange hull markings, warm red engine glow",
-          "seed": 9211,
-          "model": "qwen-image-2.1-UC-fp8",
-          "steps": 18
-        }
+        "tiers": {
+          "16": {
+            "path": "sprites/enemy_destroyer_16.png",
+            "w": 16,
+            "h": 16
+          },
+          "24": {
+            "path": "sprites/enemy_destroyer_24.png",
+            "w": 24,
+            "h": 24
+          },
+          "32": {
+            "path": "sprites/enemy_destroyer_32.png",
+            "w": 32,
+            "h": 32
+          },
+          "48": {
+            "path": "sprites/enemy_destroyer_48_sheet.png",
+            "w": 48,
+            "h": 48
+          },
+          "64": {
+            "path": "sprites/enemy_destroyer_64.png",
+            "w": 64,
+            "h": 64
+          },
+          "96": {
+            "path": "sprites/enemy_destroyer_96.png",
+            "w": 96,
+            "h": 96
+          }
+        },
+        "frameW": 48,
+        "frameH": 48,
+        "frames": 4,
+        "fps": 8,
+        "loop": true
       },
       "cruiser": {
-        "path": "units/enemy/cruiser.png",
-        "frameW": 64,
-        "frameH": 64,
-        "frames": 6,
-        "fps": 6,
-        "loop": true,
-        "anchor": [
-          32,
-          56
-        ],
-        "frameOrder": [
-          "idle_0",
-          "idle_1",
-          "move_0",
-          "move_1",
-          "attack_0",
-          "attack_1"
-        ],
-        "bytes": 11604,
-        "colors": 0,
-        "frameSource": "postprocess(Qwen source: bob/bank/glow/muzzle)",
-        "source": {
-          "prompt": "Pixel art game asset, single centered object, a bulky cruiser spaceship with several turrets, top-down three-quarter view spaceship, on plain pure black background, crisp pixel shading, limited colour palette, high contrast, no text. red and orange hull markings, warm red engine glow",
-          "seed": 9212,
-          "model": "qwen-image-2.1-UC-fp8",
-          "steps": 18
-        }
+        "tiers": {
+          "16": {
+            "path": "sprites/enemy_cruiser_16.png",
+            "w": 16,
+            "h": 16
+          },
+          "24": {
+            "path": "sprites/enemy_cruiser_24.png",
+            "w": 24,
+            "h": 24
+          },
+          "32": {
+            "path": "sprites/enemy_cruiser_32.png",
+            "w": 32,
+            "h": 32
+          },
+          "48": {
+            "path": "sprites/enemy_cruiser_48_sheet.png",
+            "w": 48,
+            "h": 48
+          },
+          "64": {
+            "path": "sprites/enemy_cruiser_64.png",
+            "w": 64,
+            "h": 64
+          },
+          "96": {
+            "path": "sprites/enemy_cruiser_96.png",
+            "w": 96,
+            "h": 96
+          }
+        },
+        "frameW": 48,
+        "frameH": 48,
+        "frames": 4,
+        "fps": 8,
+        "loop": true
       },
       "battleship": {
-        "path": "units/enemy/battleship.png",
-        "frameW": 64,
-        "frameH": 64,
-        "frames": 6,
-        "fps": 6,
-        "loop": true,
-        "anchor": [
-          32,
-          56
-        ],
-        "frameOrder": [
-          "idle_0",
-          "idle_1",
-          "move_0",
-          "move_1",
-          "attack_0",
-          "attack_1"
-        ],
-        "bytes": 7476,
-        "colors": 479,
-        "frameSource": "postprocess(Qwen source: bob/bank/glow/muzzle)",
-        "source": {
-          "prompt": "Pixel art game asset, single centered object, a heavy battleship spaceship with thick armor and big gun turrets, top-down three-quarter view spaceship, on plain pure black background, crisp pixel shading, limited colour palette, high contrast, no text. red and orange hull markings, warm red engine glow",
-          "seed": 9213,
-          "model": "qwen-image-2.1-UC-fp8",
-          "steps": 18
-        }
+        "tiers": {
+          "16": {
+            "path": "sprites/enemy_battleship_16.png",
+            "w": 16,
+            "h": 16
+          },
+          "24": {
+            "path": "sprites/enemy_battleship_24.png",
+            "w": 24,
+            "h": 24
+          },
+          "32": {
+            "path": "sprites/enemy_battleship_32.png",
+            "w": 32,
+            "h": 32
+          },
+          "48": {
+            "path": "sprites/enemy_battleship_48_sheet.png",
+            "w": 48,
+            "h": 48
+          },
+          "64": {
+            "path": "sprites/enemy_battleship_64.png",
+            "w": 64,
+            "h": 64
+          },
+          "96": {
+            "path": "sprites/enemy_battleship_96.png",
+            "w": 96,
+            "h": 96
+          }
+        },
+        "frameW": 48,
+        "frameH": 48,
+        "frames": 4,
+        "fps": 8,
+        "loop": true
       },
       "carrier": {
-        "path": "units/enemy/carrier.png",
-        "frameW": 64,
-        "frameH": 64,
-        "frames": 6,
-        "fps": 6,
-        "loop": true,
-        "anchor": [
-          32,
-          56
-        ],
-        "frameOrder": [
-          "idle_0",
-          "idle_1",
-          "move_0",
-          "move_1",
-          "attack_0",
-          "attack_1"
-        ],
-        "bytes": 9504,
-        "colors": 0,
-        "frameSource": "postprocess(Qwen source: bob/bank/glow/muzzle)",
-        "source": {
-          "prompt": "Pixel art game asset, single centered object, a flat-decked carrier spaceship with a hangar flight deck, top-down three-quarter view spaceship, on plain pure black background, crisp pixel shading, limited colour palette, high contrast, no text. red and orange hull markings, warm red engine glow",
-          "seed": 9214,
-          "model": "qwen-image-2.1-UC-fp8",
-          "steps": 18
-        }
+        "tiers": {
+          "16": {
+            "path": "sprites/enemy_carrier_16.png",
+            "w": 16,
+            "h": 16
+          },
+          "24": {
+            "path": "sprites/enemy_carrier_24.png",
+            "w": 24,
+            "h": 24
+          },
+          "32": {
+            "path": "sprites/enemy_carrier_32.png",
+            "w": 32,
+            "h": 32
+          },
+          "48": {
+            "path": "sprites/enemy_carrier_48_sheet.png",
+            "w": 48,
+            "h": 48
+          },
+          "64": {
+            "path": "sprites/enemy_carrier_64.png",
+            "w": 64,
+            "h": 64
+          },
+          "96": {
+            "path": "sprites/enemy_carrier_96.png",
+            "w": 96,
+            "h": 96
+          }
+        },
+        "frameW": 48,
+        "frameH": 48,
+        "frames": 4,
+        "fps": 8,
+        "loop": true
       },
       "titan": {
-        "path": "units/enemy/titan.png",
-        "frameW": 64,
-        "frameH": 64,
-        "frames": 6,
-        "fps": 6,
-        "loop": true,
-        "anchor": [
-          32,
-          56
-        ],
-        "frameOrder": [
-          "idle_0",
-          "idle_1",
-          "move_0",
-          "move_1",
-          "attack_0",
-          "attack_1"
-        ],
-        "bytes": 6743,
-        "colors": 330,
-        "frameSource": "postprocess(Qwen source: bob/bank/glow/muzzle)",
-        "source": {
-          "prompt": "Pixel art game asset, single centered object, a massive ornate titan dreadnought spaceship with layered fins, top-down three-quarter view spaceship, on plain pure black background, crisp pixel shading, limited colour palette, high contrast, no text. red and orange hull markings, warm red engine glow",
-          "seed": 9215,
-          "model": "qwen-image-2.1-UC-fp8",
-          "steps": 18
-        }
+        "tiers": {
+          "16": {
+            "path": "sprites/enemy_titan_16.png",
+            "w": 16,
+            "h": 16
+          },
+          "24": {
+            "path": "sprites/enemy_titan_24.png",
+            "w": 24,
+            "h": 24
+          },
+          "32": {
+            "path": "sprites/enemy_titan_32.png",
+            "w": 32,
+            "h": 32
+          },
+          "48": {
+            "path": "sprites/enemy_titan_48_sheet.png",
+            "w": 48,
+            "h": 48
+          },
+          "64": {
+            "path": "sprites/enemy_titan_64.png",
+            "w": 64,
+            "h": 64
+          },
+          "96": {
+            "path": "sprites/enemy_titan_96.png",
+            "w": 96,
+            "h": 96
+          }
+        },
+        "frameW": 48,
+        "frameH": 48,
+        "frames": 4,
+        "fps": 8,
+        "loop": true
       },
       "colossus": {
-        "path": "units/enemy/colossus.png",
-        "frameW": 64,
-        "frameH": 64,
-        "frames": 6,
-        "fps": 6,
-        "loop": true,
-        "anchor": [
-          32,
-          56
-        ],
-        "frameOrder": [
-          "idle_0",
-          "idle_1",
-          "move_0",
-          "move_1",
-          "attack_0",
-          "attack_1"
-        ],
-        "bytes": 15102,
-        "colors": 0,
-        "frameSource": "postprocess(Qwen source: bob/bank/glow/muzzle)",
-        "source": {
-          "prompt": "Pixel art game asset, single centered object, a colossal ring-shaped super-heavy spaceship with a glowing core, top-down three-quarter view spaceship, on plain pure black background, crisp pixel shading, limited colour palette, high contrast, no text. red and orange hull markings, warm red engine glow",
-          "seed": 9216,
-          "model": "qwen-image-2.1-UC-fp8",
-          "steps": 18
-        }
+        "tiers": {
+          "16": {
+            "path": "sprites/enemy_colossus_16.png",
+            "w": 16,
+            "h": 16
+          },
+          "24": {
+            "path": "sprites/enemy_colossus_24.png",
+            "w": 24,
+            "h": 24
+          },
+          "32": {
+            "path": "sprites/enemy_colossus_32.png",
+            "w": 32,
+            "h": 32
+          },
+          "48": {
+            "path": "sprites/enemy_colossus_48_sheet.png",
+            "w": 48,
+            "h": 48
+          },
+          "64": {
+            "path": "sprites/enemy_colossus_64.png",
+            "w": 64,
+            "h": 64
+          },
+          "96": {
+            "path": "sprites/enemy_colossus_96.png",
+            "w": 96,
+            "h": 96
+          }
+        },
+        "frameW": 48,
+        "frameH": 48,
+        "frames": 4,
+        "fps": 8,
+        "loop": true
       }
     }
   },
-  "effects": {
-    "laser_shot": {
-      "path": "effects/laser_shot.png",
-      "frameW": 64,
-      "frameH": 64,
-      "frames": 6,
-      "fps": 12,
-      "loop": false,
-      "anchor": [
-        32,
-        32
-      ],
-      "bytes": 584,
-      "colors": 42,
-      "frameSource": "postprocess(Qwen source: motion/scale/fade)",
-      "source": {
-        "prompt": "Pixel art game asset, single centered object, a bright cyan laser bolt projectile flying horizontally with a glowing trail, on plain pure black background, crisp pixel shading, limited colour palette, high contrast, no text.  Horizontal composition, centered.",
-        "seed": 9400,
-        "model": "qwen-image-2.1-UC-fp8",
-        "steps": 18
+  "icons": {
+    "action_attack": {
+      "16": {
+        "path": "icons/action_attack_16.png",
+        "w": 16,
+        "h": 16
+      },
+      "24": {
+        "path": "icons/action_attack_24.png",
+        "w": 24,
+        "h": 24
+      },
+      "32": {
+        "path": "icons/action_attack_32.png",
+        "w": 32,
+        "h": 32
+      },
+      "48": {
+        "path": "icons/action_attack_48.png",
+        "w": 48,
+        "h": 48
       }
     },
-    "kinetic_shot": {
-      "path": "effects/kinetic_shot.png",
-      "frameW": 64,
-      "frameH": 64,
-      "frames": 6,
-      "fps": 12,
-      "loop": false,
-      "anchor": [
-        32,
-        32
-      ],
-      "bytes": 602,
-      "colors": 47,
-      "frameSource": "postprocess(Qwen source: motion/scale/fade)",
-      "source": {
-        "prompt": "Pixel art game asset, single centered object, an orange kinetic shell tracer with sparks and a smoke trail flying horizontally, on plain pure black background, crisp pixel shading, limited colour palette, high contrast, no text.  Horizontal composition, centered.",
-        "seed": 9401,
-        "model": "qwen-image-2.1-UC-fp8",
-        "steps": 18
+    "action_move": {
+      "16": {
+        "path": "icons/action_move_16.png",
+        "w": 16,
+        "h": 16
+      },
+      "24": {
+        "path": "icons/action_move_24.png",
+        "w": 24,
+        "h": 24
+      },
+      "32": {
+        "path": "icons/action_move_32.png",
+        "w": 32,
+        "h": 32
+      },
+      "48": {
+        "path": "icons/action_move_48.png",
+        "w": 48,
+        "h": 48
       }
     },
-    "shield_hit": {
-      "path": "effects/shield_hit.png",
-      "frameW": 64,
-      "frameH": 64,
-      "frames": 6,
-      "fps": 12,
-      "loop": false,
-      "anchor": [
-        32,
-        32
-      ],
-      "bytes": 10661,
-      "colors": 468,
-      "frameSource": "postprocess(Qwen source: motion/scale/fade)",
-      "source": {
-        "prompt": "Pixel art game asset, single centered object, a cyan hexagonal energy shield impact flash with bright sparks, on plain pure black background, crisp pixel shading, limited colour palette, high contrast, no text.  Horizontal composition, centered.",
-        "seed": 9402,
-        "model": "qwen-image-2.1-UC-fp8",
-        "steps": 18
+    "action_defend": {
+      "16": {
+        "path": "icons/action_defend_16.png",
+        "w": 16,
+        "h": 16
+      },
+      "24": {
+        "path": "icons/action_defend_24.png",
+        "w": 24,
+        "h": 24
+      },
+      "32": {
+        "path": "icons/action_defend_32.png",
+        "w": 32,
+        "h": 32
+      },
+      "48": {
+        "path": "icons/action_defend_48.png",
+        "w": 48,
+        "h": 48
       }
     },
-    "death_explosion": {
-      "path": "effects/death_explosion.png",
-      "frameW": 64,
-      "frameH": 64,
-      "frames": 6,
-      "fps": 10,
-      "loop": false,
-      "anchor": [
-        32,
-        32
-      ],
-      "bytes": 4080,
-      "colors": 308,
-      "frameSource": "postprocess(Qwen source: motion/scale/fade)",
-      "source": {
-        "prompt": "Pixel art game asset, single centered object, a fiery orange explosion with debris, sparks and a shockwave ring, on plain pure black background, crisp pixel shading, limited colour palette, high contrast, no text.  Horizontal composition, centered.",
-        "seed": 9403,
-        "model": "qwen-image-2.1-UC-fp8",
-        "steps": 18
+    "action_overwatch": {
+      "16": {
+        "path": "icons/action_overwatch_16.png",
+        "w": 16,
+        "h": 16
+      },
+      "24": {
+        "path": "icons/action_overwatch_24.png",
+        "w": 24,
+        "h": 24
+      },
+      "32": {
+        "path": "icons/action_overwatch_32.png",
+        "w": 32,
+        "h": 32
+      },
+      "48": {
+        "path": "icons/action_overwatch_48.png",
+        "w": 48,
+        "h": 48
+      }
+    },
+    "action_wait": {
+      "16": {
+        "path": "icons/action_wait_16.png",
+        "w": 16,
+        "h": 16
+      },
+      "24": {
+        "path": "icons/action_wait_24.png",
+        "w": 24,
+        "h": 24
+      },
+      "32": {
+        "path": "icons/action_wait_32.png",
+        "w": 32,
+        "h": 32
+      },
+      "48": {
+        "path": "icons/action_wait_48.png",
+        "w": 48,
+        "h": 48
+      }
+    },
+    "action_ability": {
+      "16": {
+        "path": "icons/action_ability_16.png",
+        "w": 16,
+        "h": 16
+      },
+      "24": {
+        "path": "icons/action_ability_24.png",
+        "w": 24,
+        "h": 24
+      },
+      "32": {
+        "path": "icons/action_ability_32.png",
+        "w": 32,
+        "h": 32
+      },
+      "48": {
+        "path": "icons/action_ability_48.png",
+        "w": 48,
+        "h": 48
+      }
+    },
+    "action_endturn": {
+      "16": {
+        "path": "icons/action_endturn_16.png",
+        "w": 16,
+        "h": 16
+      },
+      "24": {
+        "path": "icons/action_endturn_24.png",
+        "w": 24,
+        "h": 24
+      },
+      "32": {
+        "path": "icons/action_endturn_32.png",
+        "w": 32,
+        "h": 32
+      },
+      "48": {
+        "path": "icons/action_endturn_48.png",
+        "w": 48,
+        "h": 48
+      }
+    },
+    "action_auto": {
+      "16": {
+        "path": "icons/action_auto_16.png",
+        "w": 16,
+        "h": 16
+      },
+      "24": {
+        "path": "icons/action_auto_24.png",
+        "w": 24,
+        "h": 24
+      },
+      "32": {
+        "path": "icons/action_auto_32.png",
+        "w": 32,
+        "h": 32
+      },
+      "48": {
+        "path": "icons/action_auto_48.png",
+        "w": 48,
+        "h": 48
+      }
+    },
+    "status_1": {
+      "16": {
+        "path": "icons/status_1_16.png",
+        "w": 16,
+        "h": 16
+      },
+      "24": {
+        "path": "icons/status_1_24.png",
+        "w": 24,
+        "h": 24
+      },
+      "32": {
+        "path": "icons/status_1_32.png",
+        "w": 32,
+        "h": 32
+      },
+      "48": {
+        "path": "icons/status_1_48.png",
+        "w": 48,
+        "h": 48
+      }
+    },
+    "status_2": {
+      "16": {
+        "path": "icons/status_2_16.png",
+        "w": 16,
+        "h": 16
+      },
+      "24": {
+        "path": "icons/status_2_24.png",
+        "w": 24,
+        "h": 24
+      },
+      "32": {
+        "path": "icons/status_2_32.png",
+        "w": 32,
+        "h": 32
+      },
+      "48": {
+        "path": "icons/status_2_48.png",
+        "w": 48,
+        "h": 48
+      }
+    },
+    "status_3": {
+      "16": {
+        "path": "icons/status_3_16.png",
+        "w": 16,
+        "h": 16
+      },
+      "24": {
+        "path": "icons/status_3_24.png",
+        "w": 24,
+        "h": 24
+      },
+      "32": {
+        "path": "icons/status_3_32.png",
+        "w": 32,
+        "h": 32
+      },
+      "48": {
+        "path": "icons/status_3_48.png",
+        "w": 48,
+        "h": 48
+      }
+    },
+    "status_4": {
+      "16": {
+        "path": "icons/status_4_16.png",
+        "w": 16,
+        "h": 16
+      },
+      "24": {
+        "path": "icons/status_4_24.png",
+        "w": 24,
+        "h": 24
+      },
+      "32": {
+        "path": "icons/status_4_32.png",
+        "w": 32,
+        "h": 32
+      },
+      "48": {
+        "path": "icons/status_4_48.png",
+        "w": 48,
+        "h": 48
+      }
+    },
+    "status_5": {
+      "16": {
+        "path": "icons/status_5_16.png",
+        "w": 16,
+        "h": 16
+      },
+      "24": {
+        "path": "icons/status_5_24.png",
+        "w": 24,
+        "h": 24
+      },
+      "32": {
+        "path": "icons/status_5_32.png",
+        "w": 32,
+        "h": 32
+      },
+      "48": {
+        "path": "icons/status_5_48.png",
+        "w": 48,
+        "h": 48
+      }
+    },
+    "status_6": {
+      "16": {
+        "path": "icons/status_6_16.png",
+        "w": 16,
+        "h": 16
+      },
+      "24": {
+        "path": "icons/status_6_24.png",
+        "w": 24,
+        "h": 24
+      },
+      "32": {
+        "path": "icons/status_6_32.png",
+        "w": 32,
+        "h": 32
+      },
+      "48": {
+        "path": "icons/status_6_48.png",
+        "w": 48,
+        "h": 48
+      }
+    },
+    "status_7": {
+      "16": {
+        "path": "icons/status_7_16.png",
+        "w": 16,
+        "h": 16
+      },
+      "24": {
+        "path": "icons/status_7_24.png",
+        "w": 24,
+        "h": 24
+      },
+      "32": {
+        "path": "icons/status_7_32.png",
+        "w": 32,
+        "h": 32
+      },
+      "48": {
+        "path": "icons/status_7_48.png",
+        "w": 48,
+        "h": 48
+      }
+    },
+    "status_8": {
+      "16": {
+        "path": "icons/status_8_16.png",
+        "w": 16,
+        "h": 16
+      },
+      "24": {
+        "path": "icons/status_8_24.png",
+        "w": 24,
+        "h": 24
+      },
+      "32": {
+        "path": "icons/status_8_32.png",
+        "w": 32,
+        "h": 32
+      },
+      "48": {
+        "path": "icons/status_8_48.png",
+        "w": 48,
+        "h": 48
+      }
+    },
+    "status_9": {
+      "16": {
+        "path": "icons/status_9_16.png",
+        "w": 16,
+        "h": 16
+      },
+      "24": {
+        "path": "icons/status_9_24.png",
+        "w": 24,
+        "h": 24
+      },
+      "32": {
+        "path": "icons/status_9_32.png",
+        "w": 32,
+        "h": 32
+      },
+      "48": {
+        "path": "icons/status_9_48.png",
+        "w": 48,
+        "h": 48
+      }
+    },
+    "status_10": {
+      "16": {
+        "path": "icons/status_10_16.png",
+        "w": 16,
+        "h": 16
+      },
+      "24": {
+        "path": "icons/status_10_24.png",
+        "w": 24,
+        "h": 24
+      },
+      "32": {
+        "path": "icons/status_10_32.png",
+        "w": 32,
+        "h": 32
+      },
+      "48": {
+        "path": "icons/status_10_48.png",
+        "w": 48,
+        "h": 48
+      }
+    },
+    "status_11": {
+      "16": {
+        "path": "icons/status_11_16.png",
+        "w": 16,
+        "h": 16
+      },
+      "24": {
+        "path": "icons/status_11_24.png",
+        "w": 24,
+        "h": 24
+      },
+      "32": {
+        "path": "icons/status_11_32.png",
+        "w": 32,
+        "h": 32
+      },
+      "48": {
+        "path": "icons/status_11_48.png",
+        "w": 48,
+        "h": 48
+      }
+    },
+    "status_12": {
+      "16": {
+        "path": "icons/status_12_16.png",
+        "w": 16,
+        "h": 16
+      },
+      "24": {
+        "path": "icons/status_12_24.png",
+        "w": 24,
+        "h": 24
+      },
+      "32": {
+        "path": "icons/status_12_32.png",
+        "w": 32,
+        "h": 32
+      },
+      "48": {
+        "path": "icons/status_12_48.png",
+        "w": 48,
+        "h": 48
+      }
+    },
+    "ability_focus_fire": {
+      "16": {
+        "path": "icons/ability_focus_fire_16.png",
+        "w": 16,
+        "h": 16
+      },
+      "24": {
+        "path": "icons/ability_focus_fire_24.png",
+        "w": 24,
+        "h": 24
+      },
+      "32": {
+        "path": "icons/ability_focus_fire_32.png",
+        "w": 32,
+        "h": 32
+      },
+      "48": {
+        "path": "icons/ability_focus_fire_48.png",
+        "w": 48,
+        "h": 48
+      }
+    },
+    "ability_emergency_repair": {
+      "16": {
+        "path": "icons/ability_emergency_repair_16.png",
+        "w": 16,
+        "h": 16
+      },
+      "24": {
+        "path": "icons/ability_emergency_repair_24.png",
+        "w": 24,
+        "h": 24
+      },
+      "32": {
+        "path": "icons/ability_emergency_repair_32.png",
+        "w": 32,
+        "h": 32
+      },
+      "48": {
+        "path": "icons/ability_emergency_repair_48.png",
+        "w": 48,
+        "h": 48
+      }
+    },
+    "ability_ew_jam": {
+      "16": {
+        "path": "icons/ability_ew_jam_16.png",
+        "w": 16,
+        "h": 16
+      },
+      "24": {
+        "path": "icons/ability_ew_jam_24.png",
+        "w": 24,
+        "h": 24
+      },
+      "32": {
+        "path": "icons/ability_ew_jam_32.png",
+        "w": 32,
+        "h": 32
+      },
+      "48": {
+        "path": "icons/ability_ew_jam_48.png",
+        "w": 48,
+        "h": 48
+      }
+    },
+    "ability_torpedo_fan": {
+      "16": {
+        "path": "icons/ability_torpedo_fan_16.png",
+        "w": 16,
+        "h": 16
+      },
+      "24": {
+        "path": "icons/ability_torpedo_fan_24.png",
+        "w": 24,
+        "h": 24
+      },
+      "32": {
+        "path": "icons/ability_torpedo_fan_32.png",
+        "w": 32,
+        "h": 32
+      },
+      "48": {
+        "path": "icons/ability_torpedo_fan_48.png",
+        "w": 48,
+        "h": 48
+      }
+    },
+    "ability_shield_barrier": {
+      "16": {
+        "path": "icons/ability_shield_barrier_16.png",
+        "w": 16,
+        "h": 16
+      },
+      "24": {
+        "path": "icons/ability_shield_barrier_24.png",
+        "w": 24,
+        "h": 24
+      },
+      "32": {
+        "path": "icons/ability_shield_barrier_32.png",
+        "w": 32,
+        "h": 32
+      },
+      "48": {
+        "path": "icons/ability_shield_barrier_48.png",
+        "w": 48,
+        "h": 48
+      }
+    },
+    "ability_interceptors": {
+      "16": {
+        "path": "icons/ability_interceptors_16.png",
+        "w": 16,
+        "h": 16
+      },
+      "24": {
+        "path": "icons/ability_interceptors_24.png",
+        "w": 24,
+        "h": 24
+      },
+      "32": {
+        "path": "icons/ability_interceptors_32.png",
+        "w": 32,
+        "h": 32
+      },
+      "48": {
+        "path": "icons/ability_interceptors_48.png",
+        "w": 48,
+        "h": 48
+      }
+    },
+    "ability_tactical_retreat": {
+      "16": {
+        "path": "icons/ability_tactical_retreat_16.png",
+        "w": 16,
+        "h": 16
+      },
+      "24": {
+        "path": "icons/ability_tactical_retreat_24.png",
+        "w": 24,
+        "h": 24
+      },
+      "32": {
+        "path": "icons/ability_tactical_retreat_32.png",
+        "w": 32,
+        "h": 32
+      },
+      "48": {
+        "path": "icons/ability_tactical_retreat_48.png",
+        "w": 48,
+        "h": 48
+      }
+    },
+    "ability_reserve": {
+      "16": {
+        "path": "icons/ability_reserve_16.png",
+        "w": 16,
+        "h": 16
+      },
+      "24": {
+        "path": "icons/ability_reserve_24.png",
+        "w": 24,
+        "h": 24
+      },
+      "32": {
+        "path": "icons/ability_reserve_32.png",
+        "w": 32,
+        "h": 32
+      },
+      "48": {
+        "path": "icons/ability_reserve_48.png",
+        "w": 48,
+        "h": 48
+      }
+    },
+    "ability_boarding": {
+      "16": {
+        "path": "icons/ability_boarding_16.png",
+        "w": 16,
+        "h": 16
+      },
+      "24": {
+        "path": "icons/ability_boarding_24.png",
+        "w": 24,
+        "h": 24
+      },
+      "32": {
+        "path": "icons/ability_boarding_32.png",
+        "w": 32,
+        "h": 32
+      },
+      "48": {
+        "path": "icons/ability_boarding_48.png",
+        "w": 48,
+        "h": 48
+      }
+    },
+    "ability_reactor_overload": {
+      "16": {
+        "path": "icons/ability_reactor_overload_16.png",
+        "w": 16,
+        "h": 16
+      },
+      "24": {
+        "path": "icons/ability_reactor_overload_24.png",
+        "w": 24,
+        "h": 24
+      },
+      "32": {
+        "path": "icons/ability_reactor_overload_32.png",
+        "w": 32,
+        "h": 32
+      },
+      "48": {
+        "path": "icons/ability_reactor_overload_48.png",
+        "w": 48,
+        "h": 48
+      }
+    },
+    "ability_veteran": {
+      "16": {
+        "path": "icons/ability_veteran_16.png",
+        "w": 16,
+        "h": 16
+      },
+      "24": {
+        "path": "icons/ability_veteran_24.png",
+        "w": 24,
+        "h": 24
+      },
+      "32": {
+        "path": "icons/ability_veteran_32.png",
+        "w": 32,
+        "h": 32
+      },
+      "48": {
+        "path": "icons/ability_veteran_48.png",
+        "w": 48,
+        "h": 48
+      }
+    },
+    "ability_logist": {
+      "16": {
+        "path": "icons/ability_logist_16.png",
+        "w": 16,
+        "h": 16
+      },
+      "24": {
+        "path": "icons/ability_logist_24.png",
+        "w": 24,
+        "h": 24
+      },
+      "32": {
+        "path": "icons/ability_logist_32.png",
+        "w": 32,
+        "h": 32
+      },
+      "48": {
+        "path": "icons/ability_logist_48.png",
+        "w": 48,
+        "h": 48
+      }
+    },
+    "ability_shieldsmith": {
+      "16": {
+        "path": "icons/ability_shieldsmith_16.png",
+        "w": 16,
+        "h": 16
+      },
+      "24": {
+        "path": "icons/ability_shieldsmith_24.png",
+        "w": 24,
+        "h": 24
+      },
+      "32": {
+        "path": "icons/ability_shieldsmith_32.png",
+        "w": 32,
+        "h": 32
+      },
+      "48": {
+        "path": "icons/ability_shieldsmith_48.png",
+        "w": 48,
+        "h": 48
+      }
+    },
+    "ability_sniper": {
+      "16": {
+        "path": "icons/ability_sniper_16.png",
+        "w": 16,
+        "h": 16
+      },
+      "24": {
+        "path": "icons/ability_sniper_24.png",
+        "w": 24,
+        "h": 24
+      },
+      "32": {
+        "path": "icons/ability_sniper_32.png",
+        "w": 32,
+        "h": 32
+      },
+      "48": {
+        "path": "icons/ability_sniper_48.png",
+        "w": 48,
+        "h": 48
+      }
+    },
+    "ability_fortitude": {
+      "16": {
+        "path": "icons/ability_fortitude_16.png",
+        "w": 16,
+        "h": 16
+      },
+      "24": {
+        "path": "icons/ability_fortitude_24.png",
+        "w": 24,
+        "h": 24
+      },
+      "32": {
+        "path": "icons/ability_fortitude_32.png",
+        "w": 32,
+        "h": 32
+      },
+      "48": {
+        "path": "icons/ability_fortitude_48.png",
+        "w": 48,
+        "h": 48
+      }
+    },
+    "ability_tactician": {
+      "16": {
+        "path": "icons/ability_tactician_16.png",
+        "w": 16,
+        "h": 16
+      },
+      "24": {
+        "path": "icons/ability_tactician_24.png",
+        "w": 24,
+        "h": 24
+      },
+      "32": {
+        "path": "icons/ability_tactician_32.png",
+        "w": 32,
+        "h": 32
+      },
+      "48": {
+        "path": "icons/ability_tactician_48.png",
+        "w": 48,
+        "h": 48
       }
     }
   },
-  "backgrounds": {
-    "backdrop": {
-      "path": "bg/battle-backdrop.png",
-      "width": 1920,
-      "height": 1080,
-      "bytes": 311964,
-      "colors": 32,
-      "source": {
-        "prompt": "Wide cinematic space battle background: distant blue planet, purple nebula, debris field, damaged station silhouette on the right, dark navy palette, stylized pixel-art-inspired game illustration, empty darker center for UI, no ships in foreground, no text.",
-        "seed": 9500,
-        "model": "qwen-image-2.1-UC-fp8",
-        "steps": 18
-      }
-    },
-    "battlefield2d": {
-      "path": "bg/battlefield-2d.png",
-      "width": 640,
-      "height": 360,
-      "bytes": 78844,
-      "colors": 32,
-      "source": {
-        "prompt": "Top-down isometric space battlefield background, dark navy with faint nebula, scattered debris and asteroid patches, subtle grid-like light, stylized pixel-art-inspired game art, no text, no UI.",
-        "seed": 9501,
-        "model": "qwen-image-2.1-UC-fp8",
-        "steps": 18
-      }
-    }
+  "actions": {
+    "action_attack": "icons/action_attack_32.png",
+    "action_move": "icons/action_move_32.png",
+    "action_defend": "icons/action_defend_32.png",
+    "action_overwatch": "icons/action_overwatch_32.png",
+    "action_wait": "icons/action_wait_32.png",
+    "action_ability": "icons/action_ability_32.png",
+    "action_endturn": "icons/action_endturn_32.png",
+    "action_auto": "icons/action_auto_32.png"
   },
-  "pending": [],
-  "totalBytes": 625131,
-  "sha256_16": {
-    "tiles/empty.png": "e3c4dd45cd02959e",
-    "tiles/asteroid.png": "1f1ee4401c8a4ce2",
-    "tiles/nebula.png": "0c7b248000312a53",
-    "tiles/mines.png": "7c6c9228b0d4c525",
-    "tiles/gravity.png": "9062d7f115da6b40",
-    "tiles/wreck.png": "25dbc6c057fc7702",
-    "units/player/corvette.png": "423057c3abcb8cec",
-    "units/player/frigate.png": "082d21fd1c5379cc",
-    "units/player/destroyer.png": "f9f578250c23631d",
-    "units/player/cruiser.png": "a4b239dfb94427a2",
-    "units/player/battleship.png": "152f16b249e9bf99",
-    "units/player/carrier.png": "1a1a9f64481627d1",
-    "units/player/titan.png": "06f8df2381cd59e4",
-    "units/player/colossus.png": "ba4e9e2e7cff6d2b",
-    "units/enemy/corvette.png": "3c54284dc41a85a8",
-    "units/enemy/frigate.png": "10b52911b98ba8be",
-    "units/enemy/destroyer.png": "309733a5488d8816",
-    "units/enemy/cruiser.png": "65336f2d90a145a5",
-    "units/enemy/battleship.png": "686ffdb128bbf73c",
-    "units/enemy/carrier.png": "b23cf5396dd79970",
-    "units/enemy/titan.png": "f51332a2f478da2a",
-    "units/enemy/colossus.png": "22781749d2c5e49f",
-    "effects/laser_shot.png": "b87438860de731aa",
-    "effects/kinetic_shot.png": "dc4882ca41ee8610",
-    "effects/shield_hit.png": "2bc5b15168cf1e14",
-    "effects/death_explosion.png": "18c67be1d8398679",
-    "bg/battle-backdrop.png": "787ed0e03df4eed1",
-    "bg/battlefield-2d.png": "7c7515093aa8079c"
+  "statuses": {
+    "status_1": "icons/status_1_24.png",
+    "status_2": "icons/status_2_24.png",
+    "status_3": "icons/status_3_24.png",
+    "status_4": "icons/status_4_24.png",
+    "status_5": "icons/status_5_24.png",
+    "status_6": "icons/status_6_24.png",
+    "status_7": "icons/status_7_24.png",
+    "status_8": "icons/status_8_24.png",
+    "status_9": "icons/status_9_24.png",
+    "status_10": "icons/status_10_24.png",
+    "status_11": "icons/status_11_24.png",
+    "status_12": "icons/status_12_24.png"
   },
-  "ready": true
+  "abilities": {
+    "focus_fire": "icons/ability_focus_fire_24.png",
+    "emergency_repair": "icons/ability_emergency_repair_24.png",
+    "ew_jam": "icons/ability_ew_jam_24.png",
+    "torpedo_fan": "icons/ability_torpedo_fan_24.png",
+    "shield_barrier": "icons/ability_shield_barrier_24.png",
+    "interceptors": "icons/ability_interceptors_24.png",
+    "tactical_retreat": "icons/ability_tactical_retreat_24.png",
+    "reserve": "icons/ability_reserve_24.png",
+    "boarding": "icons/ability_boarding_24.png",
+    "reactor_overload": "icons/ability_reactor_overload_24.png",
+    "veteran": "icons/ability_veteran_24.png",
+    "logist": "icons/ability_logist_24.png",
+    "shieldsmith": "icons/ability_shieldsmith_24.png",
+    "sniper": "icons/ability_sniper_24.png",
+    "fortitude": "icons/ability_fortitude_24.png",
+    "tactician": "icons/ability_tactician_24.png"
+  }
 }
