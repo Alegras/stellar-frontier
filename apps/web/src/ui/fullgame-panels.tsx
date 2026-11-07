@@ -71,7 +71,11 @@ export function PanelHost({ panel, game, state, onClose, coopCallbacks, coopLobb
 
 const RESOURCE_RU: Record<string, string> = {
   credits: "кредиты", alloys: "сплавы", energy: "энергия", minerals: "минералы", food: "пища", goods: "товары",
-  influence: "влияние", unity: "единство", population: "население",
+  influence: "влияние", unity: "единство", population: "население", stability: "стабильность колоний",
+};
+const EVENT_FLAG_RU: Record<string, string> = {
+  pirate_paid: "пираты получили дань — торговый путь спокоен",
+  pirate_attacked: "пираты атакованы — их эскадра в вашей системе",
 };
 function campaignEffectRu(target: string, value: number): string {
   const sign = value > 0 ? "+" : "";
@@ -79,6 +83,7 @@ function campaignEffectRu(target: string, value: number): string {
   if (target.startsWith("flag:")) return "флаг кампании: " + target.slice(5);
   if (target.startsWith("rep.")) return "отношения: " + target.slice(4) + " " + sign + value;
   if (target.startsWith("opinion:")) return "мнение империи " + target.slice(8) + " " + sign + value;
+  if (target.startsWith("battle:")) return "начнётся бой (" + target.split(":")[1] + ")";
   return (RESOURCE_RU[target] ?? target) + " " + sign + value;
 }
 
@@ -255,7 +260,7 @@ export function FullGameOverlays({ game, state }: { game: Game; state: GameState
                 <div className="sf-meta">
                   {ch.effects.map((e) => campaignEffectRu(e.target, e.value)).join(" · ") || L("без прямых эффектов", "no direct effects")}
                   {ch.missionId ? " · " + L("новая миссия", "new mission") : ""}
-                  {ch.flag ? " · " + L("особый исход", "special outcome") : ""}
+                  {ch.flag ? " · " + (EVENT_FLAG_RU[ch.flag] ?? L("особый исход", "special outcome") + ": " + ch.flag) : ""}
                 </div>
               </div>
             ))}

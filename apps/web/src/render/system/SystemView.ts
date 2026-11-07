@@ -982,16 +982,25 @@ export class SystemView implements SceneView {
       let pos = body ? body.position.clone() : (this.sysScene.station ? this.sysScene.station.group.position.clone() : new THREE.Vector3());
       if (def.bodyKind === "moon" && !body && def.parentPlanetId != null) {
         const parent = this.bodyById(def.parentPlanetId);
-        if (parent) pos = parent.position.clone().add(new THREE.Vector3(parent.radiusM * 3.2, 600, 0));
+        if (parent) pos = parent.position.clone().add(new THREE.Vector3(parent.radiusM * 2.4 + 1400, 900, parent.radiusM * 0.6));
       } else if (def.bodyKind === "colony" && body) {
-        pos.add(new THREE.Vector3(0, body.radiusM + 80, 0));
+        pos.add(new THREE.Vector3(0, body.radiusM + 500, 0));
+      } else if ((def.bodyKind === "moon" || def.bodyKind === "planet") && body) {
+        pos.add(new THREE.Vector3(0, body.radiusM + 600, 0));
       } else if ((def.bodyKind === "wreck" || def.bodyKind === "ship") && body) {
-        pos.add(new THREE.Vector3(body.radiusM * 1.6, 400, body.radiusM * 1.2));
+        pos.add(new THREE.Vector3(body.radiusM * 1.8 + 500, 500, body.radiusM * 1.2));
+      } else if (def.bodyKind === "station") {
+        pos.add(new THREE.Vector3(0, 1100, 0));
       }
       const object = this.buildQuestObject(def.bodyKind, pos);
-      const mesh = new THREE.Mesh(new THREE.OctahedronGeometry(120, 0), new THREE.MeshBasicMaterial({ color: 0x6be675, transparent: true, opacity: 0.95 }));
+      // Яркий ромб с лучом: виден с нескольких километров, даже если объект за планетой.
+      const markerMat = new THREE.MeshBasicMaterial({ color: 0x6be675, transparent: true, opacity: 1, depthTest: false });
+      const mesh = new THREE.Mesh(new THREE.OctahedronGeometry(320, 0), markerMat);
       mesh.position.copy(pos);
-      mesh.position.y += 260;
+      mesh.renderOrder = 50;
+      const beam = new THREE.Mesh(new THREE.CylinderGeometry(14, 14, 1800, 5), new THREE.MeshBasicMaterial({ color: 0x6be675, transparent: true, opacity: 0.55, depthWrite: false }));
+      beam.position.copy(pos); beam.position.y -= 900; beam.renderOrder = 49;
+      mesh.add(beam);
       this.scene.add(mesh);
       this.questMarkers.push({ mesh, object, signalId: def.id, name: def.labelRu, target: pos });
     }
@@ -1007,7 +1016,7 @@ export class SystemView implements SceneView {
       marker.mesh.position.y += Math.sin(this.time * 2 + marker.mesh.position.x) * 2 * dt;
       const dist = this.flight.position.distanceTo(marker.target);
       if (!nearest || dist < nearest.dist) nearest = { marker, dist };
-      if (dist > 1200) continue;
+      if (dist > 4000) continue;
       const r = this.game.sendCommandDetailed({ type: "dlc_signal_reach", signalId: marker.signalId } as never);
       if (r.ok) {
         this.game.toast(r.messageRu ?? "Квест начат", "good");

@@ -156,6 +156,11 @@ export function GridBattleOverlay({ game, onClose, onFinish, coop = false, seed 
             </aside>
 
             <main className="sf-gridbattle__center">
+              <div className="sf-gridhelp" data-testid="grid-help">
+                {screen === "deploy"
+                  ? L("1) Выберите корабль в ростере слева. 2) Кликните гекс в голубой зоне. 3) «В бой».", "1) Pick a ship in the roster. 2) Click a hex in the blue zone. 3) To battle.")
+                  : L("Жёлтый — ваш активный стэк. Синие гексы — ход. Клик по врагу — атака; наведите для прогноза.", "Yellow is your active stack. Blue hexes are moves. Click an enemy to attack; hover for forecast.")}
+              </div>
               {listMode ? <BattleList battle={battle} onSelect={setSelectedId} onAttack={(tid) => { if (!active || active.side !== "player") return; const target = battle.stacks.find((s) => s.id === tid); if (!target) return; const b = clone(battle); attack(b, active.id, target.id, active.range > 1 && canAttack(battle, active, target, true).ok); setBattle(b); if (b.phase === "result") setScreen("result"); }} />
                 : <HexField battle={battle} reach={reach} targets={targets} onHexClick={onHex} onHover={(q, r) => setHover({ q, r })} reducedMotion={reduced} />}
               {screen === "battle" && <div className="sf-gridactions" data-testid="grid-actions">

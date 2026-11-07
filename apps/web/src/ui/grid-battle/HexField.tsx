@@ -124,15 +124,20 @@ export function HexField({ battle, reach, targets, onHexClick, onHover, reducedM
       const targeted = targetIds.has(s.id);
       if (isActive) { ctx.strokeStyle = "#F5C542"; ctx.lineWidth = 2; hexPath(x, y, 1.02); ctx.stroke(); }
       if (targeted) { ctx.fillStyle = "rgba(255,90,90,.14)"; hexPath(x, y, 0.95); ctx.fill(); }
+      // Токен стэка: компактный, в пределах гекса; иконка — 22×22, не перекрывает соседей.
+      ctx.beginPath(); ctx.arc(x, y - 8, 13, 0, Math.PI * 2);
+      ctx.fillStyle = "rgba(5,7,14,.92)"; ctx.fill();
+      ctx.strokeStyle = color; ctx.lineWidth = 2; ctx.stroke();
       const img = artRef.current.units[s.side + ":" + s.cls];
       if (img) {
-        ctx.drawImage(img, 0, 0, 64, 64, x - 24, y - 38, 48, 48);
+        ctx.save(); ctx.beginPath(); ctx.arc(x, y - 8, 11, 0, Math.PI * 2); ctx.clip();
+        ctx.drawImage(img, 0, 0, 64, 64, x - 11, y - 20, 22, 22);
+        ctx.restore();
       } else {
-        ctx.beginPath();
-        if (s.side === "player") { ctx.arc(x, y - 4, 13, 0, Math.PI * 2); } else { ctx.moveTo(x, y - 18); ctx.lineTo(x + 14, y + 6); ctx.lineTo(x - 14, y + 6); ctx.closePath(); }
-        ctx.fillStyle = "#0C1626"; ctx.fill(); ctx.strokeStyle = color; ctx.lineWidth = 2; ctx.stroke();
-        ctx.fillStyle = color; ctx.font = "bold 9px monospace"; ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.fillText(CLASS_CODE[s.cls] ?? "?", x, y - 4);
+        ctx.fillStyle = color; ctx.font = "bold 8px monospace"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+        ctx.fillText(CLASS_CODE[s.cls] ?? "?", x, y - 8);
       }
+      if (s.side === "player") { ctx.fillStyle = "#4FC3F7"; ctx.fillRect(x - 2, y + 3, 4, 4); }
       // бейдж количества
       ctx.fillStyle = "rgba(5,7,14,.9)"; ctx.fillRect(x - 13, y - 28, 26, 11);
       ctx.strokeStyle = color; ctx.lineWidth = 1; ctx.strokeRect(x - 13, y - 28, 26, 11);

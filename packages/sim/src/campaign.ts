@@ -19,7 +19,7 @@ import type {
 } from "@sf/data";
 import type { CampaignBranch, CampaignMission, CampaignState, ContractObjective } from "./fullgame";
 import { advancedOf, ensureFg, pushJournal, relationOf } from "./fullgame";
-import { empireById, logEvent } from "./economy";
+import { createFleet, createShip, empireById, logEvent } from "./economy";
 import { getEmpireFleetPower } from "./queries";
 import { activateTreaty, breakTreaty, refreshOpinion, setWarSide, warSideOf } from "./diplomacy";
 import type { Empire, World } from "./types";
@@ -241,6 +241,22 @@ export function applyCampaignEffect(world: World, empireId: number, target: stri
       if (federation.presidentId === empireId) federation.presidentId = federation.members.slice().sort((a, b) => a - b)[0] ?? 0;
     }
     fg.federations = fg.federations.filter((federation) => federation.members.length >= 2);
+    return;
+  }
+  if (target === "stability") {
+    for (const colony of world.colonies.filter((c) => c.empireId === empireId)) {
+      colony.stability = Math.max(0, Math.min(100, colony.stability + value));
+    }
+    return;
+  }
+  if (target.startsWith("battle:")) {
+    const parts = target.split(":");
+    const count = Math.max(1, Math.min(8, Number(parts[2] ?? 3)));
+    const playerFleet = world.fleets.find((f) => f.empireId === empireId && f.ships.length > 0);
+    const systemId = playerFleet?.systemId ?? empireById(world, empireId)?.capitalSystemId ?? 0;
+    const ships = Array.from({ length: count }, (_, i) => createShip(world.nextId++, i % 2 ? "corvette_strike" : "frigate_escort", "Пират " + (i + 1), false, world));
+    createFleet(world, 9, systemId, ships, "Пиратская эскадра", "wedge");
+    fg.campaign.flags["event_battle"] = world.tick;
     return;
   }
   if (isResourceId(target)) {
