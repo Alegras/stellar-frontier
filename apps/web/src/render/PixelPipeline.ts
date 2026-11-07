@@ -103,7 +103,7 @@ export class PixelPipeline {
     this.options = { ...options };
     this.renderer = new THREE.WebGLRenderer({
       canvas,
-      antialias: false,
+      antialias: true,
       alpha: false,
       powerPreference: "high-performance",
       preserveDrawingBuffer: true,
@@ -117,8 +117,8 @@ export class PixelPipeline {
     const depthTexture = new THREE.DepthTexture(iw, ih);
     depthTexture.type = THREE.UnsignedIntType;
     this.rt = new THREE.WebGLRenderTarget(iw, ih, {
-      minFilter: THREE.NearestFilter,
-      magFilter: THREE.NearestFilter,
+      minFilter: THREE.LinearFilter,
+      magFilter: THREE.LinearFilter,
       format: THREE.RGBAFormat,
       type: THREE.UnsignedByteType,
       depthBuffer: true,
@@ -175,8 +175,8 @@ export class PixelPipeline {
     const depthTexture = new THREE.DepthTexture(iw, ih);
     depthTexture.type = THREE.UnsignedIntType;
     this.rt = new THREE.WebGLRenderTarget(iw, ih, {
-      minFilter: THREE.NearestFilter,
-      magFilter: THREE.NearestFilter,
+      minFilter: THREE.LinearFilter,
+      magFilter: THREE.LinearFilter,
       format: THREE.RGBAFormat,
       type: THREE.UnsignedByteType,
       depthBuffer: true,

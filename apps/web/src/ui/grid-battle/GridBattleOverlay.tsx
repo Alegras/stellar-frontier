@@ -7,7 +7,7 @@ import { HexField } from "./HexField";
 import { CLASS_RU, COLS, ROWS, attackObstacle, obstacleAt, stackAt, type Battle, type Formation, type Result, type Stack } from "./model";
 import {
   ability, activeStack, aiTurn, attack, autoBattle, canAttack, checkEnd, clone, createMockBattle,
-  defend, deploy, formation, moveActive, preview, reachable, resetDeploy, start, wait,
+  defend, deploy, endTurn, formation, moveActive, preview, reachable, resetDeploy, start, wait,
 } from "./adapter";
 
 type Screen = "deploy" | "battle" | "result";
@@ -17,6 +17,27 @@ const FORMATIONS: Array<{ id: Formation; ru: string; hint: string }> = [
   { id: "echelon", ru: "Эшелон", hint: "ступенчатая линия" },
   { id: "guard", ru: "Охрана", hint: "стрелки под прикрытием" },
 ];
+
+/** Добавляет визуальные события по разнице состояний (адаптер не отдаёт их напрямую). */
+function addVisualDiff(before: Battle, after: Battle): void {
+  if (before.phase !== "battle" || after.phase !== "battle") return;
+  const now = Date.now();
+  const attacker = before.stacks.find((s) => s.id === before.activeId) ?? null;
+  for (const next of after.stacks) {
+    const prev = before.stacks.find((s) => s.id === next.id);
+    if (!prev) continue;
+    if (prev.q !== next.q || prev.r !== next.r) {
+      after.lastEffects.push({ kind: "move", from: { q: prev.q, r: prev.r }, to: { q: next.q, r: next.r }, amount: 0, shield: 0, t: now });
+    }
+    const hpLoss = Math.max(0, prev.hp - next.hp) + Math.max(0, prev.shield - next.shield);
+    if (hpLoss > 0 && attacker) {
+      const shield = Math.max(0, prev.shield - next.shield);
+      after.lastEffects.push({ kind: shield > 0 ? "shield" : "attack", from: { q: attacker.q, r: attacker.r }, to: { q: next.q, r: next.r }, amount: hpLoss, shield, t: now });
+      after.lastDamage.push({ q: next.q, r: next.r, amount: hpLoss, t: now });
+    }
+    if (prev.alive && !next.alive) after.lastEffects.push({ kind: "death", from: { q: next.q, r: next.r }, to: { q: next.q, r: next.r }, amount: 0, shield: 0, t: now });
+  }
+}
 function useReducedMotion(): boolean {
   const [reduced, setReduced] = useState(false);
   useEffect(() => { const mq = window.matchMedia?.("(prefers-reduced-motion: reduce)"); if (!mq) return; const on = () => setReduced(mq.matches); on(); mq.addEventListener?.("change", on); return () => mq.removeEventListener?.("change", on); }, []);
@@ -53,7 +74,7 @@ export function GridBattleOverlay({ game, onClose, onFinish, coop = false, seed 
   const targets = useMemo(() => (screen === "battle" && active?.side === "player" ? battle.stacks.filter((s) => s.side === "enemy" && s.alive && !s.reserve) : [] as Stack[]), [battle, active, screen]);
 
   useEffect(() => { if (!battle.coop || screen !== "deploy") return; const id = window.setInterval(() => setTimer((v) => { if (v <= 1) { window.clearInterval(id); const b = autoBattle(start(clone(battle))); setBattle(b); setScreen("result"); return 0; } return v - 1; }), 1000); return () => window.clearInterval(id); }, [battle, screen]);
-  useEffect(() => { if (screen !== "battle" || battle.phase !== "battle") return; const a = activeStack(battle); if (!a || a.side !== "enemy") return; const id = window.setTimeout(() => { setBattle((prev) => { if (prev.phase !== "battle" || activeStack(prev)?.side !== "enemy") return prev; const next = aiTurn(prev); if (next.phase === "result") setScreen("result"); return next; }); }, reduced ? 60 : 520); return () => window.clearTimeout(id); }, [battle, screen, reduced]);
+  useEffect(() => { if (screen !== "battle" || battle.phase !== "battle") return; const a = activeStack(battle); if (!a || a.side !== "enemy") return; const id = window.setTimeout(() => { setBattle((prev) => { if (prev.phase !== "battle" || activeStack(prev)?.side !== "enemy") return prev; const before = clone(prev); const next = aiTurn(prev); addVisualDiff(before, next); if (next.phase === "result") setScreen("result"); return next; }); }, reduced ? 60 : 520); return () => window.clearTimeout(id); }, [battle, screen, reduced]);
   useEffect(() => { if (battle.phase === "result" && screen !== "result") setScreen("result"); }, [battle.phase, screen]);
 
   const showHint = (text: string): void => setHint(text);
@@ -64,12 +85,13 @@ export function GridBattleOverlay({ game, onClose, onFinish, coop = false, seed 
     if (kind === "auto") { const b = autoBattle(clone(battle)); setBattle(b); setScreen("result"); return; }
     if (screen !== "battle" || !active || active.side !== "player") return;
     const b = clone(battle);
-    if (kind === "wait") wait(b); else if (kind === "defend") defend(b); else if (kind === "ability") ability(b);
+    if (kind === "wait") wait(b); else if (kind === "defend") defend(b); else if (kind === "endTurn") endTurn(b); else if (kind === "ability") ability(b);
+    addVisualDiff(battle, b);
     setBattle(b); if (b.phase === "result") setScreen("result");
   };
   const useAbility = (abilityId: string): void => {
     if (!active || active.side !== "player") return;
-    const b = clone(battle); ability(b, abilityId); setBattle(b); setAbilityOpen(false);
+    const b = clone(battle); ability(b, abilityId); addVisualDiff(battle, b); setBattle(b); setAbilityOpen(false);
     if (b.phase === "result") setScreen("result");
   };
 
@@ -84,7 +106,7 @@ export function GridBattleOverlay({ game, onClose, onFinish, coop = false, seed 
     const ranged = active.range > 1 && canAttack(battle, active, target, true).ok;
     const res = canAttack(battle, active, target, ranged);
     if (!res.ok) { showHint(res.reason ?? L("Цель недоступна", "Target unavailable")); return; }
-    const b = clone(battle); attack(b, active.id, target.id, ranged); setBattle(b); setTargetId(null); if (b.phase === "result") setScreen("result");
+    const b = clone(battle); attack(b, active.id, target.id, ranged); addVisualDiff(battle, b); setBattle(b); setTargetId(null); if (b.phase === "result") setScreen("result");
   };
   const onHex = (q: number, r: number): void => {
     if (screen === "deploy") {

@@ -51,8 +51,11 @@ export function HexField({ battle, reach, targets, selectedTargetId, targetObsta
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
-    ctx.imageSmoothingEnabled = false;
-    canvas.width = FIELD_W; canvas.height = FIELD_H;
+    // 2× backing store: текст и линии остаются гладкими при растяжении на весь экран.
+    ctx.imageSmoothingEnabled = true;
+    const scale = 2;
+    canvas.width = FIELD_W * scale; canvas.height = FIELD_H * scale;
+    ctx.setTransform(scale, 0, 0, scale, 0, 0);
 
     // Ровный фон без мозаичного шума.
     const bg = ctx.createLinearGradient(0, 0, 0, FIELD_H);
@@ -204,7 +207,7 @@ export function HexField({ battle, reach, targets, selectedTargetId, targetObsta
       ref={ref}
       className="sf-hexfield"
       data-testid="grid-hex-canvas"
-      style={{ width: "100%", height: "auto", aspectRatio: FIELD_W + "/" + FIELD_H, imageRendering: "pixelated", cursor: "crosshair" }}
+      style={{ width: "100%", height: "auto", aspectRatio: FIELD_W + "/" + FIELD_H, imageRendering: "auto", cursor: "crosshair" }}
       onPointerMove={(ev) => { const h = toHex(ev); hoverRef.current = h; onHover(h.q, h.r); }}
       onPointerLeave={() => { hoverRef.current = null; }}
       onPointerDown={(ev) => { if (ev.button !== 0) return; const h = toHex(ev); onHexClick(h.q, h.r); }}

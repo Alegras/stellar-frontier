@@ -55,7 +55,7 @@ export function BattleChoiceModal({ game, state }: { game: Game; state: GameStat
       <div className="sf-row" style={{ flexWrap: "wrap", gap: 6 }}>
         <Btn variant="primary" onClick={resolve} testId="btn-battle-auto">{L("Авторезолв", "Auto-resolve")}</Btn>
         <Btn onClick={openGrid} testId="btn-battle-grid">{L("Сетка командования", "Grid Command")}</Btn>
-        <Btn onClick={() => { game.exitToGalaxy(); setHidden(true); }} testId="btn-battle-flight">{L("Вести бой (6DOF)", "Fight in 6DOF")}</Btn>
+        <Btn onClick={() => { game.enterSystem(pb.systemId); setHidden(true); }} testId="btn-battle-flight">{L("Вести бой (6DOF)", "Fight in 6DOF")}</Btn>
         <Btn onClick={() => { const r = game.sendCommandDetailed({ type: "escape_battle" } as never); if (!r.ok) setEscapeReason(r.messageRu ?? L("Отход невозможен", "Cannot escape")); }} title={escapeReason ?? L("Попытаться уйти; сильный атакующий может блокировать отход", "Try to escape; a much stronger attacker can block it")} testId="btn-battle-escape">{L("Уклониться", "Escape")}</Btn>
       </div>
       <div className="sf-meta" style={{ marginTop: 6 }}>{L("Режим по умолчанию меняется в Настройках → «Бои на карте».", "Default mode is changed in Settings → Map battles.")}</div>

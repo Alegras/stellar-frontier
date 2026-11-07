@@ -82,7 +82,10 @@ function mapResult(base: Battle, raw: BG.BattleState): Result {
 }
 function withRaw(b: Battle, fn: (raw: BG.BattleState) => void): Battle {
   const raw = RAWS.get(b.id); if (!raw) return mock.clone(b);
-  fn(raw); return battleFromRaw(b, raw);
+  fn(raw);
+  // Синхронизируем UI-модель на месте: иначе клон в оверлее остаётся со старыми позициями/HP.
+  Object.assign(b, battleFromRaw(b, raw));
+  return b;
 }
 
 export function createMockBattle(opts: { seed?: number; systemName?: string; coop?: boolean } = {}): Battle {
@@ -99,6 +102,7 @@ export function deploy(b: Battle, id: string, q: number, r: number): { ok: boole
   const raw = RAWS.get(b.id); if (!raw) { const res = mock.deploy(b, id, q, r); return res; }
   const ax = BG.offsetToAxial(q, r);
   const res = BG.applyCommand(raw, { type: "place", stackId: id, at: ax, side: "A" });
+  if (res.ok) Object.assign(b, battleFromRaw(b, raw));
   return { ok: res.ok, reason: res.reason };
 }
 export function resetDeploy(b: Battle): Battle {
@@ -134,6 +138,7 @@ export function preview(b: Battle, aid: string, tid: string, ranged: boolean): {
 export function attack(b: Battle, aid: string, tid: string, ranged: boolean): boolean {
   const raw = RAWS.get(b.id); if (!raw) return mock.attack(mock.clone(b), aid, tid, ranged);
   const res = BG.applyCommand(raw, { type: ranged ? "ranged" : "attack", stackId: aid, targetId: tid });
+  if (res.ok) Object.assign(b, battleFromRaw(b, raw));
   return res.ok;
 }
 export function moveActive(b: Battle, q: number, r: number): boolean {
@@ -142,6 +147,7 @@ export function moveActive(b: Battle, q: number, r: number): boolean {
   const path = BG.pathTo(raw, raw.current!, BG.offsetToAxial(q, r));
   if (path.length === 0) return false;
   const res = BG.applyCommand(raw, { type: "move", stackId: raw.current!, path });
+  if (res.ok) Object.assign(b, battleFromRaw(b, raw));
   return res.ok;
 }
 export function wait(b: Battle): void { withRaw(b, (raw) => { if (raw.current) BG.applyCommand(raw, { type: "wait", stackId: raw.current }); }); }
