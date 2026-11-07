@@ -32,6 +32,8 @@ export function HexField({ battle, reach, targets, onHexClick, onHover, reducedM
   const artRef = useRef<{ tiles: Record<string, HTMLImageElement>; units: Record<string, HTMLImageElement> }>({ tiles: {}, units: {} });
   const hoverState = useState(0)[1];
   const [artTick, setArtTick] = useState(0);
+  const prevPosRef = useRef<Map<string, { q: number; r: number }>>(new Map());
+  const animRef = useRef<Map<string, { x0: number; y0: number; x1: number; y1: number; start: number }>>(new Map());
 
   useEffect(() => {
     let alive = true;
@@ -54,12 +56,12 @@ export function HexField({ battle, reach, targets, onHexClick, onHover, reducedM
 
   // анимация idle/эффектов (отключается prefers-reduced-motion)
   useEffect(() => {
-    if (reducedMotion || !manifest) return;
+    if (reducedMotion) return;
     let raf = 0; let last = 0;
     const tick = (now: number) => { raf = requestAnimationFrame(tick); if (now - last < 120) return; last = now; setArtTick((v) => v + 1); };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, [manifest, reducedMotion]);
+  }, [reducedMotion]);
 
   const targetIds = useMemo(() => new Set(targets.map((t) => t.id)), [targets]);
   const reachSet = useMemo(() => new Set(reach.map((h) => h.q + "," + h.r)), [reach]);
@@ -119,7 +121,9 @@ export function HexField({ battle, reach, targets, onHexClick, onHover, reducedM
     // стэки
     const drawStack = (s: Stack) => {
       if (!s.alive || s.reserve) return;
-      const { x, y } = hexCenter(s.q, s.r); const color = SIDE_COLOR[s.side];
+      let { x, y } = hexCenter(s.q, s.r); const color = SIDE_COLOR[s.side];
+      const moveFx = [...battle.lastEffects].reverse().find((e) => e.kind === "move" && e.to.q === s.q && e.to.r === s.r);
+      if (moveFx) { const age = (performance.now() - moveFx.t) / 260; if (age < 1) { const a0 = hexCenter(moveFx.from.q, moveFx.from.r); const b0 = hexCenter(moveFx.to.q, moveFx.to.r); x = a0.x + (b0.x - a0.x) * Math.min(1, age); y = a0.y + (b0.y - a0.y) * Math.min(1, age); } }
       const isActive = s.id === battle.activeId;
       const targeted = targetIds.has(s.id);
       if (isActive) { ctx.strokeStyle = "#F5C542"; ctx.lineWidth = 2; hexPath(x, y, 1.02); ctx.stroke(); }
@@ -151,6 +155,40 @@ export function HexField({ battle, reach, targets, onHexClick, onHover, reducedM
       if (s.side === "player" && !s.moved && isActive) { ctx.fillStyle = "#F5C542"; ctx.beginPath(); ctx.moveTo(x, y - 38); ctx.lineTo(x + 5, y - 32); ctx.lineTo(x - 5, y - 32); ctx.fill(); }
     };
     for (const s of battle.stacks) if (!s.reserve) drawStack(s);
+    // Эффекты боя: луч атаки, щит, взрыв, след движения.
+    for (const e of battle.lastEffects) {
+      const age = (performance.now() - e.t) / 700;
+      if (age < 0 || age > 1) continue;
+      const from = hexCenter(e.from.q, e.from.r);
+      const to = hexCenter(e.to.q, e.to.r);
+      ctx.save();
+      ctx.globalAlpha = 1 - age;
+      if (e.kind === "move") {
+        ctx.strokeStyle = "rgba(79,195,247,.75)";
+        ctx.lineWidth = 3; ctx.setLineDash([4, 5]);
+        ctx.beginPath(); ctx.moveTo(from.x, from.y); ctx.lineTo(to.x, to.y); ctx.stroke();
+        ctx.setLineDash([]);
+      } else {
+        // луч / снаряд
+        ctx.strokeStyle = e.kind === "shield" ? "#4FC3F7" : "#FFD36A";
+        ctx.lineWidth = 3;
+        ctx.shadowColor = ctx.strokeStyle; ctx.shadowBlur = 10;
+        ctx.beginPath(); ctx.moveTo(from.x, from.y); ctx.lineTo(to.x, to.y); ctx.stroke();
+        const px = from.x + (to.x - from.x) * Math.min(1, age * 2);
+        const py = from.y + (to.y - from.y) * Math.min(1, age * 2);
+        ctx.fillStyle = "#FFFFFF"; ctx.beginPath(); ctx.arc(px, py, 4, 0, Math.PI * 2); ctx.fill();
+        // взрыв / щит
+        const r = 8 + age * 26;
+        ctx.beginPath(); ctx.arc(to.x, to.y, r, 0, Math.PI * 2);
+        ctx.strokeStyle = e.kind === "shield" ? "rgba(79,195,247,.9)" : "rgba(255,211,106,.9)";
+        ctx.lineWidth = 3; ctx.stroke();
+        if (e.kind === "shield") {
+          ctx.beginPath(); ctx.arc(to.x, to.y, r + 7, 0, Math.PI * 2);
+          ctx.strokeStyle = "rgba(120,220,255,.5)"; ctx.lineWidth = 2; ctx.stroke();
+        }
+      }
+      ctx.restore();
+    }
     // числа урона
     const now = Date.now();
     for (const d of battle.lastDamage) {

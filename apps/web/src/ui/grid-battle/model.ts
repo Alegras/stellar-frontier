@@ -11,7 +11,8 @@ export interface Obstacle { q: number; r: number; kind: Terrain }
 export interface LogEntry { round: number; text: string; kind: "damage" | "ability" | "system" | "death" | "move" }
 export interface Loss { side: Side; cls: Cls; name: string; lost: number; fp: number }
 export interface Result { winner: Side | "draw"; losses: Loss[]; spoils: { credits: number; alloys: number; samples: number }; xp: number; warScore: number; mvpName: string; mvpDamage: number; parity: { autoMin: number; autoMax: number; actual: number }; seed: number }
-export interface Battle { id: string; seed: number; title: string; systemName: string; phase: Phase; coop: boolean; round: number; maxRounds: number; timerSec: number | null; stacks: Stack[]; obstacles: Obstacle[]; cursor: { q: number; r: number }; hover: { q: number; r: number } | null; activeId: string | null; order: string[]; log: LogEntry[]; result: Result | null; preset: Formation; deploymentCount: number; reserveCount: number; lastDamage: Array<{ q: number; r: number; amount: number; t: number }> }
+export interface BattleEffect { kind: "attack" | "hit" | "shield" | "move" | "death"; from: { q: number; r: number }; to: { q: number; r: number }; amount: number; shield: number; t: number; }
+export interface Battle { id: string; seed: number; title: string; systemName: string; phase: Phase; coop: boolean; round: number; maxRounds: number; timerSec: number | null; stacks: Stack[]; obstacles: Obstacle[]; cursor: { q: number; r: number }; hover: { q: number; r: number } | null; activeId: string | null; order: string[]; log: LogEntry[]; result: Result | null; preset: Formation; deploymentCount: number; reserveCount: number; lastDamage: Array<{ q: number; r: number; amount: number; t: number }>; lastEffects: BattleEffect[] }
 
 export const COLS = 15, ROWS = 11, FIELD_W = 544, FIELD_H = 350, HEX_W = 32, HEX_H = 36;
 export const CLASS_RU: Record<Cls, string> = Object.fromEntries((["corvette", "frigate", "destroyer", "cruiser", "battleship", "carrier", "titan", "colossus"] as Cls[]).map((id) => [id, BATTLE_CLASS_BY_ID[id]?.titleRu ?? id])) as Record<Cls, string>;
@@ -66,10 +67,10 @@ export function createMockBattle(opts: { seed?: number; systemName?: string; coo
   for (const kind of ["asteroid", "asteroid", "nebula", "nebula", "minefield", "gravity_anomaly", "debris"] as Terrain[]) {
     for (let t = 0; t < 20; t++) { const q = 4 + Math.floor(rnd() * 7), r = Math.floor(rnd() * ROWS); if (obstacles.some((o) => o.q === q && o.r === r)) continue; obstacles.push({ q, r, kind }); break; }
   }
-  const b: Battle = { id: "btl_" + seed, seed, title: "Сетка командования", systemName: opts.systemName ?? "Вега-II", phase: "deploy", coop: Boolean(opts.coop), round: 0, maxRounds: 30, timerSec: opts.coop ? 90 : null, stacks, obstacles, cursor: { q: 1, r: 5 }, hover: null, activeId: null, order: [], log: [{ round: 0, kind: "system", text: "Расстановка: 7 стэков на поле, 3 в резерве." }], result: null, preset: "line", deploymentCount: 0, reserveCount: 0, lastDamage: [] };
+  const b: Battle = { id: "btl_" + seed, seed, title: "Сетка командования", systemName: opts.systemName ?? "Вега-II", phase: "deploy", coop: Boolean(opts.coop), round: 0, maxRounds: 30, timerSec: opts.coop ? 90 : null, stacks, obstacles, cursor: { q: 1, r: 5 }, hover: null, activeId: null, order: [], log: [{ round: 0, kind: "system", text: "Расстановка: 7 стэков на поле, 3 в резерве." }], result: null, preset: "line", deploymentCount: 0, reserveCount: 0, lastDamage: [], lastEffects: [] };
   formation(b, "line", "player"); formation(b, "wedge", "enemy"); return b;
 }
-export function clone(b: Battle): Battle { return { ...b, stacks: b.stacks.map((s) => ({ ...s })), obstacles: b.obstacles.map((o) => ({ ...o })), cursor: { ...b.cursor }, order: [...b.order], log: [...b.log], result: b.result, lastDamage: b.lastDamage.map((x) => ({ ...x })) }; }
+export function clone(b: Battle): Battle { return { ...b, stacks: b.stacks.map((s) => ({ ...s })), obstacles: b.obstacles.map((o) => ({ ...o })), cursor: { ...b.cursor }, order: [...b.order], log: [...b.log], result: b.result, lastDamage: b.lastDamage.map((x) => ({ ...x })), lastEffects: b.lastEffects.map((x) => ({ ...x, from: { ...x.from }, to: { ...x.to } })) }; }
 function log(b: Battle, text: string, kind: LogEntry["kind"]): void { b.log.push({ round: b.round, text, kind }); if (b.log.length > 80) b.log.splice(0, b.log.length - 80); }
 function rowsOrder(): number[] { return [5, 4, 6, 3, 7, 2, 8, 1, 9, 0, 10]; }
 export function recount(b: Battle): void { b.deploymentCount = b.stacks.filter((s) => s.side === "player" && !s.reserve && s.alive).length; b.reserveCount = b.stacks.filter((s) => s.side === "player" && s.reserve && s.alive).length; }
@@ -122,6 +123,7 @@ export function attack(b: Battle, aid: string, tid: string, ranged: boolean): bo
   const a = b.stacks.find((s) => s.id === aid), t = b.stacks.find((s) => s.id === tid); if (!a || !t || !canAttack(b, a, t, ranged).ok) return false;
   const p = preview(b, aid, tid, ranged); const dmg = Math.round((p.min + p.max) / 2); const sh = Math.min(t.shield, dmg); t.shield -= sh; const hull = dmg - sh; t.hp = Math.max(0, t.hp - hull); const perShip = t.maxHp / Math.max(1, t.count); t.count = Math.max(0, t.count - Math.min(t.count, Math.ceil(hull / Math.max(1, perShip)))); a.kills += dmg;
   log(b, (a.side === "player" ? "Ваш " : "Враг: ") + CLASS_RU[a.cls] + " «" + a.name + "» → " + CLASS_RU[t.cls] + " «" + t.name + "»: " + dmg + " урона", "damage"); b.lastDamage.push({ q: t.q, r: t.r, amount: dmg, t: Date.now() });
+  b.lastEffects.push({ kind: sh > 0 ? "shield" : "attack", from: { q: a.q, r: a.r }, to: { q: t.q, r: t.r }, amount: dmg, shield: sh, t: Date.now() });
   if (t.hp <= 0 || t.count <= 0) { t.alive = false; log(b, CLASS_RU[t.cls] + " «" + t.name + "» уничтожен.", "death"); }
   else if (!ranged && !t.counterUsed) { t.counterUsed = true; const c = Math.round(dmg * 0.5 * (t.defended ? 1.15 : 1)); const cs = Math.min(a.shield, c); a.shield -= cs; a.hp = Math.max(0, a.hp - (c - cs)); if (a.hp <= 0) { a.alive = false; a.count = 0; } log(b, "Ответный удар: " + CLASS_RU[t.cls] + " «" + t.name + "» → " + c, "damage"); }
   if (!checkEnd(b)) endTurn(b); return true;
@@ -157,7 +159,7 @@ export function aiTurn(b: Battle): Battle {
   if (b.phase !== "battle") return b; const a = activeStack(b); if (!a || a.side !== "enemy") return b; const targets = b.stacks.filter((s) => s.side === "player" && s.alive && !s.reserve); if (targets.length === 0) { checkEnd(b); return b; }
   const adj = targets.find((t) => distance(a, t) === 1); if (adj) { attack(b, a.id, adj.id, false); return b; }
   const ranged = targets.find((t) => canAttack(b, a, t, true).ok); if (ranged) { attack(b, a.id, ranged.id, true); return b; }
-  const target = [...targets].sort((x, y) => distance(a, x) - distance(a, y))[0]!; const spots = reachable(b, a.id).sort((x, y) => distance(x, target) - distance(y, target)); if (spots.length) { a.q = spots[0]!.q; a.r = spots[0]!.r; log(b, "Враг: " + CLASS_RU[a.cls] + " «" + a.name + "» → q" + a.q + ",r" + a.r, "move"); const hit = targets.find((t) => distance(a, t) === 1); if (hit) attack(b, a.id, hit.id, false); else endTurn(b); } else endTurn(b); return b;
+  const target = [...targets].sort((x, y) => distance(a, x) - distance(a, y))[0]!; const spots = reachable(b, a.id).sort((x, y) => distance(x, target) - distance(y, target)); if (spots.length) { const fromPos = { q: a.q, r: a.r }; a.q = spots[0]!.q; a.r = spots[0]!.r; b.lastEffects.push({ kind: "move", from: fromPos, to: { q: a.q, r: a.r }, amount: 0, shield: 0, t: Date.now() }); log(b, "Враг: " + CLASS_RU[a.cls] + " «" + a.name + "» → q" + a.q + ",r" + a.r, "move"); const hit = targets.find((t) => distance(a, t) === 1); if (hit) attack(b, a.id, hit.id, false); else endTurn(b); } else endTurn(b); return b;
 }
 export function autoBattle(b: Battle): Battle {
   let guard = 0; while (b.phase === "battle" && guard++ < 500) { const a = activeStack(b); if (!a) break; if (a.side === "enemy") { aiTurn(b); continue; } const targets = b.stacks.filter((s) => s.side === "enemy" && s.alive && !s.reserve); if (targets.length === 0) break; const adj = targets.find((t) => distance(a, t) === 1); if (adj) { attack(b, a.id, adj.id, false); continue; } const target = [...targets].sort((x, y) => distance(a, x) - distance(a, y))[0]!; const spots = reachable(b, a.id).sort((x, y) => distance(x, target) - distance(y, target)); if (spots.length) { a.q = spots[0]!.q; a.r = spots[0]!.r; } const hit = targets.find((t) => distance(a, t) === 1); if (hit) attack(b, a.id, hit.id, false); else endTurn(b); }
@@ -165,7 +167,7 @@ export function autoBattle(b: Battle): Battle {
 }
 export function moveActive(b: Battle, q: number, r: number): boolean {
   const a = activeStack(b); if (!a || a.side !== "player") return false; if (!reachable(b, a.id).some((h) => h.q === q && h.r === r)) return false;
-  const from = "q" + a.q + ",r" + a.r; a.q = q; a.r = r; log(b, CLASS_RU[a.cls] + " «" + a.name + "»: " + from + " → q" + q + ",r" + r, "move");
+  const from = "q" + a.q + ",r" + a.r; const fromPos = { q: a.q, r: a.r }; a.q = q; a.r = r; b.lastEffects.push({ kind: "move", from: fromPos, to: { q, r }, amount: 0, shield: 0, t: Date.now() }); log(b, CLASS_RU[a.cls] + " «" + a.name + "»: " + from + " → q" + q + ",r" + r, "move");
   if (obstacleAt(b, q, r) === "minefield") { const d = 30; a.hp = Math.max(0, a.hp - d); log(b, "Мины: " + d + " урона " + CLASS_RU[a.cls] + " «" + a.name + "»", "damage"); if (a.hp <= 0) a.alive = false; if (checkEnd(b)) return true; }
   endTurn(b); return true;
 }
