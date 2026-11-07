@@ -92,9 +92,14 @@ export function FleetPanel({ game, state }: { game: Game; state: GameState }) {
           </div>
 
           <div className="sf-row" style={{ marginTop: 4, flexWrap: "wrap" }}>
-            {findSystem(world, selected.systemId)?.station && (
+            {(selected.fuel ?? 0) < (selected.fuelMax ?? 0) && findSystem(world, selected.systemId)?.station && (
               <Btn size="sm" variant="primary" onClick={() => game.sendCommand({ type: "refuel_fleet", fleetId: selected.id } as never)} testId="btn-refuel-fleet">
-                {L("Дозаправить", "Refuel")}
+                {L("Дозаправить", "Refuel")} ({(selected.fuelMax ?? 0) - (selected.fuel ?? 0)})
+              </Btn>
+            )}
+            {(selected.fuel ?? 0) < (selected.fuelMax ?? 0) && !findSystem(world, selected.systemId)?.station && (
+              <Btn size="sm" variant="primary" onClick={() => game.sendCommand({ type: "emergency_refuel", fleetId: selected.id } as never)} testId="btn-emergency-refuel">
+                {L("Аварийная дозаправка", "Emergency refuel")}
               </Btn>
             )}
             <Btn size="sm" onClick={() => game.sendCommand({ type: "repair_fleet", fleetId: selected.id })} testId="btn-repair-fleet">

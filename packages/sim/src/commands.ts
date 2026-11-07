@@ -174,6 +174,21 @@ export function applyCommandAs(world: World, empireId: number, cmd: Command): Co
       logEvent(world, "fleet", "info", "Флот «" + fleet.name + "» дозаправлен за " + cost + " Cr.", system.id, empireId);
       return { ok: true, messageRu: "Дозаправлено за " + cost + " Cr" };
     }
+    case "emergency_refuel": {
+      const fleet = findFleet(world, cmd.fleetId);
+      if (!fleet || fleet.empireId !== empireId) return deny("Флот не найден");
+      ensureFleetFuel(world, fleet);
+      const max = fleet.fuelMax ?? 0;
+      const cur = fuelOf(fleet);
+      if (cur >= max) return deny("Бак уже полон");
+      const missing = max - cur;
+      const cost = 5000 + missing * 8;
+      if (empire.resources.credits < cost) return deny("Не хватает кредитов на аварийную дозаправку: нужно " + cost + " Cr");
+      empire.resources.credits -= cost;
+      fleet.fuel = Math.min(max, cur + Math.ceil(max * 0.5));
+      logEvent(world, "fleet", "warn", "Аварийная дозаправка «" + fleet.name + "» за " + cost + " Cr.", fleet.systemId, empireId);
+      return { ok: true, messageRu: "Аварийная дозаправка: +" + Math.round(max * 0.5) + " топлива за " + cost + " Cr" };
+    }
     case "stop_fleet": {
       const fleet = findFleet(world, cmd.fleetId);
       if (!fleet) return deny("Флот не найден");

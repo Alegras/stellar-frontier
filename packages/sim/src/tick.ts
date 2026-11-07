@@ -167,8 +167,10 @@ function fleetsPhase(world: World): void {
     const system = world.systems[fleet.systemId];
     if (!system) continue;
     // ИИ сам дозаправляется на станциях; игрок — вручную.
-    if (fleet.empireId !== world.playerEmpireId && fleet.status !== "moving" && system.station && fuelOf(fleet) < (fleet.fuelMax ?? 0)) {
-      fleet.fuel = fleet.fuelMax;
+    if (fleet.empireId !== world.playerEmpireId && fleet.status !== "moving") {
+      if (system.station && fuelOf(fleet) < (fleet.fuelMax ?? 0)) fleet.fuel = fleet.fuelMax;
+      // ИИ не должен навсегда застревать в системе без станции: аварийный запас.
+      else if (!system.station && fuelOf(fleet) === 0) fleet.fuel = Math.ceil((fleet.fuelMax ?? 0) * 0.25);
     }
     if (!system.visibleTo.includes(fleet.empireId)) system.visibleTo.push(fleet.empireId);
     if (!system.knownBy.includes(fleet.empireId)) {
