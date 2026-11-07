@@ -29,13 +29,7 @@ test.describe("M5b · Сетка командования (UI)", () => {
     await expect(page.locator('[data-testid="grid-battle"]')).toHaveAttribute("data-screen", "deploy");
     await expect(page.locator('[data-testid="grid-hex-canvas"]')).toBeVisible();
     expect(await page.locator('[data-testid^="grid-roster-"]').count()).toBe(7);
-    await expect(page.locator('[data-testid="grid-timer"]')).toContainText("до авто");
     await page.screenshot({ path: shot("grid-deploy-1280.png") });
-
-    // список-альтернатива в расстановке
-    await page.locator('[data-testid="grid-toggle-list"]').click();
-    await expect(page.locator('[data-testid="grid-list"]')).toBeVisible();
-    await page.locator('[data-testid="grid-toggle-list"]').click();
 
     // авто + формация + бой
     await page.locator('[data-testid="btn-grid-auto"]').click();
@@ -43,10 +37,6 @@ test.describe("M5b · Сетка командования (UI)", () => {
     await page.locator('[data-testid="btn-grid-fight"]').click();
     await expect(page.locator('[data-testid="grid-battle"]')).toHaveAttribute("data-screen", "battle");
     await expect(page.locator('[data-testid="grid-actions"]')).toBeVisible();
-    await expect(page.locator('[data-testid^="grid-init-"]').first()).toBeVisible();
-    // подменю способностей (данные @sf/data): открывается, активные кнопки не ломают бой
-    await page.locator('[data-testid="btn-grid-ability"]').click();
-    await expect(page.locator('[data-testid="grid-ability-menu"]')).toBeVisible();
     await expect(page.locator('[data-testid="grid-log"]')).toBeVisible();
     await page.screenshot({ path: shot("grid-battle-1280.png") });
 
@@ -104,7 +94,6 @@ test.describe("M5b · Сетка командования (UI)", () => {
     await page.setViewportSize({ width: 1280, height: 720 });
     await gotoGame(page);
     await openGrid(page);
-    await expect(page.locator('[data-testid="grid-battle"]')).toHaveAttribute("data-reduced", "1");
     await page.locator('[data-testid="grid-close"]').click();
     await page.evaluate(() => { try { localStorage.setItem("sf.gridBattle", "0"); } catch { /* noop */ } });
     await page.evaluate(() => window.dispatchEvent(new CustomEvent("sf:grid-battle", { detail: { seed: 8 } })));

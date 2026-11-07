@@ -11,7 +11,7 @@ import { AiWorldEventModal } from "./WorldPoliticsPanel";
 import { BattleChoiceModal } from "./BattleChoiceModal";
 import { worldOf } from "./util";
 import { DLC_QUEST_BY_ID, L10N_RU } from "@sf/data";
-import { GridBattleOverlay } from "./grid-battle/GridBattleOverlay";
+import { GridBattleV2Overlay } from "./grid-battle/GridBattleV2Overlay";
 
 // PanelId/PANEL_TITLES/PANEL_REGISTRY живут в fullgame-registry.ts (без JSX), чтобы
 // react-refresh не ругался на смешанные экспорты. Здесь только компоненты.
@@ -218,7 +218,7 @@ export function FullGameOverlays({ game, state }: { game: Game; state: GameState
       )}
       {gridBattle && (
         <div style={{ pointerEvents: "auto" }}>
-          <GridBattleOverlay game={game} coop={gridBattle.coop} seed={gridBattle.seed} onFinish={finishGrid} onClose={() => setGridBattle(null)} />
+          <GridBattleV2Overlay game={game} seed={gridBattle.seed} onFinish={finishGrid} onClose={() => setGridBattle(null)} />
         </div>
       )}
       {event && (
