@@ -1733,5 +1733,9 @@ export function revealDlcSignal(world: World, signalId: string): CommandResult {
   d.flags["signal_seen:" + signal.id] = 1;
   makeAvailable(d, signal.questId);
   chronicle(world, d, "dlc.chronicle.signal:" + signal.id, signal.questId);
-  return { ok: true, messageRu: "Квест открыт: сигнал достигнут" };
+  // Достижение сигнала запускает сюжет, а не только открывает запись в журнале.
+  const quest = DLC_QUESTS.find((q) => q.id === signal.questId);
+  const accepted = dlcAcceptQuest(world, playerId, signal.questId, "signal");
+  if (accepted.ok) return { ok: true, messageRu: "Квест начат: " + (quest?.titleKey ?? signal.questId) };
+  return { ok: true, messageRu: "Сигнал достигнут. " + (accepted.messageRu ?? "Квест доступен в журнале") };
 }

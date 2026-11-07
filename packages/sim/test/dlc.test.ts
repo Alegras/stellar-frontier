@@ -291,7 +291,7 @@ describe("DLC XIV · 4 канала и маркеры", () => {
     const result = revealDlcSignal(world, signal.id);
     expect(result.ok).toBe(true);
     expect(getDlcSignals(world)[0]!.revealed).toBe(true);
-    expect(d.quests[signal.questId]!.status).toBe("available");
+    expect(d.quests[signal.questId]!.status).toBe("active");
   });
 
   it("аксессоры: журнал/хроника/дерево/маркеры/dialogue view", () => {
