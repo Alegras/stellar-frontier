@@ -6,7 +6,7 @@ import { L } from "../fg";
 import { HexField } from "./HexField";
 import {
   CLASS_RU, apOf, attackObstacle, canAttack, clone, createMockBattle, deploy, formation,
-  preview, reachable, runAutoBattle, stackAt, startV2, v2AiPhase, v2Attack,
+  distance, preview, reachable, runAutoBattle, stackAt, startV2, v2AiPhase, v2Attack,
   v2Defend, v2EndPhase, v2Move, v2Overwatch, type Battle, type Result, type Stack,
 } from "./model";
 
@@ -31,6 +31,17 @@ export function GridBattleV2Overlay({ game, onClose, onFinish, seed = 42 }: {
   const [confirmEnd, setConfirmEnd] = useState(false);
   const battleRef = useRef<Battle>(battle);
   useEffect(() => { battleRef.current = battle; }, [battle]);
+  // Баннер фазы (16c §6.6): игрок должен видеть «ВАША ФАЗА / ФАЗА ПРОТИВНИКА», иначе переход
+  // «Завершить ход → сразу снова моя фаза» (игрок закрывал вторую фазу раунда) выглядит как баг.
+  const [phaseBanner, setPhaseBanner] = useState<string | null>(null);
+  useEffect(() => {
+    if (screen !== "battle" || battle.phase !== "battle" || !battle.turnSide) { setPhaseBanner(null); return; }
+    setPhaseBanner(battle.turnSide === "enemy"
+      ? L("ФАЗА ПРОТИВНИКА", "ENEMY PHASE")
+      : L("ВАША ФАЗА", "YOUR PHASE") + " · " + L("Раунд", "Round") + " " + battle.round);
+    const id = window.setTimeout(() => setPhaseBanner(null), 900);
+    return () => window.clearTimeout(id);
+  }, [screen, battle.turnSide, battle.round, battle.phase]);
   const playerStacks = battle.stacks.filter((s) => s.side === "player" && s.alive);
   const selected = selectedId ? battle.stacks.find((s) => s.id === selectedId) ?? null : null;
   const active = selected ?? battle.stacks.find((s) => s.id === battle.activeId) ?? null;
@@ -99,7 +110,15 @@ export function GridBattleV2Overlay({ game, onClose, onFinish, seed = 42 }: {
     }
     if (screen !== "battle" || !active || active.side !== "player" || !isPlayerPhase) return;
     const other = stackAt(battle, q, r);
-    if (other?.side === "enemy") { setTargetId(other.id); setTargetObstacle(null); const p = preview(battle, active.id, other.id, active.range > 1 && canAttack(battle, active, other, true).ok); setHint(L("Цель: ", "Target: ") + other.name + " · " + p.min + "–" + p.max + L(" урона", " damage")); return; }
+    if (other?.side === "enemy") {
+      setTargetId(other.id); setTargetObstacle(null);
+      const melee = distance(active, other) === 1;
+      const legal = canAttack(battle, active, other, !melee);
+      if (!legal.ok) { setHint(L("Цель: ", "Target: ") + other.name + " · " + (legal.reason ?? L("атака недоступна", "cannot attack"))); return; }
+      const p = preview(battle, active.id, other.id, !melee && active.range > 1);
+      setHint(L("Цель: ", "Target: ") + other.name + " · " + p.min + "–" + p.max + L(" урона", " damage") + (melee ? L(" (ближний бой, возможен ответ)", " (melee, possible counter)") : ""));
+      return;
+    }
     const obs = battle.obstacles.find((o) => o.q === q && o.r === r && (o.kind === "asteroid" || o.kind === "debris"));
     if (obs) { setTargetObstacle({ q, r }); setTargetId(null); setHint(L("Препятствие можно разрушить атакой.", "Obstacle can be destroyed by attack.")); return; }
     if (reach.some((h) => h.q === q && h.r === r)) {
@@ -108,11 +127,20 @@ export function GridBattleV2Overlay({ game, onClose, onFinish, seed = 42 }: {
     if (other?.side === "player") pick(other);
   };
 
+  /** В контакте бьём ближним боем (полный урон), иначе — дальней, если достаём. */
+  const pickRanged = (a: Stack, t: Stack): boolean =>
+    distance(a, t) > 1 && a.range > 1 && canAttack(battle, a, t, true).ok;
   const doAttack = (): void => {
     if (!active || active.side !== "player" || !isPlayerPhase) return;
     if (targetObstacle) { const b = clone(battle); if (attackObstacle(b, targetObstacle.q, targetObstacle.r)) { refresh(b); setTargetObstacle(null); setHint(L("Обстрел препятствия (1 AP).", "Obstacle hit (1 AP).")); } return; }
     const target = selectedTarget; if (!target) { setHint(L("Сначала выберите цель.", "Select a target first.")); return; }
-    const b = clone(battle); if (v2Attack(b, active.id, target.id, active.range > 1 && canAttack(battle, active, target, true).ok)) { refresh(b); setTargetId(null); setHint(L("Атака выполнена (1 AP).", "Attack done (1 AP).")); } else setHint(L("Атака недоступна.", "Attack unavailable."));
+    if (!canAttack(battle, active, target, distance(active, target) > 1).ok) {
+      setHint(canAttack(battle, active, target, distance(active, target) > 1).reason ?? L("Атака недоступна.", "Attack unavailable."));
+      return;
+    }
+    const b = clone(battle);
+    if (v2Attack(b, active.id, target.id, pickRanged(active, target))) { refresh(b); setTargetId(null); setHint(L("Атака выполнена (1 AP).", "Attack done (1 AP).")); }
+    else setHint(L("Атака недоступна (нужен 1 AP и валидная цель).", "Attack unavailable (needs 1 AP and a valid target)."));
   };
   const doDefend = (): void => { if (!active) return; const b = clone(battle); if (v2Defend(b, active.id)) { refresh(b); setHint(L("Защита +20% (1 AP).", "Defend +20% (1 AP).")); } };
   const doOverwatch = (): void => { if (!active) return; const b = clone(battle); if (v2Overwatch(b, active.id)) { refresh(b); setHint(L("Наблюдение включено (2 AP).", "Overwatch set (2 AP).")); } else setHint(L("Нужно 2 AP.", "Requires 2 AP.")); };
@@ -124,8 +152,10 @@ export function GridBattleV2Overlay({ game, onClose, onFinish, seed = 42 }: {
       setHint(L("Осталось AP у " , "AP remains on ") + remaining + L(" юнитов — остаток сгорит. Нажмите «ПОДТВЕРДИТЬ ХОД», чтобы передать ход противнику.", " units — remaining AP will burn. Press CONFIRM to hand the turn to the enemy."));
       return;
     }
-    const b = clone(battle); v2EndPhase(b); refresh(b); setSelectedId(null); setTargetId(null);
-    setHint(b.turnSide === "enemy" ? L("Фаза противника — ИИ отыгрывает свои действия.", "Enemy phase — the AI is acting.") : L("Фаза игрока. Выберите юнит с AP.", "Player phase. Pick a unit with AP."));
+    const b = clone(battle); v2EndPhase(b, "player"); refresh(b); setSelectedId(null); setTargetId(null);
+    setHint(b.turnSide === "enemy"
+      ? L("Фаза противника — ИИ отыгрывает свои действия.", "Enemy phase — the AI is acting.")
+      : L("Вы закрыли вторую фазу раунда — раунд ", "You closed the second phase of the round — round ") + b.round + L(" начинаете вы (противник ходил вторым).", " starts with you (the enemy moved second)."));
   };
 
   const doAutoBattle = (): void => {
@@ -164,7 +194,9 @@ export function GridBattleV2Overlay({ game, onClose, onFinish, seed = 42 }: {
           <header className="sf-gridbattle__head"><b className="sf-gold">{L("Итог боя", "Battle result")}</b><span className="sf-meta">{battle.systemName}</span><span className="sf-spacer" /><Btn size="sm" variant="ghost" onClick={close} testId="btn-grid-to-map">{L("На карту", "To map")}</Btn></header>
           <Panel title={battle.result.winner === "player" ? L("Победа", "Victory") : battle.result.winner === "enemy" ? L("Поражение", "Defeat") : L("Ничья", "Draw")} testId="grid-result">
             <div className="sf-meta">{L("Ходов", "Rounds")}: {battle.round} · MVP: {battle.result.mvpName}</div>
-            <div className="sf-meta" data-testid="grid-parity">{L("≈ авторезолв по потерям", "≈ auto-resolve losses")}</div>
+            <div className="sf-meta" data-testid="grid-parity">
+              {L("≈ авторезолв по потерям", "≈ auto-resolve losses")}: {battle.result.parity.autoMin}–{battle.result.parity.autoMax}% · {L("факт", "actual")}: {battle.result.parity.actual}%
+            </div>
             <table className="sf-gridtable" data-testid="grid-result-losses"><thead><tr><th>{L("Сторона", "Side")}</th><th>{L("Потери", "Losses")}</th><th>FP</th></tr></thead><tbody>{battle.result.losses.map((l, i) => <tr key={i}><td>{l.side === "player" ? "●" : "▲"} {CLASS_RU[l.cls]}</td><td>{l.lost}</td><td>{Math.round(l.fp)}</td></tr>)}</tbody></table>
           </Panel>
         </div>
@@ -174,6 +206,11 @@ export function GridBattleV2Overlay({ game, onClose, onFinish, seed = 42 }: {
 
   return (
     <div className="sf-gridbattle-layer" data-testid="grid-battle" data-screen={screen}>
+      {phaseBanner && (
+        <div data-testid="grid-phase-banner" style={{ position: "absolute", top: "18%", left: 0, right: 0, textAlign: "center", pointerEvents: "none", zIndex: 5 }}>
+          <span style={{ display: "inline-block", padding: "8px 22px", border: "1px solid #F5C542", background: "rgba(6,10,20,.88)", color: "#F5C542", fontWeight: 700, letterSpacing: ".14em", fontSize: 20 }}>{phaseBanner}</span>
+        </div>
+      )}
       <div className="sf-gridbattle" role="dialog" aria-modal="true" aria-label={L("Сетка командования v2", "Grid Command v2")}>
         <header className="sf-gridbattle__head">
           <b className="sf-gold" data-testid="grid-phase-title">

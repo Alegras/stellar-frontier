@@ -51,6 +51,54 @@ test.describe("M5b · Сетка командования (UI)", () => {
     expectNoErrors(diag);
   });
 
+  // Регресс на баг «нажимаю Завершить ход, а враг не атакует, снова мой ход».
+  test("S31b · «Завершить ход» запускает фазу противника, и ИИ реально атакует", async ({ page }) => {
+    const diag = attachDiagnostics(page);
+    await page.setViewportSize({ width: 1280, height: 720 });
+    await gotoGame(page);
+    await openGrid(page);
+    await page.locator('[data-testid="btn-grid-auto"]').click();
+    await page.locator('[data-testid="btn-grid-fight"]').click();
+    await expect(page.locator('[data-testid="grid-battle"]')).toHaveAttribute("data-screen", "battle");
+
+    const sumPlayerHp = async (): Promise<number> => page.evaluate(() => {
+      let sum = 0;
+      for (const el of Array.from(document.querySelectorAll('[data-testid^="grid-roster-p"]'))) {
+        const m = (el.textContent ?? "").match(/HP (\d+)/);
+        if (m) sum += Number(m[1]);
+      }
+      return sum;
+    });
+    const endTurn = page.locator('[data-testid="grid-end-turn"]');
+    const title = page.locator('[data-testid="grid-phase-title"]');
+    const hpStart = await sumPlayerHp();
+    expect(hpStart).toBeGreaterThan(0);
+
+    let sawEnemyPhase = false;
+    let sawEnemyAttack = false;
+    // до 3 циклов: завершить ход → фаза противника → возврат управления
+    for (let i = 0; i < 3 && !sawEnemyAttack; i++) {
+      await expect(endTurn).toBeEnabled({ timeout: 15_000 });
+      const logBefore = await page.locator('[data-testid="grid-log"]').textContent();
+      await endTurn.click();
+      // при остатке AP первый клик только просит подтверждение
+      if (((await endTurn.textContent()) ?? "").includes("ПОДТВЕРДИТЬ")) await endTurn.click();
+      await expect(title).toContainText("ХОД ПРОТИВНИКА", { timeout: 5_000 });
+      sawEnemyPhase = true;
+      // управление возвращается игроку (или бой закончился)
+      await expect
+        .poll(async () => (await endTurn.isEnabled()) || (await page.locator('[data-testid="grid-result"]').count()) > 0, { timeout: 20_000 })
+        .toBe(true);
+      const logAfter = await page.locator('[data-testid="grid-log"]').textContent();
+      if ((logAfter ?? "").includes("Враг:") || (logAfter ?? "") !== (logBefore ?? "")) sawEnemyAttack = true;
+    }
+    expect(sawEnemyPhase).toBe(true);
+    expect(sawEnemyAttack).toBe(true);
+    // урон по игроку виден в отряде
+    if ((await page.locator('[data-testid="grid-result"]').count()) === 0) expect(await sumPlayerHp()).toBeLessThan(hpStart);
+    expectNoErrors(diag);
+  });
+
   test("вход с L0: combat-флот в системе → кнопка сетки", async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 720 });
     await gotoGame(page);

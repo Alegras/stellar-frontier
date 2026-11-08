@@ -50,7 +50,7 @@ function battleFromRaw(base: Battle, raw: BG.BattleState): Battle {
       name: "Эск." + v.code,
       count: v.count, startCount: v.maxCount, hp: v.hp, maxHp: v.maxHp,
       shield: 0, maxShield: 0, mp: v.mp, maxMp: v.mp, init: v.initiative,
-      dmg: Math.round((cls?.damageStack ?? 100) ?? 100), range: v.range,
+      dmg: Math.round(cls?.damageStack ?? 100), range: v.range,
       q: v.col, r: v.row, facing: v.side === "A" ? 0 : 3, reserve: v.reserve,
       alive: !v.dead, moved: false, waited: v.waited, defended: v.defending, counterUsed: false, kills: 0, abilities: [...v.abilities],
     };

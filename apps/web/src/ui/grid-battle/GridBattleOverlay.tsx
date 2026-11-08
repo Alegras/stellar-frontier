@@ -89,7 +89,7 @@ export function GridBattleOverlay({ game, onClose, onFinish, coop = false, seed 
     addVisualDiff(battle, b);
     setBattle(b); if (b.phase === "result") setScreen("result");
   };
-  const useAbility = (abilityId: string): void => {
+  const fireAbility = (abilityId: string): void => {
     if (!active || active.side !== "player") return;
     const b = clone(battle); ability(b, abilityId); addVisualDiff(battle, b); setBattle(b); setAbilityOpen(false);
     if (b.phase === "result") setScreen("result");
@@ -225,7 +225,7 @@ export function GridBattleOverlay({ game, onClose, onFinish, coop = false, seed 
               {abilityOpen && active && active.side === "player" && (
                 <div className="sf-gridabilities" data-testid="grid-ability-menu">
                   {(active.abilities ?? []).map((id) => BATTLE_ABILITY_BY_ID[id]).filter((ab) => ab && ab.kind === "active").map((ab) => (
-                    <Btn key={ab!.id} size="sm" title={ab!.descRu} onClick={() => useAbility(ab!.id)} testId={"grid-ability-" + ab!.id}>{ab!.titleRu}</Btn>
+                    <Btn key={ab!.id} size="sm" title={ab!.descRu} onClick={() => fireAbility(ab!.id)} testId={"grid-ability-" + ab!.id}>{ab!.titleRu}</Btn>
                   ))}
                   {(active.abilities ?? []).filter((id) => BATTLE_ABILITY_BY_ID[id]?.kind === "active").length === 0 && <span className="sf-meta">{L("Нет активных способностей (пассив класса).", "No active abilities (class passive).")}</span>}
                 </div>

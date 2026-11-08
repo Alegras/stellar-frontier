@@ -12,7 +12,7 @@ export interface LogEntry { round: number; text: string; kind: "damage" | "abili
 export interface Loss { side: Side; cls: Cls; name: string; lost: number; fp: number }
 export interface Result { winner: Side | "draw"; losses: Loss[]; spoils: { credits: number; alloys: number; samples: number }; xp: number; warScore: number; mvpName: string; mvpDamage: number; parity: { autoMin: number; autoMax: number; actual: number }; seed: number; lossFraction?: { player: number; enemy: number } }
 export interface BattleEffect { kind: "attack" | "hit" | "shield" | "move" | "death"; from: { q: number; r: number }; to: { q: number; r: number }; amount: number; shield: number; t: number; }
-export interface Battle { id: string; seed: number; title: string; systemName: string; phase: Phase; coop: boolean; round: number; maxRounds: number; timerSec: number | null; stacks: Stack[]; obstacles: Obstacle[]; cursor: { q: number; r: number }; hover: { q: number; r: number } | null; activeId: string | null; order: string[]; log: LogEntry[]; result: Result | null; preset: Formation; deploymentCount: number; reserveCount: number; lastDamage: Array<{ q: number; r: number; amount: number; t: number }>; lastEffects: BattleEffect[]; turnSide?: Side; overwatch?: Record<string, boolean>; startFp?: { player: number; enemy: number }; firstSide?: Side }
+export interface Battle { id: string; seed: number; title: string; systemName: string; phase: Phase; coop: boolean; round: number; maxRounds: number; timerSec: number | null; stacks: Stack[]; obstacles: Obstacle[]; cursor: { q: number; r: number }; hover: { q: number; r: number } | null; activeId: string | null; order: string[]; log: LogEntry[]; result: Result | null; preset: Formation; deploymentCount: number; reserveCount: number; lastDamage: Array<{ q: number; r: number; amount: number; t: number }>; lastEffects: BattleEffect[]; turnSide?: Side; firstSide?: Side; overwatch?: Record<string, boolean>; startFp?: { player: number; enemy: number } }
 
 export const COLS = 15, ROWS = 11, FIELD_W = 544, FIELD_H = 350, HEX_W = 32, HEX_H = 36;
 export const CLASS_RU: Record<Cls, string> = Object.fromEntries((["corvette", "frigate", "destroyer", "cruiser", "battleship", "carrier", "titan", "colossus"] as Cls[]).map((id) => [id, BATTLE_CLASS_BY_ID[id]?.titleRu ?? id])) as Record<Cls, string>;
@@ -159,7 +159,8 @@ export function reachable(b: Battle, id: string): Array<{ q: number; r: number }
       const occ = stackAt(b, n.q, n.r);
       // сквозь союзника идти можно (финиш в занятом гексе запрещён), сквозь врага — нельзя
       if (occ && occ.side !== s.side) continue;
-      const c = cur.c + (obstacleAt(b, n.q, n.r) === "gravity_anomaly" ? 2 : 1);
+      const terr = obstacleAt(b, n.q, n.r);
+      const c = cur.c + (terr === "gravity_anomaly" ? 2 : terr === "nebula" ? 2 : 1);
       if (c > s.mp) continue;
       if ((seen.get(key(n.q, n.r)) ?? 99) <= c) continue;
       seen.set(key(n.q, n.r), c); queue.push({ q: n.q, r: n.r, c });
@@ -259,7 +260,8 @@ export function startV2(b: Battle): Battle {
   b.phase = "battle"; b.round = 1; b.turnSide = firstSide; b.firstSide = firstSide; b.activeId = null; b.overwatch = {};
   for (const s of b.stacks) { s.hp = s.maxHp; s.shield = s.maxShield; s.alive = true; s.moved = false; s.waited = false; s.defended = false; s.counterUsed = false; s.ap = 2; s.attackedThisPhase = 0; s.movedThisPhase = false; s.damagedThisRound = false; }
   b.startFp = { player: fpOf(b, "player"), enemy: fpOf(b, "enemy") };
-  log(b, "Бой v2: фаза игрока. У каждого юнита 2 AP.", "system");
+  for (const s of b.stacks) s.ap = 2;
+  log(b, "Бой v2: первая фаза — " + (b.firstSide === "player" ? "игрок" : "противник") + ". У каждого юнита 2 AP.", "system");
   return b;
 }
 export function v2Cost(b: Battle, id: string, cost: number): boolean {
@@ -278,9 +280,8 @@ export function v2Attack(b: Battle, aid: string, tid: string, ranged: boolean): 
 }
 
 function overwatchReaction(b: Battle, mover: Stack): void {
-  if (mover.side !== "enemy") return;
   for (const shooter of b.stacks) {
-    if (shooter.side !== "player" || !shooter.alive || !b.overwatch?.[shooter.id]) continue;
+    if (shooter.side === mover.side || !shooter.alive || !b.overwatch?.[shooter.id]) continue;
     if (!canAttack(b, shooter, mover, shooter.range > 1).ok) continue;
     const dmg = Math.max(1, Math.round(shooter.dmg * shooter.count * 0.75));
     const shieldBefore = mover.shield;
@@ -302,12 +303,19 @@ export function v2Move(b: Battle, id: string, q: number, r: number): boolean {
   a.q = q; a.r = r; b.activeId = id;
   b.lastEffects.push({ kind: "move", from: before, to: { q, r }, amount: 0, shield: 0, t: Date.now() });
   log(b, CLASS_RU[a.cls] + " «" + a.name + "»: движение", "move");
+  if (obstacleAt(b, q, r) === "minefield" && a.alive) {
+    const mine = Math.max(1, Math.round(a.maxHp * 0.08));
+    const hit = applyDamage(a, mine);
+    log(b, "Мины: " + hit.damage + " урона " + CLASS_RU[a.cls] + " «" + a.name + "»", "damage");
+    if (hit.killed) { log(b, CLASS_RU[a.cls] + " «" + a.name + "» уничтожен.", "death"); checkEnd(b); }
+  }
   spendAp(a, 1); a.movedThisPhase = true; overwatchReaction(b, a); return true;
 }
 export function v2Defend(b: Battle, id: string): boolean { const s = b.stacks.find((x) => x.id === id); if (!s || !s.alive || s.side !== b.turnSide || apOf(s) < 1) return false; s.defended = true; spendAp(s, 1); log(b, CLASS_RU[s.cls] + " «" + s.name + "» защищается.", "system"); return true; }
 export function v2Overwatch(b: Battle, id: string): boolean { const s = b.stacks.find((x) => x.id === id); if (!s || !s.alive || s.side !== b.turnSide || apOf(s) < 2) return false; b.overwatch = { ...(b.overwatch ?? {}), [id]: true }; spendAp(s, 2); log(b, "Наблюдение: " + s.name, "system"); return true; }
-export function v2EndPhase(b: Battle): void {
+export function v2EndPhase(b: Battle, expectedSide?: Side): void {
   if (b.phase !== "battle") return;
+  if (expectedSide && b.turnSide && b.turnSide !== expectedSide) return;
   const first: Side = b.firstSide ?? "player";
   const second: Side = first === "player" ? "enemy" : "player";
   const closing: Side = b.turnSide ?? first;
@@ -328,7 +336,15 @@ export function v2EndPhase(b: Battle): void {
     if (!s.damagedThisRound && s.shield < s.maxShield) s.shield = Math.min(s.maxShield, s.shield + Math.round(s.maxShield * 0.03));
     s.damagedThisRound = false;
   }
-  b.round += 1; if (b.round > b.maxRounds) { finish(b, "draw"); return; }
+  b.overwatch = {};
+  b.round += 1;
+  if (b.round > b.maxRounds) {
+    // 16b §8.2/§8.7: кап раундов — не «ничья», а решение по остатку сил.
+    const pl = fpOf(b, "player"), en = fpOf(b, "enemy");
+    log(b, "Кап раундов: решение по остатку сил.", "system");
+    finish(b, pl > en ? "player" : en > pl ? "enemy" : "draw");
+    return;
+  }
   // 16b §1.3: кто ходил вторым в раунде — открывает следующий. Без этого одна сторона
   // всегда ходит первой и систематически проигрывает (первый ход = расход AP на сближение).
   const nextFirst: Side = second;
@@ -382,8 +398,8 @@ export function aiAct(b: Battle, actor: Stack): boolean {
     const best = ranked[0]!;
     if (v2Move(b, actor.id, best.h.q, best.h.r)) return true;
   }
+  if (apOf(actor) >= 2 && v2Overwatch(b, actor.id)) return true;
   if (v2Defend(b, actor.id)) return true;
-  if (v2Overwatch(b, actor.id)) return true;
   return false;
 }
 /** Действует текущая сторона, пока у её юнитов есть AP. Фазу не завершает. */
