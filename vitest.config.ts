@@ -2,7 +2,7 @@ import { defineConfig } from "vitest/config";
 
 export default defineConfig({
   test: {
-    include: ["packages/sim/test/**/*.test.ts", "packages/data/test/**/*.test.ts", "packages/battle-grid/test/**/*.test.ts"],
+    include: ["packages/sim/test/**/*.test.ts", "packages/data/test/**/*.test.ts", "packages/battle-grid/test/**/*.test.ts", "apps/web/src/ui/grid-battle/**/*.test.ts"],
     environment: "node",
     reporters: "default",
     testTimeout: 300_000,

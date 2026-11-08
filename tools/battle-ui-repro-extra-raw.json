@@ -1,0 +1,592 @@
+{
+  "base": "http://127.0.0.1:5173",
+  "startedAt": "2026-11-07T23:53:26.315Z",
+  "consoleErrors": [],
+  "pageErrors": [],
+  "e1": {
+    "before": {
+      "round": 1,
+      "turnSide": "player",
+      "hint": "Фаза игрока. Выберите юнит с AP.",
+      "help": "Любой юнит с AP: движение/атака/защита/наблюдение. «Завершить ход» — конец фазы.",
+      "logLen": 2
+    },
+    "afterOneClick": {
+      "round": 1,
+      "turnSide": "player",
+      "help": "Любой юнит с AP: движение/атака/защита/наблюдение. «Завершить ход» — конец фазы.",
+      "hint": "Остались AP у 7 юнитов. Нажмите «Завершить ход» ещё раз.",
+      "logLen": 2,
+      "logTail": [
+        "[0] Расстановка: 7 стэков на поле, 3 в резерве.",
+        "[1] Бой v2: фаза игрока. У каждого юнита 2 AP."
+      ]
+    },
+    "afterTwoClicks": {
+      "round": 2,
+      "turnSide": "player",
+      "help": "Любой юнит с AP: движение/атака/защита/наблюдение. «Завершить ход» — конец фазы.",
+      "hint": "Остались AP у 7 юнитов. Нажмите «Завершить ход» ещё раз.",
+      "logTail": [
+        "[1] Титан «Рёв»: движение",
+        "[1] Корвет «Стрекоза»: движение",
+        "[1] Корвет «Стрекоза»: движение",
+        "[1] Фрегат «Гнев»: движение",
+        "[1] Враг: Фрегат «Гнев» → Корвет «Заря»: 6765 урона",
+        "[1] Эсминец «Клык»: движение",
+        "[1] Эсминец «Клык»: движение",
+        "[2] Раунд 2. Фаза игрока."
+      ]
+    },
+    "enemyAttacksAfter2nd": [
+      "[1] Враг: Крейсер «Хищник» → Эсминец «Стрела»: 8856 урона",
+      "[1] Враг: Фрегат «Гнев» → Корвет «Заря»: 6765 урона"
+    ],
+    "shot": "N:\\AI\\stellar-frontier\\docs\\shots\\bug-endturn-confirm.png"
+  },
+  "e2": [
+    {
+      "seed": 7,
+      "idleCycles": 3,
+      "idleRounds": [
+        {
+          "round": 2,
+          "turnSide": "player",
+          "hpPlayer": 309399,
+          "enemyAttacks": 2
+        },
+        {
+          "round": 3,
+          "turnSide": "player",
+          "hpPlayer": 194350,
+          "enemyAttacks": 16
+        },
+        {
+          "round": 3,
+          "turnSide": "player",
+          "hpPlayer": 194350,
+          "enemyAttacks": 16
+        }
+      ],
+      "preAuto": {
+        "round": 3,
+        "turnSide": "player",
+        "playerAlive": 5,
+        "enemyAlive": 7
+      },
+      "visible": true,
+      "elapsedMs": 38,
+      "title": "Поражение",
+      "body": "Ходов: 5 · MVP: Крейсер «Хищник»≈ авторезолв по потерямСторонаПотериFP● Корвет1038654● Фрегат1059000● Эсминец547165● Крейсер445589● Линкор118792● Носитель01637● Титан114240▲ Крейсер00▲ Линкор117540▲ Носитель00▲ Титан0530▲ Корвет310724▲ Фрегат00▲ Эсминец14876",
+      "losses": [
+        [
+          "● Корвет",
+          "10",
+          "38654"
+        ],
+        [
+          "● Фрегат",
+          "10",
+          "59000"
+        ],
+        [
+          "● Эсминец",
+          "5",
+          "47165"
+        ],
+        [
+          "● Крейсер",
+          "4",
+          "45589"
+        ],
+        [
+          "● Линкор",
+          "1",
+          "18792"
+        ],
+        [
+          "● Носитель",
+          "0",
+          "1637"
+        ],
+        [
+          "● Титан",
+          "1",
+          "14240"
+        ],
+        [
+          "▲ Крейсер",
+          "0",
+          "0"
+        ],
+        [
+          "▲ Линкор",
+          "1",
+          "17540"
+        ],
+        [
+          "▲ Носитель",
+          "0",
+          "0"
+        ],
+        [
+          "▲ Титан",
+          "0",
+          "530"
+        ],
+        [
+          "▲ Корвет",
+          "3",
+          "10724"
+        ],
+        [
+          "▲ Фрегат",
+          "0",
+          "0"
+        ],
+        [
+          "▲ Эсминец",
+          "1",
+          "4876"
+        ]
+      ],
+      "winner": null,
+      "round": 3,
+      "shot": "N:\\AI\\stellar-frontier\\docs\\shots\\bug-auto-after-idle-seed7-3.png"
+    },
+    {
+      "seed": 42,
+      "idleCycles": 3,
+      "idleRounds": [
+        {
+          "round": 2,
+          "turnSide": "player",
+          "hpPlayer": 354042,
+          "enemyAttacks": 2
+        },
+        {
+          "round": 2,
+          "turnSide": "player",
+          "hpPlayer": 354042,
+          "enemyAttacks": 2
+        },
+        {
+          "round": 3,
+          "turnSide": "player",
+          "hpPlayer": 236179,
+          "enemyAttacks": 16
+        }
+      ],
+      "preAuto": {
+        "round": 3,
+        "turnSide": "player",
+        "playerAlive": 5,
+        "enemyAlive": 7
+      },
+      "visible": true,
+      "elapsedMs": 40,
+      "title": "Поражение",
+      "body": "Ходов: 4 · MVP: Фрегат «Гнев»≈ авторезолв по потерямСторонаПотериFP● Корвет1140920● Фрегат953732● Эсминец329436● Крейсер221822● Линкор224480● Носитель113719● Титан123301▲ Крейсер05683▲ Линкор112874▲ Носитель00▲ Титан00▲ Корвет13277▲ Фрегат00▲ Эсминец00",
+      "losses": [
+        [
+          "● Корвет",
+          "11",
+          "40920"
+        ],
+        [
+          "● Фрегат",
+          "9",
+          "53732"
+        ],
+        [
+          "● Эсминец",
+          "3",
+          "29436"
+        ],
+        [
+          "● Крейсер",
+          "2",
+          "21822"
+        ],
+        [
+          "● Линкор",
+          "2",
+          "24480"
+        ],
+        [
+          "● Носитель",
+          "1",
+          "13719"
+        ],
+        [
+          "● Титан",
+          "1",
+          "23301"
+        ],
+        [
+          "▲ Крейсер",
+          "0",
+          "5683"
+        ],
+        [
+          "▲ Линкор",
+          "1",
+          "12874"
+        ],
+        [
+          "▲ Носитель",
+          "0",
+          "0"
+        ],
+        [
+          "▲ Титан",
+          "0",
+          "0"
+        ],
+        [
+          "▲ Корвет",
+          "1",
+          "3277"
+        ],
+        [
+          "▲ Фрегат",
+          "0",
+          "0"
+        ],
+        [
+          "▲ Эсминец",
+          "0",
+          "0"
+        ]
+      ],
+      "winner": "enemy",
+      "round": 4,
+      "shot": "N:\\AI\\stellar-frontier\\docs\\shots\\bug-auto-after-idle-seed42-3.png"
+    },
+    {
+      "seed": 7,
+      "idleCycles": 1,
+      "idleRounds": [
+        {
+          "round": 2,
+          "turnSide": "player",
+          "hpPlayer": 309399,
+          "enemyAttacks": 2
+        }
+      ],
+      "preAuto": {
+        "round": 2,
+        "turnSide": "player",
+        "playerAlive": 7,
+        "enemyAlive": 7
+      },
+      "visible": true,
+      "elapsedMs": 30,
+      "title": "Победа",
+      "body": "Ходов: 8 · MVP: Крейсер «Тень»≈ авторезолв по потерямСторонаПотериFP● Корвет1038082● Фрегат315835● Эсминец650312● Крейсер02258● Линкор116410● Носитель01637● Титан06471▲ Крейсер342636▲ Линкор228803▲ Носитель112581▲ Титан0530▲ Корвет1347064▲ Фрегат955744▲ Эсминец219277",
+      "losses": [
+        [
+          "● Корвет",
+          "10",
+          "38082"
+        ],
+        [
+          "● Фрегат",
+          "3",
+          "15835"
+        ],
+        [
+          "● Эсминец",
+          "6",
+          "50312"
+        ],
+        [
+          "● Крейсер",
+          "0",
+          "2258"
+        ],
+        [
+          "● Линкор",
+          "1",
+          "16410"
+        ],
+        [
+          "● Носитель",
+          "0",
+          "1637"
+        ],
+        [
+          "● Титан",
+          "0",
+          "6471"
+        ],
+        [
+          "▲ Крейсер",
+          "3",
+          "42636"
+        ],
+        [
+          "▲ Линкор",
+          "2",
+          "28803"
+        ],
+        [
+          "▲ Носитель",
+          "1",
+          "12581"
+        ],
+        [
+          "▲ Титан",
+          "0",
+          "530"
+        ],
+        [
+          "▲ Корвет",
+          "13",
+          "47064"
+        ],
+        [
+          "▲ Фрегат",
+          "9",
+          "55744"
+        ],
+        [
+          "▲ Эсминец",
+          "2",
+          "19277"
+        ]
+      ],
+      "winner": null,
+      "round": 2,
+      "shot": "N:\\AI\\stellar-frontier\\docs\\shots\\bug-auto-after-idle-seed7-1.png"
+    }
+  ],
+  "e3": [
+    {
+      "seed": 1,
+      "title": "Победа",
+      "winner": "player",
+      "round": 5,
+      "elapsedMs": 39,
+      "before": {
+        "round": 1,
+        "turnSide": "player"
+      }
+    },
+    {
+      "seed": 2,
+      "title": "Поражение",
+      "winner": "enemy",
+      "round": 6,
+      "elapsedMs": 50,
+      "before": {
+        "round": 1,
+        "turnSide": "player"
+      }
+    },
+    {
+      "seed": 3,
+      "title": "Победа",
+      "winner": "player",
+      "round": 5,
+      "elapsedMs": 46,
+      "before": {
+        "round": 1,
+        "turnSide": "player"
+      }
+    },
+    {
+      "seed": 4,
+      "title": "Поражение",
+      "winner": "enemy",
+      "round": 7,
+      "elapsedMs": 41,
+      "before": {
+        "round": 1,
+        "turnSide": "player"
+      }
+    },
+    {
+      "seed": 5,
+      "title": "Победа",
+      "winner": "player",
+      "round": 8,
+      "elapsedMs": 37,
+      "before": {
+        "round": 1,
+        "turnSide": "player"
+      }
+    },
+    {
+      "seed": 6,
+      "title": "Победа",
+      "winner": "player",
+      "round": 5,
+      "elapsedMs": 48,
+      "before": {
+        "round": 1,
+        "turnSide": "player"
+      }
+    },
+    {
+      "seed": 7,
+      "title": "Победа",
+      "winner": "player",
+      "round": 6,
+      "elapsedMs": 42,
+      "before": {
+        "round": 1,
+        "turnSide": "player"
+      }
+    },
+    {
+      "seed": 8,
+      "title": "Победа",
+      "winner": "player",
+      "round": 5,
+      "elapsedMs": 48,
+      "before": {
+        "round": 1,
+        "turnSide": "player"
+      }
+    },
+    {
+      "seed": 9,
+      "title": "Победа",
+      "winner": "player",
+      "round": 5,
+      "elapsedMs": 40,
+      "before": {
+        "round": 1,
+        "turnSide": "player"
+      }
+    },
+    {
+      "seed": 10,
+      "title": "Победа",
+      "winner": "player",
+      "round": 5,
+      "elapsedMs": 40,
+      "before": {
+        "round": 1,
+        "turnSide": "player"
+      }
+    },
+    {
+      "seed": 11,
+      "title": "Победа",
+      "winner": "player",
+      "round": 7,
+      "elapsedMs": 34,
+      "before": {
+        "round": 1,
+        "turnSide": "player"
+      }
+    },
+    {
+      "seed": 12,
+      "title": "Победа",
+      "winner": "player",
+      "round": 5,
+      "elapsedMs": 43,
+      "before": {
+        "round": 1,
+        "turnSide": "player"
+      }
+    },
+    {
+      "seed": 13,
+      "title": "Победа",
+      "winner": "player",
+      "round": 5,
+      "elapsedMs": 42,
+      "before": {
+        "round": 1,
+        "turnSide": "player"
+      }
+    },
+    {
+      "seed": 14,
+      "title": "Поражение",
+      "winner": "enemy",
+      "round": 6,
+      "elapsedMs": 35,
+      "before": {
+        "round": 1,
+        "turnSide": "player"
+      }
+    },
+    {
+      "seed": 15,
+      "title": "Победа",
+      "winner": "player",
+      "round": 5,
+      "elapsedMs": 39,
+      "before": {
+        "round": 1,
+        "turnSide": "player"
+      }
+    },
+    {
+      "seed": 16,
+      "title": "Поражение",
+      "winner": "enemy",
+      "round": 6,
+      "elapsedMs": 49,
+      "before": {
+        "round": 1,
+        "turnSide": "player"
+      }
+    },
+    {
+      "seed": 17,
+      "title": "Поражение",
+      "winner": "enemy",
+      "round": 6,
+      "elapsedMs": 47,
+      "before": {
+        "round": 1,
+        "turnSide": "player"
+      }
+    },
+    {
+      "seed": 18,
+      "title": "Победа",
+      "winner": "player",
+      "round": 5,
+      "elapsedMs": 36,
+      "before": {
+        "round": 1,
+        "turnSide": "player"
+      }
+    },
+    {
+      "seed": 19,
+      "title": "Победа",
+      "winner": null,
+      "round": 1,
+      "elapsedMs": 38,
+      "before": {
+        "round": 1,
+        "turnSide": "player"
+      }
+    },
+    {
+      "seed": 20,
+      "title": "Победа",
+      "winner": null,
+      "round": 1,
+      "elapsedMs": 52,
+      "before": {
+        "round": 1,
+        "turnSide": "player"
+      }
+    }
+  ],
+  "e4": {
+    "title": "Победа",
+    "winner": "player",
+    "round": 6,
+    "elapsedMs": 56
+  }
+}

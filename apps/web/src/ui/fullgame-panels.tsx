@@ -149,7 +149,7 @@ export function FullGameOverlays({ game, state }: { game: Game; state: GameState
   }, [game]);
 
 
-  const finishGrid = (result: { winner: "player" | "enemy" | "draw"; losses: { side: "player" | "enemy"; lost: number; fp: number }[]; spoils: { credits: number; alloys: number } }): void => {
+  const finishGrid = (result: { winner: "player" | "enemy" | "draw"; losses: { side: "player" | "enemy"; lost: number; fp: number }[]; spoils: { credits: number; alloys: number }; lossFraction?: { player: number; enemy: number } }): void => {
     const pendingBattle = gridBattle?.pending;
     if (!pendingBattle) return;
     const w = worldOf(game);
@@ -157,8 +157,13 @@ export function FullGameOverlays({ game, state }: { game: Game; state: GameState
     const a = w.fleets.find((f) => f.id === pendingBattle.attackerFleetId);
     const b = w.fleets.find((f) => f.id === pendingBattle.defenderFleetId);
     if (!a || !b) return;
-    const playerLoss = result.losses.filter((l) => l.side === "player").reduce((n, l) => n + l.fp, 0);
-    const enemyLoss = result.losses.filter((l) => l.side === "enemy").reduce((n, l) => n + l.fp, 0);
+    const fleetFp = (f: typeof a): number => f.ships.reduce((n, s) => n + (s.fleetPower ?? 0), 0);
+    const playerIsAttackerSide = pendingBattle.playerSide === "attacker";
+    const playerFleet = playerIsAttackerSide ? a : b;
+    const enemyFleet = playerIsAttackerSide ? b : a;
+    // Боевые HP стеков — не FP флота: в отчёт идут доли потерь, пересчитанные в FP своего флота.
+    const playerLoss = result.lossFraction ? Math.round(result.lossFraction.player * fleetFp(playerFleet)) : result.losses.filter((l) => l.side === "player").reduce((n, l) => n + l.fp, 0);
+    const enemyLoss = result.lossFraction ? Math.round(result.lossFraction.enemy * fleetFp(enemyFleet)) : result.losses.filter((l) => l.side === "enemy").reduce((n, l) => n + l.fp, 0);
     const playerShips = result.losses.filter((l) => l.side === "player").reduce((n, l) => n + l.lost, 0);
     const enemyShips = result.losses.filter((l) => l.side === "enemy").reduce((n, l) => n + l.lost, 0);
     const playerIsAttacker = pendingBattle.playerSide === "attacker";

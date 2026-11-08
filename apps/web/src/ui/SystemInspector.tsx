@@ -1,5 +1,7 @@
+import { useState } from "react";
 import type { Game } from "../game/Game";
 import { DESIGN_BY_ID } from "@sf/data";
+import { routeAlternatives, type RouteMode, type RoutePlan } from "@sf/sim";
 import type { GameState } from "../game/types";
 import { Badge, Btn, KV, Panel, Sep, Tip } from "./controls";
 import { L, STATION_KIND_EN, tr } from "./fg";
@@ -19,6 +21,9 @@ export function SystemInspector({ game, state }: { game: Game; state: GameState 
   const world = worldOf(game);
   const sys = world ? findSystem(world, state.selectedSystemId) : null;
   const emp = playerEmpire(game);
+  const [routeMode, setRouteMode] = useState<RouteMode>("fastest");
+  const [fuelAware, setFuelAware] = useState(true);
+  const [routePlans, setRoutePlans] = useState<RoutePlan[] | null>(null);
 
   if (!world || !sys || !emp) {
     return (
@@ -128,6 +133,38 @@ export function SystemInspector({ game, state }: { game: Game; state: GameState 
           <div className="sf-meta">{L("Гиперпрокладчик", "Pathfinder")}: {pathfinderFleet.name}</div>
         </>
       )}
+
+      {(() => {
+        const fleet = selectedFleet ?? fleetsElsewhere[0] ?? null;
+        if (!fleet || fleet.systemId === sys.id) return null;
+        return (
+          <>
+            <Sep />
+            <div className="sf-h">{L("Слой маршрута", "Route layer")}</div>
+            <div className="sf-row" style={{ flexWrap: "wrap", gap: 3 }}>
+              {(["fastest", "shortest", "economical", "safest"] as RouteMode[]).map((m) => <Btn key={m} size="sm" active={routeMode === m} onClick={() => { setRouteMode(m); setRoutePlans(null); }} testId={"route-mode-" + m}>{L({ fastest: "Быстрейший", shortest: "Кратчайший", economical: "Экономичный", safest: "Безопасный" }[m], m)}</Btn>)}
+              <Btn size="sm" active={fuelAware} onClick={() => { setFuelAware((v) => !v); setRoutePlans(null); }} testId="route-fuel-toggle">{L("Учитывать дозаправки", "Fuel stops")}: {fuelAware ? "✓" : "—"}</Btn>
+              <Btn size="sm" variant="primary" onClick={() => { const plans = routeAlternatives(world, fleet as never, sys.id, fuelAware); setRoutePlans(plans); try { localStorage.setItem("sf.routeLayer", JSON.stringify({ fleetId: fleet.id, targetId: sys.id, path: plans[0]?.path ?? [], mode: routeMode })); } catch { /* noop */ } }} testId="btn-route-plan">{L("Построить маршрут", "Plan route")}</Btn>
+            </div>
+            {routePlans && (
+              <div className="sf-list" data-testid="route-plans">
+                {routePlans.map((p, i) => (
+                  <div key={p.mode} className="sf-line" data-testid={"route-plan-" + p.mode}>
+                    <span className={p.feasible ? "sf-ok" : "sf-bad"}>{i === 0 ? "★" : "•"}</span>
+                    <div style={{ flex: "1 1 auto" }}>
+                      <b>{L({ fastest: "Быстрейший", shortest: "Кратчайший", economical: "Экономичный", safest: "Безопасный" }[p.mode], p.mode)}</b>
+                      <div className="sf-meta">{p.jumps} {L("прыжк.", "jumps")} · {L("топливо", "fuel")} {p.fuelEnd} · {L("дозаправки", "refuels")}: {p.refuelAt.length || 0} · {L("опасность", "danger")} {rnd(p.danger)}</div>
+                      {p.warnings.map((w, j) => <div key={j} className="sf-meta sf-bad">{w}</div>)}
+                    </div>
+                    <Btn size="sm" variant="primary" onClick={() => game.sendCommand({ type: "follow_route", fleetId: fleet.id, targetId: sys.id, mode: p.mode, fuelAware } as never)} testId={"btn-route-follow-" + p.mode}>{L("Следовать", "Follow")}</Btn>
+                  </div>
+                ))}
+              </div>
+            )}
+            <div className="sf-meta">{L("Маршрут: выбранный флот", "Route: selected fleet")}: {fleet.name} · {L("бак", "tank")} {fleet.fuel ?? 0}/{fleet.fuelMax ?? 0}</div>
+          </>
+        );
+      })()}
 
       <Sep />
       <div className="sf-h">{L("Планеты", "Planets")}</div>

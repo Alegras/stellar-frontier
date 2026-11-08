@@ -36,6 +36,7 @@ import { createDesign, deleteDesign, findCustomDesign, saveDesign, updateDesign 
 import { aiWorldEventChoice } from "./aiWorld";
 import { consumePathfinderStock, ensureFg, pathfinderStockAt } from "./fullgame";
 import { ensureFleetFuel, fuelOf, jumpTicksFor, pathFuelCost } from "./fuel";
+import { planRoute } from "./routePlan";
 import { onContractScan, onContractJump } from "./contracts";
 import { empireModifiers } from "./modifiers";
 import { colonyCostFor, outpostCostFor } from "./economy";
@@ -173,6 +174,17 @@ export function applyCommandAs(world: World, empireId: number, cmd: Command): Co
       fleet.fuel = fleet.fuelMax;
       logEvent(world, "fleet", "info", "Флот «" + fleet.name + "» дозаправлен за " + cost + " Cr.", system.id, empireId);
       return { ok: true, messageRu: "Дозаправлено за " + cost + " Cr" };
+    }
+    case "follow_route": {
+      const fleet = findFleet(world, cmd.fleetId);
+      if (!fleet || fleet.empireId !== empireId) return deny("Флот не найден");
+      if (!world.systems[cmd.targetId]) return deny("Система не найдена");
+      const plan = planRoute(world, fleet, cmd.targetId, cmd.mode, cmd.fuelAware ?? true);
+      if (!plan) return deny("Маршрут не найден");
+      if (!plan.feasible && plan.warnings.length > 0) return deny(plan.warnings.join("; "));
+      fleet.path = plan.path.slice(); fleet.pathIndex = 0; fleet.jumpTicksLeft = jumpTicksFor(world, fleet); fleet.status = "moving";
+      logEvent(world, "fleet", "info", "Маршрут («" + cmd.mode + "»): " + plan.jumps + " прыжк., топливо " + plan.fuelEnd + ".", fleet.systemId, empireId);
+      return { ok: true, messageRu: "Маршрут проложен: " + plan.jumps + " прыжк., остаток " + plan.fuelEnd };
     }
     case "emergency_refuel": {
       const fleet = findFleet(world, cmd.fleetId);

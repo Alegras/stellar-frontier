@@ -394,6 +394,7 @@ export type Command =
   | { type: "move_fleet"; fleetId: number; systemId: number }
   | { type: "stop_fleet"; fleetId: number }
   | { type: "refuel_fleet"; fleetId: number }
+  | { type: "follow_route"; fleetId: number; targetId: number; mode: "fastest" | "shortest" | "economical" | "safest"; fuelAware?: boolean }
   | { type: "emergency_refuel"; fleetId: number }
   | { type: "colonize"; fleetId: number; planetId: number }
   | { type: "build_ship"; systemId: number; designId: string; count: number; buy?: boolean }

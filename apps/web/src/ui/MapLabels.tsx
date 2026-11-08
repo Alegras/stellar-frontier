@@ -570,6 +570,20 @@ export function MapLabels({ game, state, onPick, onEnter }: MapLabelsProps) {
         );
       })()}
       {layer === "political" && (() => {
+        const proj = game.mapProject; if (!proj || !world) return null;
+        let route: { path?: number[]; targetId?: number } | null = null;
+        try { route = JSON.parse(localStorage.getItem("sf.routeLayer") ?? "null") as { path?: number[]; targetId?: number } | null; } catch { route = null; }
+        if (!route?.path || route.path.length === 0) return null;
+        const pts = route.path.map((id) => world.systems[id]).filter(Boolean).map((sys) => proj(sys!.x, sys!.y)).filter((p): p is { x: number; y: number } => p !== null);
+        if (pts.length < 2) return null;
+        return (
+          <svg className="sf-map-route-layer" aria-hidden="true" data-testid="map-route-layer">
+            <polyline className="sf-map-route-line" points={pts.map((p) => p.x + "," + p.y).join(" ")} />
+            {pts.map((p, i) => <circle key={i} cx={p.x} cy={p.y} r={i === pts.length - 1 ? 7 : 4} className={i === pts.length - 1 ? "sf-map-route-target" : "sf-map-route-waypoint"} />)}
+          </svg>
+        );
+      })()}
+      {layer === "political" && (() => {
         const dlc = world ? dlcOf(world) : null;
         const proj = game.mapProject;
         if (!dlc?.enabled || !proj || !world) return null;
